@@ -287,8 +287,8 @@ awk 从它的输入中每次读取一行, 将行分解为一个个的字段, 默
 \subsection{打印行号}
 \label{subsec:printing_line_numbers}
 
-Awk 提供了另一个内建变量, \NR, 这个变量计算到目前为止, 读取到的行的数量.
-我们可以使用 \NR 和 \verb'$0' 为 \filename{emp.data} 的每一行加上行号:
+awk 提供了另一个内建变量, \nr, 这个变量计算到目前为止, 读取到的行的数量.
+我们可以使用 \nr 和 \verb'$0' 为 \filename{emp.data} 的每一行加上行号:
 \begin{awkcode}
     { print NR, $0 }
 \end{awkcode}
@@ -303,7 +303,7 @@ Awk 提供了另一个内建变量, \NR, 这个变量计算到目前为止, 读�
     6 Susie   4.25    18
 \end{file}
 
-\subsection{将文件放入输出中}
+\subsection{将文本放入输出中}
 \label{subsec:putting_text_in_the_output}
 
 你也可以将单词放在字段与被计算的值的中间:
@@ -320,3 +320,85 @@ Awk 提供了另一个内建变量, \NR, 这个变量计算到目前为止, 读�
     total pay for Susie is 76.5
 \end{file}
 在 \print 语句中, 被双引号包围的文本会随着字段, 以及计算得到的值一起输出.
+
+\section{更精美的输出}
+\label{sec:fancier_output}
+
+\print 用于简单快速的输出. 如果你想要格式化输出, 那么就需要使用 \printf
+语句. 正如我们将要在 \ref{sec:output} 节看到的那样, \printf 几乎可以产生
+任何种类的输出, 但在这一节, 我们仅仅展现它的一小部分能力.
+
+\subsection{字段排队}
+\label{subsec:lining_up_fields}
+
+\printf 语句具有形式
+\begin{pattern}
+    \texttt{printf(}\textit{format}\texttt{,} \textit{value$_1$}\texttt{,}
+    \textit{value$_2$}\texttt{, ... ,} \textit{value$_n$}\texttt{)}
+\end{pattern}
+\textit{format} 是一个字符串, 它包含按字面打印的文本, 中间散布着格式说明符,
+格式说明符用于说明如何打印值. 一个格式说明符是一个 \verb'%', 后面跟着几个
+字符, 这些字符控制一个 \textit{value} 的输出格式. 第一个格式说明符说明
+\textit{value$_1$} 的输出格式, 第二个格式说明符说明 \textit{value$_2$} 的
+输出格式, 依次类推. 于是, 格式说明符的数量应该和被打印的 \textit{value} 一
+样多.
+
+这个程序使用 \printf 打印每位雇员的报酬:
+\begin{awkcode}
+    { printf(" total pay for %s is $%.2f\n", $1, $2 * $3 }
+\end{awkcode}
+这个 \printf 语句的格式字符串包含两个格式说明符. 第一个格式说明符,
+\marginpar{8}
+\verb'%s', 是说将第一个值, \verb'$1', 以字符串的形式打印; 第二个格式说明符,
+\verb'%.2f', 是说将第二个值, \verb'$2*$3', 以带有两位小数的数字打印. 格式
+字符串的其他内容, 包括美元符, 按照字面值打印; 字符串末尾的 \verb'\n' 表示
+换行符, 该符号使后来的输出从下一行开始. 当 \filename{emp.data} 作为输入时,
+这个程序输出:
+\begin{file}
+    total pay for Beth is $0.00
+    total pay for Dan is $0.00
+    total pay for Kathy is $40.00
+    total pay for Mark is $100.00
+    total pay for Mary is $121.00
+    total pay for Susie is $76.50
+\end{file}
+使用 \printf 不会自动产生空白符或换行符; 你必须自己创建它们. 不要忘了
+\verb'\n'.
+
+另外一个程序打印每位雇员的名字与报酬:
+\begin{awkcode}
+    { printf("%-8s $%6.2f\n", $1, $2 * $3) }
+\end{awkcode}
+第一个格式说明符, \verb'%-8s', 将名字左对齐输出, 占用8个字符的宽度. 第二个
+格式说明符, \verb'%6.2f', 将报酬以带有两位小数的数字打印出来, 数字至少占用
+6个字符的宽度:
+\begin{awkcode}
+    Beth     $  0.00
+    Dan      $  0.00
+    Kathy    $ 40.00
+    Mark     $100.00
+    Mary     $121.00
+    Susie    $ 76.50
+\end{awkcode}
+更多的关于 \printf 的例子会慢慢加以介绍; 而关于 \printf 的完整描述在
+\ref{sec:output} 节.
+
+\subsection{输出排序}
+\label{subsec:sorting_the_output}
+
+设想一下你想要为每一位雇员打印所有的数据, 包括他的报酬, 报酬按照升序排列.
+最简单的办法是使用 awk 在每一位雇员的记录前加上报酬, 然后再通过一个排序
+程序进行排序, 在 Unix 中, 命令行
+\begin{shell}
+    awk '{ printf("%6.2f %s\n", $2 * $3, $0) }' emp.data | sort
+\end{shell}
+将 awk 的输出通过管道传递给 \texttt{sort} 命令, 最后输出:
+\marginpar{9}
+\begin{file}
+      0.00 Beth    4.00    0
+      0.00 Dan     3.75    0
+    100.00 Mark    5.00    20
+    121.00 Mary    5.50    22
+     40.00 Kathy   4.00    10
+     76.50 Susie   4.25    18
+\end{file}
