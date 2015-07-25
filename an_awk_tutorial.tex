@@ -253,3 +253,33 @@ awk 从它的输入中每次读取一行, 将行分解为一个个的字段, 默
 在 \print 语句中由逗号分隔的表达式, 在输出时, 默认用一个空白符分隔. 由
 \print 打印的每一行都由一个换行符终止. 这些默认行为都可以修改, 我们将在第
 \ref{chap:the_awk_language} 章讨论如何修改.
+
+\subsection{\texttt{NF}, 字段的数量}
+\label{subsec:nf_the_number_fields}
+
+有时候, 你必须总是通过 \verb'$1', \verb'$2' 这样的形式引用字段, 但是任何表
+达式都可以出现在 \verb'$' 的后面, 来指明一个字段的号码; 表达式被求值, 求出
+的值被当作字段的号码. Awk 计算当前输入行的字段数量, 并将它存储在一个内建的
+变量中, 这个变量叫作 \nf. 因此程序
+\begin{awkcode}
+    { print NF, $1, $NF }
+\end{awkcode}
+将会打印每一个输入行的字段数量, 第一个字段, 以及最后一个字段.
+
+\subsection{计算和打印}
+\label{subsec:computing_and_printing}
+
+你也可以用字段值进行计算, 并将计算得到的值放在输入语句中. 程序
+\begin{awkcode}
+    { print $1, $2 * $3 }
+\end{awkcode}
+是一个很典型的例如. 它会打印雇员的名字与报酬 (每小时工资乘以工作时长):
+\begin{file}
+    Beth 0
+    Dan 0
+    Kathy 40
+    Mark 100
+    Mary 121
+    Susie 76.5
+\end{file}
+我们待会就会展示如果将输出做得更好看.
