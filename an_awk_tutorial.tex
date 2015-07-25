@@ -283,3 +283,22 @@ awk 从它的输入中每次读取一行, 将行分解为一个个的字段, 默
     Susie 76.5
 \end{file}
 我们待会就会展示如果将输出做得更好看.
+
+\subsection{打印行号}
+\label{subsec:printing_line_numbers}
+
+Awk 提供了另一个内建变量, \NR, 这个变量计算到目前为止, 读取到的行的数量.
+我们可以使用 \NR 和 \verb'$0' 为 \filename{emp.data} 的每一行加上行号:
+\begin{awkcode}
+    { print NR, $0 }
+\end{awkcode}
+输出就像这样:
+\marginpar{7}
+\begin{file}
+    1 Beth    4.00    0
+    2 Dan     3.75    0
+    3 Kathy   4.00    10
+    4 Mark    5.00    20
+    5 Mary    5.50    22
+    6 Susie   4.25    18
+\end{file}
