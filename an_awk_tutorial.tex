@@ -16,18 +16,18 @@ Awk 是一种使用方便且表现力很强的编程语言, 它可以应用在�
 \filename{emp.data}, 这个文件包含有名字, 每小时工资 (以美元为单位),
 工作时长, 每一行代表一个雇员的记录, 就像这样
 \begin{file}
-Beth    4.00    0
-Dan     3.75    0
-Kathy   4.00    10
-Mark    5.00    20
-Mary    5.50    22
-Susie   4.25    18
+    Beth    4.00    0
+    Dan     3.75    0
+    Kathy   4.00    10
+    Mark    5.00    20
+    Mary    5.50    22
+    Susie   4.25    18
 \end{file}
 现在你想要打印每位雇员的名字以及他们的报酬 (每小时工资乘以工作时长), 而雇员
 的工作时长必须大于零. 这种类型的工作是 awk 的设计目标之一, 所以会很简单.
 只要键入下面这一行即可:
 \begin{awkcode}
-awk '$3 > 0 { print $1, $2 * $3 }' emp.data
+    awk '$3 > 0 { print $1, $2 * $3 }' emp.data
 \end{awkcode}
 这一行命令告诉系统运行 awk 命令, 被运行的程序被单引号包围, 从输入文件
 \filename{emp.data} 获取数据. 被单引号包围的部分是一个完整的 awk 程序. 它由
@@ -35,34 +35,34 @@ awk '$3 > 0 { print $1, $2 * $3 }' emp.data
 模式 \verb'$3 > 0' 匹配每一行输入, 如果该行的第三列, 或者说 \cterm{字段}
 (\term{field}) 大于零, 则动作
 \begin{awkcode}
-{ print $1, $2 * $3 }
+    { print $1, $2 * $3 }
 \end{awkcode}
 就会为每一个匹配行打印第一个字段, 以及第二与第三个字段的乘积.
 
 如果你想要打印没有工作的雇员的名字, 键入
 \begin{awkcode}
-awk '$3 == 0 { print $1 }' emp.data
+    awk '$3 == 0 { print $1 }' emp.data
 \end{awkcode}
 模式 \verb'$3 == 0' 匹配第三个字段为零的行, 动作
 \begin{awkcode}
-{ print $1 }
+    { print $1 }
 \end{awkcode}
 打印该行的第一个字段.
 
 当你阅读这本书时, 请尝试运行并修改书中的程序. 由于大多数程序都很简短, 你可
 以快速理解 awk 是怎么工作的. 在一个 Unix 系统终端上, 上面提到的两个例子看
 起来就像这样
-\begin{awkcode}
-$ awk '$3 > 0 { print $1, $2 * $3 }' emp.data
-Kathy 40
-Mark 100
-Mary 121
-Susie 76.5
-$ awk '$3 == 0 { print $1 }' emp.data
-Beth
-Dan
-$
-\end{awkcode}
+\begin{shell}
+    $ awk '$3 > 0 { print $1, $2 * $3 }' emp.data
+    Kathy 40
+    Mark 100
+    Mary 121
+    Susie 76.5
+    $ awk '$3 == 0 { print $1 }' emp.data
+    Beth
+    Dan
+    $
+\end{shell}
 一行开头的字符 \verb'$' 是系统的提示符, 在你的机器上或许会不一样.
 
 \subsection{AWK 程序的结构}
@@ -77,16 +77,17 @@ $
     ...
 \end{pattern}
 awk 的基本操作是在由输入行组成的序列中, 一个接一个地扫描每一行, 搜索被程序
-中的模式 \cterm{匹配} (\term{match}) 的行. "匹配" 的精确含义依赖于问题中
-的模式, 对于模式, 例如 \verb'$3 > 0', 意味着 "条件为真".
+中的模式 \cterm{匹配} (\term{match}) 的行.
+\cterm{匹配}的精确含义依赖于问题中 的模式, 对于模式, 例如 \verb'$3 > 0',
+意味着条件为真.
 
 每一个输入行轮流被每一个模式测试. 每匹配一个模式, 对应的动作 (可能包含多个
-        步骤) 就会执行. 然后下一行被读取, 匹配重新开始. 这个过程会一起持续
+步骤) 就会执行. 然后下一行被读取, 匹配重新开始. 这个过程会一起持续
 到所有的输入被读完为止.
 
 上面的程序是模式与动作的典型例子
 \begin{awkcode}
-$3 == 0 { print $1 }
+    $3 == 0 { print $1 }
 \end{awkcode}
 是一个单一的模式-动作语句, 对于每一个第3个字段为零的行, 它的第一个字段都会
 被打印.
@@ -94,18 +95,18 @@ $3 == 0 { print $1 }
 在一个模式-动作语句, 模式或动作可以省略其一, 但不能两者同时被省略. 如果一个
 模式没有动作, 例如
 \begin{awkcode}
-$3 == 0
+    $3 == 0
 \end{awkcode}
 会将每一个匹配行 (也就是条件判断为真的行) 打印出来. 这个程序会被文件
 \filename{emp.data} 中第3个字段为0的两行打印出来:
 \begin{file}
-Beth    4.00    0
-Dan     3.75    0
+    Beth    4.00    0
+    Dan     3.75    0
 \end{file}
 
 如果只有动作而没有模式, 例如
 \begin{awkcode}
-{ print $1 }
+    { print $1 }
 \end{awkcode}
 对于每一个输入行, 动作 (在这个例子里是打印第1个字段) 都会被执行.
 
@@ -132,7 +133,7 @@ Dan     3.75    0
 在这种情况下, awk 会将 \textit{program} 应用到你接下来在终端输入的内容上面,
 直到你键入一个文件结束标志 (Unix 系统是组合键 control-d). 下面是一个在 Unix
 的例子
-\begin{awkcode}
+\begin{shell}
     $ awk '$3 == 0 { print $1 print $1 }'
     Beth    4.00    0
     Beth
@@ -142,7 +143,7 @@ Dan     3.75    0
     Kathy   3.75    0
     Kathy
     ...
-\end{awkcode}
+\end{shell}
 % TODO: 加粗显示未实现
 被计算机打印的字符加粗显示.
 
