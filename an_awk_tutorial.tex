@@ -302,3 +302,21 @@ Awk 提供了另一个内建变量, \NR, 这个变量计算到目前为止, 读�
     5 Mary    5.50    22
     6 Susie   4.25    18
 \end{file}
+
+\subsection{将文件放入输出中}
+\label{subsec:putting_text_in_the_output}
+
+你也可以将单词放在字段与被计算的值的中间:
+\begin{awkcode}
+    { print "total pay for", $1, "is", $2 * $3 }
+\end{awkcode}
+输出
+\begin{file}
+    total pay for Beth is 0
+    total pay for Dan is 0
+    total pay for Kathy is 40
+    total pay for Mark is 100
+    total pay for Mary is 121
+    total pay for Susie is 76.5
+\end{file}
+在 \print 语句中, 被双引号包围的文本会随着字段, 以及计算得到的值一起输出.
