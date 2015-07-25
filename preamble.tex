@@ -8,10 +8,12 @@
 \usepackage{xeCJK}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
+\usepackage{verbatim}
 
+% from package geometry
 \geometry{bottom = 2cm, outer = 2cm}
 
-% page style from fancyhdr
+% page style from package fancyhdr
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[EL]{\thepage}
@@ -19,16 +21,41 @@
 \fancyhead[OR]{\thepage}
 \fancyhead[OL]{\nouppercase{\rightmark}}
 
+% from package hyperref
 \hypersetup{
     bookmarksnumbered = true
 }
 
-\setCJKmainfont[Scale=1.0]{AR PL UKai CN}
-\setCJKsansfont[Scale=1.0]{AR PL UKai CN}
+% from package fontspec and xeCJK
+\setCJKmainfont[Scale=1.0]{AR PL UMing CN}
+\setCJKsansfont[Scale=1.0]{AR PL UMing CN}
 \setCJKmonofont[Scale=1.0]{AR PL UMing CN}
-\setmainfont{Century Schoolbook L}
+\setmainfont{Liberation Serif}
 \setsansfont{FreeSans}
-\setmonofont{Courier 10 Pitch}
+\setmonofont{FreeMono}
+
+% the name of file or directory
+\newcommand\filename[1]{\texttt{#1}}
+
+% the content of file
+\newenvironment{file}%
+{\verbatim}%
+{\endverbatim}
+
+% awk program, from package verbatim
+\newenvironment{awkcode}%
+{\verbatim}%
+{\endverbatim}
+
+% pattern for many situations
+\newenvironment{pattern}%
+{\begin{quotation}}%
+{\end{quotation}}
+
+% term in English
+\newcommand\term[1]{\textit{#1}}
+% term in Chinese
+\newcommand\cterm[1]{\textbf{#1}}
 
 \title{AWK 程序设计语言}
 \author{Alfred V.Aho \and Brian W.Kernighan \and Peter J.Weinberger \and
