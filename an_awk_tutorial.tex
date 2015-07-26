@@ -781,3 +781,44 @@ C 语言. 它们只能用在动作里.
 如果测试结果为真, 循环体的 \printf 语句被执行. 执行完循环体之后, 增值语句
 \texttt{i = i + 1} 被执行, 循环的下一次迭代从条件的另一次测试开始. 代码很
 紧凑, 因为循环体只有一条语句, 也就不再需要花括号.
+
+\section{数组}
+\label{sec:arrays}
+
+Awk 提供了数组, 用来存储一组有关的值. 虽然数组给予了 awk 可观的力量, 但是
+我们在这里只展示一个简单的例子. 下面这个程序按行逆序显示输入数据. 第一个
+动作将输入行放入数组 \texttt{line} 的下一个元素中; 也就是说, 第一行放入
+\texttt{line[1]}, 第二行放入 \texttt{line[2]}, 依次类推. \END 动作用一个
+\while 循环, 从数组的最后一个元素开始打印, 一直到打印到第一个元素:
+\begin{awkcode}
+    # reverse - print input in reverse order by line
+
+        { line[NR] = $0 }  # remember each input line
+
+    END { i = NR           # print lines in reverse order
+          while (i > 0) {
+              print line[i]
+              i = i - 1
+          }
+        }
+\end{awkcode}
+用 \filename{emp.data} 作输入, 输出是
+\begin{file}
+    Susie   4.25    18
+    Mary    5.50    22
+    Mark    5.00    20
+    Kathy   4.00    10
+    Dan     3.75    0
+    Beth    4.00    0
+\end{file}
+这有用 \for 循环实现的造价的程序:
+\marginpar{17}
+\begin{awkcode}
+    # reverse - print input in reverse order by line
+
+        { line[NR] = $0 }  # remember each input line
+
+    END { for (i = NR; i > 0; i = i - 1)
+              print line[i]
+        }
+\end{awkcode}
