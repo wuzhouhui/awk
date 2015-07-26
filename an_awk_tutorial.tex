@@ -811,7 +811,7 @@ Awk 提供了数组, 用来存储一组有关的值. 虽然数组给予了 awk �
     Dan     3.75    0
     Beth    4.00    0
 \end{file}
-这有用 \for 循环实现的造价的程序:
+这是用 \for 循环实现的等价的程序:
 \marginpar{17}
 \begin{awkcode}
     # reverse - print input in reverse order by line
@@ -822,3 +822,106 @@ Awk 提供了数组, 用来存储一组有关的值. 虽然数组给予了 awk �
               print line[i]
         }
 \end{awkcode}
+
+\section{实用``一行''手册}
+\label{sec:a_handful_of_useful_one_liners}
+
+虽然 awk 可以写出非常复杂的程序, 但是许多具有实用价值的程序并不比我们目前
+为止看到的复杂多少. 这里有一些小程序集合, 对你应该会有一些参考价值. 大多数
+是我们已经讨论过的程序的变形.
+\begin{enumerate}
+\item 输入行的总行数
+\begin{awkcode}
+    END { print NR }
+\end{awkcode}
+\item 打印第 10 行
+\begin{awkcode}
+    NR == 10
+\end{awkcode}
+\item 打印每一个输入行的最后一个字段
+\begin{awkcode}
+    { print $NF }
+\end{awkcode}
+\item 打印最后一行的最后一个字段
+\begin{awkcode}
+    { field = $NF }
+    END { print field }
+    \end{awkcode}
+\item 打印字段数多于4个的输入行
+\begin{awkcode}
+    NF > 4
+\end{awkcode}
+\item 打印最后一个字段大于4的输入行
+\begin{awkcode}
+    $NF > 4
+\end{awkcode}
+\item 打印所有输入行的字段数的总和
+\begin{awkcode}
+    { nf = nf + NF }
+    END { print nf }
+\end{awkcode}
+\item 打印包含 \texttt{Beth} 的行的数量
+\begin{awkcode}
+    /Beth/ { nlines = nlines + 1 }
+    END { print nlines }
+\end{awkcode}
+\item 打印具有最大值的第一个字段, 以及包含它的行 (假设 \verb'$1' 总是
+\marginpar{18}
+    正的)
+\begin{awkcode}
+    $1 > max { max = $1; maxline = $0 }
+    END { print max, maxline }
+\end{awkcode}
+\item 打印至少包含一个字段的行
+\begin{awkcode}
+    $NF > 0
+\end{awkcode}
+\item 打印长度超过80个字符的行
+\begin{awkcode}
+    length($0) > 80
+\end{awkcode}
+\item 在每一行的前面加上它的字段数
+\begin{awkcode}
+    { print NF, $0 }
+\end{awkcode}
+\item 打印每一行的第1与第2个字段, 但顺序相反
+\begin{awkcode}
+    { print $2, $1 }
+\end{awkcode}
+\item 交换每一行的第1与第2个字段, 并打印该行
+\begin{awkcode}
+    { temp = $1; $1 = $2; $2 = temp; print }
+\end{awkcode}
+\item 将每一行的第一个字段用行号代替
+\begin{awkcode}
+    { $1 = NR; print }
+\end{awkcode}
+\item 打印删除了第2个字段后的行
+\begin{awkcode}
+    { $2 = ""; print }
+\end{awkcode}
+\item 将每一行的字段按逆序打印
+\begin{awkcode}
+    { for (i = NF; i > 0; i = i - 1) printf("%s ", $i)
+      printf("\n")
+    }
+\end{awkcode}
+\item 打印每一行的所有字段值之和
+\begin{awkcode}
+    { sum = 0
+      for (i = 1; i <= NF; i = i + 1) sum = sum + $i
+      print sum
+    }
+\end{awkcode}
+\item 将所有行的所有字段值累加起来
+\begin{awkcode}
+        { for (i = 1; i <= NF; i = i + 1) sum = sum + $i }
+    END { print sum }
+\end{awkcode}
+\item 将每一行的每一个字段用它的绝对值替换
+\begin{awkcode}
+    { for (i = 1; i <= NF; i = i + 1) if ($i < 0) $i = -$i
+      print
+    }
+\end{awkcode}
+\end{enumerate}
