@@ -3,7 +3,7 @@
 
 \documentclass[nofonts]{book}
 
-%\usepackage{geometry}
+\usepackage{geometry}
 \usepackage{fontspec}
 \usepackage{xeCJK}
 \usepackage{hyperref}
@@ -11,7 +11,19 @@
 \usepackage{verbatim}
 
 % from package geometry
-%\geometry{bottom = 2cm, outer = 2cm}
+\geometry{
+    bottom = 2cm,
+    outer = 2cm,
+    marginparsep = 0.5cm
+}
+
+% 为边注加边框
+% FIXME: 偶数页无法显示边注
+\let\oldmarginpar=\marginpar
+\renewcommand\marginpar[1]{%
+    \oldmarginpar{\framebox{#1}}%
+}
+
 
 % page style from package fancyhdr
 \pagestyle{fancy}
