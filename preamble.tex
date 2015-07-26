@@ -1,25 +1,25 @@
 % vim: ts=4 sts=4 sw=4 et tw=75
 % preamble here.
 
-\documentclass[nofonts]{book}
+\documentclass[nofonts]{ctexbook}
 
 \usepackage{geometry}
 \usepackage{fontspec}
 \usepackage{xeCJK}
 \usepackage{hyperref}
-\usepackage{fancyhdr}
+%\usepackage{fancyhdr}
 \usepackage{verbatim}
 
 % from package geometry
 \geometry{bottom = 2cm, outer = 2cm}
 
 % page style from package fancyhdr
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[EL]{\thepage}
-\fancyhead[ER]{\nouppercase{\leftmark}}
-\fancyhead[OR]{\thepage}
-\fancyhead[OL]{\nouppercase{\rightmark}}
+%\pagestyle{fancy}
+%\fancyhf{}
+%\fancyhead[EL]{\thepage}
+%\fancyhead[ER]{\nouppercase{\leftmark}}
+%\fancyhead[OR]{\thepage}
+%\fancyhead[OL]{\nouppercase{\rightmark}}
 
 % from package hyperref
 \hypersetup{
@@ -27,12 +27,12 @@
 }
 
 % from package fontspec and xeCJK
-\setCJKmainfont[Scale=1.0]{AR PL UMing CN}
-\setCJKsansfont[Scale=1.0]{AR PL UMing CN}
-\setCJKmonofont[Scale=1.0]{AR PL UMing CN}
-\setmainfont{Liberation Serif}
+\setCJKmainfont[Scale=1.0]{AR PL UKai CN}
+\setCJKsansfont[Scale=1.0]{AR PL UKai CN}
+\setCJKmonofont[Scale=1.0]{AR PL UKai CN}
+\setmainfont{Century Schoolbook L}
 \setsansfont{FreeSans}
-\setmonofont{FreeMono}
+\setmonofont{Courier 10 Pitch}
 
 % the name of file or directory
 \newcommand\filename[1]{\texttt{#1}}
