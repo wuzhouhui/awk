@@ -31,9 +31,10 @@ awk '$3 > 0 { print $1, $2 * $3 }' emp.data
 \end{awkcode}
 这一行命令告诉系统运行 awk 命令, 被运行的程序被单引号包围, 从输入文件
 \filename{emp.data} 获取数据. 被单引号包围的部分是一个完整的 awk 程序. 它由
-一个单独的 \cterm{模式-动作 语句} (\term{pattern-action statement}) 组成.
+一个单独的 \cterm{\mbox{模式}\mbox{--}动作}\ 语句
+(\term{pattern-action statement}) 组成.
 模式 \verb'$3 > 0' 匹配每一行输入, 如果该行的第三列, 或者说 \cterm{字段}
-(\term{field}) 大于零, 则动作
+(\term{field}), 大于零, 则动作
 \begin{awkcode}
 { print $1, $2 * $3 }
 \end{awkcode}
