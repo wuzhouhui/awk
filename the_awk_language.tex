@@ -54,4 +54,73 @@
 
 在这一章的剩下部分, 如果没有显式给出输入数据, 默认将 \filename{countries}
 作为输入数据.
-%%%%%%%%%%%%%%%% review stops here %%%%%%%%%%%%
+
+\subsection{程序格式}
+\label{subsec:program_format}
+
+\patact 语句, 以及动作内的语句通常用换行符分隔, 但是若干条语句也可出现在同
+一行, 只要它们之间用分号分开即可. 一个分号可以放在任何语句的末尾.
+
+动作的左花括号必须与它的模式在同一行; 而剩下的部分, 包括右花括号, 则可以出
+现在下面几行.
+
+空行会被忽略; 它们可在插入在语句之前或之后, 用来提高程序的可读性. 空格与制
+表符可以出现在操作符与操作数的周围, 同样也是为了提高可读性.
+
+注释可以出现在任意一行的末尾. 一个注释以井号开始, 以换行符结束, 正如
+\begin{awkcode}
+    { print $1, $3 }    # print country name and population
+\end{awkcode}
+
+一条长语句可以分散成多行, 只要在断行处插入一个反斜杆即可:
+\begin{awkcode}
+    { print \
+            $1,     # country name
+            $2,     # area in thousands of square miles
+            $3 }    # population in millions
+\end{awkcode}
+正如这个例子所呈现的那样, 语句可以在逗号之后断行, 并且注释可以插入在断行的
+末尾.
+
+在这本书里我们用到了若干种格式化风格, 之所以这样做, 一方面是为了比较不同的
+风格之间的差异, 另一方面是为了避免程序占用过多的行. 对于比较短小的程序,
+就像本章中出现过那些例子, 格式并不是非常重要, 但是一致性与可读性对于大程序
+的管理非常有帮助.
+
+\section{模式}
+\label{sec:patterns}
+\marginpar{23}
+
+模式控制动作的执行. 这一小节描述模式的6种类型, 以及匹配它们的条件.
+\begin{summary}{模式汇总}
+    \begin{enumerate}
+        \item \BEGIN \verb'{' \stmt \verb'}'
+            在输入被读取之后, \stmt 被执行一次.
+        \item \END \verb'{' \stmt \verb'}'
+            当所以输入被读取完毕之后, \stmt 被执行一次.
+        \item \expr \verb'{' \stmt \verb'}'
+            每碰到一个使 \expr 为真的输入行, \stmt 就被执行. \expr 为真指
+            的是其值非零或非空.
+        \item \verb'/'\regexpr\verb'/' \verb'{'
+            \stmt \verb'}'
+            当碰到这样一个输入行时, \stmt 就被执行: 输入行含有一段字符串,
+            而该字符串可以被 \regexpr 匹配.
+        \item \textit{compound pattern} \verb'{' \stmt \verb'}'
+            一个复合模式将表达式用 \AND (AND), \OR (OR), \NOT (NOT), 以及
+            括号组合起来; 当 \textit{compound pattern} 为真时, \stmt 执行.
+        \item \pat$_1$\verb',' \pat$_2$ \verb'{' \stmt \verb'}'
+            一个范围模式匹配多个输入行, 这些输入行从匹配 \pat$_1$ 的行开始,
+            到匹配 \pat$_2$ 的行结束, 包括这两行; 对这其中的每一行执行
+            \stmt.
+    \end{enumerate}
+    \BEGIN 与 \END 不与其他模式组合. 一个范围模式不能是其他模式的一部分.
+    \BEGIN 与 \END 是唯一两个不能省略动作的模式.
+\end{summary}
+
+\subsection{\BEGIN 与 \END}
+\label{subsec:begin_and_end}
+
+\BEGIN 与 \END 这两个模式匹配任何输入行. 实际情况是, 当 awk 从输入读取数据
+之前, \BEGIN 里的语句被执行; 当所有输入数据被读取完毕, \END 里的语句被执行.
+于是, \BEGIN 与 \END 分别提供了一种控制初始化与扫尾的方式. \BEGIN 与 \END
+不能与其他模式作组合.
