@@ -65,7 +65,7 @@
 现在下面几行.
 
 空行会被忽略; 它们可在插入在语句之前或之后, 用来提高程序的可读性. 空格与制
-表符可以出现在操作符与操作数的周围, 同样也是为了提高可读性.
+表符可以出现在运算符与操作数的周围, 同样也是为了提高可读性.
 
 注释可以出现在任意一行的末尾. 一个注释以井号开始, 以换行符结束, 正如
 \begin{awkcode}
@@ -123,4 +123,157 @@
 \BEGIN 与 \END 这两个模式匹配任何输入行. 实际情况是, 当 awk 从输入读取数据
 之前, \BEGIN 里的语句被执行; 当所有输入数据被读取完毕, \END 里的语句被执行.
 于是, \BEGIN 与 \END 分别提供了一种控制初始化与扫尾的方式. \BEGIN 与 \END
-不能与其他模式作组合.
+不能与其他模式作组合. 如果有多个 \BEGIN, 与其关联的动作会按照它们在程序中
+出现的顺序执行, 这种行为对多个 \END 同样适用. 我们通常将 \BEGIN 放在程序
+开关, 将 \END 放在程序末尾, 虽然这并不是强制的.
+
+\BEGIN 的一个常用用途是更改输入行被分割为字段的默认方式. 分割字符由一个内
+建变量 \fs 控制. 默认情况下字段由空格或 (和) 制表符分割, 此时 \fs 的值被
+\marginpar{24}
+设置为一个空格符. 将 \fs 设置为一个不是空格的字符, 就会使该字符成为字段分
+割符.
+
+下面这个程序在 \BEGIN 的动作里将字段字割符设置为制表符 (\verb'\t'), 并在
+输出之前打印标题. 第二个 \printf 语句 (对每一个输入行它都会被执行) 半输出
+格式化成一个表格, 使得每一列都刚好与标题的列表头对齐. \END 打印总和. (变量
+与表达式在 \ref{sec:actions} 节讨论.
+\begin{awkcode}
+    # print countries with column headers and totals
+
+    BEGIN { FS = "\t"   # make tab the field separator
+            printf("%10s %6s %5s   %s\n\n",
+                  "COUNTRY", "AREA", "POP", "CONTINENT")
+          }
+          { printf("%10s %6d %5d   %s\n", $1, $2, $3, $4)
+            area = area + $2
+            pop = pop + $3
+          }
+    END   { printf("\n%10s %6d %5d\n", "TOTAL", area, pop) }
+\end{awkcode}
+如果将 \filename{countries} 作为输入, 将出将是
+\begin{file}
+   COUNTRY   AREA   POP   CONTINENT
+
+      USSR   8649   275   Asia
+    Canada   3852    25   North America
+     China   3705  1032   Asia
+       USA   3615   237   North America
+    Brazil   3286   134   South America
+     India   1267   746   Asia
+    Mexico    762    78   North America
+    France    211    55   Europe
+     Japan    144   120   Asia
+   Germany     96    61   Europe
+   England     94    56   Europe
+
+     TOTAL  25681  2819
+\end{file}
+
+\subsection{用表达式作为模式}
+\label{subsec:expressions_as_patterns}
+
+就像大多数程序设计语言一样, awk 有着非常丰富的用来描述数值计算的表达式.
+但是与许多语言不同的是, awk 还有用于描述字符串操作的表达式. 在整本书里,
+\textit{string} 都表示一个由 0 个或多个字符组成的序列. 这些字符串可以存储
+在变量中, 也可以以字符串常量的形式出现, 就像 \verb'""' 或 \verb'Asia'. 字
+符串 \verb'""' 不包括任何字符, 叫做 \cterm{空字符串} (\term{null string}).
+术语 \cterm{子字符串} (\term{substring}) 表示一个字符内部的, 由0个或多个
+字符组成的连续序列. 对任意一个字符串, 空字符串都可以看作是该字符串第一个字
+符之前的, 长度为0的子字符串, 或者是一对相邻字符之间的子字符串, 又或者是
+最后一个字符之后的子字符串.
+
+任意一个表达式都可以用作任意运算符的操作数. 如果一个表达式拥有一个数值形式
+\marginpar{25}
+的值, 而运算符要求一个字符串值, 那么该数值会自动转换成字符串, 类似地, 当
+运算符要求一个数值时, 字符串被自动转换成数值.
+
+任意一个表达式都可以当作模式来使用. 如果一个作为模式使用的表达式, 对当前
+输入行的求值结果不空或非零, 那么该模式就匹配该行. 典型的表达式模式是那些
+涉及到数值或字符串比较的表达式. 一个比较表达式包含 6 种关系运算符中的一种,
+或者包含两种字符串匹配运算符中的一种: \verb'~' 与 \verb'!~' 在下一小节讨论.
+这些运算列在表 \ref{tbl:comparison_operators} 中.
+\caption{比较运算符}
+\label{tbl:comparison_operators}
+\begin{tabular}{c|c}
+    \hline
+    \hline
+    运算符      & 意义 \\
+    \verb'<'    & 小于 \\
+    \verb'<='   & 小于或等于 \\
+    \verb'=='   & 等于  \\
+    \verb'!='   & 不等于 \\
+    \verb'>='   & 大于或等于 \\
+    \verb'>'    & 大于  \\
+    \verb'~'    & 匹配 \\
+    \verb'!~'   & 不匹配
+\end{tabular}
+
+如果模式是一个比较表达式, 就像 \verb'NF > 10', 当当前行使该条件满足时, 这
+个模式就算是匹配该输入行, 在这里条件满足指的是当前输入行的字段数大于 10.
+如果模式是一个算术表达式, 就像 \nf, 如果该表达式的值非零, 那么当前输入行被
+匹配. 如果模式是一个字符串表达式, 当表达式的字符串值非空时, 当前输入行被
+匹配.
+
+在一个关系比较中, 如果两个操作数都是数值, 关系比较将会按照数值比较进行;
+否则的话, 数值操作数会被转换成字符串, 再将操作数按字符串的形式进行比较.
+两个字符串间的比较按照字符逐个相比, 字符间的先后顺序依赖于机器提供的字符
+集 (大多数情况下是 ASCII 字符集). 一个字符串 ``小于'' 另一个, 如果它比另
+一个字符串更早出现的话, 例如 \verb'"Canada" < "China"',
+\verb'"Asia" < "Asian"'.
+
+模式
+\begin{awkcode}
+    $3/$2 >= 0.5
+\end{awkcode}
+选择那些第3个字段除以第2个字段的商大于0.5的输入行, 而
+\begin{awkcode}
+    $0 >= "M"
+\end{awkcode}
+\marginpar{26}
+选择那些以字母 \verb'M', \verb'N', \verb'O' 等开头的输入行:
+\begin{file}
+    USSR	8649	275	Asia
+    USA	3615	237	North America
+    Mexico	762	78	North America
+\end{file}
+
+有时候一个比较运算符的类型不能单单靠表达式表现出来的语法形式来判断. 程序
+\begin{awkcode}
+    $1 < $4
+\end{awkcode}
+可以以数值的形式, 或者字符串的形式比较输入行的第1个与第4个字段. 在这里,
+比较的类型取决于字段的值, 并且有可能每一行都有不同的情况出现. 文件
+\filename{countries} 的第1与第4个字段总是字符串, 所以比较总是以字符串的形
+式进行; 输出是
+\begin{file}
+    Canada	3852	25	North America
+    Brazil	3286	134	South America
+    Mexico	762	78	North America
+    England	94	56	Europe
+\end{file}
+只有当两个字段都是数值时, 比较才会以数值的形式进行; 这种情况可以是
+\begin{awkcode}
+    $2 < $3
+\end{awkcode}
+
+\ref{sec:actions} 节包含了一个更加完整的, 关于字符串, 数值与表达式的讨论.
+
+\subsection{字符串匹配 模式}
+\label{subsec:string_matching_pattern}
+
+Awk 提供了一种称为 \cterm{正则表达式} (\regexpr) 表示法, 它可以用来指定和
+匹配一个字符串.  正则表达式 在 Unix 中使用得非常普遍, 包括文本编译器与
+shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中可以用
+``通配符'' 指定一个文件名集合.
+
+一个 \cterm{字符串匹配模式} (\term{string-matching pattern}
+测试一个字符串是否包含一段可以被正则表达式匹配的子字符串.
+
+最简单的正则表达式是仅由数字与字母组成的字符串, 就像 \verb'Asia', 它匹配的
+就是它自己. 为了将一个正则表达式切换成一个模式, 只需要用一对斜杆包围起来即
+可:
+\begin{awkcode}
+    /Asia/
+\end{awkcode}
+这个模式匹配那些含有子字符串 \verb'Asia' 的输入行, 例如 \verb'Asia',
+\verb'Asian', 或 \verb'Pan-Asiatic'. 注意, 正则表达式中空格是有意义的:
