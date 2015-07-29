@@ -276,4 +276,62 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
     /Asia/
 \end{awkcode}
 这个模式匹配那些含有子字符串 \verb'Asia' 的输入行, 例如 \verb'Asia',
-\verb'Asian', 或 \verb'Pan-Asiatic'. 注意, 正则表达式中空格是有意义的:
+\verb'Asian', 或 \verb'Pan-Asiatic'. 注意, 正则表达式中空格是有意义的: 字
+符串匹配模式
+\marginpar{27}
+\begin{summary}{字符串匹配模式}
+    \begin{enumerate}
+        \item \verb'/'\textit{regexpr}\verb'/' \\
+            当当前输入行包含一段能够被 \textit{regexpr} 匹配的子字符串时,
+            该模式被匹配.
+        \item \regexpr \verb'~' \verb'/'\textit{regexpr}\verb'/' \\
+            如果 \expr 的字符串值包含一段能够被 \textit{regexpr} 匹配的子
+            字符时, 该模式被匹配.
+        \item \expr \verb'!~' \verb'/'\textit{regexpr}\verb'/' \\
+            如果 \expr 的字符串值不包含能够被 \textit{regexpr} 匹配的子字
+            符串, 该模式被匹配.
+    \end{enumerate}
+    在 \verb'~' 与 \verb'!~' 的语境中, 任意一个表达式都可以出现在
+    \verb'/'\textit{regexpr}\verb'/' 出现的地方.
+\end{summary}
+
+\begin{awkcode}
+    / Asia /
+\end{awkcode}
+只有当 \verb'Asia' 被一对空格包围时才会被匹配.
+
+上面的模式是三种字符串匹配模式当中的一种. 它的形式是用一对斜杆将正则表达式
+包围起来:
+\begin{pattern}
+    \verb'/'\textit{r}\verb'/'
+\end{pattern}
+这个模式匹配那些含有能够被 \textit{r} 匹配的子字符串的输入行.
+
+剩下的两种字符串匹配模式使用到了显式的匹配运算符:
+\begin{pattern}
+    \expr \verb'~' \verb'/'\textit{r}\verb'/' \\
+    \expr \verb'!~' \verb'/'\textit{r}\verb'/'
+\end{pattern}
+匹配运算符 \verb'~' 的意思是 ``被...匹配'', \verb'!~' 的意思是 ``不被...%
+匹配''. 当 \expr 的字符串值包含一段能够被正则表达式 \textit{r} 匹配的子字
+串时, 第一个模式被匹配; 当不存在这样的子字符串时, 第二个模式被匹配.
+
+匹配运算符的左操作数经常是一个字段: 模式
+\begin{awkcode}
+    $4 ~ /Asia/
+\end{awkcode}
+匹配所有{}第4个字段包含 \verb'Asia' 的输入行, 而
+\begin{awkcode}
+    $4 !~ /Asia/
+\end{awkcode}
+匹配所有{}第4个字段\cterm{不}包含 \verb'Asia' 的输入行.
+
+注意到, 字符串匹配模式
+\begin{awkcode}
+    /Asia/
+\end{awkcode}
+是
+\begin{awkcode}
+    $0 ~ /Asia/
+\end{awkcode}
+的简写形式.
