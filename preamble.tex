@@ -69,6 +69,11 @@
 {\begin{quotation}}%
 {\end{quotation}}
 
+% environment for summary
+\newenvironment{summary}[1]
+{\begin{center} #1 \end{center}}
+{}
+
 % term in English
 \newcommand\term[1]{\textit{#1}}
 % term in Chinese
@@ -92,6 +97,10 @@
 \newcommand\while{\texttt{while}}
 \newcommand\for{\texttt{for}}
 \newcommand\patact{\ \mbox{模式}\mbox{--}动作\ }
+\newcommand\stmt{\textit{statements}}
+\newcommand\expr{\textit{expression}}
+\newcommand\regexpr{\textit{regular expression}}
+\newcommand\pat{\textit{pattern}}
 
 \title{AWK 程序设计语言}
 \author{Alfred V.Aho \and Brian W.Kernighan \and Peter J.Weinberger \and
