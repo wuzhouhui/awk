@@ -64,10 +64,11 @@
 动作的左花括号必须与它的模式在同一行; 而剩下的部分, 包括右花括号, 则可以出
 现在下面几行.
 
-空行会被忽略; 它们可在插入在语句之前或之后, 用来提高程序的可读性. 空格与制
-表符可以出现在操作符与操作数的周围, 同样也是为了提高可读性.
+空行会被忽略; 它们可以插入在语句之前或之后, 用来提高程序的可读性. 空格与制
+表符可以出现在运算符与操作数的周围, 同样也是为了提高可读性.
 
-注释可以出现在任意一行的末尾. 一个注释以井号开始, 以换行符结束, 正如
+注释可以出现在任意一行的末尾. 一个注释以井号 (\verb'#') 开始,
+以换行符结束, 正如
 \begin{awkcode}
     { print $1, $3 }    # print country name and population
 \end{awkcode}
@@ -94,21 +95,21 @@
 模式控制动作的执行. 这一小节描述模式的6种类型, 以及匹配它们的条件.
 \begin{summary}{模式汇总}
     \begin{enumerate}
-        \item \BEGIN \verb'{' \stmt \verb'}'
-            在输入被读取之后, \stmt 被执行一次.
-        \item \END \verb'{' \stmt \verb'}'
-            当所以输入被读取完毕之后, \stmt 被执行一次.
-        \item \expr \verb'{' \stmt \verb'}'
+        \item \BEGIN \verb'{' \stmt \verb'}' \\
+            在输入被读取之前, \stmt 被执行一次.
+        \item \END \verb'{' \stmt \verb'}'      \\
+            当所有输入被读取完毕之后, \stmt 被执行一次.
+        \item \expr \verb'{' \stmt \verb'}' \\
             每碰到一个使 \expr 为真的输入行, \stmt 就被执行. \expr 为真指
             的是其值非零或非空.
-        \item \verb'/'\regexpr\verb'/' \verb'{'
+        \item \verb'/'\regexpr\verb'/' \verb'{' \\
             \stmt \verb'}'
             当碰到这样一个输入行时, \stmt 就被执行: 输入行含有一段字符串,
             而该字符串可以被 \regexpr 匹配.
-        \item \textit{compound pattern} \verb'{' \stmt \verb'}'
-            一个复合模式将表达式用 \AND (AND), \OR (OR), \NOT (NOT), 以及
+        \item \textit{compound pattern} \verb'{' \stmt \verb'}' \\
+            一个复合模式将表达式用 \AND{}(AND), \OR{}(OR), \NOT{}(NOT), 以及
             括号组合起来; 当 \textit{compound pattern} 为真时, \stmt 执行.
-        \item \pat$_1$\verb',' \pat$_2$ \verb'{' \stmt \verb'}'
+        \item \pat$_1$\verb',' \pat$_2$ \verb'{' \stmt{}\verb'}' \\
             一个范围模式匹配多个输入行, 这些输入行从匹配 \pat$_1$ 的行开始,
             到匹配 \pat$_2$ 的行结束, 包括这两行; 对这其中的每一行执行
             \stmt.
@@ -124,3 +125,4 @@
 之前, \BEGIN 里的语句被执行; 当所有输入数据被读取完毕, \END 里的语句被执行.
 于是, \BEGIN 与 \END 分别提供了一种控制初始化与扫尾的方式. \BEGIN 与 \END
 不能与其他模式作组合.
+%%%%%%%%%%%%%%%%%%%%%% review stops here %%%%%%%%%%%%%%%%%%%%%%%%%

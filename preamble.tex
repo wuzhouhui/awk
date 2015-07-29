@@ -71,8 +71,27 @@
 
 % environment for summary
 \newenvironment{summary}[1]
-{\begin{center} #1 \end{center}}
-{}
+{
+    \begin{center}
+        \hrulefill
+    \end{center}
+    \vspace{-1.14cm}
+    \begin{center}
+        \hrulefill
+    \end{center}
+    \vspace{-0.60cm}
+    \begin{center} \Large{#1} \end{center}%
+}
+{
+    \vspace{-0.5cm}
+    \begin{center}
+        \hrulefill
+    \end{center}
+    \vspace{-1.14cm}
+    \begin{center}
+        \hrulefill
+    \end{center}
+}
 
 % term in English
 \newcommand\term[1]{\textit{#1}}
