@@ -192,6 +192,7 @@
 涉及到数值或字符串比较的表达式. 一个比较表达式包含 6 种关系运算符中的一种,
 或者包含两种字符串匹配运算符中的一种: \verb'~' 与 \verb'!~' 在下一小节讨论.
 这些运算列在表 \ref{tbl:comparison_operators} 中.
+\begin{figure}[ht]
 \caption{比较运算符}
 \label{tbl:comparison_operators}
 \begin{tabular}{c|c}
@@ -207,6 +208,7 @@
     \verb'~'    & 匹配 \\
     \verb'!~'   & 不匹配
 \end{tabular}
+\end{figure}
 
 如果模式是一个比较表达式, 就像 \verb'NF > 10', 当当前行使该条件满足时, 这
 个模式就算是匹配该输入行, 在这里条件满足指的是当前输入行的字段数大于 10.
