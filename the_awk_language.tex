@@ -295,10 +295,10 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
         \item \verb'/'\textit{regexpr}\verb'/' \\
             当当前输入行包含一段能够被 \textit{regexpr} 匹配的子字符串时,
             该模式被匹配.
-        \item \regexpr{}\verb'~' \verb'/'\textit{regexpr}\verb'/' \\
+        \item \regexpr {} \verb'~' \verb'/'\textit{regexpr}\verb'/' \\
             如果 \expr 的字符串值包含一段能够被 \textit{regexpr} 匹配的子
             字符时, 该模式被匹配.
-        \item \expr{}\verb'!~' \verb'/'\textit{regexpr}\verb'/' \\
+        \item \expr {} \verb'!~' \verb'/'\textit{regexpr}\verb'/' \\
             如果 \expr 的字符串值不包含能够被 \textit{regexpr} 匹配的子字
             符串, 该模式被匹配.
     \end{enumerate}
@@ -320,8 +320,8 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 
 剩下的两种字符串匹配模式使用到了显式的匹配运算符:
 \begin{pattern}
-    \expr \verb'~' \verb'/'\textit{r}\verb'/' \par
-    \expr \verb'!~' \verb'/'\textit{r}\verb'/'
+    \expr {} \verb'~' \verb'/'\textit{r}\verb'/' \par
+    \expr {} \verb'!~' \verb'/'\textit{r}\verb'/'
 \end{pattern}
 匹配运算符 \verb'~' 的意思是 ``被...匹配'', \verb'!~' 的意思是 ``不被...%
 匹配''. 当 \expr 的字符串值包含一段能够被正则表达式 \textit{r} 匹配的子字
