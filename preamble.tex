@@ -9,6 +9,8 @@
 \usepackage{hyperref}
 %\usepackage{fancyhdr}
 \usepackage{verbatim}
+% for float's caption
+\usepackage{caption}
 
 % from package geometry
 % 为边注加边框
@@ -75,19 +77,11 @@
     \begin{center}
         \hrulefill
     \end{center}
-    \vspace{-1.14cm}
-    \begin{center}
-        \hrulefill
-    \end{center}
     \vspace{-0.60cm}
     \begin{center} \Large{#1} \end{center}%
 }
 {
     \vspace{-0.5cm}
-    \begin{center}
-        \hrulefill
-    \end{center}
-    \vspace{-1.14cm}
     \begin{center}
         \hrulefill
     \end{center}
@@ -120,6 +114,7 @@
 \newcommand\expr{\textit{expression}}
 \newcommand\regexpr{\textit{regular expression}}
 \newcommand\pat{\textit{pattern}}
+\newcommand\fs{\texttt{FS}}
 
 \title{AWK 程序设计语言}
 \author{Alfred V.Aho \and Brian W.Kernighan \and Peter J.Weinberger \and
