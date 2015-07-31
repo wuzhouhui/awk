@@ -394,7 +394,7 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 未被引述的美元符 \verb'$' 匹配一行的结束, 一个未被引述的句点 \verb'.'
 匹配任意一个字符. 于是,
 \begin{tabbing}
-    \verb'^C' \hspace{6em}  \= 匹配以字符 \verb'C' 开始的字符串; \\
+    \verb'^C' \hspace{4em}  \= 匹配以字符 \verb'C' 开始的字符串; \\
     \verb'C$'   \> 匹配以字符 \verb'C' 结束的字符串; \\
     \verb'^C$'  \> 匹配只含有单个字符 \verb'C' 的字符串; \\
     \verb'^.$'  \> 匹配有且仅有一个字符的字符串; \\
@@ -420,7 +420,7 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 是方括号内排在脱字符之后的那些字符. 于是, \verb'[^0-9]' 匹配任意一个不是
 数字的字符; \verb'[^a-zA-Z]' 匹配任意一个不是字母的字符.
 \begin{tabbing}
-    \verb'^[ABC]' \hspace{6em}  \= 匹配以 \verb'A', \verb'B', 或 \verb'C'
+    \verb'^[ABC]' \hspace{4em}  \= 匹配以 \verb'A', \verb'B', 或 \verb'C'
         开始的字符串; \\
     \verb'^[^ABC]' \> 匹配以任意一个字符 (除了 \verb'A', \verb'B',
         或 \verb'C') 开始的字符串; \\
@@ -434,4 +434,71 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 互补字符集合开头的 \verb'^', 以及两个字符间的 \verb'-'.
 于是, \verb'[.]' 匹配一个句点, \verb'^[^^]' 匹配不以脱字符开始的字符串.
 
-可以使用括号来指定正则表达式中的各个成分如何组合.
+可以使用括号来指定正则表达式中的各个成分如何组合. 有两种二元正则表达式运算
+符: 选择与连接. 选择运算符 \verb'|' 用来指定一个选择: 如果 \textit{r}$_1$
+与 \textit{r}$_2$ 是正则表达式, 那么 \textit{r}$_1$\verb'|'\textit{r}$_2$
+所匹配的字符串, 或者与 \textit{r}$_1$, 或者与 \textit{r}$_2$ 匹配.
+
+Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 是正则
+表达式, 那么 \verb'('\textit{r}$_1$\verb')'\verb'('\textit{r}$_1$\verb')'
+(在 \verb'('\textit{r}$_1$\verb')' 与 \verb'('\textit{r}$_2$\verb')' 之
+间没有空格) 所匹配的字符串具有形式 \textit{xy}, 其中 \textit{x} 被
+\textit{r}$_1$ 匹配, \textit{y} 被 \textit{r}$_2$ 匹配. \textit{r}$_1$ 或
+\textit{r}$_2$ 两边的括号可以省略, 如果被括号包围的正则表达式不包含选择
+运算符的话. 正则表达式
+\begin{awkcode}
+    (Asian|European|North American) (male|female) (black|blue)bird
+\end{awkcode}
+一共匹配12个字符串, 从
+\begin{file}
+    Asian male blackbird
+\end{file}
+到
+\marginpar{30}
+\begin{file}
+    North American female bluebird
+\end{file}
+
+符号 \verb'*', \verb'+' 与 \verb'?' 是一元运算符, 用来指定正则表达式的
+重复次数. 如果 \textit{r} 是一个正则表达式, 那么
+\verb'('\textit{r}\verb')'\verb'*' 所匹配的字符串含有零个或连续的多个,
+能被 \textit{r} 匹配的子符串. \textit{r}\verb'?' 匹配的字符串, 要么是空字
+符串, 要么是能够被 \textit{r} 匹配的字符串. 如果 \textit{r} 是一个基本的
+正则表达式, 那么括号可以省略.
+\begin{tabbing}
+    \verb'B*' \hspace{4em} \= 匹配空字符串, 或 \verb'B', \verb'BB', 等等.\\
+    \verb'AB*C' \> 匹配 \verb'AC', 或 \verb'ABC', \verb'ABBC', 等等. \\
+    \verb'AB+C' \> 匹配 \verb'ABC', 或 \verb'ABBC', \verb'ABBBC', 等等.\\
+    \verb'AB?C' \> 匹配 \verb'AC' 或 \verb'ABC' \\
+    \verb'[A-Z]+' \> 匹配由一个或多个大写字母组成的字符串. \\
+    \verb'(AB)+C' \> 匹配 \verb'ABC', \verb'ABABC', \verb'ABABABC', 等等.
+\end{tabbing}
+
+在正则表达中, 选择运算符 \verb'|' 的优先级最低, 然后是连接运算, 最后是重
+复运算符 \verb'*', \verb'+', 与 \verb'?'. 与算术表达式的规则一样, 优先
+级高的运算符优先处理. 这种规则经常使得括号被省略: \verb'ab|cd' 等价于
+\verb'(ab)|(cd)', \verb'^ab|cd*e$' 等价于 \verb'(^ab)|(c(d*)e$)'.
+
+为了结束关于正则表达式的讨论, 这里列出了一些比较有用的字符串匹配模式的
+例子, 这些例子都带有使用了一元与二元运算符的正则表达式, 同时还描述了能够
+被该模式匹配的输入行. 回想一下, 如果当前输入行含有至少一个, 能够被
+\textit{r} 匹配的子字符串, 那么字符串匹配模式 \verb'/'\textit{r}\verb'/'
+匹配成功.
+\begin{enumerate}
+\item \verb'^[0-9]+$/' \\
+    匹配含有且只含有数字的输入行.
+\item \verb'^[0-9][0-9][0-9]$/' \\
+    输入行有且仅有3个数字.
+\item \verb'^(\+|-)?[0-9]+\.?[0-9]*$/' \\
+    十进制小数, 符号与小数部分是可选的.
+\item \verb'^[+-]?[0-9]+[.]?[0-9]*$/' \\
+    也是匹配十进制小数, 带有可选的符号与小数部分.
+\item \verb'^[+-]?([0-9]+[.]?[0-9]*|[.][0-9]+)([eE][+-]?[0-9]+)?$/' \\
+    浮点数, 符号与指数部分是可选的.
+\item \verb'^[A-Za-z][A-Za-z0-9]*$/' \\
+    一个字母, 后面再跟着任意多个字母或数字 (比如 awk 的变量名).
+\item \verb'^[A-Za-z]$|^[A-Za-z][0-9]$/' \\
+    一个字母, 又或者是一个后面跟着一个数字的字母 (比如 Basic 的变量名).
+\item \verb'^[A-Za-z][0-9]?$/' \\
+    同样是一个字母, 又或者是一个后面跟着一个数字的字母.
+\end{enumerate}
