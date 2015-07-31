@@ -351,7 +351,6 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 \label{subsec:regular_expressions}
 \marginpar{28}
 正则表达式是一种用于指定和匹配字符串的表示法. 就像算术表达式一样,
-%%%%%%%%%%%%%%%%%%%%%% review stops here %%%%%%%%%%%%%%%%%%%%%%%%%
 一个正则表达式是一个基本表达式, 或者是多个子表达式通过运算符组合而成.
 为了理解被一个正则表达式匹配的字符串, 我们需要先了解被子表达式匹配的字符串.
 \begin{summary}{正则表达式}
@@ -416,7 +415,8 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 含有连字符的单词.
 
 一个 \cterm{互补} (\term{complemented}) 的字符集合在 \verb'[' 之后以
-\verb'^' 开始. 这样一个集合匹配任意一个不在集合中的字符, 集合中的字符指的
+\verb'^' 开始. 这样一个集合匹配任意一个不在集合中的字符, ``集合中的字符''%
+指的
 是方括号内排在脱字符之后的那些字符. 于是, \verb'[^0-9]' 匹配任意一个不是
 数字的字符; \verb'[^a-zA-Z]' 匹配任意一个不是字母的字符.
 \begin{tabbing}
@@ -449,7 +449,7 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \begin{awkcode}
     (Asian|European|North American) (male|female) (black|blue)bird
 \end{awkcode}
-一共匹配12个字符串, 从
+一共匹配12种字符串, 从
 \begin{file}
     Asian male blackbird
 \end{file}
@@ -461,7 +461,7 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 
 符号 \verb'*', \verb'+' 与 \verb'?' 是一元运算符, 用来指定正则表达式的
 重复次数. 如果 \textit{r} 是一个正则表达式, 那么
-\verb'('\textit{r}\verb')'\verb'*' 所匹配的字符串含有零个或连续的多个,
+\verb'('\textit{r}\verb')'\verb'*' 所匹配的字符串含有零个或连续的多个
 能被 \textit{r} 匹配的子符串. \textit{r}\verb'?' 匹配的字符串, 要么是空字
 符串, 要么是能够被 \textit{r} 匹配的字符串. 如果 \textit{r} 是一个基本的
 正则表达式, 那么括号可以省略.
@@ -481,8 +481,8 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 
 为了结束关于正则表达式的讨论, 这里列出了一些比较有用的字符串匹配模式的
 例子, 这些例子都带有使用了一元与二元运算符的正则表达式, 同时还描述了能够
-被该模式匹配的输入行. 回想一下, 如果当前输入行含有至少一个, 能够被
-\textit{r} 匹配的子字符串, 那么字符串匹配模式 \verb'/'\textit{r}\verb'/'
+被该模式匹配的输入行. 回想一下, 如果当前输入行含有至少一个能够被
+\textit{r} 匹配的子字符串, 那么模式 \verb'/'\textit{r}\verb'/'
 匹配成功.
 \begin{enumerate}
 \item \verb'^[0-9]+$/' \\
@@ -502,3 +502,4 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \item \verb'^[A-Za-z][0-9]?$/' \\
     同样是一个字母, 又或者是一个后面跟着一个数字的字母.
 \end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%% review stops here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
