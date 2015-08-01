@@ -462,7 +462,7 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     \verb'(AB)+C' \> 匹配 \verb'ABC', \verb'ABABC', \verb'ABABABC', 等等.
 \end{tabbing}
 
-在正则表达中, 选择运算符 \verb'|' 的优先级最低, 然后是连接运算, 最后是重
+在正则表达式中, 选择运算符 \verb'|' 的优先级最低, 然后是连接运算, 最后是重
 复运算符 \verb'*', \verb'+', 与 \verb'?'. 与算术表达式的规则一样, 优先
 级高的运算符优先处理. 这种规则经常使得括号被省略: \verb'ab|cd' 等价于
 \verb'(ab)|(cd)', \verb'^ab|cd*e$' 等价于 \verb'(^ab)|(c(d*)e$)'.
@@ -490,3 +490,42 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \item \verb'^[A-Za-z][0-9]?$/' \\
     同样是一个字母, 又或者是一个后面跟着一个数字的字母.
 \end{enumerate}
+
+在第3个例子中, 为了匹配元字符\verb'+' 与 \verb'-' 的字面值, 必须在它们的
+前面加上反斜线, 而在字符集合中则不需要, 所以第 3 项与 第 4 项的功能是等价
+的.
+\marginpar{31}
+
+任意一个被一对斜线包围的正则表达式都可以作为匹配运算符的右操作数: 程序
+\begin{awkcode}
+    $2 !~ /^[0-9]+$/
+\end{awkcode}
+打印那些第2个字段不全是数字的行.
+
+在正则表达式与字符串内部, awk 使用一个特定的字符序列--\cterm{转义序列}
+(\term{escape sequences})--来表示那些无法用方式表示的字符. 例如, \verb'\n'
+表示一个换行符, 它无法以其他方式出现在字符串或正则表达式中; \verb'\b' 表示
+退格符; \verb'\t' 表示制表符; \verb'007' 表示 ASCII 中的响铃符; \verb'\/'
+表示一个斜杆. 转义序列在 awk 程序中才会有特殊的意义; 如果在数据中, 它们则
+是普通的字符. 完整的转义序列名单在表 \ref{tbl:escape_sequences}.
+\caption{转义序列}
+\label{tbl:escape_sequences}
+\begin{tabular}{c|c}
+    \hline
+    \hline
+    序列        & 意义 \\
+    \hline
+    \verb'\b'   & 退格  \\
+    \verb'\f'   & 换页  \\
+    \verb'\n'   & 换行  \\
+    \verb'\r'   & 回车  \\
+    \verb't'    & 制表符    \\
+    \verb'\'\textit{ddd} & 八进制数 \textit{ddd}, \textit{ddd} 含有 1 到 3
+        个数字, 每个数字的值在 0 到 7 之间 \\
+    \verb'\'\textit{c} & 其他的字面意义上的 \textit{c} (举例来说, \verb'\\'
+        表示反斜杆, \verb'\"' 表示双引号)
+    \hline
+\end{tabular}
+
+表 \ref{tbl:regular_expressions} 总结了正则表达式, 以及它们所匹配的字符串.
+运算符按优先级递增的顺序列出.
