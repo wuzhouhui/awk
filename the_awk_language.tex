@@ -533,14 +533,16 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 
 表 \ref{tbl:regular_expressions} 总结了正则表达式, 以及它们所匹配的字符串.
 运算符按优先级递增的顺序列出.
-\caption{tbl:regular_expressions}
+\begin{figure}[ht]
+\caption{比较运算符}
+\label{tbl:comparison_operators}
 \begin{tabular}{c|l}
     \hline
     \hline
     表达式  & 匹配  \\
     \hline
     \textit{c}  & 非元字符 \textit{c}   \\
-    \veb'\'\textit{c}   & 转义序列或字面意义上的 \textit{c} \\
+    \verb'\'\textit{c}   & 转义序列或字面意义上的 \textit{c} \\
     \verb'^'    & 字符串的开始 \\
     \verb'$'    & 字符串的结束  \\
     \verb'.'    & 任意一个字符 \\
@@ -550,24 +552,27 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
         \textit{c}$_1$\textit{c}$_2$... 中的字符. \\
     \verb'['\textit{c}$_1$\verb'-'\textit{c}$_2$...\verb']' & 任意一个在
         范围内的字符, 范围由 \textit{c}$_1$ 开始, 由 \textit{c}$_2$ 结束.
-\verb'[^'\textit{c}$_1$\verb'-'\textit{c}$_2$...\verb']' & 任意一个不在
-        范围内的字符, 范围由 \textit{c}$_1$ 开始, 由 \textit{c}$_2$ 结束.
         \\
+\verb'[^'\textit{c}$_1$\verb'-'\textit{c}$_2$...\verb']' & 任意一个不在
+        范围内的字符, 范围由 \textit{c}$_1$ 开始,
+        由 \textit{c}$_2$ 结束.  \\
     \textit{r}$_1$\verb'|'\textit{r}$_2$    & 任意一个被 \textit{r}$_1$
         或 \textit{r}$_2$ 匹配的字符串. \\
-\verb'('\textit{r}$_1$\verb')('\textit{r}$_2$\verb')'    &
-        任意一个字串 \textit{xy}, 其中 \textit{r}$_1$ 匹配 \textit{x},
-        而 \textit{r}$_1$ 匹配 \textit{y}; 如果当中不含有选择运算符, 那么
-        括号是可能活力的 \\
-        \verb'('\textit{r}\verb')*' & 零个或连续多个能被 \textit{r} 匹配
-        的字符串.
-        \verb'('\textit{r}\verb')+' & 一个或连续多个能被 \textit{r} 匹配
-        的字符串.
-        \verb'('\textit{r}\verb')?' & 零个或一个能被 \textit{r} 匹配
-        的字符串. 在这里括号可以省略.
-        \verb'('\textit{r}\verb')' & 任意一个能被 \textit{r} 匹配
-        的字符串.
+     \verb'('\textit{r}$_1$\verb')('\textit{r}$_2$\verb')'    &
+         任意一个字串 \textit{xy}, 其中 \textit{r}$_1$ 匹配 \textit{x},
+         而 \textit{r}$_1$ 匹配 \textit{y}; 如果当中不含有选择运算符, 那么
+         括号是可能活力的 \\
+     \verb'('\textit{r}\verb')*' & 零个或连续多个能被 \textit{r} 匹配
+         的字符串. \\
+     \verb'('\textit{r}\verb')+' & 一个或连续多个能被 \textit{r} 匹配
+         的字符串. \\
+     \verb'('\textit{r}\verb')?' & 零个或一个能被 \textit{r} 匹配
+         的字符串. 在这里括号可以省略. \\
+     \verb'('\textit{r}\verb')' & 任意一个能被 \textit{r} 匹配
+         的字符串. \\
+     \hline
 \end{tabular}
+\end{figure}
 
 \subsection{复合模式}
 \label{subsec:compound_patterns}
