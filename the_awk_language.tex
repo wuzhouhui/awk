@@ -533,3 +533,60 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 
 表 \ref{tbl:regular_expressions} 总结了正则表达式, 以及它们所匹配的字符串.
 运算符按优先级递增的顺序列出.
+\caption{tbl:regular_expressions}
+\begin{tabular}{c|l}
+    \hline
+    \hline
+    表达式  & 匹配  \\
+    \hline
+    \textit{c}  & 非元字符 \textit{c}   \\
+    \veb'\'\textit{c}   & 转义序列或字面意义上的 \textit{c} \\
+    \verb'^'    & 字符串的开始 \\
+    \verb'$'    & 字符串的结束  \\
+    \verb'.'    & 任意一个字符 \\
+    \verb'['\textit{c}$_1$\textit{c}$_2$...\verb']' & 任意一个在
+        \textit{c}$_1$\textit{c}$_2$... 中的字符. \\
+    \verb'[^'\textit{c}$_1$\textit{c}$_2$...\verb']'    & 任意一个不在
+        \textit{c}$_1$\textit{c}$_2$... 中的字符. \\
+    \verb'['\textit{c}$_1$\verb'-'\textit{c}$_2$...\verb']' & 任意一个在
+        范围内的字符, 范围由 \textit{c}$_1$ 开始, 由 \textit{c}$_2$ 结束.
+\verb'[^'\textit{c}$_1$\verb'-'\textit{c}$_2$...\verb']' & 任意一个不在
+        范围内的字符, 范围由 \textit{c}$_1$ 开始, 由 \textit{c}$_2$ 结束.
+        \\
+    \textit{r}$_1$\verb'|'\textit{r}$_2$    & 任意一个被 \textit{r}$_1$
+        或 \textit{r}$_2$ 匹配的字符串. \\
+\verb'('\textit{r}$_1$\verb')('\textit{r}$_2$\verb')'    &
+        任意一个字串 \textit{xy}, 其中 \textit{r}$_1$ 匹配 \textit{x},
+        而 \textit{r}$_1$ 匹配 \textit{y}; 如果当中不含有选择运算符, 那么
+        括号是可能活力的 \\
+        \verb'('\textit{r}\verb')*' & 零个或连续多个能被 \textit{r} 匹配
+        的字符串.
+        \verb'('\textit{r}\verb')+' & 一个或连续多个能被 \textit{r} 匹配
+        的字符串.
+        \verb'('\textit{r}\verb')?' & 零个或一个能被 \textit{r} 匹配
+        的字符串. 在这里括号可以省略.
+        \verb'('\textit{r}\verb')' & 任意一个能被 \textit{r} 匹配
+        的字符串.
+\end{tabular}
+
+\subsection{复合模式}
+\label{subsec:compound_patterns}
+
+一个复合模式是一个组合了其他模式的表达式, 通过括号, 逻辑运算符 \OR{}(OR),
+\AND{}(AND), \NOT{}(NOT) 来进行组合. 如果表达式的值为真, 那么复合模式就匹配
+当前输入行. 下面这个程序使用 AND 运算符来选择那些第 4 个字段是 \verb'Asia'
+且第 3 个字段大于 500 的行:
+\marginpar{32}
+\begin{awkcode}
+    $4 == "Asia" && $3 > 500
+\end{awkcode}
+程序
+\begin{awkcode}
+    $4 == "Asia" || $4 == "Europe"
+\end{awkcode}
+使用 OR 运算符来选择那些第 4 个字段是 \verb'Asia' 或 \verb'Europe' 的行.
+因为较后的这个查询是一个针对字符串的测试, 所以该程序的另一种写法是用到了
+选择运算符的正则表达式:
+\begin{awkcode}
+    $4 ~ /^(Asia|Europe)$/
+\end{awkcode}
