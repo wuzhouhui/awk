@@ -547,12 +547,14 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 表 \ref{tbl:regular_expressions} 总结了正则表达式, 以及它们所匹配的字符串.
 运算符按优先级递增的顺序列出.
 \begin{figure}[ht]
+\captionsetup{type=table}
 \caption{比较运算符}
-\label{tbl:comparison_operators}
-\begin{tabular}{c|l}
+\label{tbl:regular_expressions}
+\begin{center}
+\begin{tabular}{c|p{25em}}
     \hline
     \hline
-    表达式  & 匹配  \\
+    表达式  & \multicolumn{1}{c}{匹配}  \\
     \hline
     \textit{c}  & 非元字符 \textit{c}   \\
     \verb'\'\textit{c}   & 转义序列或字面意义上的 \textit{c} \\
@@ -573,8 +575,9 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
         或 \textit{r}$_2$ 匹配的字符串. \\
      \verb'('\textit{r}$_1$\verb')('\textit{r}$_2$\verb')'    &
          任意一个字串 \textit{xy}, 其中 \textit{r}$_1$ 匹配 \textit{x},
-         而 \textit{r}$_1$ 匹配 \textit{y}; 如果当中不含有选择运算符, 那么
-         括号是可能活力的 \\
+         而 \textit{r}$_2$ 匹配 \textit{y};
+         如果当中不含有选择运算符, 那么
+         括号是可以省略的 \\
      \verb'('\textit{r}\verb')*' & 零个或连续多个能被 \textit{r} 匹配
          的字符串. \\
      \verb'('\textit{r}\verb')+' & 一个或连续多个能被 \textit{r} 匹配
@@ -585,6 +588,7 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
          的字符串. \\
      \hline
 \end{tabular}
+\end{center}
 \end{figure}
 
 \subsection{复合模式}
