@@ -242,9 +242,9 @@
 \marginpar{26}
 选择那些以字母 \verb'M', \verb'N', \verb'O' 等开头的输入行:
 \begin{file}
-    USSR	8649	275	Asia
-    USA	3615	237	North America
-    Mexico	762	78	North America
+    USSR        8649    275     Asia
+    USA 3615    237     North America
+    Mexico      762     78      North America
 \end{file}
 
 有时候一个比较运算符的类型不能单单靠表达式表现出来的语法形式来判断. 程序
@@ -256,10 +256,10 @@
 \filename{countries} 的第1与第4个字段总是字符串, 所以比较总是以字符串的形
 式进行; 输出是
 \begin{file}
-    Canada	3852	25	North America
-    Brazil	3286	134	South America
-    Mexico	762	78	North America
-    England	94	56	Europe
+    Canada      3852    25      North America
+    Brazil      3286    134     South America
+    Mexico      762     78      North America
+    England     94      56      Europe
 \end{file}
 只有当两个字段都是数值时, 比较才会以数值的形式进行; 这种情况可以是
 \begin{awkcode}
@@ -655,10 +655,10 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \end{awkcode}
 输出
 \begin{file}
-France	211	55	Europe
-Japan	144	120	Asia
-Germany	96	61	Europe
-England	94	56	Europe
+France  211     55      Europe
+Japan   144     120     Asia
+Germany 96      61      Europe
+England 94      56      Europe
 \end{file}
 
 在下一个例子里, 变量 \verb'FNR' 表示从当前输入文件中, 到目前为止读取到的
@@ -686,7 +686,7 @@ England	94	56	Europe
 \begin{tabular}{c|c|l}
     \hline
     \hline
-    模式        & 例子      & 匹配  \\
+    模式        & 例子      & \multicolumn{1}{c}{匹配}  \\
     \hline
     \BEGIN      & \BEGIN    & 输入被读取之前 \\
     \END        & \END      & 所有输入被读取完之后 \\
@@ -704,22 +704,24 @@ England	94	56	Europe
 \label{sec:actions}
 \marginpar{34}
 
-在一个 \patact 语句中, 模式决定动作什么执行. 有时候动作会非常简单: 一条 
+在一个 \patact 语句中, 模式决定动作什么时候执行. 有时候动作会非常简单: 一条 
 单独的打印语句或赋值语句. 在有些时候, 动作有可能是多条语句, 语句之间用换
 行符或分号分开. 这一小节通过讨论表达式与流程控制语句来开始对动作的描述.
-\begin{summary}
+\begin{summary}{动作}
     动作中的语句可以包括:
-    \expr, 包括常量, 变量, 赋值, 函数调用等待.
-    \print \textit{expression-list}
-    \printf\verb'('\fmt\verb', '\textit{expression-list}\verb')'
-    \verb'if ('\expr\verb')' \stmt
-    \verb'if ('\expr\verb')' \stmt \verb'else '\stmt
-    \verb'while ('\expr\verb') '\stmt
-    \verb'for ('\expr\verb'; '\expr\verb'; '\expr\verb') '\stmt
-    \verb'for ('\expr\verb' in '\textit{array}\verb')' \stmt
-    \verb'do '\stmt \verb'while ('\expr\verb')'
-    \break
-    \ctn
+    \begin{itemize}
+\item     \expr, 包括常量, 变量, 赋值, 函数调用等等.
+\item     \print\ \textit{expression-list}
+\item     \printf\verb'('\fmt\verb', '\textit{expression-list}\verb')'
+\item     \verb'if ('\expr\verb')' \stmt
+\item     \verb'if ('\expr\verb')' \stmt\ \verb'else '\stmt
+\item     \verb'while ('\expr\verb') '\stmt
+\item     \verb'for ('\expr\verb'; '\expr\verb'; '\expr\verb') '\stmt
+\item     \verb'for ('\expr\verb' in '\textit{array}\verb')' \stmt
+\item     \verb'do '\stmt\ \verb'while ('\expr\verb')'
+\item     \break
+\item     \ctn
+    \end{itemize}
 \end{summary}
 
 \subsection{表达式}
