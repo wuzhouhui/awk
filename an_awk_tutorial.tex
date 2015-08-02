@@ -392,7 +392,7 @@ awk 提供了另一个内建变量, \nr, 这个变量计算到目前为止, 读�
 设想一下你想要为每一位雇员打印所有的数据, 包括他的报酬, 报酬按照升序排列.
 最简单的办法是使用 awk 在每一位雇员的记录前加上报酬, 然后再通过一个排序
 程序进行排序, 在 Unix 中, 命令行\footnote{原文中 \texttt{sort} 命令没有
-带上 \texttt{-n} 选项.}
+带上 \texttt{-n} 选项. --- 译者注}
 \begin{shell}
     awk '{ printf("%6.2f %s\n", $2 * $3, $0) }' emp.data | sort -n
 \end{shell}
@@ -461,7 +461,7 @@ Awk 的模式非常擅长从输入中选择感兴趣的行, 以进行进一步�
 \begin{file}
     Susie   4.25    18
 \end{file}
-正则表达式可以用于指定精细得多的模式; \ref{sec:patterns} 包含一个完整的讨
+正则表达式可以用于指定精细得多的模式; \ref{sec:patterns} 节包含一个完整的讨
 论.
 
 \subsection{模式的组合}
