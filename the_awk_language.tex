@@ -586,3 +586,113 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \begin{awkcode}
     $4 ~ /^(Asia|Europe)$/
 \end{awkcode}
+(如果两个正则表达式匹配了同一个字符串, 我们就说这两个正则表达式是
+\cterm{等价} (\term{equivalent}) 的. 测试一下你对前面所说的正则表达式的
+规则的理解程序, 下面这两个正则表达式等不等价: \verb'^Asia|Europe$' 与 
+\verb'(Asia|Europe)$' ?)
+
+如果在其他字段中没有出现 \verb'Asia' 或 \verb'Europe', 那么上面的模式也
+可以写成
+\begin{awkcode}
+    /Asia/ || /Europe/
+\end{awkcode}
+或
+\begin{awkcode}
+    /Asia|Europe/
+\end{awkcode}
+
+运算符 \OR 优先级最低, 再往高是 \AND, 最高的是 \NOT. \AND 与 \OR 从左至
+右计算操作数的值, 一旦已经知道整个表达式的值, 计算便停止.
+
+\subsection{范围模式}
+\label{subsec:range_patterns}
+
+一个范围模式由两个被逗号分开的模式组成, 正如 
+\begin{pattern}
+    \textit{pat}$_1$\verb',' \textit{pat}$_2$
+\end{pattern}
+一个范围模式匹配多个输入行, 这些输入行从匹配 \textit{pat}$_1$ 的行开始,
+到匹配 \textit{pat}$_2$ 的行结束, 包括这两行; \textit{pat}$_2$ 可以与 
+\textit{pat}$_1$ 匹配到同一行, 这时候模式的范围大小就退化到了一行. 作为 
+一个例子, 模式
+\begin{awkcode}
+    /Canada/, /USA/
+\end{awkcode}
+匹配的行从包含 \texttt{Canada} 的行开始, 到包含 \texttt{USA} 的行结束.
+
+一旦范围的第一个模式匹配到了某个输入行, 那么整个范围模式的匹配就开始了;
+\marginpar{33}
+如果范围模式的第二个模式一直都没有匹配到某个输入行, 那么范围模式会一直
+匹配到输入结束:
+\begin{awkcode}
+    /Europe/, /Africa/
+\end{awkcode}
+输出
+\begin{file}
+France	211	55	Europe
+Japan	144	120	Asia
+Germany	96	61	Europe
+England	94	56	Europe
+\end{file}
+
+在下一个例子里, 变量 \verb'FNR' 表示从当前输入文件中, 到目前为止读取到的
+行数, 变量 \verb'FILENAME' 表示当前输入文件名; 它们两个都是内建变量. 于是,
+程序 
+\begin{awkcode}
+    FNR == 1, FNR == 5 { print FILENAME ": " $0 }
+\end{awkcode}
+打印每一个输入文件的前5行, 并在每一行行加上文件名. 这个程序也可以写成下面
+这种形式:
+\begin{awkcode}
+    FNR <= 5 { print FILENAME ": " $0 }
+\end{awkcode}
+
+一个范围模式不能是其他模式的一部分.
+
+\subsection{模式总结}
+\label{subsec:summary_of_patterns}
+
+表 \ref{tbl:patterns} 总结了可以出现在 \patact 语句中的模式种类.
+\begin{center}
+\caption{模式}
+\label{tbl:patterns}
+\begin{tabular}{c|c|l}
+    \hline
+    \hline
+    模式        & 例子      & 匹配  \\
+    \hline
+    \BEGIN      & \BEGIN    & 输入被读取之前 \\
+    \END        & \END      & 所有输入被读取完之后 \\
+    \expr       & \verb'$3 < 100' & 第3个字段小于100的行 \\
+    \textit{string-matching} & \verb'/Asia/' & 含有 \verb'Asia' 的行 \\
+    \textit{compound}   & \verb'$3 < 100 && $4 == "Asia"' & 第3个字段小于 
+        100 并且 第 4 个字段含有  \verb'Asia' 的行 \\
+    \textit{range} & \verb'NR==10, NR==20' & 输入的第10行到第20行.
+    \hline
+\end{tabular}{c|c|l}
+\end{center}
+
+\section{动作}
+\label{sec:actions}
+\marginpar{34}
+
+在一个 \patact 语句中, 模式决定动作什么执行. 有时候动作会非常简单: 一条 
+单独的打印语句或赋值语句. 在有些时候, 动作有可能是多条语句, 语句之间用换
+行符或分号分开. 这一小节通过讨论表达式与流程控制语句来开始对动作的描述.
+\begin{summary}
+    动作中的语句可以包括:
+    \expr, 包括常量, 变量, 赋值, 函数调用等待.
+    \print \textit{expression-list}
+    \printf\verb'('\fmt\verb', '\textit{expression-list}\verb')'
+    \verb'if ('\expr\verb')' \stmt
+    \verb'if ('\expr\verb')' \stmt \verb'else '\stmt
+    \verb'while ('\expr\verb') '\stmt
+    \verb'for ('\expr\verb'; '\expr\verb'; '\expr\verb') '\stmt
+    \verb'for ('\expr\verb' in '\textit{array}\verb')' \stmt
+    \verb'do '\stmt \verb'while ('\expr\verb')'
+    \break
+    \ctn
+\end{summary}
+
+\subsection{表达式}
+\label{subsec:expressions}
