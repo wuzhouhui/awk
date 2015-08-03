@@ -360,7 +360,7 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 \item 一个基本的表达式包括下面几种: \par
     一个不是元字符的字符, 例如 \verb'A', 这个正则表达式匹配的就是它本身. \par
     一个匹配特殊符号的转义字符: \verb'\t' 匹配一个制表符 (见表
-    \ref{tbl:escape_sequence}). \par
+    \ref{tbl:escape_sequences}). \par
     一个被引述的元字符, 例如 \verb'\*', 按字面意义匹配元字符. \par
     \verb'^' 匹配一行的开始. \par
     \verb'$' 匹配一行的结束. \par
@@ -614,7 +614,7 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \end{awkcode}
 (如果两个正则表达式匹配了同一个字符串, 我们就说这两个正则表达式是
 \cterm{等价} (\term{equivalent}) 的. 测试一下你对前面所说的正则表达式的
-规则的理解程序, 下面这两个正则表达式等不等价: \verb'^Asia|Europe$' 与 
+规则的理解程序, 下面这两个正则表达式等不等价: \verb'^Asia|Europe$' 与
 \verb'(Asia|Europe)$' ?)
 
 如果在其他字段中没有出现 \verb'Asia' 或 \verb'Europe', 那么上面的模式也
@@ -633,13 +633,13 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \subsection{范围模式}
 \label{subsec:range_patterns}
 
-一个范围模式由两个被逗号分开的模式组成, 正如 
+一个范围模式由两个被逗号分开的模式组成, 正如
 \begin{pattern}
     \textit{pat}$_1$\verb',' \textit{pat}$_2$
 \end{pattern}
 一个范围模式匹配多个输入行, 这些输入行从匹配 \textit{pat}$_1$ 的行开始,
-到匹配 \textit{pat}$_2$ 的行结束, 包括这两行; \textit{pat}$_2$ 可以与 
-\textit{pat}$_1$ 匹配到同一行, 这时候模式的范围大小就退化到了一行. 作为 
+到匹配 \textit{pat}$_2$ 的行结束, 包括这两行; \textit{pat}$_2$ 可以与
+\textit{pat}$_1$ 匹配到同一行, 这时候模式的范围大小就退化到了一行. 作为
 一个例子, 模式
 \begin{awkcode}
     /Canada/, /USA/
@@ -663,7 +663,7 @@ England 94      56      Europe
 
 在下一个例子里, 变量 \verb'FNR' 表示从当前输入文件中, 到目前为止读取到的
 行数, 变量 \verb'FILENAME' 表示当前输入文件名; 它们两个都是内建变量. 于是,
-程序 
+程序
 \begin{awkcode}
     FNR == 1, FNR == 5 { print FILENAME ": " $0 }
 \end{awkcode}
@@ -694,7 +694,7 @@ England 94      56      Europe
     \END        & \END      & 所有输入被读取完之后 \\
     \expr       & \verb'$3 < 100' & 第3个字段小于100的行 \\
     \textit{string-matching} & \verb'/Asia/' & 含有 \verb'Asia' 的行 \\
-    \textit{compound}   & \verb'$3 < 100 && $4 == "Asia"' & 第3个字段小于 
+    \textit{compound}   & \verb'$3 < 100 && $4 == "Asia"' & 第3个字段小于
         100 并且第 4 个字段含有  \verb'Asia' 的行 \\
     \textit{range} & \verb'NR==10, NR==20' & 输入的第10行到第20行. \\
     \hline
@@ -706,7 +706,7 @@ England 94      56      Europe
 \label{sec:actions}
 \marginpar{34}
 
-在一个 \patact 语句中, 模式决定动作什么时候执行. 有时候动作会非常简单: 一条 
+在一个 \patact 语句中, 模式决定动作什么时候执行. 有时候动作会非常简单: 一条
 单独的打印语句或赋值语句. 在有些时候, 动作有可能是多条语句, 语句之间用换
 行符或分号分开. 这一小节通过讨论表达式与流程控制语句来开始对动作的描述.
 \begin{summary}{动作}
@@ -728,3 +728,97 @@ England 94      56      Europe
 
 \subsection{表达式}
 \label{subsec:expressions}
+
+我们从表达式开始讨论, 因为表达式是最简单的语句, 大多数其他语句都是由不同类
+型的表达式组合而成. 主表达式与其他表达式通过运算符组合在一起, 形成一个新的
+表达式. 主表达式是最原始的构造块: 它们包括常量, 变量, 数组引用, 函数调用,
+以及各种内建变量, 例如字段的名字.
+
+我们从常量与变量开始对表达式的讨论. 然后是运算符, 它们可以用来组合表达式.
+这些表达式可以分成 5 种类别: 算术, 比较, 逻辑, 条件, 与赋值. 运算符之后,
+讨论的是内建算术运算与字符串函数, 最后是数组.
+
+\emph{常量} (\emph{Constants}). Awk 中只有两种类型的常量: 字符串与数值.
+将一个
+字符序列用一对双引号包围起来就创建了一个字符串常量, 正如 \verb'"Asia"',
+\marginpar{35}
+或 \verb'"hello, world"' 或 \verb'""'. 字符串常量可以包含表
+\ref{tbl:escape_sequences} 列出的转义序列.
+
+一个数值常量可以是一个整数, 就像 \verb'1127', 或十进制小数, \verb'3.14',
+或者是用科学计数法表示的数: \verb'0.707E-1'. 同一个数的不同表示法都拥有
+相同的值: \verb'1e6', \verb'1.00E6', \verb'10e5', \verb'0.1e7' 与
+\verb'1000000' 都表示同一个数. 所有的数都用浮点格式存储, 浮点数的精度依赖
+于机器.
+
+\emph{变量} (\emph{Variables}). 表达式可以包含若干种类型的变量: 用户定义的,
+内建的, 字段. 用户定义的变量名字由数字, 字母与下划线构成, 但是名字不能
+以数字开始. 所有的内建变量的名字都是大写字母.
+
+每一个变量都有一个值, 这个值可以是字符串或数值, 或两者都是. 因为变量的类型
+不需要事先声明, 所以 awk 需要根据上下文环境中推断出变量的类型.
+当需要时, awk 可
+以把字符串转化为数值, 或反之. 例如, 在程序
+\begin{awkcode}
+    $4 == "Asia" { print $1, 100 * $2 }
+\end{awkcode}
+里, \verb'$2' 会被转换成数值, 如果它原来不是的话, 同样的道理, 如果 \verb'$1'
+与 \verb'$4' 原来不是字符串的话, 它们会被转换成字符串.
+
+一个未初始化的变量的值是 \verb'""' (空字符串) 与 0.
+
+\emph{内建变量} (\emph{Built-In Variables}). 表 \ref{tbl:built_in_variables}
+列出的所有的内建变量. 其中一些我们已经见过了, 另一些会在本节或后面的章节里
+用到. 这些变量可以用在所有的表达式中, 而且可以被用户重置. 每当有一个新的文件
+被读取, \verb'FILENAME' 就会被重新赋值. 每当有一个新的记录被读进来,
+\verb'FNR', \verb'NF', \verb'NR' 就会被重新赋值. 另外, 当 \verb'$0' 发生
+改变, 或有新的字段被创建时, \verb'NF' 就被重置. \verb'RLENGTH' 与
+\verb'RSTART' 会随着每一次 \verb'match' 的调用而改变.
+
+\begin{figure}[ht]
+\captionsetup{type=table}
+\caption{内建变量}
+\label{tbl:built_in_variables}
+\begin{center}
+\begin{tabular}{l|l|c}
+	\hline
+	\hline
+	变量	& \multicolumn{1}{c}{意义}	& 默认值 \\
+	\hline
+	\verb'ARGC'	& 命令行参数的个数	& - \\
+	\verb'ARGV'	& 命令行参数数组	& - \\
+	\verb'FILENAME'	& 当前输入文件名	& - \\
+	\verb'FNR'	& 当前输入文件的记录个数& - \\
+	\verb'FS'	& 控制着输入行的字段分割符 & " " \\
+	\verb'NF'	& 当前记录的字段个数	& - \\
+	\verb'NR'	& 到目前为止读的记录数量 & - \\
+	\verb'OFMT'	& 数值的输出格式	& \verb'"%.6g"' \\
+	\verb'OFS'	& 输出字段分割符	& \verb'" "' \\
+	\verb'ORS'	& 输出的记录的分割符	& \verb'"\n"'	\\
+	\verb'RLENGTH'	& 被函数 \verb'match' 匹配的字符串的长度 & - \\
+	\verb'RS'	& 控制着输入行的记录分割符 & \verb'"\n"'	\\
+	\verb'RSTART'	& 被函数 \verb'match' 匹配的字符串的开始 \\
+	\verb'SUBSEP'	& 下标分割符	& \verb'"\034"'	\\
+	\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+\emph{字段变量} (\emph{Field Variables}). 当前输入行的字段从 \verb'$1',
+\verb'$2', 一直到 \verb'$NF'; \verb'$0' 表示整行. 字段变量与其他变量相比
+没什么不同 --- 它们也可以用在算术或字符串运算中, 也可以被赋值. 于是, 人们
+可以将 \filename{countries} 的每一行的第 2 个字段除以 1000, 从而可以用
+百万平方英里 --- 而不是千平方英里 --- 来表示面积:
+\begin{awkcode}
+    { $2 = $2 / 1000; print }
+\end{awkcode}
+也可以将一个新的字符串赋值给字段:
+\begin{awkcode}
+    BEGIN                   { FS = OFS = "\t" }
+    $4 == "North America"	{ $4 = "NA" }
+    $4 == "South America"	{ $4 = "SA" }
+                            { print }
+\end{awkcode}
+在这个程序里, \BEGIN 动作重新设置 \verb'FS' (\verb'FS' 控制输入行的字段分
+割符) 与 \verb'OS' (\verb'OS' 控制输出的字段分割符) 为 制表符. 第 4 行的
+\print 语句打印可能被修改过的 \verb'$0'.
