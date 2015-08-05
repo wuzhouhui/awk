@@ -789,7 +789,7 @@ England 94      56      Europe
 	\verb'ARGV'	& 命令行参数数组	& - \\
 	\verb'FILENAME'	& 当前输入文件名	& - \\
 	\verb'FNR'	& 当前输入文件的记录个数& - \\
-	\verb'FS'	& 控制着输入行的字段分割符 & " " \\
+	\verb'FS'	& 控制着输入行的字段分割符 & \verb'" "' \\
 	\verb'NF'	& 当前记录的字段个数	& - \\
 	\verb'NR'	& 到目前为止读的记录数量 & - \\
 	\verb'OFMT'	& 数值的输出格式	& \verb'"%.6g"' \\
@@ -821,4 +821,67 @@ England 94      56      Europe
 \end{awkcode}
 在这个程序里, \BEGIN 动作重新设置 \verb'FS' (\verb'FS' 控制输入行的字段分
 割符) 与 \verb'OS' (\verb'OS' 控制输出的字段分割符) 为 制表符. 第 4 行的
-\print 语句打印可能被修改过的 \verb'$0'.
+\print 语句打印可能被修改过的 \verb'$0'. 值得注意的是: 当 \verb'$0' 被
+\marginpar{36}
+修改或重新赋值 (同样的情况也可以发生在 \verb'$1', \verb'$2', 等等), \nf 
+就会被重新计算; 同样的道理, 当 \verb'$1' --- 或 \verb'$2' 等 --- 被修改了,
+\verb'$0' 就会被重新构造, 构造的方式是使用 \OFS 重新分割字段.
+
+字段也可以通过表达式指定. 例如, \verb'$(NF-1)' 表示当前输入行的倒数第 2 个
+字段. 表达式两边的括号不能省略: \verb'$NF-1' 表示最后一个字段减一后的值.
+
+如果字段变量引用到了不存在的字段, 例如 \verb'$(NF+1)', 那么它的值就是初始
+值 --- 空字符串. 可以通过向一个字段变量赋值来创建它. 例如, 下面这个程序创建
+了第 5 个字段, 该字段包含的值是人口密度:
+\begin{awkcode}
+    BEGIN { FS = OFS = "\t" }
+    { $5 = 1000 * $3 / $2; print }
+\end{awkcode}
+当需要时, 任何突然出现的字段都会被创建, 并且它们的初始值都是空值.
+
+每一行的字段数都可以不同, 但是 awk 的具体实现通常将字段数上限设置为 100.
+
+\emph{算术运算符} (\emph{Arithmetic Operators}). Awk 提供了通常的 \verb'+',
+\verb'-', \verb'*', \verb'/', \verb'%', \verb'^' 运算符. 运算符 \verb'%'
+计算余数: \verb'x%y' 的值是 \verb'x' 被 \verb'y' 除的余数; 当 \verb'x' 或
+\verb'y' 是负数时, \verb'x%y' 的结果依赖于机器. \verb'^' 是指数运算符: 
+\verb'x^y' 表示 \verb'x'$^\texttt{y}$. 所有的算术运算都用的是浮点数.
+
+\emph{比较运算符} (\emph{Comparison Operators}). 比较表达式指的是那些含有
+关系运算符, 或含有正则表达式匹配运算符的表达式. 关系运算符包括 \verb'<',
+\verb'<=', \verb'==' (相等), \verb'!=' (不相等), \verb'>=' 与 \verb'>'.
+\marginpar{37}
+正则表达式的运算符包括 \verb'~' (被匹配) 与 \verb'!~' (不被匹配).
+如果比较表达式的判断结果为真, 则它的值是 1, 否则为 0. 所以, 表达式
+\begin{awkcode}
+    $4 ~ /Asia/
+\end{awkcode}
+的值是 1, 如果当前输入行的第 4 个字段包含 \verb'Asia'的话; 反之, 如果不
+包含, 那么它的值就是 0.
+
+\emph{逻辑运算符} (\emph{Logical Operators}). 逻辑运算符将多个表达式组合
+成为逻辑表达式. 如果逻辑表达式的真值为真, 那么它的值就为 1; 如果为假, 值
+就为 0. 在对逻辑表达式求值时, 具有非零值或非空值的操作数被当作真; 相应的,
+值为零或空的操作数被当作假. 操作数之间被 \AND  或 \OR 分开, 求值是从左至
+右进行的, 当整个逻辑表达式的值可以确定时, 求值就停下来. 这意味着在表达式
+\begin{pattern}
+    \textit{expr}$_1$\ \AND\ \textit{expr}$_2$
+\end{pattern}
+中, 如果 \textit{expr}$_1$ 的值为假, 那么 \textit{expr}$_2$ 就不会被求值,
+而在表达式
+\begin{pattern}
+    \textit{expr}$_3$\ \OR\ \textit{expr}$_4$
+\end{pattern}
+中, 如果 \textit{expr}$_3$  的值为真, \textit{expr}$_4$ 就不会被求值.
+
+在 \AND  与 \OR 之后可以插入换行符.
+
+\emph{条件表达式} (\emph{Conditional Expressions}). 一个条件表达式具有形式:
+\begin{pattern}
+    \textit{expr}$_1$ \verb'?' \textit{expr}$_2$ \verb':' \textit{expr}$_3$
+\end{pattern}
+首先, \textit{expr}$_1$ 被求值. 如果值为真, 也就是值非零或非空, 那么整个 
+条件表达式的值就会是 \textit{expr}$_2$ 的值; 否则, 如果 \textit{expr}$_1$ 
+的值为假, 那么条件表达式的值就会是 \textit{expr}$_3$. \textit{expr}$_2$ 与
+\marginpar{38}
+\textit{expr}$_3$ 只有其中一个会被求值.
