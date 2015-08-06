@@ -860,3 +860,59 @@ England	94	56	Europe
 的值为假, 那么条件表达式的值就会是 \textit{expr}$_3$. \textit{expr}$_2$ 与
 \marginpar{38}
 \textit{expr}$_3$ 只有其中一个会被求值.
+
+下面这个程序利用条件表达式打印 \verb'$1' 的倒数, 如果 \verb'$1' 的值为 0,
+那就打印一条警告:
+\begin{awkcode}
+    { print ($1 != 0 ? 1/$1 : "$1 is zero, line " NR) }
+\end{awkcode}
+
+\emph{赋值运算符} (\emph{Assignment Operators}). 在赋值表达式中可以使用 7 
+种赋值运算符. 最简单的赋值表达式是
+\begin{pattern}
+    \textit{var} \verb'=' \textit{expr}
+\end{pattern}
+在这个表达式中, \textit{var} 是一个变量或字段的名字, 然后 \textit{expr} 是
+一个任意的表达式. 例如, 为了计算总人口与亚洲的国家数量, 我们可以写 
+\begin{awkcode}
+    $4 == "Asia"    { pop = pop + $3; n = n + 1 }
+    END             { print "Total population of the", n,
+                            "Asian countries is", pop, "million."
+                    }
+\end{awkcode}
+将 \filename{countries} 作为输入数据, 输出将是 
+\begin{file}
+    Total population of the 4 Asian countries is 2173 million.
+\end{file}
+第一个动作含有两个赋值语句, 第一个累积人口, 第二个计算国家的数量. 变量没有
+被显式地初始化, 但程序仍然按照期望得那样运行, 这是因为每个变量会默认初始为
+空字符串 \verb'""' 或数值 0.
+
+在下面这个程序里, 我们仍然利用了默认的初始化行为, 程序的功能是寻找拥有最
+多人口的国家:
+\begin{awkcode}
+    $3 > maxpop { maxpop = $3; country = $1 }
+    END         { print "country with largest population:",
+                    country, maxpop 
+                }
+\end{awkcode}
+注意, 只有当至少有一个 \verb'$3' 是正数时, 程序才是正确的.
+
+另外 6 个赋值运算符是 \verb'+=', \verb'-=', \verb'*=', \verb'/=', \verb'%=',
+以及 \verb'^='. 它们的意义都是类似的: \textit{v op}\verb'='\textit{e} 等价 
+于 \textit{v}\verb'='\textit{v op e}, 但是 \textit{v} 只被求值一次. 赋值 
+表达式:
+\begin{awkcode}
+    pop = pop + $3
+\end{awkcode}
+可以用 \verb'+=' 写成更加紧凑的形式:
+\begin{awkcode}
+    pop += $3
+\end{awkcode}
+紧凑形式的表达式与冗长版本具有相同的作用 --- 左值加上右值, 并赋给左值 ---
+但是 \verb'+=' 更简短, 运行起来也更快. 再看另外一个例子:
+\begin{awkcode}
+    { $2 /= 1000; print }
+\end{awkcode}
+这个程序将第 2 个字段除以 1000, 再打印整行.
+\marginpar{39}
