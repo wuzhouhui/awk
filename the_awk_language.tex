@@ -370,7 +370,7 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
     一个互补的字母集合: \verb'[^0-9]' 匹配任意一个字符, 但是除了数字.
 \item 这些运算符将正则表达式组合起来:   \par
     选择: \verb'A|B' 匹配 \verb'A' 或 \verb'B'. \par
-    连接: \verb'AB' 匹配后面紧跟着 \verb'B' 的 \verb'A'. \par
+    拼接: \verb'AB' 匹配后面紧跟着 \verb'B' 的 \verb'A'. \par
     闭包: \verb'A*' 匹配0个或多个 \verb'A'. \par
     正闭包: \verb'A+' 匹配一个或多个 \verb'A'. \par
     零或一: \verb'A?' 匹配空字符串或 \verb'A'. \par
@@ -435,11 +435,11 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 于是, \verb'[.]' 匹配一个句点, \verb'^[^^]' 匹配不以脱字符开始的字符串.
 
 可以使用括号来指定正则表达式中的各个成分如何组合. 有两种二元正则表达式运算
-符: 选择与连接. 选择运算符 \verb'|' 用来指定一个选择: 如果 \textit{r}$_1$
+符: 选择与拼接. 选择运算符 \verb'|' 用来指定一个选择: 如果 \textit{r}$_1$
 与 \textit{r}$_2$ 是正则表达式, 那么 \textit{r}$_1$\verb'|'\textit{r}$_2$
 所匹配的字符串, 或者与 \textit{r}$_1$, 或者与 \textit{r}$_2$ 匹配.
 
-Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 是正则
+Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 是正则
 表达式, 那么 \verb'('\textit{r}$_1$\verb')'\verb'('\textit{r}$_1$\verb')'
 (在 \verb'('\textit{r}$_1$\verb')' 与 \verb'('\textit{r}$_2$\verb')' 之
 间没有空格) 所匹配的字符串具有形式 \textit{xy}, 其中 \textit{x} 被
@@ -474,7 +474,7 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     \verb'(AB)+C' \> 匹配 \verb'ABC', \verb'ABABC', \verb'ABABABC', 等等.
 \end{tabbing}
 
-在正则表达式中, 选择运算符 \verb'|' 的优先级最低, 然后是连接运算, 最后是重
+在正则表达式中, 选择运算符 \verb'|' 的优先级最低, 然后是拼接运算, 最后是重
 复运算符 \verb'*', \verb'+', 与 \verb'?'. 与算术表达式的规则一样, 优先
 级高的运算符优先处理. 这种规则经常使得括号被省略: \verb'ab|cd' 等价于
 \verb'(ab)|(cd)', \verb'^ab|cd*e$' 等价于 \verb'(^ab)|(c(d*)e$)'.
@@ -844,7 +844,7 @@ England 94      56      Europe
 \emph{算术运算符} (\emph{Arithmetic Operators}). Awk 提供了通常的 \verb'+',
 \verb'-', \verb'*', \verb'/', \verb'%', \verb'^' 运算符. 运算符 \verb'%'
 计算余数: \verb'x%y' 的值是 \verb'x' 被 \verb'y' 除的余数; 当 \verb'x' 或
-\verb'y' 是负数时, \verb'x%y' 的结果依赖于机器. \verb'^' 是指数运算符: 
+\verb'y' 是负数时, \verb'x%y' 的结果依赖于机器. \verb'^' 是指数运算符:
 \verb'x^y' 表示 \verb'x'$^\texttt{y}$. 所有的算术运算都用的是浮点数.
 
 \emph{比较运算符} (\emph{Comparison Operators}). 比较表达式指的是那些含有
@@ -880,8 +880,8 @@ England 94      56      Europe
 \begin{pattern}
     \textit{expr}$_1$ \verb'?' \textit{expr}$_2$ \verb':' \textit{expr}$_3$
 \end{pattern}
-首先, \textit{expr}$_1$ 被求值. 如果值为真, 也就是值非零或非空, 那么整个 
-条件表达式的值就会是 \textit{expr}$_2$ 的值; 否则, 如果 \textit{expr}$_1$ 
+首先, \textit{expr}$_1$ 被求值. 如果值为真, 也就是值非零或非空, 那么整个
+条件表达式的值就会是 \textit{expr}$_2$ 的值; 否则, 如果 \textit{expr}$_1$
 的值为假, 那么条件表达式的值就会是 \textit{expr}$_3$. \textit{expr}$_2$ 与
 \marginpar{38}
 \textit{expr}$_3$ 只有其中一个会被求值.
@@ -892,40 +892,42 @@ England 94      56      Europe
     { print ($1 != 0 ? 1/$1 : "$1 is zero, line " NR) }
 \end{awkcode}
 
-\emph{赋值运算符} (\emph{Assignment Operators}). 在赋值表达式中可以使用 7 
+\emph{赋值运算符} (\emph{Assignment Operators}). 在赋值表达式中可以使用 7
 种赋值运算符. 最简单的赋值表达式是
 \begin{pattern}
     \textit{var} \verb'=' \textit{expr}
 \end{pattern}
 在这个表达式中, \textit{var} 是一个变量或字段的名字, 然后 \textit{expr} 是
-一个任意的表达式. 例如, 为了计算总人口与亚洲的国家数量, 我们可以写 
+一个任意的表达式. 例如, 为了计算总人口与亚洲的国家数量, 我们可以写
 \begin{awkcode}
     $4 == "Asia"    { pop = pop + $3; n = n + 1 }
     END             { print "Total population of the", n,
                             "Asian countries is", pop, "million."
                     }
 \end{awkcode}
-将 \filename{countries} 作为输入数据, 输出将是 
+将 \filename{countries} 作为输入数据, 输出将是
 \begin{file}
     Total population of the 4 Asian countries is 2173 million.
 \end{file}
 第一个动作含有两个赋值语句, 第一个累积人口, 第二个计算国家的数量. 变量没有
-被显式地初始化, 但程序仍然按照期望得那样运行, 这是因为每个变量都会默认初始为
-空字符串 \verb'""' 或数值 0.
+被显式地初始化, 但程序仍然按照期望得那样运行, 这是因为每个变量都会默认
+初始化为空字符串 \verb'""' 或数值 0.
 
 在下面这个程序里, 我们仍然利用了默认的初始化行为, 程序的功能是寻找拥有最
 多人口的国家:
 \begin{awkcode}
     $3 > maxpop { maxpop = $3; country = $1 }
     END         { print "country with largest population:",
-                    country, maxpop 
+                    country, maxpop
                 }
 \end{awkcode}
-注意, 只有当至少有一个 \verb'$3' 是正数时, 程序才是正确的.
+注意, 只有当至少有一行的 \verb'$3' 是正数时, 程序才是正确的.
 
 另外 6 个赋值运算符是 \verb'+=', \verb'-=', \verb'*=', \verb'/=', \verb'%=',
-以及 \verb'^='. 它们的意义都是类似的: \textit{v op}\verb'='\textit{e} 等价 
-于 \textit{v}\verb'='\textit{v op e}, 但是 \textit{v} 只被求值一次. 赋值 
+以及 \verb'^='. 它们的意义都是类似的: \textit{v op}\ \verb'='\ \textit{e}
+等价
+于 \textit{v}\ \verb'='\ \textit{v op e}, 但是 \textit{v} 只被求值一次.
+赋值
 表达式:
 \begin{awkcode}
     pop = pop + $3
@@ -941,3 +943,149 @@ England 94      56      Europe
 \end{awkcode}
 这个程序将第 2 个字段除以 1000, 再打印整行.
 \marginpar{39}
+
+一个赋值语句是一个表达式; 整个表达式的值是左边的变量的新值. 于是, 赋值语句
+可以放在任意表达式内部. 在复合赋值语句
+\begin{awkcode}
+    FS = OFS = "\t"
+\end{awkcode}
+中, 字段分割符与输出字段分割符都被设置为制表符. 赋值表达式在条件判断中也
+很常见, 例如:
+\begin{awkcode}
+    if ((n = length($0)) > 0) ...
+\end{awkcode}
+
+\emph{自增与自减} (\emph{Increment and Decrement Operators}). 赋值语句:
+\begin{awkcode}
+    n = n + 1
+\end{awkcode}
+通常写成 \verb'++n' 或 \verb'n++', 这里用到了一元自增运算符, 作用是给变量
+加 1. 前缀形式 \verb'++n' 在传递 \verb'n' 的值之前为 \verb'n' 加 1; 后缀
+形式 \verb'n++' 在传递 \verb'n' 的值之后, 为 \verb'n' 加 1. 当 \verb'++'
+应用到赋值表达式时, 这会造成一些不一样的地方. 如果 \verb'n' 的初始值为 1,
+赋值语句 \verb'i = ++n' 为 \verb'n' 加 1, 并将新值 \verb'2' 赋给 \verb'i',
+而 \verb'i = n++' 同样为 \verb'n' 加 1, 但将旧值 \verb'1' 赋给 \verb'i'.
+如果仅仅是给 \verb'n' 加 1, 那么 \verb'n++' 与 \verb'++n' 没什么区别.
+前缀与后缀自减运算符 \verb'--' 给变量减 1, 除此之外与 \verb'++' 相同.
+
+\emph{内建算术函数} (\emph{Built-In Arithmetic Functions}). 内建算术函数在
+表 \ref{tbl:built_in_arithmetic_functions} 中列出. 这些函数都可以作为主要
+表达式使用. 在表格中, \textit{x} 与 \textit{y} 都是任意的表达式.
+
+\begin{figure}[ht]
+\captionsetup{type=table}
+\caption{内建算术函数}
+\label{tbl:built_in_arithmetic_functions}
+\begin{center}
+    \begin{tabular}{l|l}
+        \hline
+        \hline
+        函数    & \multicolumn{1}{c}{返回值}    \\
+        \hline
+        \verb'atan2('\textit{y}\verb','\textit{x}\verb')'   & $y/x$ 的反正切值,
+        定义域在 $-\pi$ 到 $\pi$ 之间   \\
+        \verb'cos('\textit{x}\verb')'   & \textit{x} 的余弦值, \textit{x}
+        以弧度为单位    \\
+        \verb'exp('\textit{x}\verb')'   & \textit{x} 的指数函数, $e^x$ \\
+        \verb'int('\textit{x}\verb')'   & \textit{x} 的整数部分; 当
+        \textit{x} 大于 0 时, 向 0 取整 \\
+        \verb'log('\textit{x}\verb')'   & \textit{x} 的自然对数 (以 $e$ 为
+        底)  \\
+        \verb'rand()'   & 返回一个随机数 \textit{r}, 0 \le \textit{r}
+        < 1 \\
+        \verb'sin('\textit{x}\verb')'   & \textit{x} 的正弦值, \textit{x}
+        以弧度为单位.   \\
+        \verb'sqrt('\textit{x}\verb')'  & \textit{x} 的方根 \\
+        \verb'srand('\textit{x}\verb')' & \textit{x} 是 \verb'rand()' 新的
+        随机数种子  \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{figure}
+
+可以用这些函数来得到一些有用的常量: \verb'atan2(0,-1)' 得到 $\pi$,
+\verb'exp(1)' 返回 $e$ --- 自然对数的底. 为了计算 \textit{x} 的以 10 为底
+的对数, 我们可以用 \verb'log('\textit{x}\verb')/log(10)' 来实现.
+
+\verb'rand()' 返回一个大于等于 0, 小于 1 的伪随机浮点数. 调用
+\marginpar{40}
+\verb'srand('\textit{x}\verb')' 可以使随机数生成器的开始点从 \textit{x} 开
+始. 如果没有调用 \verb'srand', 每次程序运行时, \verb'rand'
+都从同一个值开始.
+
+赋值语句
+\begin{awkcode}
+    randint = int(n * rand()) + 1
+\end{awkcode}
+将 \verb'randint' 的值设置为 \verb'1' 到 \verb'n' 之间的一个整数, 包括
+\verb'1' 与 \verb'n'. 这里我们用到函数 \verb'int' 来丢弃返回值的小数部分.
+赋值语句
+\begin{awkcode}
+    x = int(x + 0.5)
+\end{awkcode}
+将正数 \verb'x' 四舍五入为最接近它的整数.
+
+\emph{字符串运算符} (\emph{String Operators}). Awk 中只有一种字符运算符 ---
+拼接. 拼接并没有显式的运算符, 字符串可以通过这些方式创建: 字符串常量, 变量,
+数组元素, 函数返回值, 以及其他与之相连的表达式, 程序
+\begin{awkcode}
+    { print NR ":" $0 }
+\end{awkcode}
+会将每一个输入行打印出来, 并在前面冠上行号, 以及一个冒号. 行号, 冒号与输入
+行之间没有空格. 数值 \nr 会被自动转换成字符串 (如果必要的话, \verb'$0' 也
+会做相同的转换); 然后三个字符串拼接在一起并打印出来.
+
+\emph{作为正则表达式的字符串} (\emph{Strings as Regular Expressions}).
+到目前为止, 在所有的匹配表达式中, \verb'~' 与 \verb'!~' 右边的操作数都是
+都是一个被斜杆包围起来的正则表达式. 但实际上, 任意一个表达式都可以用作匹配
+运算符的右操作数. Awk 对这些表达式求值, 如果必要的话将这些值转换成字符串,
+再将这些字符串解释成正则表达式. 例如, 程序
+\begin{awkcode}
+    BEGIN { digits = "^[0-9]+$" }
+    $2 ~ digits
+\end{awkcode}
+会将那些第 2 个字段有且仅有数字的行打印出来.
+
+因为字符串可以被拼接起来, 于是一个正则表达式可以由多个子部分构成.
+下面这个程序将那些具有有效的浮点数的行打印出来:
+\begin{awkcode}
+    BEGIN {
+        sign = "[+-]?"
+        decimal = "[0-9]+[.]?[0-9]*"
+        fraction = "[.][0-9]+"
+        exponent = "([eE]" sign "[0-9]+)?"
+        number = "^" sign "(" decimal "|" fraction ")" exponent "$"
+    }
+    $0 ~ number
+\end{awkcode}
+在一个匹配表达中, 一个被双引号包围的字符串, 可以与一个被斜杆包围的正则
+\marginpar{41}
+达式互换着使用, 例如 \verb'"^[0-9]+$"' 与 \verb'/^[0-9]+$/'. 然而有一个
+例外, 如果被双引号包围的字符串想要匹配一个正则表达式元字符的字面值, 当写
+成被斜杆包围的形式时, 就要在反斜杆的前面再加一个反斜杆来保护它. 于是
+\begin{awkcode}
+    $0 ~ /(\+|-)[0-9]+/
+\end{awkcode}
+与
+\begin{awkcode}
+    $0 ~ "(\\+|-)[0-9]+"
+\end{awkcode}
+是等价的.
+
+这种性质可能看起来非常晦涩难懂, 但是, 被双引号包围的字符串被 awk 解析时,
+起保护作用的反斜线就会被移除, 这样想的话应该就容易理解多了. 如果一个正则
+表达式的元字符需要一个反斜杆来暂时移除它的特殊意义, 那么在字符串中,
+这个反斜杆就需要一个额外的反斜杆来保住它自己. 如果一个匹配运算符的右
+操作数是一个变量或字段, 正如
+\begin{awkcode}
+    x ~ $1
+\end{awkcode}
+那么第 1 个字段中的反斜杆就不需要一层额外的保护, 因为在数据中反斜杆并没有
+特殊的意义.
+
+顺便说一句, 测试一下你对正则表达式交互性的理解是很容易的: 程序
+\begin{awkcode}
+    $1 ~ $2
+\end{awkcode}
+可以让你输入一个字符串与一个正则表达式; 如果字符串匹配正则表达式的话, 它
+就会回射该行.
