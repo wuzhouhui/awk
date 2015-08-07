@@ -370,7 +370,7 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
     一个互补的字母集合: \verb'[^0-9]' 匹配任意一个字符, 但是除了数字.
 \item 这些运算符将正则表达式组合起来:   \par
     选择: \verb'A|B' 匹配 \verb'A' 或 \verb'B'. \par
-    连接: \verb'AB' 匹配后面紧跟着 \verb'B' 的 \verb'A'. \par
+    拼接: \verb'AB' 匹配后面紧跟着 \verb'B' 的 \verb'A'. \par
     闭包: \verb'A*' 匹配0个或多个 \verb'A'. \par
     正闭包: \verb'A+' 匹配一个或多个 \verb'A'. \par
     零或一: \verb'A?' 匹配空字符串或 \verb'A'. \par
@@ -435,11 +435,11 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 于是, \verb'[.]' 匹配一个句点, \verb'^[^^]' 匹配不以脱字符开始的字符串.
 
 可以使用括号来指定正则表达式中的各个成分如何组合. 有两种二元正则表达式运算
-符: 选择与连接. 选择运算符 \verb'|' 用来指定一个选择: 如果 \textit{r}$_1$
+符: 选择与拼接. 选择运算符 \verb'|' 用来指定一个选择: 如果 \textit{r}$_1$
 与 \textit{r}$_2$ 是正则表达式, 那么 \textit{r}$_1$\verb'|'\textit{r}$_2$
 所匹配的字符串, 或者与 \textit{r}$_1$, 或者与 \textit{r}$_2$ 匹配.
 
-Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 是正则
+Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 是正则
 表达式, 那么 \verb'('\textit{r}$_1$\verb')'\verb'('\textit{r}$_1$\verb')'
 (在 \verb'('\textit{r}$_1$\verb')' 与 \verb'('\textit{r}$_2$\verb')' 之
 间没有空格) 所匹配的字符串具有形式 \textit{xy}, 其中 \textit{x} 被
@@ -474,7 +474,7 @@ Awk 不存在显式的连接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     \verb'(AB)+C' \> 匹配 \verb'ABC', \verb'ABABC', \verb'ABABABC', 等等.
 \end{tabbing}
 
-在正则表达式中, 选择运算符 \verb'|' 的优先级最低, 然后是连接运算, 最后是重
+在正则表达式中, 选择运算符 \verb'|' 的优先级最低, 然后是拼接运算, 最后是重
 复运算符 \verb'*', \verb'+', 与 \verb'?'. 与算术表达式的规则一样, 优先
 级高的运算符优先处理. 这种规则经常使得括号被省略: \verb'ab|cd' 等价于
 \verb'(ab)|(cd)', \verb'^ab|cd*e$' 等价于 \verb'(^ab)|(c(d*)e$)'.
@@ -1026,14 +1026,14 @@ England 94      56      Europe
 将正数 \verb'x' 四舍五入为最接近它的整数.
 
 \emph{字符串运算符} (\emph{String Operators}). Awk 中只有一种字符运算符 ---
-连接. 连接并没有显式的运算符, 字符串可以通过这些方式创建: 字符串常量, 变量,
+拼接. 拼接并没有显式的运算符, 字符串可以通过这些方式创建: 字符串常量, 变量,
 数组元素, 函数返回值, 以及其他与之相连的表达式, 程序
 \begin{awkcode}
     { print NR ":" $0 }
 \end{awkcode}
 会将每一个输入行打印出来, 并在前面冠上行号, 以及一个冒号. 行号, 冒号与输入
 行之间没有空格. 数值 \nr 会被自动转换成字符串 (如果必要的话, \verb'$0' 也
-会做相同的转换); 然后三个字符串连接在一起并打印出来.
+会做相同的转换); 然后三个字符串拼接在一起并打印出来.
 
 \emph{作为正则表达式的字符串} (\emph{Strings as Regular Expressions}).
 到目前为止, 在所有的匹配表达式中, \verb'~' 与 \verb'!~' 右边的操作数都是
