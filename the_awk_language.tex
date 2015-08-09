@@ -1060,7 +1060,7 @@ England	94	56	Europe
 就会回射该行.
 
 \emph{内建字符串函数} (\emph{Built-In String Functions}). 表
-ref{tbl:built_in_string_functions} 列出了 awk 的内建字符串函数. 在这张表
+\ref{tbl:built_in_string_functions} 列出了 awk 的内建字符串函数. 在这张表
 中, \textit{r} 表示一个正则表达式 (或者是一个字符串, 或者是被一对斜杆包围
 了的). \textit{s} 与 \textit{t} 是字符串表达式, \textit{n} 与 \textit{p}
 是整数.
@@ -1131,7 +1131,8 @@ ref{tbl:built_in_string_functions} 列出了 awk 的内建字符串函数. 在�
 
 \marginpar{42}
 \verb'sprintf('\fmt\verb','\expr$_1$\verb','\expr$_2$\verb','\ldots%
-\verb','\expr$_n$\verb') 返回 (不打印) 一个字符串, 这个字符串包含格式化了的
+\verb','\expr$_n$\verb')' 返回 (不打印) 一个字符串, 这个字符串包含格式%
+化了的
 \expr$_1$, \expr$_2$, \ldots, \expr$_n$, 格式化的依据与 \printf 的格式说
 明符相同, \printf 的格式说明符就是 \fmt. 于是, 语句
 \begin{awkcode}
