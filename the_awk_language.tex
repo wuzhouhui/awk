@@ -1174,7 +1174,136 @@ England 94      56      Europe
 \end{awkcode}
 把一个字符串赋值给 \verb'x', 这个字符串通过%
 把 \verb'$1' 格式化成 10 个字符宽度的字符串, 把 \verb'$2' 格式化成至少 6
-个字符宽度的十进制整数来生成. \ref{sec:output} 节包含了一个完整的, 关于 
+个字符宽度的十进制整数来生成. \ref{sec:output} 节包含了一个完整的, 关于
 格式转换字符的描述.
 
-\verb'sub' 
+自从 Unix 文件编辑器 \verb'ed' 的替换命令出现之后, \verb'sub' 与
+\verb'gsub' 就已经被模式化了.
+\verb'sub('\textit{r}\verb','\textit{s}\verb','\textit{t}\verb')' 首先在
+目标字符串 \textit{t} 找到能被 \textit{r} 匹配的最左最长子串, 再将这个子串
+替换为 \textit{s}. 在 \verb'ed' 中, ``最左最长'' 意味着先找到最左边的匹配,
+然后尽可能的延长匹配的长度.
+
+如果目标字符串是 \verb'banana', 那么 \verb'anan' 就是正则表达式
+\verb'(an)+' 的最左最长匹配. 相反, \verb'(an)*' 的最左最长匹配是 \verb'b'
+左边的空字符串.
+
+\verb'sub' 返回替换发生的次数.
+\verb'sub('\textit{r}\verb','\textit{s}\verb')' 等价于
+\verb'gsub('\textit{r}\verb','\textit{s}\verb','\verb'$0'\verb')'.
+
+\verb'gsub' 是类似的, 但是它会连续地替换最左最长且不重叠的子串, 而不是只
+替换子串的第一次出现; 函数返回值仍然是替换发生的次数\footnote{由此可见,
+\texttt{sub} 的返回值小于等于 1, 而 \texttt{gsub}
+返回值大于等于 0. ---- 译者}.
+\marginpar{43}
+(\verb'gsub' 的 \verb'g' 是 ``global'' 的缩写, 意思是替换是全局). 例如,
+程序
+\begin{awkcode}
+    { gsub(/USA/, "United States"); print }
+\end{awkcode}
+将输入行中的每一个 ``USA'' 替换为 ``United States'' (在这样的例子里,
+当 \verb'$0' 发生改变时, 字段与 \nf 也会跟着发生改变). 程序
+\begin{awkcode}
+    gsub(/ana/, "anda", "banana")
+\end{awkcode}
+将 \verb'banana' 变为 \verb'bandana'; 匹配是不重叠的.
+
+对一个由 \verb'sub' 或 \verb'gsub' 执行的替换来说, 字符 \verb'&' 在
+\textit{s} 中任意一次出现都会被替换为被 \textit{r} 匹配的子串. 于是
+\footnote{在 mawk-1.3.3 中, \texttt{sub} 与 \texttt{gsub}
+的第 3 个参数 \textit{t} 必须是变量. ---- 译者}
+\begin{awkcode}
+    gsub(/a/, "aba", "banana")
+\end{awkcode}
+将 \verb'banana' 变为 \verb'babanabanaba'; 同样的效果也可用
+\begin{awkcode}
+    gsub(/a/, "&b&", "banana")
+\end{awkcode}
+来实现. 在 \verb'&' 的左边加上一个反斜杆就可以关闭它在替换字符串中的特殊
+意义.
+
+\verb'substr('\textit{s}\verb','\textit{p}\verb')'
+返回 \textit{s} 从位置 \textit{p} 开始的后缀. 如果使用了
+\verb'substr('\textit{s}\verb','\textit{p}\verb')', 那么只会返回后缀的
+前 \textit{n} 字符; 如果后缀的长度小于 \textit{n}, 那么就会返回整个后缀.
+例如, 我们可以将国家名缩写为名字的前三个字母, 程序
+\begin{awkcode}
+    { $1 = substr($1, 1, 3); print $0 }
+\end{awkcode}
+输出
+\begin{awkcode}
+    USS 8649 275 Asia
+    Can 3852 25 North America
+    Chi 3705 1032 Asia
+    USA 3615 237 North America
+    Bra 3286 134 South America
+    Ind 1267 746 Asia
+    Mex 762 78 North America
+    Fra 211 55 Europe
+    Jap 144 120 Asia
+    Ger 96 61 Europe
+    Eng 94 56 Europe
+\end{awkcode}
+修改 \verb'$1' 使得 awk 重新计算 \verb'$0', 于是字段之间的分隔符就变成了
+空格 (\verb'OFS' 的默认值), 而不是制表符.
+
+只要将字符串陆续写出来就可以将它们拼接在一起. 例如, 对于
+\filename{countries}, 程序
+\begin{awkcode}
+        { s = s substr($1, 1, 3) " " }
+    END { print s}
+\end{awkcode}
+打印
+\marginpar{44}
+\begin{awkcode}
+    USS Can Chi USA Bra Ind Mex Fra Jap Ger Eng
+\end{awkcode}
+程序每一次只为 \verb's' 构造一小段. (如果你很在意 \verb's' 的末尾的空格,
+在 \verb'END' 使用
+\begin{awkcode}
+    print substr(s, 1, length(s)-1)
+\end{awkcode}
+替换 \verb'print s')
+
+\emph{数值还是字符串?} (\emph{Number or String?}). 表达式的值可以自动从
+数值转换为字符串, 或反之, 具体取决于该值将用于什么运算. 算术表达式, 例如
+\begin{awkcode}
+    pop + $3
+\end{awkcode}
+这个表达式要求 \verb'pop' 与 \verb'$3' 都必须是数值, 如果它们原来不是数值
+的话, 就会被强制转换成数值. 类似的, 赋值语句
+\begin{awkcode}
+    pop += $3
+\end{awkcode}
+也要求 \verb'pop' 与 \verb'$3' 是数值. 字符串表达式, 就像
+\begin{awkcode}
+    $1 $2
+\end{awkcode}
+要求 \verb'$1' 与 \verb'$2' 必须是字符串才能进行拼接, 所以如果必要的话,
+它们就会被强制转换成字符串.
+
+同样的运算符有时既可以用在数值上, 也可以用在字符串, 对于这种情况有一些特殊
+的规则. 在赋值语句 \textit{v}\ \verb'='\ \textit{e} 中, 赋值语句本身与变量
+\textit{v} 都会对表达式 \textit{e} 的有所要求. 比较表达式, 就像
+\begin{awkcode}
+    x == y
+\end{awkcode}
+如果两个操作数都是数值, 那么比较就按照数值进行; 否则, 数值类型的操作数被
+强制转换成字符串, 然后再字符串的方式进行比较.
+
+现在让我们来查看一下这条规则具体应用时会产生什么影响, 语句
+\begin{awkcode}
+    $1 ==  $2
+\end{awkcode}
+涉及到字段. 在这个语句里, 比较的类型取决于两个字段是否包含数值或字符串,
+而这只有到程序运行时才可以知道; 对于不同的行, 比较的类型可能是不一样的.
+当 awk 在运行状态下创建一个字段时, 会自动将它的类型设置为字符串; 另外,
+如果字段包含一个机器可表示的数, 它也会给这个字段设置一个数值类型.
+
+例如, 比较 \verb'$1 == $2' 将会按照数值进行, 并且比较结果为真, 如果
+\verb'$1' 与 \verb'$2' 的值是下面任意一种的话:
+\begin{file}
+    1   1.0    +1   1e0    0.1e+1   10E-1    001
+\end{file}
+\marginpar{45}
