@@ -134,7 +134,7 @@
 割符.
 
 下面这个程序在 \BEGIN 的动作里将字段字割符设置为制表符 (\verb'\t'), 并在
-输出之前打印标题. 第二个 \printf 语句 (对每一个输入行它都会被执行) 半输出
+输出之前打印标题. 第二个 \printf 语句 (对每一个输入行它都会被执行) 将输出
 格式化成一个表格, 使得每一列都刚好与标题的列表头对齐. \END 打印总和. (变量
 与表达式在 \ref{sec:actions} 节讨论.
 \begin{awkcode}
@@ -1046,3 +1046,88 @@ England	94	56	Europe
 \end{awkcode}
 可以让你输入一个字符串与一个正则表达式; 如果字符串匹配正则表达式的话, 它
 就会回射该行.
+
+\emph{内建字符串函数} (\emph{Built-In String Functions}). 表
+ref{tbl:built_in_string_functions} 列出了 awk 的内建字符串函数. 在这张表
+中, \textit{r} 表示一个正则表达式 (或者是一个字符串, 或者是被一对斜杆包围
+了的). \textit{s} 与 \textit{t} 是字符串表达式, \textit{n} 与 \textit{p}
+是整数.
+\begin{figure}[ht]
+    \caption{内建字符串函数}
+    \label{tbl:built_in_string_functions}
+    \begin{center}
+        \begin{tabular}{l|l}
+            \hline
+            \hline
+            函数    & 描述  \\
+            \hline
+            \verb'gsub('\textit{r}\verb','\textit{s}\verb')' &  将
+            \verb'$0' 中所有出现的 \textit{r} 替换为 \textit{s}, 返回
+            替换发生的次数. \\
+            \verb'gsub('\textit{r}\verb','\textit{s}\verb','\textit{t}
+            \verb')'    & 将字符串 \textit{t} 中所有出现的 \textit{r}
+            替换为 \textit{s}, 返回替换发生的次数 \\
+            \verb'index('\textit{s}\verb','\textit{t}\verb')' & 返回字符串
+            \textit{t} 在 \textit{s}中第一次出现的位置, 如果\textit{t}
+            没有出现的话, 返回 0.   \\
+            \verb'length('\textit{s}\verb')'    & 返回 \textit{s} 包含的
+            字符个数 \\
+            \verb'match('\textit{s}\verb','\textit{r}\verb')'   &
+            测试 \textit{s} 是否包含能被 \textit{r} 匹配的子串, 返回索引或
+            0; 设置 \verb'RSTART' 与 \verb'RLENGTH' \\
+            \verb'split('\textit{s}\verb','\textit{a}\verb')'   &
+            用 \verb'FS' 将 \textit{s} 分割到数组 \textit{a} 中, 返回字段
+            的个数  \\
+            \verb'split('\textit{s}\verb','\textit{a}\verb','\textit{fs}%
+            \verb')'    & 用 \textit{fs} 分割 \textit{s} 到数组 \textit{a}
+            中, 返回字段的个数  \\
+            \verb'sprintf('\textit{fmt}\verb','\textit{expr-list}\verb')'
+            & 根据格式字符串 \textit{fmt} 返回格式化后 \textit{expr-list}
+            \\
+            \verb'sub('\textit{r}\verb','\textit{s}\verb')' &
+            将 \verb'$0' 的最左最长的, 能被 \textit{r} 匹配的子字符串替换为
+            \textit{s}, 返回替换发生的次数. \\
+            \verb'sub('\textit{r}\verb','\textit{s}\verb','\textit{t}%
+            \verb')'    & 把 \textit{t} 的最左最长的, 能被 \textit{r} 匹配
+            的子字符串替换为 \textit{s}, 返回替换发生的次数.    \\
+            \verb'substr('\textit{s}\verb','\textit{p}\verb')'  &
+            返回 \textit{s} 中从位置 \textit{p} 开始的后缀.\\
+            \verb'substr('\textit{s}\verb','\textit{p}\verb','\textit{n}%
+            \verb')'    & 返回 \textit{s} 中从位置 \textit{p} 开始的, 长
+            度为 \textit{n} 的子字符串. \\
+            \hline
+        \end{tabular}
+    \end{center}
+\end{figure}
+
+函数 \verb'index('\textit{s}\verb','\textit{t}\verb')' 返回 \textit{t} 在
+\textit{s} 中第一次出现的位置; 如果 \textit{t} 没有在 \textit{s} 中出现,
+那就返回 0. 字符串的第一个字符的位置是 1:
+\begin{awkcode}
+    index("banana", "an")
+\end{awkcode}
+返回 2.
+
+函数 \verb'match('\textit{s}\verb','\textit{r}\verb')' 返回 \textit{s} 中
+最左最长的, 能被 \textit{r} 匹配的子串, 返回值是子串在 \textit{s} 中的开始
+位置, 如果没有找到相匹配的子串, 那就返回 0. 这个函数还会将内建变量
+\verb'RSTART' 置为子串的起始位置, 将 \verb'RLENGTH' 置为子串的长度.
+
+函数 \verb'split('\textit{s}\verb','\textit{a}\verb','\textit{fs}\verb')'
+根据分割符 \textit{fs} 将字符串 \textit{s} 分割成一个个子串, 并存到数组
+\textit{a} 中. 这个函数会在数组之后讨论, 也就是在这一节的末尾.
+
+\marginpar{42}
+\verb'sprintf('\fmt\verb','\expr$_1$\verb','\expr$_2$\verb','\ldots%
+\verb','\expr$_n$\verb') 返回 (不打印) 一个字符串, 这个字符串包含格式化了的
+\expr$_1$, \expr$_2$, \ldots, \expr$_n$, 格式化的依据与 \printf 的格式说
+明符相同, \printf 的格式说明符就是 \fmt. 于是, 语句
+\begin{awkcode}
+    x = sprintf("%10s %6d", $1, $2)
+\end{awkcode}
+把一个字符串赋值给 \verb'x', 这个字符串通过%
+把 \verb'$1' 格式化成 10 个字符宽度的字符串, 把 \verb'$2' 格式化成至少 6
+个字符宽度的十进制整数来生成. \ref{sec:output} 节包含了一个完整的, 关于 
+格式转换字符的描述.
+
+\verb'sub' 
