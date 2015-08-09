@@ -1323,7 +1323,7 @@ England	94	56	Europe
 
 数值的字符串形式需要根据 \verb'OFMT' 转换后才会输出. 为了拼接, 比较, 与
 数组下标的创建而需要将数值转换成字符串时, \verb'OFMT' 也会影响转换的过程.
-\verb'OFMT' 的默认值是 \verb'"%.6g". 于是
+\verb'OFMT' 的默认值是 \verb'"%.6g"'. 于是
 \begin{awkcode}
     BEGIN { print 1E2 "", 12E-2 "", E12 "", 1.23456789 "" }
 \end{awkcode}
