@@ -1180,7 +1180,8 @@ England 94      56      Europe
 自从 Unix 文件编辑器 \verb'ed' 的替换命令出现之后, \verb'sub' 与
 \verb'gsub' 就已经被模式化了.
 \verb'sub('\textit{r}\verb','\textit{s}\verb','\textit{t}\verb')' 首先在
-目标字符串 \textit{t} 找到能被 \textit{r} 匹配的最左最长子串, 再将这个子串
+目标字符串 \textit{t} 中找到能被 \textit{r} 匹配的最左最长子串,
+再将这个子串
 替换为 \textit{s}. 在 \verb'ed' 中, ``最左最长'' 意味着先找到最左边的匹配,
 然后尽可能的延长匹配的长度.
 
@@ -1197,13 +1198,15 @@ England 94      56      Europe
 \texttt{sub} 的返回值小于等于 1, 而 \texttt{gsub}
 返回值大于等于 0. ---- 译者}.
 \marginpar{43}
-(\verb'gsub' 的 \verb'g' 是 ``global'' 的缩写, 意思是替换是全局). 例如,
+(\verb'gsub' 的 \verb'g' 是 ``global'' 的缩写, 意思是替换是全局的). 例如,
 程序
 \begin{awkcode}
     { gsub(/USA/, "United States"); print }
 \end{awkcode}
 将输入行中的每一个 ``USA'' 替换为 ``United States'' (在这样的例子里,
 当 \verb'$0' 发生改变时, 字段与 \nf 也会跟着发生改变). 程序
+\footnote{在 mawk-1.3.3 中, \texttt{sub} 与 \texttt{gsub}
+的第 3 个参数 \textit{t} 必须是变量. ---- 译者}
 \begin{awkcode}
     gsub(/ana/, "anda", "banana")
 \end{awkcode}
@@ -1211,8 +1214,6 @@ England 94      56      Europe
 
 对一个由 \verb'sub' 或 \verb'gsub' 执行的替换来说, 字符 \verb'&' 在
 \textit{s} 中任意一次出现都会被替换为被 \textit{r} 匹配的子串. 于是
-\footnote{在 mawk-1.3.3 中, \texttt{sub} 与 \texttt{gsub}
-的第 3 个参数 \textit{t} 必须是变量. ---- 译者}
 \begin{awkcode}
     gsub(/a/, "aba", "banana")
 \end{awkcode}
@@ -1220,7 +1221,7 @@ England 94      56      Europe
 \begin{awkcode}
     gsub(/a/, "&b&", "banana")
 \end{awkcode}
-来实现. 在 \verb'&' 的左边加上一个反斜杆就可以关闭它在替换字符串中的特殊
+来完成. 在 \verb'&' 的左边加上一个反斜杆就可以关闭它在替换字符串中的特殊
 意义.
 
 \verb'substr('\textit{s}\verb','\textit{p}\verb')'
@@ -1260,13 +1261,13 @@ England 94      56      Europe
     USS Can Chi USA Bra Ind Mex Fra Jap Ger Eng
 \end{awkcode}
 程序每一次只为 \verb's' 构造一小段. (如果你很在意 \verb's' 的末尾的空格,
-在 \verb'END' 使用
+在 \verb'END' 中使用
 \begin{awkcode}
     print substr(s, 1, length(s)-1)
 \end{awkcode}
 替换 \verb'print s')
 
-\emph{数值还是字符串?} (\emph{Number or String?}). 表达式的值可以自动从
+\emph{数值还是字符串} (\emph{Number or String}). 表达式的值可以自动从
 数值转换为字符串, 或反之, 具体取决于该值将用于什么运算. 算术表达式, 例如
 \begin{awkcode}
     pop + $3
@@ -1285,18 +1286,18 @@ England 94      56      Europe
 
 同样的运算符有时既可以用在数值上, 也可以用在字符串, 对于这种情况有一些特殊
 的规则. 在赋值语句 \textit{v}\ \verb'='\ \textit{e} 中, 赋值语句本身与变量
-\textit{v} 都会对表达式 \textit{e} 的有所要求. 比较表达式, 就像
+\textit{v} 都会对表达式 \textit{e} 的类型有所要求. 比较表达式, 就像
 \begin{awkcode}
     x == y
 \end{awkcode}
 如果两个操作数都是数值, 那么比较就按照数值进行; 否则, 数值类型的操作数被
-强制转换成字符串, 然后再字符串的方式进行比较.
+强制转换成字符串, 然后再按字符串的方式进行比较.
 
 现在让我们来查看一下这条规则具体应用时会产生什么影响, 语句
 \begin{awkcode}
-    $1 ==  $2
+    $1 == $2
 \end{awkcode}
-涉及到字段. 在这个语句里, 比较的类型取决于两个字段是否包含数值或字符串,
+涉及到字段. 在这个语句里, 比较的类型取决于这两个字段是否包含数值或字符串,
 而这只有到程序运行时才可以知道; 对于不同的行, 比较的类型可能是不一样的.
 当 awk 在运行状态下创建一个字段时, 会自动将它的类型设置为字符串; 另外,
 如果字段包含一个机器可表示的数, 它也会给这个字段设置一个数值类型.
