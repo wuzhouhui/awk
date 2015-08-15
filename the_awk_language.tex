@@ -1303,8 +1303,132 @@ England 94      56      Europe
 如果字段包含一个机器可表示的数, 它也会给这个字段设置一个数值类型.
 
 例如, 比较 \verb'$1 == $2' 将会按照数值进行, 并且比较结果为真, 如果
-\verb'$1' 与 \verb'$2' 的值是下面任意一种的话:
+\verb'$1' 与 \verb'$2' 的值是下面任意一种的话,
 \begin{file}
     1   1.0    +1   1e0    0.1e+1   10E-1    001
 \end{file}
 \marginpar{45}
+这些值都是数值 1 的不同表示方法. 然而, 这个表达式也可以是字符串比较, 于是,
+该表达式对下面每对值都会比较失败:
+\begin{file}
+    0           (null)
+    0.0         (null)
+    0           0a
+    1e500       1.0e500
+\end{file}
+在前三对值中, 第二个字段都不是一个有效的数值.
+最后一对值也会按照字符串来比较,
+这是因为如果将它们转换成数值的话, 其值大得无法在机器上表示.
+
+输出语句
+\begin{awkcode}
+    print $1
+\end{awkcode}
+打印第 1 个字段的字符串值; 于是, 输出与输入是一样的.
+
+未初始化的变量默认初始值为数值 0 或空字符串 \verb'""'.
+不存在或显式为空的字段具有字符串值 \verb'""', 它们不是数值, 但是当强制
+转换为数值时, 将会是 0. 我们将在本节的末尾看到, 数组的下标是字符串.
+
+有两种惯用语法可以将表达式从一种类型转换成另一种类型:
+\begin{pattern}
+    \textit{number} \verb'""'   将空字符串拼接到 \textit{number} 可以将它
+    强制转换成字符串;
+    \textit{string} \verb'+ 0'  给字符串加上零可以把它强制转换成数值.
+\end{pattern}
+于是, 为了强制让两个字段之间的比较按照字符串来进行, 我们可以把其中一个字段
+强制转换成字符串:
+\begin{awkcode}
+    $1 + 0 == $2
+\end{awkcode}
+为了让比较强制按照数值类型来进行, 我们需要将\emph{两个}字段都转换成数值:
+\begin{awkcode}
+    $1 + 0 == $2 + 0
+\end{awkcode}
+无论字段包含什么内容, 这个方式总能奏效.
+
+字符串的数值类型的值, 等于字符串最长的看起来像数值的前缀的值. 于是
+\begin{awkcode}
+    BEGIN { print "1E2"+0, "12E"+0, "E12"+0, "1X2Y3"+0 }
+\end{awkcode}
+输出
+\begin{file}
+    100 12 0 1
+\end{file}
+
+数值的字符串形式需要根据 \verb'OFMT' 转换后才会输出. 为了拼接, 比较, 与
+数组下标的创建而需要将数值转换成字符串时, \verb'OFMT' 也会影响转换的过程.
+\verb'OFMT' 的默认值是 \verb'"%.6g"'. 于是
+\begin{awkcode}
+    BEGIN { print 1E2 "", 12E-2 "", E12 "", 1.23456789 "" }
+\end{awkcode}
+输出
+\begin{file}
+    100 0.12  1.23457
+\end{file}
+\marginpar{46}
+向 \verb'OFMT' 赋予新值就可以修改它的默认值. 比如将 \verb'OFMT' 改为
+\verb'"%.2f"', 那么在打印数值, 以及强制转换而成的数值之间进行比较时, 小数
+点后将会保留两位小数.
+\begin{figure}[ht]
+    \caption{表达式运算符}
+    \label{tbl:expression_operators}
+    \begin{center}
+        \begin{tabular}{l|l|l|l}
+        \hline
+        \hline
+        操作    & 运算符    & 例子  & 例子的含义    \\
+        \hline
+        赋值    & \verb'= += -= *=' \verb'/= %= ^=' & \verb'x *= 2' &
+        \verb'x = x * 2' \\
+        条件表达式 & \verb'?:' & \verb'x ? y : z' & 若 \verb'x' 为真, 则
+        \verb'y', 否则 \verb'z' \\
+        逻辑 或 & \verb'||' & \verb'x || y' & 若 \verb'x' 或 \verb'y' 为
+        真, 则为 1, 否则为 0 \\
+        逻辑 与 & \verb'&&' & \verb'x && y' & 若 \verb'x' 与 \verb'y' 都为
+        真, 则为 1, 否则为 0 \\
+        数组成员匹配 & \verb'in' & \verb' i in a' & 如果 \verb'a[i]' 存在,
+        则为 1, 否则为 0 \\
+        关系运算 & \verb'< <= == !=' \verb'>= >' & \verb'x == y' &
+        如果 \verb'x' 等于 \verb'y', 则为 1, 否则为 0 \\
+        拼接 & & \verb'"a" "bc"' & \verb'"abc"'; 不存在显式的拼接运算符 \\
+        减法, 加法 & \verb'+ -' & \verb'x + y' & \verb'x' 与 \verb'y'
+        的和 \\
+        乘法, 除法, 取模 & \verb'* / %' & \verb'x % y' & \verb'x' 除以
+        \verb'y' 的余数 \\
+        单目加, 单目减 & \verb'+ -' & \verb'-x' & \verb'x' 的相反数 \\
+        逻辑 非 & \verb'!' & \verb'!$1' & 若 \verb'$1' 为空或为 0, 则为 1,
+        否则为 0 \\
+        自增, 自减 & \verb'++ --' & \verb'++x, x++' & 为 \verb'x' 加 1 \\
+        字段 & \verb'$' & \verb'$i+1' & 1 加上第 \verb'i' 个字段的值 \\
+        组合 & \verb'( )' & \verb'($i)++' & 给第 \verb'i' 个字段的值加 1 \\
+        \hline
+        \end{tabular}
+    \end{center}
+\end{figure}
+
+\emph{运算符的总结} (\emph{Summary of Operators}). 可以出现在表达式中的运算
+符全部列在了表 \ref{tbl:expression_operators} 中. 将这些运算符应用到常量,
+变量, 字段, 数组元素, 函数, 和其他表达式中, 就可以构造一个表达式.
+
+运算符按照优先级的升序排列. 优先级高的运算符优先求值; 举例来说, 在表达式
+中, 乘法运算在加法运算之前求值. 所有的运算符都是左结合的, 除了赋值运算符,
+条件运算符, 指数运算, 它们都是右结合的. 左结合性意味着相同优先级的运算符
+按照从左到右的顺序进行运算; 于是 \verb'3-2-1' 是指 \verb'(3-2)-1', 而不是 
+\verb'3-(2-1)'.
+
+因为没有显式的拼接运算符, 比较明智的做法是拼接运算中, 将涉及到其他运算的
+\marginpar{47}
+表达式用括号括起来. 考虑下面这个程序
+\begin{awkcode}
+    $1 < 0 { print "abs($1) = " -$1 }
+\end{awkcode}
+跟在 \print 后面的表达式看起来像是拼接, 实际上是一个减法运算. 程序 
+\begin{awkcode}
+    $1 < 0 { print "abs($1) = " (-$1) }
+\end{awkcode}
+与
+\begin{awkcode}
+    $1 < 0 { print "abs($1) =", -$1 }
+\end{awkcode}
+都可以得到我们期望的效果.
