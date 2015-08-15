@@ -1333,4 +1333,65 @@ England	94	56	Europe
 \end{file}
 \marginpar{46}
 向 \verb'OFMT' 赋予新值就可以修改它的默认值. 比如将 \verb'OFMT' 改为
-\verb'"%.2f"',
+\verb'"%.2f"', 那么在打印数值, 以及强制转换而成的数值之间进行比较时, 小数
+点后将会保留两位小数.
+\begin{figure}[ht]
+    \caption{表达式运算符}
+    \label{tbl:expression_operators}
+    \begin{center}
+        \hline
+        \hline
+        操作    & 运算符    & 例子  & 例子的含义    \\
+        \hline
+        赋值    & \verb'= += -= *=' \verb'/= %= ^=' & \verb'x *= 2' &
+        \verb'x = x * 2'
+        条件表达式 & \verb'?:' & \verb'x ? y : z' & 若 \verb'x' 为真, 则
+        \verb'y', 否则 \verb'z' \\
+        逻辑 或 & \verb'||' & \verb'x || y' & 若 \verb'x' 或 \verb'y' 为
+        真, 则为 1, 否则为 0
+        逻辑 与 & \verb'&&' & \verb'x && y' & 若 \verb'x' 与 \verb'y' 都为
+        真, 则为 1, 否则为 0 \\
+        数组成员匹配 & \verb'in' & \verb' i in a' & 如果 \verb'a[i]' 存在,
+        则为 1, 否则为 0 \\
+        关系运算 & \verb'< <= == !=' \verb'>= >' & \verb'x == y' &
+        如果 \verb'x' 等于 \verb'y', 则为 1, 否则为 0 \\
+        拼接 & & \verb'"a" "bc"' & \verb'"abc"'; 不存在显式的拼接运算符 \\
+        减法, 加法 & \verb'+ -' & \verb'x + y' & \verb'x' 与 \verb'y'
+        的和 \\
+        乘法, 除法, 取模 & \verb'* / %' & \verb'x % y' & \verb'x' 除以
+        \verb'y' 的余数 \\
+        单目加, 单目减 & \verb'+ -' & \verb'-x' & \verb'x' 的相反数 \\
+        逻辑 非 & \verb'!' & \verb'!$1' & 若 \verb'$1' 为空或为 0, 则为 1,
+        否则为 0 \\
+        自增, 自减 & \verb'++ --' & \verb'++x, x++' & 为 \verb'x' 加 1 \\
+        字段 & \verb'$' & \verb'$i+1' & 1 加上第 \verb'i' 个字段的值 \\
+        组合 & \verb'( )' & \verb'($i)++' & 给第 \verb'i' 个字段的值加 1 \\
+        \hline
+    \end{center}
+\end{figure}
+
+\emph{运算符的总结} (\emph{Summary of Operators}). 可以出现在表达式中的运算
+符全部列在了表 \ref{tbl:expression_operators} 中. 将这些运算符应用到常量,
+变量, 字段, 数组元素, 函数, 和其他表达式中, 就可以构造一个表达式.
+
+运算符按照优先级的升序排列. 优先级高的运算符优先求值; 举例来说, 在表达式
+中, 乘法运算在加法运算之前求值. 所有的运算符都是左结合的, 除了赋值运算符,
+条件运算符, 指数运算, 它们都是右结合的. 左结合性意味着相同优先级的运算符
+按照从左到右的顺序进行运算; 于是 \verb'3-2-1' 是指 \verb'(3-2)-1', 而不是 
+\verb'3-(2-1)'.
+
+因为没有显式的拼接运算符, 比较明智的做法是拼接运算中, 将涉及到其他运算的
+\marginpar{47}
+表达式用括号括起来. 考虑下面这个程序
+\begin{awkcode}
+    $1 < 0 { print "abs($1) = " -$1 }
+\end{awkcode}
+跟在 \print 后面的表达式看起来像是拼接, 实际上是一个减法运算. 程序 
+\begin{awkcode}
+    $1 < 0 { print "abs($1) = " (-$1) }
+\end{awkcode}
+与
+\begin{awkcode}
+    $1 < 0 { print "abs($1) =", -$1 }
+\end{awkcode}
+都可以得到我们期望的效果.
