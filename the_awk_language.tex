@@ -1473,4 +1473,55 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
     \verb'for ('\expr$_1$\verb';'\expr$_2$\verb';'\expr$_3$\verb')'
     \stmt
 \end{pattern}
-\margin{49}
+\marginpar{49}
+右括号后面的换行符是可选的. \verb'for' 等效于 
+\begin{pattern}
+    \expr$_1$
+    \verb'while ('\expr$_2$\verb') {' \\
+        \stmt  \\
+        \expr$_3$ \\
+    \verb'}'
+\end{pattern}
+所以 
+\begin{awkcode}
+    { for (i = 1; i <= NF; i++)
+        print $i
+    }
+\end{awkcode}
+所做的工作, 与前面的用 \verb'while' 循环遍历所有字段的例子是一样的. 在
+\verb'for' 语句中, 三个表达式都是可选的. 如果 \expr$_2$ 被省略了, 那么条 
+件就被当作是永真式, 于是 \verb'for(;;)' 将会是无限循环.
+
+\verb'for' 语句的一个替代版本可用于遍历数组下标, 这在数组那一节讨论.
+
+\verb'do' 语句具有形式 
+\begin{pattern}
+    \verb'do'
+    \stmt 
+    \verb'while ('\expr\verb')'
+\end{pattern}
+关键字 \verb'do' 与 \stmt 后面的换行符是可选的. 如果 \verb'while' 与 \stmt 
+出现在了同一行, 并且 \stmt 是一条单独的语句, 那么就必须使用封号来终止
+\stmt. \verb'do' 循环执行 \stmt 一次, 然后只要 \expr 为真, 就重复执行 
+\stmt. \verb'do' 循环与 \verb'while' 和 \verb'for' 循环相比有很大的不同:
+它的条件测试在循环体的底部, 而不是顶部, 所以循环体至少会执行一次.
+
+有两种语句可以影响循环的运行: \verb'break' 和 \verb'continue'. \verb'break'
+会导致控制流马上从包围着它的循环内退出, 循环可以是 \verb'while', \verb'for'
+, 或 \verb'do'. \verb'continue' 导致下一次迭代开始; 它使得执行流马上进入
+\verb'while' 与 \verb'do' 测试表达式, 或 \verb'for' 的 \expr$_3$.
+
+\verb'next' 与 \verb'exit' 控制用于读取输入行的外层循环. \verb'next' 使
+awk 抓取下一个输入行, 然后从第一个 \patact 语句开始匹配模式. 在 \END 动作 
+里, \verb'exit' 会导致程序终止. 在其他动作里, \verb'exit' 会使得程序表现
+得就好像所有输入都读完了; 不再有输入会被读取, 并执行 \END 动作 (如果有 \END
+的话).
+
+如果 \verb'exit' 语句包含一个表达式
+\begin{pattern}
+    \verb'exit' \expr
+\end{pattern}
+\marginpar{50}
+它使得 awk 将 \expr 的值作为程序的退出状态返回, 除非返回值被随后的错误或
+\verb'exit' 覆盖. 如果没有 \expr, 退出状态就会是 0. 在某些操作系统中, 包括 
+Unix, 调用 awk 的程序可能会检查  awk 的退出状态.
