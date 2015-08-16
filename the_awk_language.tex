@@ -1379,7 +1379,7 @@ England	94	56	Europe
 运算符按照优先级的升序排列. 优先级高的运算符优先求值; 举例来说, 在表达式
 中, 乘法运算在加法运算之前求值. 所有的运算符都是左结合的, 除了赋值运算符,
 条件运算符, 指数运算, 它们都是右结合的. 左结合性意味着相同优先级的运算符
-按照从左到右的顺序进行运算; 于是 \verb'3-2-1' 是指 \verb'(3-2)-1', 而不是 
+按照从左到右的顺序进行运算; 于是 \verb'3-2-1' 是指 \verb'(3-2)-1', 而不是
 \verb'3-(2-1)'.
 
 因为没有显式的拼接运算符, 比较明智的做法是拼接运算中, 将涉及到其他运算的
@@ -1388,7 +1388,7 @@ England	94	56	Europe
 \begin{awkcode}
     $1 < 0 { print "abs($1) = " -$1 }
 \end{awkcode}
-跟在 \print 后面的表达式看起来像是拼接, 实际上是一个减法运算. 程序 
+跟在 \print 后面的表达式看起来像是拼接, 实际上是一个减法运算. 程序
 \begin{awkcode}
     $1 < 0 { print "abs($1) = " (-$1) }
 \end{awkcode}
@@ -1397,3 +1397,96 @@ England	94	56	Europe
     $1 < 0 { print "abs($1) =", -$1 }
 \end{awkcode}
 都可以得到我们期望的效果.
+
+\subsection{流程控制语句}
+\label{subsec:control_flow_statements}
+
+Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while',
+\verb'for', \verb'do' 语句用于循环, 所有这些都来源于 C 语言.
+
+一条单独的语句总是可以被替换为一个被花括号包围起来的语句列表. 列表中的语句
+用换行符或封号分开. 换行符可以出现在任何左花括号之后, 也可以出现在任何右
+花括号之后.
+
+\verb'if-else' 具有形式:
+\begin{pattern}
+    \verb'if ('\expr\verb')'
+    \stmt$_1$
+    \verb'else'
+    \stmt$_2$
+\end{pattern}
+\verb'else '\stmt$_2$ 是可选的. 右括号, \stmt$_1$, 和关键词 \verb'else' 后
+面的换行符是可选的. 如果 \verb'else' 与 \stmt$_1$ 出现在同一行, 并且
+\stmt$_1$ 是一条单独的语句, 那么在 \stmt$_1$ 的末尾必须使用封号来终止语句.
+
+在一个 \verb'if-else' 语句中, 文本 \expr 先被求值. 如果 \expr 为真 (也就是
+非空或非零), 那么 \stmt$_1$ 就会执行. 如果 \expr 为假 (也就是空或零),
+如果 \verb'else '\stmt$_2$ 存在, 那它就会执行.
+
+为了避免歧义, 我们规定, \verb'else' 与最近一个未匹配的 \verb'if' 匹配.
+举例来说, 语句
+\begin{awkcode}
+    if (e1) if (e2) s=1; else s=2
+\end{awkcode}
+中的 \verb'else' 与第 2 个 \verb'if' 匹配. (\verb's=1' 后面的封号是必须的,
+因为 \verb'else' 与 \verb's=1' 出现在同一行)
+
+当条件为真时, \verb'while' 就会重复执行一条语句:
+\begin{summary}{流程控制语句}
+    \begin{enumerate}
+        \item \verb'{'\stmt\verb'}' \\
+            语句组合
+        \item \verb'if ('\expr\verb')'\stmt \\
+            如果 \expr 为真, 执行 \stmt
+        \item \verb'if ('\expr\verb')' \stmt$_1$ \verb'else' \stmt$_2$ \\
+            如果 \expr 为真, 执行 \stmt$_1$, 否则执行 \stmt$_2$
+        \item \verb'while ('\expr\verb')' \stmt \\
+            如果 \expr 为真, 执行 \stmt; 然后重复前面的过程
+        \item \verb'for ('\expr$_1$\verb';'\expr$_2$\verb';'\expr$_3$
+            \verb')' \stmt \\
+            等价于 \expr$_1$\verb';' \verb'while ('\expr$_2$\verb') {'
+            \stmt\verb';' \expr$_3$\verb'}'
+        \item \verb'for ('\textit{variable} \verb'in'
+            \textit{array}\verb')' \stmt \\
+            轮流地将 \textit{variable} 设置为 \textit{array} 的每一个下标,
+            并执行 \stmt
+        \item \verb'do' \stmt \verb'while ('\expr\verb')' \\
+            执行 \stmt; 如果 \expr 为真就重复
+        \item \verb'break' \\
+            马上离开最内层的, 包围 \verb'break' 的 \verb'while',
+            \verb'for' 或 \verb'do'
+        \item \verb'continue'
+            开始最内层的, 包围 \verb'continue' 的 \verb'while', \verb'for',
+            或 \verb'do' 下一次循环
+        \item \verb'next'
+            开始主输入循环的下一次迭代
+        \item \verb'exit'
+        \item \verb'exit' \expr \\
+            马上进行 \END 动作; 如果已经在 \END 动作内, 那就寻出程序.
+            将 \expr 作为程序的退出状态返回.
+    \end{enumerate}
+\end{summary}
+\marginpar{48}
+\begin{pattern}
+    \verb'while ('\expr\verb')'
+    \stmt
+\end{pattern}
+右括号后面的换行符是可选的. 在这个循环语句里, \expr 被求值; 如果它的值为
+真, \stmt 就会执行, 然后 \expr 再被求值. 只要 \expr 为真, 循环就会一直
+持续下去. 举例来说, 下面这个程序打印所有的输入字段, 每行一个:
+\begin{awkcode}
+    {   i = 1
+        while (i <= NF) {
+            print $1
+            i++
+        }
+    }
+\end{awkcode}
+当 \verb'i' 到达 \verb'NF+1' 时, 循环停止, 这也是循环结束时 \verb'i' 的值.
+
+\verb'for' 语句是 \verb'while' 的更加一般的形式:
+\begin{pattern}
+    \verb'for ('\expr$_1$\verb';'\expr$_2$\verb';'\expr$_3$\verb')'
+    \stmt
+\end{pattern}
+\margin{49}
