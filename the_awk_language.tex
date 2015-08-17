@@ -1525,3 +1525,99 @@ awk 抓取下一个输入行, 然后从第一个 \patact 语句开始匹配模�
 它使得 awk 将 \expr 的值作为程序的退出状态返回, 除非返回值被随后的错误或
 \verb'exit' 覆盖. 如果没有 \expr, 退出状态就会是 0. 在某些操作系统中, 包括 
 Unix, 调用 awk 的程序可能会检查  awk 的退出状态.
+
+\subsection{空语句}
+\label{subsec:empty_statement}
+
+单独一个封号表示一个空语句. 在下面这个程序里, \verb'for' 的循环体是一个
+空语句.
+\begin{awkcode}
+    BEGIN { FS = "\t" }
+          { for (i = 1; i <= NF && $i != ""; i++)
+              ;
+            if (i <= NF)
+                print 
+          }
+\end{awkcode}
+这个程序打印所有的, 包含空字段的行.
+
+\subsection{数组}
+\label{subsec:arrays}
+
+Awk 提供了一维数组, 用于存放字符串与数值. 数组与数组元素都不需要事先声明,
+也不需要说明数组中有多少个元素. 就像变量一样, 当被提及时, 数组元素就会
+突然存在\footnote{原谅为 Like variables, array elements sprint into
+existence by being mentioned.}; 数组元素的默认初始值为 0 或空字符串 
+\verb'""'.
+
+作为一个简单的例子, 语句 
+\begin{awkcode}
+    x[NR] = $0
+\end{awkcode}
+将当前输入行赋值给数组 \verb'x' 的元素 \verb'NR'. 实际上, 将整个输入行
+读入到一个数组中, 然后再按照某种方便的顺序去处理它们, 这样做是很容易的, 
+虽然会有点慢. 举例来说, 下面这个程序是 \ref{sec:arrays} 节的逆序打印程序
+的变形:
+\begin{awkcode}
+        { x[NR] = $0 }
+    END { for (i = NR; i > 0; i--) print x[i] }
+\end{awkcode}
+第一个动作仅仅是将每个输入行存放到数组 \verb'x' 中, 使用行号作为下标注; 
+真正的工作在 \END 语句中完成.
+
+Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下标是字符串. 这个特性
+使得 awk 具有了一种能力, 这种能力类似于 SNOBOL4 表格的关联内存, 也由于这个
+原因, awk 的数组称为 \emph{关联数组} (\emph{associative arrays}).
+
+下面这个程序将 \verb'Asia' 与 \verb'Europe' 的人口数量累加上数组 \verb'pop'
+中. \END 动作打印这两个洲的总人口.
+\begin{awkcode}
+    /Asia/      { pop["Asia"] += $3 }
+    /Europe/    { pop["Europe"] += $3 }
+    END         { print "Asian population is",
+                    pop["Asia"], "million."
+                  print "European population is",
+                    pop["Europe"], "million."
+                }
+\end{awkcode}
+\marginpar{51}
+\verb'countries' 作为输入, 输出是 
+\begin{file}
+    Asian population is 2173 million.
+    European population is 172 million.
+\end{file}
+应该注意的是, 数组下标是字符串常量 \verb'"Asia"' 与 \verb'"Europe"'. 如果 
+我们将 \verb'pop["Asia"]' 写成 \verb'pop[Asia]', 后者使用变量 \verb'Asia'
+的值作为下标, 又因为变量是未初始化过的, 于是人口数量将会累加到
+\verb'pop[""]' 中.
+
+这个例子其实并不需要关联数组, 因为这里只有两个元素, 并且都显式给出了名字.
+假设我们的任务是计算每个大洲的总人口, 对于这种聚合问题, 使用关联数组是
+非常方便的做法. 数组下标可以是任意的表达式, 所以 
+\begin{awkcode}
+    pop[$4] += $3
+\end{awkcode}
+使用当前输入行的第 4 个字段的字符串值来索引数组 \verb'pop', 并使用该项来
+累积第 3 个字段的值:
+\begin{awkcode}
+    BEGIN   { FS = "\t" }
+            { pop[$4] += $3 }
+    END     { for (name in pop)
+                print name, pop[name]
+            }
+\end{awkcode}
+数组 \verb'pop' 的下标是大洲的名字; 每一个元素的值是大洲的总人口. 无论大 
+洲的数目有多少个, 这个程序都可以正常的工作; 文件 \filename{countries}
+的输出是 
+\begin{file}
+    Europe 172
+    Asia 2173
+    South America 134
+    North America 340
+\end{file}
+最近的这个程序使用 \verb'for' 语句的另一种形式来遍历数组下标:
+\begin{pattern}
+    \verb'for ('\textit{variable} \verb'in' \textit{array}\verb')'
+        \stmt
+\end{pattern}
+这个循环将 \textit{variable} 轮流地设置为数组的每一个下标, 并执行 \stmt.
