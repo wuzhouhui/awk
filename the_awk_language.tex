@@ -1474,7 +1474,7 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
     \stmt
 \end{pattern}
 \marginpar{49}
-右括号后面的换行符是可选的. \verb'for' 等效于 
+右括号后面的换行符是可选的. \verb'for' 等效于
 \begin{pattern}
     \expr$_1$
     \verb'while ('\expr$_2$\verb') {' \\
@@ -1482,27 +1482,27 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
         \expr$_3$ \\
     \verb'}'
 \end{pattern}
-所以 
+所以
 \begin{awkcode}
     { for (i = 1; i <= NF; i++)
         print $i
     }
 \end{awkcode}
 所做的工作, 与前面的用 \verb'while' 循环遍历所有字段的例子是一样的. 在
-\verb'for' 语句中, 三个表达式都是可选的. 如果 \expr$_2$ 被省略了, 那么条 
+\verb'for' 语句中, 三个表达式都是可选的. 如果 \expr$_2$ 被省略了, 那么条
 件就被当作是永真式, 于是 \verb'for(;;)' 将会是无限循环.
 
 \verb'for' 语句的一个替代版本可用于遍历数组下标, 这在数组那一节讨论.
 
-\verb'do' 语句具有形式 
+\verb'do' 语句具有形式
 \begin{pattern}
     \verb'do'
-    \stmt 
+    \stmt
     \verb'while ('\expr\verb')'
 \end{pattern}
-关键字 \verb'do' 与 \stmt 后面的换行符是可选的. 如果 \verb'while' 与 \stmt 
+关键字 \verb'do' 与 \stmt 后面的换行符是可选的. 如果 \verb'while' 与 \stmt
 出现在了同一行, 并且 \stmt 是一条单独的语句, 那么就必须使用封号来终止
-\stmt. \verb'do' 循环执行 \stmt 一次, 然后只要 \expr 为真, 就重复执行 
+\stmt. \verb'do' 循环执行 \stmt 一次, 然后只要 \expr 为真, 就重复执行
 \stmt. \verb'do' 循环与 \verb'while' 和 \verb'for' 循环相比有很大的不同:
 它的条件测试在循环体的底部, 而不是顶部, 所以循环体至少会执行一次.
 
@@ -1512,7 +1512,7 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
 \verb'while' 与 \verb'do' 测试表达式, 或 \verb'for' 的 \expr$_3$.
 
 \verb'next' 与 \verb'exit' 控制用于读取输入行的外层循环. \verb'next' 使
-awk 抓取下一个输入行, 然后从第一个 \patact 语句开始匹配模式. 在 \END 动作 
+awk 抓取下一个输入行, 然后从第一个 \patact 语句开始匹配模式. 在 \END 动作
 里, \verb'exit' 会导致程序终止. 在其他动作里, \verb'exit' 会使得程序表现
 得就好像所有输入都读完了; 不再有输入会被读取, 并执行 \END 动作 (如果有 \END
 的话).
@@ -1523,7 +1523,7 @@ awk 抓取下一个输入行, 然后从第一个 \patact 语句开始匹配模�
 \end{pattern}
 \marginpar{50}
 它使得 awk 将 \expr 的值作为程序的退出状态返回, 除非返回值被随后的错误或
-\verb'exit' 覆盖. 如果没有 \expr, 退出状态就会是 0. 在某些操作系统中, 包括 
+\verb'exit' 覆盖. 如果没有 \expr, 退出状态就会是 0. 在某些操作系统中, 包括
 Unix, 调用 awk 的程序可能会检查  awk 的退出状态.
 
 \subsection{空语句}
@@ -1536,7 +1536,7 @@ Unix, 调用 awk 的程序可能会检查  awk 的退出状态.
           { for (i = 1; i <= NF && $i != ""; i++)
               ;
             if (i <= NF)
-                print 
+                print
           }
 \end{awkcode}
 这个程序打印所有的, 包含空字段的行.
@@ -1547,22 +1547,22 @@ Unix, 调用 awk 的程序可能会检查  awk 的退出状态.
 Awk 提供了一维数组, 用于存放字符串与数值. 数组与数组元素都不需要事先声明,
 也不需要说明数组中有多少个元素. 就像变量一样, 当被提及时, 数组元素就会
 突然存在\footnote{原谅为 Like variables, array elements sprint into
-existence by being mentioned.}; 数组元素的默认初始值为 0 或空字符串 
+existence by being mentioned.}; 数组元素的默认初始值为 0 或空字符串
 \verb'""'.
 
-作为一个简单的例子, 语句 
+作为一个简单的例子, 语句
 \begin{awkcode}
     x[NR] = $0
 \end{awkcode}
 将当前输入行赋值给数组 \verb'x' 的元素 \verb'NR'. 实际上, 将整个输入行
-读入到一个数组中, 然后再按照某种方便的顺序去处理它们, 这样做是很容易的, 
+读入到一个数组中, 然后再按照某种方便的顺序去处理它们, 这样做是很容易的,
 虽然会有点慢. 举例来说, 下面这个程序是 \ref{sec:arrays} 节的逆序打印程序
 的变形:
 \begin{awkcode}
         { x[NR] = $0 }
     END { for (i = NR; i > 0; i--) print x[i] }
 \end{awkcode}
-第一个动作仅仅是将每个输入行存放到数组 \verb'x' 中, 使用行号作为下标注; 
+第一个动作仅仅是将每个输入行存放到数组 \verb'x' 中, 使用行号作为下标注;
 真正的工作在 \END 语句中完成.
 
 Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下标是字符串. 这个特性
@@ -1581,19 +1581,19 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
                 }
 \end{awkcode}
 \marginpar{51}
-\verb'countries' 作为输入, 输出是 
+\verb'countries' 作为输入, 输出是
 \begin{file}
     Asian population is 2173 million.
     European population is 172 million.
 \end{file}
-应该注意的是, 数组下标是字符串常量 \verb'"Asia"' 与 \verb'"Europe"'. 如果 
+应该注意的是, 数组下标是字符串常量 \verb'"Asia"' 与 \verb'"Europe"'. 如果
 我们将 \verb'pop["Asia"]' 写成 \verb'pop[Asia]', 后者使用变量 \verb'Asia'
 的值作为下标, 又因为变量是未初始化过的, 于是人口数量将会累加到
 \verb'pop[""]' 中.
 
 这个例子其实并不需要关联数组, 因为这里只有两个元素, 并且都显式给出了名字.
 假设我们的任务是计算每个大洲的总人口, 对于这种聚合问题, 使用关联数组是
-非常方便的做法. 数组下标可以是任意的表达式, 所以 
+非常方便的做法. 数组下标可以是任意的表达式, 所以
 \begin{awkcode}
     pop[$4] += $3
 \end{awkcode}
@@ -1606,9 +1606,9 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
                 print name, pop[name]
             }
 \end{awkcode}
-数组 \verb'pop' 的下标是大洲的名字; 每一个元素的值是大洲的总人口. 无论大 
+数组 \verb'pop' 的下标是大洲的名字; 每一个元素的值是大洲的总人口. 无论大
 洲的数目有多少个, 这个程序都可以正常的工作; 文件 \filename{countries}
-的输出是 
+的输出是
 \begin{file}
     Europe 172
     Asia 2173
@@ -1652,12 +1652,12 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
         delete pop[i]
 \end{awkcode}
 
-\emph{\verb'split' 函数} (\emph{The \verb'split' Function}). 函数 
+\emph{\verb'split' 函数} (\emph{The \verb'split' Function}). 函数
 \verb'split(\textit{str}\verb','\textit{arr}\verb','\textit{fs}\verb')'
 将字符串 \textit{str} 切割成一个个字段, 并存储到数组 \textit{arr} 中.
 字段的个数作为函数的返回值返回. 第3个参数 \textit{fs} 的字符串值作为字段
-的分割符. 如果第3个参数被忽略, 就使用 \verb'FS'. 不管是哪一种情况, 分割 
-字段的规则等同于输入行的字段分割 (见 \ref{sec:input} 节). 函数 
+的分割符. 如果第3个参数被忽略, 就使用 \verb'FS'. 不管是哪一种情况, 分割
+字段的规则等同于输入行的字段分割 (见 \ref{sec:input} 节). 函数
 \begin{awkcode}
     split("7/4/76", arr, "/")
 \end{awkcode}
@@ -1665,8 +1665,98 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \verb'7' 存储在 \verb'arr["1"]', 将 \verb'4' 存储在 \verb'arr["2"]',
 将 \verb'76' 存储在 \verb'arr["3"]'.
 
-字符串是多功能的数组下标, 但是, 将数值类型的下标作为字符串来索引数组时, 
+字符串是多功能的数组下标, 但是, 将数值类型的下标作为字符串来索引数组时,
 有时候会出现有悖于常理的事情. 因为 \verb'1' 的字符串值与 \verb'"1"' 是相同
 的, 所以 \verb'arr[1]' 与 \verb'arr["1"]' 是同一个元素. 但是请注意,
 \verb'01' 的字符串值与 \verb'1' 的字符串值并不相同, 并且字符串 \verb'10'
 排在字符串 \verb'2' 之前.
+
+\emph{多维数组} (\emph{Multidimensional Arrays}). Awk 不直接支持多维数组,
+但是它利用一维数组来近似模拟多维数组. 虽然你可以写出像 \verb'i, j' 或
+\verb's, p, q, r' 这样的多维数组下标, 实际上 awk 会将它们都拼接起来 (下标
+之间用一个分隔符分开), 合成一个单独的下标. 举例来说,
+\begin{awkcode}
+    for (i = 1; i <= 10; i++)
+        for (j = 1; j <= 10; j++)
+            arr[i, j] = 0
+\end{awkcode}
+创建了一个具有 100 个元素的数组, 下标具有形式 \verb'1,1', \verb'1,2' 等等.
+\marginpar{53}
+在 awk 内部, 下标其实是以字符串的形式存储的, 字符串具有形式
+\verb'1 SUBSEP 1', \verb'1 SUBSEP 2' 等等. 内建变量 \verb'SUBSEP' 用于分
+隔下标的各个构成成分, 它的默认值是 \verb'"\034"', 而不是 逗号, 之所以使用
+\verb'"\034"' 是因为这个字符不太可能出现在通常的文本中.
+
+为了测试一个多维下标是否是某个数组的成员, 我们需要将下标用括号括起来, 例如 
+\begin{awkcode}
+    if ((i,j) in arr) ...
+\end{awkcode}
+为了遍历一个这样的数组, 你可以这样写:
+\begin{awkcode}
+    for (k in arr) ...
+\end{awkcode}
+如果需要单独地访问下标的某个成分, 你可以使用 \verb'split(k, x, SUBSEP)'.
+
+数组的元素不能再是数组.
+
+\section{用户定义的函数}
+\label{sec:user_defined_functions}
+
+除了内建函数, awk 还可以包含用户定义的函数. 定义函数的语句具有形式:
+\begin{pattern}
+    \verb'function ' \textit{name}\verb'('\textit{patameter-list}\verb')'
+        \verb'{' \\
+            \stmt
+    \verb'}'
+\end{pattern}
+一个函数定义可以出现在任何 \patact 语句可以出现的地方. 于是, awk 程序的 
+通常形式就变成了一系列的, 由换行符或封号分开的 \patact 语句与函数定义.
+
+在一个函数定义中, 函数体左花括号后的换行符, 与右花括号前的换行符都是可选
+的. 参数列表由一系列的由逗号分开的变量名构成; 在函数体内部, 这些变量引用
+的是函数被调用时传递给它的参数.
+
+函数体可能包含一个 \verb'return' 语句, 用于将程序执行流返回至调用函数 (返
+回的时候可以带有一个值). 它具有形式
+\begin{pattern}
+    \verb'return '\expr
+\end{pattern}
+\expr 与 \verb'return' 语句都是可选的, 如果没有为 \verb'return' 语句提供 
+表达式, 或者最后一句执行的语句不是 \verb'return', 那么返回值就是未定义的.
+
+举例来说, 这个函数计算参数的最大值:
+\begin{awkcode}
+    function max(m, n) {
+        return m > n ? m : n
+    }
+\end{awkcode}
+变量 \verb'm' 与 \verb'n' 属于函数 \verb'max', 它们与程序中其他同名的变量
+没有任何关联.
+\marginpar{54}
+
+用户定义的函数可以在任何 \patact 语句的任何表达式中使用, 也可以在出现在
+任何函数体内. 每一个对函数的使用都叫做一个 \emph{调用} (\emph{call}).
+如果一个用户定义的函数在函数体内调用了它自身, 
+我们就说这个函数是 \emph{递归}
+(\emph{recursive}) 的.
+
+举例来说, \verb'max' 函数可以像这样调用:
+\begin{awkcode}
+    { print max($1, max($2, $3)) } # print maxinum of $1, $2, $3
+    function max(m, n) {
+        return m > n ? m : n
+    }
+\end{awkcode}
+调用函数时, 函数名与左括号之间不能留有空白.
+
+一个带有参数 \verb'$1' 的函数被调用时 (\verb'$1' 只是一个普通的变量), 函数 
+接收到的参数是变量的值的一份拷贝, 所以函数操作是变量的拷贝, 而不是变量本
+身. 这意味着函数不会对函数体外部的变量的值产生影响. (用行话来说, 这样的变
+量叫做 ``标量'', ``按值传递'' 给函数) 然而, 当数组作为函数的参数时, 函数 
+接收到的参数就不是数组的拷贝, 所以函数可以改变数组的元素, 或往数组增添新
+的值 (这叫作 ``按引用传递''). 函数名不能当作参数使用.
+
+重申一遍, 在函数体内部, 参数是局部变量 ---- 它们只在函数执行时才存在, 而且 
+它们与程序中其他同名的变量没有任何关联. 但是 \emph{所有的其他变量都是全
+局的} (\emph{all other variables are global}); 如果函数体内的某个变量没有
+出现在参数列表中, 那么整个程序范围内都可以访问该变量.
