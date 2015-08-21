@@ -1760,3 +1760,60 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 它们与程序中其他同名的变量没有任何关联. 但是 \emph{所有的其他变量都是全
 局的} (\emph{all other variables are global}); 如果函数体内的某个变量没有
 出现在参数列表中, 那么整个程序范围内都可以访问该变量.
+
+这意味着如果函数想要拥有私有的局部变量, 唯一的方法是将该变量包含在参数列
+表的末尾. 参数列表中没有实际参数对应的参数都将作为局部变量使用, 初始值为
+空值. 虽然这种设计不是非常优雅, 但至少为语言提供了必要的能力. 我们在参数
+与局部变量之间多放置几个空格, 以区分它们.
+
+\section{输出}
+\label{sec:output}
+
+\print 与 \printf 语句可以用来产生输出. \print 用于产生简单的输出; \printf 
+用于产生格式化的输出. 来自 \print 与 \printf 的输出可以被重定向到文件, 管
+道与终端. 这两个语句可以混合使用, 输出按照它们产生的顺序出现.
+
+\begin{summary}{输出语句}
+    \begin{enumerate}
+            \marginpar{55}
+        \item \print \\
+            将 \verb'$0' 打印到标准输出
+        \item \print \expr\verb',' \expr\verb',' \ldots \\
+            打印各个 \expr, \expr 之间由 \verb'OFS' 分开, 由 \verb'ORS' 
+            终止
+        \item \print \expr\verb','\expr\verb','\ldots \verb'>'
+            \textit{filename}
+            \\ 输出至文件 \textit{filename}
+        \item \print \expr\verb','\expr\verb','\ldots \verb'>>'
+            \textit{filename}
+            \\ 累加输出到文件 \textit{filename}, 不覆盖之前的内容
+        \item \print \expr\verb','\expr\verb','\ldots \verb'|'
+            \textit{command} \\
+            输出作为命令 \textit{command} 标准输入
+        \item
+            \printf\verb'('\fmt\verb','\expr\verb','\expr\verb','\ldots
+            \verb')'
+        \item
+            \printf\verb'('\fmt\verb','\expr\verb','\expr\verb','\ldots
+            \verb')' \verb'>' \textit{filename}
+        \item
+            \printf\verb'('\fmt\verb','\expr\verb','\expr\verb','\ldots
+            \verb')' \verb'>>' \textit{filename}
+        \item
+            \printf\verb'('\fmt\verb','\expr\verb','\expr\verb','\ldots
+            \verb')' \verb'|' \textit{command} \\
+            \printf 类似于 \print, 但是第 1 个参数规定了输出的格式
+        \item \verb'close('\textit{filename}\verb')', \verb'close('
+            \textit{command}\verb')' \\
+            断开 \print 与 \textit{filename} (或 \textit{command}) 之间 
+            的连接
+        \item \verb'system('\textit{command}\verb')' \\
+            执行 \textit{command}; 函数的返回值是 \textit{command} 的退 
+            出状态
+
+        \printf 的参数列表不需要被包围在一对括号中. 但是如果 \print 或 
+        \printf 的参数列表中, 有一个表达式含有关系运算符, 或者表达式, 或者 
+        参数列表, 必须用一对括号包围. 在非 Unix 系统上可能不提供管道与 
+        \verb'system'.
+    \end{enumerate}
+\end{summary}
