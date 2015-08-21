@@ -1760,3 +1760,48 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 它们与程序中其他同名的变量没有任何关联. 但是 \emph{所有的其他变量都是全
 局的} (\emph{all other variables are global}); 如果函数体内的某个变量没有
 出现在参数列表中, 那么整个程序范围内都可以访问该变量.
+
+\subsection{\print 语句}
+\label{subsec:the_print_statement}
+\print 语句具有形式:
+\begin{pattern}
+    \print \expr$_1$\verb',' \expr$_2$\verb','...\verb','\expr$_n$
+    \print \verb'('\expr$_1$\verb',' \expr$_2$\verb','...\verb','
+    \expr$_n$\verb')'
+\end{pattern}
+两种形式都会把表达式的字符串值打印出现, 各个表达式的字符串值之间用输出
+字段分隔符分开, 最后跟着输出记录分隔符. 语句 
+\begin{awkcode}
+    print
+\end{awkcode}
+是
+\begin{awkcode}
+    print $0
+\end{awkcode}
+的缩写形式. 为了打印空白行 (即只含有换行符的行), 可以这样写:
+\begin{awkcode}
+    print ""
+\end{awkcode}
+\print 的第 2 种形式将参数列表包围在一对括号当中, 正如 
+\begin{awkcode}
+    print($1 ":", $2)
+\end{awkcode}
+\marginpar{56}
+两种形式的 \print 都可以产生相同的输出, 但是, 正如我们将会看到的那样, 当
+参数含有关系运算符时, 就必须使用括号.
+
+\subsection{输出分隔符}
+\label{subsec:output_separators}
+
+输出字段分割符与输出记录分隔符存储在内建变量 \verb'OFS' 与 \verb'ORS' 中.
+初始情况下, \verb'OFS' 与 \verb'ORS' 分别被设置为一个空格符与一个换行符,
+但它们的值可以在任何时候改变. 举例来说, 下面这个程序打印每一行的第 1 与第 
+2 个字段, 字段之间用封号分开, 在每一行的第 2 个字段之后输出两个换行符.
+\begin{awkcode}
+    BEGIN   { OFS = ":"; ORS = "\n\n" }
+            { print $1, $2 }
+\end{awkcode}
+作为对比,
+\begin{awkcode}
+    { print $1 $2 }
+\end{awkcode}
