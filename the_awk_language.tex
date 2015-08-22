@@ -1861,3 +1861,87 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \begin{awkcode}
     { print $1 $2 }
 \end{awkcode}
+打印第 1 个与第 2 个字段, 两个字段之间没有输出字段分隔符插入, 这是因为 
+\verb'$1 $1' 表示两个字符串的拼接.
+
+\subsection{\texttt{printf} 语句}
+\label{subsec:the_printf_statement}
+
+\printf 用于产生格式化的输出. 它与 C 语言中的 \printf 函数很像, 但是 awk 
+的 \printf 不支持格式说明符 \verb'*'. 与 \print 一样, 它也有带括号与不带
+括号的两种形式:
+\begin{pattern}
+    \printf\ \fmt\verb','\expr$_1$\verb','\expr$_2$\verb','\cdots\verb','
+    \expr$_n$ \par 
+    \printf\verb'('\fmt\verb','\expr$_1$\verb','\expr$_2$\verb','
+    \cdots\verb',' \expr$_n$\verb')'
+\end{pattern}
+参数 \fmt 总是必须的; 它是一个变量, 其字符串值含有字面文本与格式说明符,
+字面文本会按照文本的字面值输出, 格式说明符规定了参数列表中的表达式将被如何
+格式化地输出, 表 \ref{tbl:printf_format_control_characters} 列出了所有的
+格式说明符. 每一个格式说明符都以 \verb'%' 开始, 以转换字符结束, 可能含有
+下面三种修饰符:
+\begin{tabbing}
+\marginpar{57}
+    \verb'-' \hspace{4em} \= 表达式在它的域内左对齐 \\
+    \textit{width}  \> 为了达到规定的宽度, 必要时填充空格; 前导的 \verb'0'
+    表示用零填充 \\
+    \verb'.'\textit{prec}   \> 字符串最大宽度, 或十进制数的小数部分的位数
+\end{tabbing}
+\begin{center}
+    \begin{figure}
+        \captionsetup{type=table}
+        \caption{\texttt{printf} 的格式控制字符}
+        \begin{tabular}{c|l}
+            \hline
+            \hline
+            字符    & 表达式将被打印为 \\
+            \hline
+            \verb'c' & ASCII 字符 \\
+            \verb'd' & 十进制整数 \\
+            \verb'e' & \verb'[-]d.ddddddE[+-]dd \\
+            \verb'f' & \verb'[-]ddd.dddddd \\
+            \verb'g' & 按照 \ver'e' 或 \verb'f' 进行转换, 选项较短的那个,
+                无意义的零会被抑制 \\
+            \verb'o' & 无符号八进制数 \\
+            \verb's' & 字符串 \\
+            \verb'x' & 无符号十六进制数 \\
+            \verb'%' & 打印一个百分号 \verb'%', 不会有参数被吸收 \\
+            \hline
+        \end{tabular}
+    \end{figure}
+\end{center}
+\begin{center}
+    \begin{figure}
+        \captionsetup{type=table}
+        \caption{\texttt{printf} 格式说明符的示例}
+        \begin{tabular}{c|l|l}
+            \hline
+            \hline
+            \verb'fmt'  & \verb'$1'     & \verb'printf(fmt, $1)' \\
+            \hline
+            \verb'%c'     & \verb'97'       & \verb'a'  \\
+            \verb'%d'     & \verb'97.5'     & \verb'97' \\
+            \verb'%5d'    & \verb'97.5'     & \verb'   97'  \\
+            \verb'%e'     & \verb'97.5'     & \verb'9.750000e+01'   \\
+            \verb'%f'     & \verb'97.5'     & \verb'97.500000'      \\
+            \verb'%7.2f'  & \verb'97.5'     & \verb'  97.50'        \\
+            \verb'%g'     & \verb'97.5'     & \verb'97.5'   \\
+            \verb'%.6g'   & \verb'97.5'     & \verb'97.5'   \\
+            \verb'%o'     & \verb'97'       & \verb'141'    \\
+            \verb'%06o'   & \verb'97'       & \verb'000141' \\
+            \verb'%x'     & \verb'97'       & \verb'61' \\
+            \verb'%s'          & \verb'January'   & \verb'|January|' \\
+            \verb'%10s'        & \verb'January'   & \verb'|   January|' \\
+            \verb'%-10s'       & \verb'January'   & \verb'|January   |' \\
+            \verb'%.3s'        & \verb'January'   & \verb'|Jan|' \\
+            \verb'%10.3s'      & \verb'January'   & \verb'|       Jan|' \\
+            \verb'%-10.3s'     & \verb'January'   & \verb'|Jan       |' \\
+            \verb'%%'          & \verb'January'   & \verb'%' \\
+            \hline
+        \end{tabular}
+    \end{figure}
+\end{center}
+表 \ref{tbl:examples_of_printf_specifications} 包含有几个例子, 这些例子 
+说明了格式说明符, 数据及其对应的输出. 由 \printf 产生的输出不会在行末自动
+插入一个换行符, 除非你显式放置了一个换行符.
