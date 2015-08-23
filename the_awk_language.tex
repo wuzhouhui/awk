@@ -1887,18 +1887,18 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 的 \printf 不支持格式说明符 \verb'*'. 与 \print 一样, 它也有带括号与不带
 括号的两种形式:
 \begin{pattern}
-    \printf\ \fmt\verb','\expr$_1$\verb','\expr$_2$\verb','\cdots\verb','
+    \printf\ \fmt\verb','\expr$_1$\verb','\expr$_2$\verb','...\verb','
     \expr$_n$ \par 
     \printf\verb'('\fmt\verb','\expr$_1$\verb','\expr$_2$\verb','
-    \cdots\verb',' \expr$_n$\verb')'
+    ...\verb',' \expr$_n$\verb')'
 \end{pattern}
 参数 \fmt 总是必须的; 它是一个变量, 其字符串值含有字面文本与格式说明符,
 字面文本会按照文本的字面值输出, 格式说明符规定了参数列表中的表达式将被如何
 格式化地输出, 表 \ref{tbl:printf_format_control_characters} 列出了所有的
 格式说明符. 每一个格式说明符都以 \verb'%' 开始, 以转换字符结束, 可能含有
 下面三种修饰符:
-\begin{tabbing}
 \marginpar{57}
+\begin{tabbing}
     \verb'-' \hspace{4em} \= 表达式在它的域内左对齐 \\
     \textit{width}  \> 为了达到规定的宽度, 必要时填充空格; 前导的 \verb'0'
     表示用零填充 \\
@@ -1906,7 +1906,6 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \end{tabbing}
 \begin{center}
     \begin{figure}
-        \captionsetup{type=table}
         \caption{\texttt{printf} 的格式控制字符}
         \begin{tabular}{c|l}
             \hline
@@ -1915,9 +1914,9 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
             \hline
             \verb'c' & ASCII 字符 \\
             \verb'd' & 十进制整数 \\
-            \verb'e' & \verb'[-]d.ddddddE[+-]dd \\
-            \verb'f' & \verb'[-]ddd.dddddd \\
-            \verb'g' & 按照 \ver'e' 或 \verb'f' 进行转换, 选项较短的那个,
+            \verb'e' & \verb'[-]d.ddddddE[+-]dd' \\
+            \verb'f' & \verb'[-]ddd.dddddd' \\
+            \verb'g' & 按照 \verb'e' 或 \verb'f' 进行转换, 选项较短的那个,
                 无意义的零会被抑制 \\
             \verb'o' & 无符号八进制数 \\
             \verb's' & 字符串 \\
@@ -1929,7 +1928,6 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \end{center}
 \begin{center}
     \begin{figure}
-        \captionsetup{type=table}
         \caption{\texttt{printf} 格式说明符的示例}
         \begin{tabular}{c|l|l}
             \hline
