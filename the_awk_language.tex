@@ -1937,24 +1937,26 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 下面三种修饰符:
 \marginpar{57}
 \begin{tabbing}
-    \verb'-' \hspace{4em} \= 表达式在它的域内左对齐 \\
-    \textit{width}  \> 为了达到规定的宽度, 必要时填充空格; 前导的 \verb'0'
+    \indent\verb'-' \hspace{4em} \= 表达式在它的域内左对齐 \\
+    \indent\textit{width}  \> 为了达到规定的宽度, 必要时填充空格; 前导的 \verb'0'
     表示用零填充 \\
-    \verb'.'\textit{prec}   \> 字符串最大宽度, 或十进制数的小数部分的位数
+    \indent\verb'.'\textit{prec}   \> 字符串最大宽度, 或十进制数的小数部分的位数
 \end{tabbing}
-\begin{center}
-    \begin{figure}
+\begin{figure}
+        \captionsetup{type=table}
         \caption{\texttt{printf} 的格式控制字符}
+        \label{tbl:printf_format_control_characters}
+\begin{center}
         \begin{tabular}{c|l}
             \hline
             \hline
-            字符    & 表达式将被打印为 \\
+            字符    & \multicolumn{1}{c}{表达式将被打印为} \\
             \hline
             \verb'c' & ASCII 字符 \\
             \verb'd' & 十进制整数 \\
             \verb'e' & \verb'[-]d.ddddddE[+-]dd' \\
             \verb'f' & \verb'[-]ddd.dddddd' \\
-            \verb'g' & 按照 \verb'e' 或 \verb'f' 进行转换, 选项较短的那个,
+            \verb'g' & 按照 \verb'e' 或 \verb'f' 进行转换, 选择较短的那个,
                 无意义的零会被抑制 \\
             \verb'o' & 无符号八进制数 \\
             \verb's' & 字符串 \\
@@ -1962,15 +1964,19 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
             \verb'%' & 打印一个百分号 \verb'%', 不会有参数被吸收 \\
             \hline
         \end{tabular}
-    \end{figure}
 \end{center}
-\begin{center}
+    \end{figure}
     \begin{figure}
+        \captionsetup{type=table}
         \caption{\texttt{printf} 格式说明符的示例}
-        \begin{tabular}{c|l|l}
+        \label{tbl:examples_of_printf_specifications}
+\begin{center}
+        \begin{tabular}{l|l|l}
             \hline
             \hline
-            \verb'fmt'  & \verb'$1'     & \verb'printf(fmt, $1)' \\
+            % TODO: the first line should be centered.
+            \texttt{fmt}  & \verb'$1'     &
+            \verb'printf(fmt, $1)' \\
             \hline
             \verb'%c'     & \verb'97'       & \verb'a'  \\
             \verb'%d'     & \verb'97.5'     & \verb'97' \\
@@ -1992,8 +1998,8 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
             \verb'%%'          & \verb'January'   & \verb'%' \\
             \hline
         \end{tabular}
-    \end{figure}
 \end{center}
+    \end{figure}
 表 \ref{tbl:examples_of_printf_specifications} 包含有几个例子, 这些例子 
 说明了格式说明符, 数据及其对应的输出. 由 \printf 产生的输出不会在行末自动
 插入一个换行符, 除非你显式放置了一个换行符.
@@ -2019,11 +2025,11 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \begin{awkcode}
     { print > $1 }
 \end{awkcode}
-将所有的输入行输出到以第 1 个字段命令的文件中.
+将所有的输入行输出到以第 1 个字段命名的文件中.
 
 在 \print 与 \printf 语句中, 如果参数列表中的表达式包含有关系运算符, 那么,
 表达式 (或者是参数列表) 需要用括号括起来. 这样做是为了避免由重定向运算符
-\verb'>' 带的歧义. 在程序 
+\verb'>' 带来的歧义. 在程序 
 \begin{awkcode}
     { print $1, $2 > $3 }
 \end{awkcode}
@@ -2051,8 +2057,8 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 假设我们想要得到一张表格, 表格的每一行都是大洲的名字及其对应的人口数, 人口
 按照从大到小的顺序排列. 下面这个程序为每个大洲计算总人口, 人口数存储在数
 组 \verb'pop' 中. \END 动作打印大洲的名字及其对应的人口数, 并把打印的内容
-输送给 \verb'sort' 命令\footnote{正确的写法应该是 \texttt{sort -t'\t' 
--k1rn}}
+输送给 \verb'sort' 命令\footnote{正确的写法应该是 \texttt{sort
+-t'}\texttt{\textbackslash}\texttt{t' -k1rn}}
 \begin{awkcode}
     # print continents and populations, sorted by population
 
@@ -2081,7 +2087,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 
 虽然我们的大多数例子都把字面字符串包围在双引号中, 其实命令行与文件名可以用
 任意的表达式指定. 在涉及到输出重定向的 \print 语句中, 文件或管道通过它们的
-名字标识; 也就是说, 上面的程序的管道是按字面命名的
+名字标识; 也就是说, 上面程序的管道是按字面命名的
 \begin{awkcode}
     sort -t'\t' +1rn
 \end{awkcode}
@@ -2092,7 +2098,8 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \label{subsec:closing_files_and_pipes}
 
 语句 \verb'close('\expr\verb')' 关闭一个文件或管道, 文件或管道由 
-\expr 指定; \expr 的字符串值必须与用于创建文件或管道的字符串值相同. 于是 
+\expr 指定; \expr 的字符串值必须与最初用于创建文件或管道的字符串值相同.
+于是 
 \begin{awkcode}
     close("sort -t'\t' +1rn")
 \end{awkcode}
