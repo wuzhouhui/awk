@@ -1945,3 +1945,106 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 表 \ref{tbl:examples_of_printf_specifications} 包含有几个例子, 这些例子 
 说明了格式说明符, 数据及其对应的输出. 由 \printf 产生的输出不会在行末自动
 插入一个换行符, 除非你显式放置了一个换行符.
+
+\subsection{输出到字段}
+\label{subsec:output_into_files}
+
+重定向运算符 \verb'>' 与 \verb'>>' 用于将输出重定向到文件, 而不是原来的
+标准输出. 下面这个程序将所有输入行的第 1 个与第 3 个字段输出到两个文件
+中: \verb'bigpop', 如果第 3 个字段大于 100, 否则的话, 输出到
+\verb'smallpop':
+\begin{awkcode}
+    $3 > 100    { print $1, $3 > "bigpop" }
+    $3 <= 100   { print $1, $3 > "smallpop" }
+\end{awkcode}
+注意, 文件名必须用双引号括起来; 如果没有双引号的话, \verb'bigpop' 与 
+\verb'smallpop' 将被当作未初化的变量.
+\marginpar{58} 文件名也可以是表达式或变量:
+\begin{awkcode}
+    { print($1, $3) > ($3 > 100 ? "bigpop" : "smallpop") }
+\end{awkcode}
+上面这个程序做的是同样的工作, 程序 
+\begin{awkcode}
+    { print > $1 }
+\end{awkcode}
+将所有的输入行输出到以第 1 个字段命令的文件中.
+
+在 \print 与 \printf 语句中, 如果参数列表中的表达式包含有关系运算符, 那么,
+表达式 (或者是参数列表) 需要用括号括起来. 这样做是为了避免由重定向运算符
+\verb'>' 带的歧义. 在程序 
+\begin{awkcode}
+    { print $1, $2 > $3 }
+\end{awkcode}
+中, \verb'>' 是重定向运算符, 而不是第 2 个表达式的一部分, 所以程序的功能是
+将第 1 个与第 2 个字段输出到以 第 3 个字段命名的文件中. 如果你想要让
+ \verb'>' 成为第 2 个表达式的一部分, 使用括号:
+\begin{awkcode}
+     { print $1, ($2 > $3) }
+\end{awkcode}
+
+还有一点需要注意的是, 重定向运算符只会打开文件一次; 随后的 \print 或
+\printf 语句将更多的数据添加到文件的末尾. 重定向运算符 \verb'>' 在打开文件
+时先把文件内容清空, 然后再往里写数据. 如果用的是 \verb'>>', 那么文件原来的
+内容便会保留下来, 而把新的内容添加到原来内容的末尾.
+
+\subsection{输出到管道}
+\label{subsec:output_into_pipe}
+
+在支持管道的系统中, 也可以把输出重定向到管道, 而不仅仅是文件. 语句 
+\begin{pattern}
+    \verb'print | '\textit{command}
+\end{pattern}
+导致 \print 的输出以管道的方式传递给 \textit{command}
+
+假设我们想要得到一张表格, 表格的每一行都是大洲的名字及其对应的人口数, 人口
+按照从大到小的顺序排列. 下面这个程序为每个大洲计算总人口, 人口数存储在数
+组 \verb'pop' 中. \END 动作打印大洲的名字及其对应的人口数, 并把打印的内容
+输送给 \verb'sort' 命令\footnote{正确的写法应该是 \texttt{sort -t'\t' 
+-k1rn}}
+\begin{awkcode}
+    # print continents and populations, sorted by population
+
+    BEGIN { FS = "\t" }
+          { pop[$4] += $3 }
+    END   { for (c in pop)
+              printf("%15s\t%6d\n", c, pop[c]) | "sort -t'\t' +1rn"
+          }
+\end{awkcode}
+程序的输出是
+\begin{awkcode}
+           Asia	  2173
+         Europe	   172
+  North America	   340
+  South America	   134
+\end{awkcode}
+\marginpar{59}
+
+管道的另一个用法是把输出重定向至标准错误文件 (Unix 系统); 于是输出将会出现
+在用户的终端, 而不是标准输出. 有几种惯用语法可以把输出重定向至标准错误文件:
+\begin{awkcode}
+    print message | "cat 1>&2"          # redirect cat to stderr
+    system("echo '" message "' 1>&2")   # redirect echo to stderr
+    print message > "/dev/tty"          # write directly on terminal
+\end{awkcode}
+
+虽然我们的大多数例子都把字面字符串包围在双引号中, 其实命令行与文件名可以用
+任意的表达式指定. 在涉及到输出重定向的 \print 语句中, 文件或管道通过它们的
+名字标识; 也就是说, 上面的程序的管道是按字面命名的
+\begin{awkcode}
+    sort -t'\t' +1rn
+\end{awkcode}
+通常来说, 在程序运行期间, 文件或管道只被打开一次. 如果文件或管道被显式地
+关闭, 而后面又使用到了, 那么它们就会被重新打开.
+
+\subsection{关闭文件与管道}
+\label{subsec:closing_files_and_pipes}
+
+语句 \verb'close('\expr\verb')' 关闭一个文件或管道, 文件或管道由 
+\expr 指定; \expr 的字符串值必须与用于创建文件或管道的字符串值相同. 于是 
+\begin{awkcode}
+    close("sort -t'\t' +1rn")
+\end{awkcode}
+关闭上面打开的排序管道.
+
+在同一个程序中, 如果你写了一个文件, 而待会想要读取它, 那么就需要调用
+\verb'close'. 某一时刻, 同时处于打开状态的文件或管道数量最大值由实现定义.
