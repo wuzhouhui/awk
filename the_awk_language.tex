@@ -2048,3 +2048,77 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 
 在同一个程序中, 如果你写了一个文件, 而待会想要读取它, 那么就需要调用
 \verb'close'. 某一时刻, 同时处于打开状态的文件或管道数量最大值由实现定义.
+
+\subsection{多行记录}
+\label{subsec:multiline_records}
+
+默认情况下, 记录之间由换行符分隔, 所以术语 ``行'' 与 ``记录'' 在通常情况
+下是等价的. 默认的记录分隔符可以通过向内建变量 \verb'RS' 赋予新值来改变,
+但是必须按照某种受限的方式来进行. 如果 \verb'RS' 被设置成空值, 正如 
+\begin{awkcode}
+    BEGIN { RS = "" }
+\end{awkcode}
+\marginpar{61}
+那么记录之间将由一个或多个的空行来分隔, 并且每个记录可以占据多行. 把
+\verb'RS' 重新设置成换行符 (\verb'RS = "\n"') 就可以恢复原来的效果.
+当记录由多行组成时, 无论 \verb'FS' 是什么值, 换行符总是字段分隔符之一.
+
+处理多行记录的通常方式是使用
+\begin{awkcode}
+    BEGIN { RS = ""; FS = "\n" }
+\end{awkcode}
+把记录分隔符设置成一个或多个空白行, 把字段分隔符设置成单个的换行符; 每一
+行都是一个单独的字段. 记录的长度是有限制的, 通常是 3000 个字符. 
+关于如何处理多行记录, 在第 \ref{chap:data_processing} 章包含更多的讨论.
+
+\subsection{\texttt{getline} 函数}
+\label{subsec:the_getline_function}
+
+函数 \verb'getline' 可以从当前输入行, 或文件, 或管道, 读取输入. 
+\verb'getline' 抓取下一个记录, 按照通常的方式把记录分割成一个个的字段. 
+它会设置 \verb'NF', \verb'NR', 和 \verb'FNR'; 如果存在一个记录, 返回 1,
+若遇到文件末尾, 返回 0, 发生错误时返回 -1 (例如打开文件失败).
+
+表达式 \verb'getline x' 读取下一条记录到变量 \verb'x' 中, 并递增 \verb'NR'
+与 \verb'FNR'. 不会对记录进行分割, 所以不会设置 \verb'NF'.
+
+表达式 
+\begin{awkcode}
+    getline <"file"
+\end{awkcode}
+从文件 \verb'file' 读取输入. 它不会对 \verb'NR' 与 \verb'FNR' 产生影响,
+但是会执行字段分割, 并且设置 \verb'NF'.
+
+表达式 
+\begin{awkcode}
+    getline x <"file"
+\end{awkcode}
+从 \verb'file' 读取下一条记录, 存到变量 \verb'x' 中. 记录不会被分割成字段,
+变量 \verb'NF', \verb'NR', 与 \verb'FNR' 都不会被修改.
+
+表 \ref{tbl:getline_function} 总结了 \verb'getline' 函数的所有形式.
+每个表达式的值都是 \verb'getline' 的返回值.
+
+\begin{figure}
+    \begin{center}
+        \captionsetup{type=table}
+        \caption{\texttt{getline} 函数}
+        \label{tbl:getline_function}
+        \begin{tabular}{l|l}
+            \hline
+            \hline
+            表达式  & 被设置的变量  \\
+            \hline
+            \verb'getline'  & \verb'$0, NF, NR, FNR' \\
+            \verb'getline'\ \textit{var} & \textit{var}, \verb'NR, FNR' \\
+            \verb'getline <'\textit{file} & \verb'$0, NF' \\
+            \verb'getline'
+        \end{tabular}
+    \end{center}
+\end{figure}
+
+作为一个例子, 这个程序把它的输入复制到输出, 除了类似下面这样的行:
+\begin{awkcode}
+    #include "filename"
+\end{awkcode}
+这些行将被文件 \verb'filename' 的内容所替代.
