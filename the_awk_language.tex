@@ -2122,3 +2122,30 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
     #include "filename"
 \end{awkcode}
 这些行将被文件 \verb'filename' 的内容所替代.
+\begin{awkcode}
+    # include - replace #include "f" by contents of file f
+
+    /^#include/ {
+        gsub(/"/, "", $2)
+        while (getline x <$2 > 0)
+            print x
+        next
+    }
+    { print }
+\end{awkcode}
+
+\marginpar{62}
+也可以把其他命令的输出直接输送给 \verb'getline'. 例如, 语句 
+\begin{awkcode}
+    while ("who" | getline)
+        n++
+\end{awkcode}
+执行 Unix 命令 \verb'who' (只执行一次), 并将它的输出传递给 \verb'getline'.
+\verb'who' 命令的输出是所以已登录用户的用户名. \verb'while' 循环的每一次
+迭代, 从这个用户名列表里读取一行或多, 并递增变量 \verb'n', 当循环结束后,
+\verb'n' 的值就是已登录用户的人数. 类似的, 表达式 
+\begin{awkcode}
+    "date" | getline d
+\end{awkcode}
+把命令 \verb'date' 的输出保存到变量 \verb'd' 中, 于是 \verb'd' 就被设置为
+当前日期. 同样, 在非 Unix 系统上可能不支持管道.
