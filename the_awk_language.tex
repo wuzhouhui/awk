@@ -2114,12 +2114,12 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 为 awk 提供输入数据有若干种方式. 最常见的是把输入数据放在一个文件中, 例如 
 文件 \verb'data', 然后再键入
 \begin{pattern}
-    \indent\verb"awk '"\textit{program}\verb"'data"
+    \indent\verb"awk '"\textit{program}\verb"' data"
 \end{pattern}
 
 如果没有指定输入文件, awk 就从它的标准输入读取数据; 所以, 另一种常用的方法
 是把另一个程序的输出以管道的方式输送给 awk. 举例来说, 实用程序 \verb'egrep'
-从输入行中挑选具有指定正则表达的行, 虽然 awk 也可以做同样的工作, 但是与前
+从输入行中挑选具有指定正则表达式的行, 虽然 awk 也可以做同样的工作, 但是与前
 者相比就慢得多了. 我们可以输入命令
 \begin{pattern}
     \indent\verb"egrep 'Asia' countries | awk '"\textit{program}\verb"'"
@@ -2133,13 +2133,13 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 
 内建变量 \verb'FS' 的默认值是 \verb'" "', 也就是一个空格符. 当 \verb'FS'
 具有这个特定值时, 输入字段按照空格和 (或) 制表符分割, 前导的空格与制表符
-会被丢弃, 所以下面三行数据, 其每一行的第1个字段都相同:
+会被丢弃, 所以下面三行数据中, 其每一行的第1个字段都相同:
 \begin{awkcode}
     field1
       field1
         field1      field2
 \end{awkcode}
-然而, 当 \verb'FS' 是其他值时, 前导的空格与制表符 \emph{不会} 被丢弃.
+然而, 当 \verb'FS' 是其他值时, 前导的空格与制表符\emph{不会}被丢弃.
 
 把一个字符串赋值给内建变量 \verb'FS' 就可以改变字段分隔符. 如果字符串的长
 度多于一个字符, 那么它会被当成一个正则表达式. 当前输入行中, 与该正则表达
