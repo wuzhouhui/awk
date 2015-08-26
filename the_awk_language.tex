@@ -2375,8 +2375,8 @@ Unix 系统上, 这里的例子可能无法工作或表现出不同的行为.
 \subsection{\texttt{system} 函数}
 \label{subsec:the_system_function}
 
-内建函数 \verb'system)'\textit{expression}\verb')' 用于执行命令, 命令由 
-\textit{expression} 给出. \verb'system' 的返回就是命令的退出状态.
+内建函数 \verb'system('\textit{expression}\verb')' 用于执行命令, 命令由 
+\textit{expression} 给出. \verb'system' 的返回值就是命令的退出状态.
 
 例如, 我们可以重新实现 \ref{sec:input} 节提到的文件包含程序, 就像这样
 \begin{awkcode}
@@ -2396,7 +2396,7 @@ Unix 系统上, 这里的例子可能无法工作或表现出不同的行为.
     awk '{ print $1 }' ...
 \end{awkcode}
 Awk 用到了许多 Shell 也同样会用到的字符, 例如 \verb'$' 与 \verb'"',
-把 awk 程序包围在一对单引号中可以确保 Shell 把程序原封不动的传递给 awk.
+把 awk 程序包围在一对单引号中可以确保 Shell 把程序原封不动地传递给 awk.
 
 上面提到的两种执行 awk 程序的方法都要求用户自己打一些字. 为了降低打字的
 工作量, 我们想要把命令与程序都写到一个可执行文件中, 通过键入文件名来执行
@@ -2415,18 +2415,18 @@ Unix 命令:
     \indent\texttt{field1 } \textit{filenames} ...
 \end{pattern}
 
-现在我们考虑实现一个更加通用的 \verb'field', 程序可以从每个输入行
-打印字段的任意组合; 换句话说, 命令 
+现在我们考虑实现一个更加通用的 \verb'field', 程序可以从每个输入行中
+打印任意组合的字段; 换句话说, 命令 
 \begin{pattern}
-    \indent\verb'field '$n_1$\ $n_2$\ ...\ \textit{file}$_1$\ \textit{file}
+    \indent\verb'field '\textit{n}$_1$\ \textit{n}$_2$\ ...\ \textit{file}$_1$\ \textit{file}
         $_2$\ ...
 \end{pattern}
-按照特定的顺序打印特定的字段. 但是我们如何获取 $n_i$ 的值, 又如何区分
-$n_i$ 与文件名参数?
+按照特定的顺序打印特定的字段. 但是我们如何获取 \textit{n}$_i$ 的值, 又如何区分
+\textit{n}$_i$ 与文件名参数?
 
-对于采用 Shell 编程的人来说, 解决上面提到的两个问题有多种方式. 如何使用 
-awk 的话, 最简单的方式是扫描内建数组 \verb'ARGV', 获取 $n_i$ 的值之后, 把
-数组中对应的位置清零, 这样它们就不会被当成文件名.
+对于采用 Shell 编程的人来说, 解决上面提到的两个问题有多种方式. 如果使用 
+awk 的话, 最简单的方式是扫描内建数组 \verb'ARGV', 获取 \textit{n}$_i$
+的值之后, 把数组中对应的位置清零, 这样它们就不会被当成文件名.
 \marginpar{66}
 \begin{awkcode}
     # field - print named fields of each input line
@@ -2459,14 +2459,14 @@ awk 的话, 最简单的方式是扫描内建数组 \verb'ARGV', 获取 $n_i$ �
 
 和其他语言一样, awk 也需要通过经验与实践来学习, 所以我们鼓励你开始自己写
 程序. 程序不需要有多么的庞大或复杂 ---- 你可以通过仅仅几行代码, 来学习
-语言的某些特性如何工作, 或测试程序的某些关键点, 你也可能自己手动输入数据
+语言的某些特性如何工作, 或测试程序的某些关键点, 你也可以自己手动输入数据
 来查看程序的运行效果.
 
 \subsection{参考资料}
 \label{subsec:bibliographic_notes}
 
 \textit{The C Programming Language} (Brian Kernighan 与 Dennis Ritchie 著,
-Prentice-Hall 1978 年出版) 对 C 程序设计语言进行了完整的描述. 关于如何 
+Prentice-Hall 1978 年出版) 对 C 程序设计语言进行了完整地描述. 关于如何 
 使用 Unix 系统有大量的资料可供参考; \textit{The Unix Programming 
 Environment} (Brian Kernighan 与 Rob Pike 著, Prentice-Hall 1984 年出版)
 包含一个扩展讨论, 讨论的是如何创建包含 awk 的 shell 程序.
