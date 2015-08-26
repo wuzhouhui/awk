@@ -2228,7 +2228,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \begin{awkcode}
     while (getline <"file" > 0) ...     # safe
 \end{awkcode}
-这个循环只有在 \verb'getline' 返回 1 的情况下才会执行.
+这个循环只有在 \verb'getline' 返回 \texttt{1} 的情况下才会执行.
 
 \subsection{命令行变量赋值}
 \label{subsec:command_line_variable_assignments}
@@ -2237,9 +2237,9 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 正如我们之前看到过的那样, awk 命令行具有多种形式:
 \begin{pattern}
     \indent\verb"awk '"\textit{program}\verb"' f1 f2 ..." \par
-    \indent\verb"awk -f '"\textit{progfile}\verb" f1 f2 ..." \par
-    \indent\verb"awk -F"\textit{sep}\verb" '"\textit{program}
-        \verb"' f1 f2 ..." \par
+    \indent\verb"awk -f "\textit{progfile}\verb" f1 f2 ..." \par
+    \indent\verb"awk -F"\textit{sep}\verb" '"\textit{program}\verb"'"
+    \verb"f1 f2 ..." \par
     \indent\verb"awk -F"\textit{sep}\verb" -f "\textit{progfile}
         \verb" f1 f2 ..." \par
 \end{pattern}
@@ -2258,9 +2258,9 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \end{awkcode}
 \verb'ARGC' 的值是 \verb'4', \verb'ARGV[0]' 含有 \verb'awk', \verb'ARGV[1]'
 含有 \verb'a', \verb'ARGV[2]' 含有 \verb'v=1', \verb'ARGV[3]' 含有
-\verb'b'. \verb'ARGC' 之所以会比参数的个数多1, 是因为命名的名字 \verb'awk'
+\verb'b'. \verb'ARGC' 之所以会比参数的个数多1, 是因为命令的名字 \verb'awk'
 也被当作参数之一, 存放在索引为 0 的位置, 就像 C 程序那样. 然而, 如果 awk 
-程序出现在的命令行, 那它就不会被当作参数, 对 \verb'-f '\textit{filename}
+程序在命令行中出现, 那它就不会被当作参数, 对 \verb'-f '\textit{filename}
 或任意的 \verb'-F' 选项同样如此. 例如, 对于命令行
 \begin{awkcode}
     awk -F'\t' '$3 > 100' countries
@@ -2310,10 +2310,10 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \verb'ARGV' 里面的参数可以修改或添加; \verb'ARGC' 可能会随之改变. 每当有一 
 个输入文件结束, awk 把 \verb'ARGV' 的下一个非空元素 (直到 \verb'ARGC - 1'
 的当前值) 看作是下一个输入文件名. 于是, 把 \verb'ARGV' 的一个元素设置为
-空, 意味着 awk 不会把它看作是输入文件. 名字 ``\verb"-"'' 可以当用标准输入
+空, 意味着 awk 不会把它看作是输入文件. 名字 ``\verb"-"'' 可以当作标准输入
 来用.
 
-\section{与其他程序的交互}
+\subsection{与其他程序的交互}
 \label{sec:interaction_with_other_programs}
 
 这一节描述几种 awk 程序与其他命令合作的方式. 主要针对 Unix 系统; 在非 
