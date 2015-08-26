@@ -2149,3 +2149,65 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \end{awkcode}
 把命令 \verb'date' 的输出保存到变量 \verb'd' 中, 于是 \verb'd' 就被设置为
 当前日期. 同样, 在非 Unix 系统上可能不支持管道.
+
+在所有的涉及到 \verb'getline' 的情况中, 你必须注意由于文件无法访问而返回的
+错误. 写出这样的代码是有可能的
+\begin{awkcode}
+    while (getline <"file") ...     # dangerous
+\end{awkcode}
+如果文件不存在的话, 这将是个死循环, 因为对于不存在的文件, \verb'getline'
+返回 \verb'-1', 非零值都表示真. 安全的方式是
+\begin{awkcode}
+    while (getline <"file" > 0) ...     # safe
+\end{awkcode}
+这个循环只有在 \verb'getline' 返回 1 的情况下才会执行.
+
+\subsection{命令行变量赋值}
+\label{subsec:command_line_variable_assignments}
+
+\marginpar{63}
+正如我们之前看到过的那样, awk 命令行具有多种形式:
+\begin{pattern}
+    \indent\verb"awk '"\textit{program}\verb"' f1 f2 ..." \par
+    \indent\verb"awk -f '"\textit{progfile}\verb" f1 f2 ..." \par
+    \indent\verb"awk -F"\textit{sep}\verb" '"\textit{program}
+        \verb"' f1 f2 ..." \par
+    \indent\verb"awk -F"\textit{sep}\verb" -f "\textit{progfile}
+        \verb" f1 f2 ..." \par
+\end{pattern}
+在上面的命令行中, \verb'f1, f2' 等变量是命令行参数, 通常代表文件名. 
+如果一个文件名具有形式 \textit{var}\verb'='\textit{text}, 那这就表示赋
+值语句, 把 \textit{text} 赋值给 \textit{var}, 当这个参数被当作文件来访问时,
+执行赋值动作. 这种类型的赋值语句允许变量在文件读之前或之后改变.
+
+\subsection{命令行参数}
+\label{subsec:command_line_arguments}
+
+命令行参数可以通常 awk 的内建数组 \verb'ARGV' 来访问. 内建变量 \verb'ARGC'
+的值是参数的个数再加 1. 对于命令行
+\begin{awkcode}
+    awk -f progfile a v=1 b
+\end{awkcode}
+\verb'ARGC' 的值是 \verb'4', \verb'ARGV[0]' 含有 \verb'awk', \verb'ARGV[1]'
+含有 \verb'a', \verb'ARGV[2]' 含有 \verb'v=1', \verb'ARGV[3]' 含有
+\verb'b'. \verb'ARGC' 之所以会比参数的个数多1, 是因为命名的名字 \verb'awk'
+也被当作参数之一, 存放在索引为 0 的位置, 就像 C 程序那样. 然而, 如果 awk 
+程序出现在的命令行, 那它就不会被当作参数, 对 \verb'-f '\textit{filename}
+或任意的 \verb'-F' 选项同样如此. 例如, 对于命令行
+\begin{awkcode}
+    awk -F'\t' '$3 > 100' countries
+\end{awkcode}
+\verb'ARGC' 的值是 \verb'2', \verb'ARGV[1]' 的值是 \verb'countries'.
+
+下面这个程序回射它的命令行参数:
+\begin{awkcode}
+    # echo - print command-line arguments
+
+    BEGIN {
+        for (i = 1; i < ARGC; i++)
+            printf "%s ", ARGV[i]
+        printf "\n"
+    }
+\end{awkcode}
+请注意在 \verb'BEGIN' 动作里所发生的一切: 因为没有其他的 \patact 语句, 
+所以参数不会被当作文件名, 也没有输入被读取.
