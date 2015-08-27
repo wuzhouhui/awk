@@ -1,0 +1,55 @@
+\chapter{数据处理}
+\label{chap:data_processing}
+
+\marginpar{67}
+Awk 最初的设计目标是用于日常的数据处理, 例如信息查询, 数据验证, 以及数据
+转换与归约. 我们已经在第 \ref{chap:an_awk_tutorial} 章与第
+\ref{chap:the_awk_language} 见到了关于这些的简单例子. 在这一章, 我们会按照
+相同的思路, 考虑一些更加复杂的任务. 大多数例子一次只处理一行, 但是最后一节
+讨论如何处理占据多行的输入记录.
+
+Awk 程序通常按照增量模式开发: 先写上几行, 测试一下, 然后再添加几行, 再测试,
+如此进行下去. 这本书里的大多数比较大的程序都是按照这种模式开发的.
+
+也可以按照传统的方式来开发 awk 程序, 先拟好程序的主体框架, 然后查询手册.
+但是, 通过修改已存在的程序来达到我们自己想要的效果, 通常来说会更加容易.
+于是, 这本书里的程序扮演了另一个角色: 通过例子来提供实用的编程模型.
+
+\section{数据转换与归约}
+\label{sec:data_transformation_and_reduction}
+
+Awk 的一个最常用的功能是把数据从一种形式转换成另一种形式, 通常情况下, 是把
+一种程序的输出格式, 转换成另一种程序要求的格式. 另一个常用的功能是从一个大
+数据集中提取相关的数据, 通常伴随着汇总信息的重新格式化与准备. 这一节包含了
+许多关于这些主题的例子.
+
+\subsection{列求和}
+\label{subsec:Summing_columns}
+
+我们已经看到了 2 行 awk 程序的几种变体, 这些程序对单个字段上的所有数字求和.
+下面这个程序执行的工作更加复杂, 但却是比较典型的数据归约任务. 每一个输入行
+都含有若干个字段, 每一个字段都包含数字, 程序的任务是计算每一列的和, 而不管
+该行有多少列.
+\begin{awkcode}
+     # sum1 - print column sums
+     #   input:  rows of numbers
+     #   output: sum of each column
+     #     missing entries are treated as zeros
+     
+         { for (i = 1; i <= NF; i++)
+               sum[i] += $i
+           if (NF > maxfld)
+               maxfld = NF
+         }
+     END { for (i = 1; i <= maxfld; i++) {
+               printf("%g", sum[i])
+               if (i < maxfld)
+                   printf("\t")
+               else
+                   printf("\n")
+           }
+         }
+\end{awkcode}
+\marginpar{68}
+变量的自动初始化在这里显得非常方便, 因为 \verb'maxfld' (到目前为止, 看到的
+字段数量大值) 自动从 0 开始, 
