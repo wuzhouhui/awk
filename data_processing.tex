@@ -52,4 +52,64 @@ Awk 的一个最常用的功能是把数据从一种形式转换成另一种形�
 \end{awkcode}
 \marginpar{68}
 变量的自动初始化在这里显得非常方便, 因为 \verb'maxfld' (到目前为止, 看到的
-字段数量大值) 自动从 0 开始, 
+字段数最大值) 自动从 0 开始, 随着程序的进行, 所有的项都被放入数组 \verb'sum'
+中, 虽然只有到程序运行结束, 我们才能知道数组中到底有多少项. 值得注意的是,
+如果输入文件为空, 那么程序什么也不会打印出来.
+
+程序不需要知道一行有多少个字段, 这对我们写程序来说就非常方便, 但是它不检
+查所有的项是否都是数字, 也不检查每行的字段数是否相同\footnote{原文为:
+    but it doesn't check that the entries are all numbers, nor that each 
+row has the same number of entries.}  下面的程序做的是同样的事件, 但是 
+它会检查每行的字段数是否与每一行的相同:
+\begin{awkcode}
+     # sum2 - print column sums
+     #     check that each line has the same number of fields
+     #        as line one
+     
+     NR==1 { nfld = NF }
+           { for (i = 1; i <= NF; i++)
+                 sum[i] += $i
+             if (NF != nfld)
+                 print "line " NR " has " NF " entries, not " nfld
+           }
+     END   { for (i = 1; i <= nfld; i++)
+                 printf("%g%s", sum[i], i < nfld ? "\t" : "\n")
+           }
+\end{awkcode}
+我们还修正了位于 \END 的输出代码, 这段代码显示了如何利用条件表达式, 使得
+在列与列之间插入一个制表符, 在最后一列之后插入一个换行符.
+
+现在, 假设某些字段不是数值型, 所以它们不能被计算在内. 策略是新增一个数组
+\verb'numcol', 用于跟踪数值型字段, 并且函数 \verb'isnum' 来检查某项是否是
+一个数值. 由于使用到了函数, 所以测试只需要在一个地方完成, 这样做有助于将来
+\marginpar{69}
+对程序进行修改. 如果程序可以相信它的输入, 那么只需要查看第 1 行就可以知道
+某个字段是否是数值. 我们仍然需要 \verb'nfld', 因为在 \END 中, \verb'NF' 的
+值是零.
+\begin{awkcode}
+     # sum3 - print sums of numeric columns
+     #     input:  rows of integers and strings
+     #     output: sums of numeric columns
+     #       assumes every line has same layout
+     
+     NR==1 { nfld = NF
+             for (i = 1; i <= NF; i++)
+                 numcol[i] = isnum($i)
+           }
+     
+           { for (i = 1; i <= NF; i++)
+                 if (numcol[i])
+                     sum[i] += $i
+           }
+     
+     END   { for (i = 1; i <= nfld; i++) {
+                 if (numcol[i])
+                     printf("%g", sum[i])
+                 else
+                     printf("--")
+                 printf(i < nfld ? "\t" : "\n")
+             }
+           }
+     
+     function isnum(n) { return n ~ /^[+-]?[0-9]+$/ }
+\end{awkcode}
