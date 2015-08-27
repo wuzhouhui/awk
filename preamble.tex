@@ -11,6 +11,8 @@
 \usepackage{verbatim}
 % for float's caption
 \usepackage{caption}
+% for exercise 
+\usepackage{theorem}
 
 % from package geometry
 % 为边注加边框
@@ -119,6 +121,11 @@
 \renewcommand\break{\texttt{break}}
 \newcommand\ctn{\texttt{continue}}
 \newcommand\fmt{\textit{format}}
+
+\theoremstyle{plain}
+\theoremheaderfont{\bfseries}
+\theorembodyfont{\normalfont}
+\newtheorem{exercise}{Exercise}[chapter]
 
 \title{AWK 程序设计语言}
 \author{Alfred V.Aho \and Brian W.Kernighan \and Peter J.Weinberger \and
