@@ -188,7 +188,7 @@ row has the same number of entries.}. 下面的程序做的是同样的事件, �
     awk -f histogram
 \end{awkcode}
 它的输出是\footnote{这是在我系统上的运行结果, 因为成绩是随机生成的, 所以 
-与原文不太一样}
+与原文不太一样. ---- 译者注}
 \begin{shell}
       0 -  9:  20 ********************
      10 - 19:  18 ******************
@@ -205,7 +205,7 @@ row has the same number of entries.}. 下面的程序做的是同样的事件, �
 
 \marginpar{71}
 \begin{exercise}
-    根据比较决定星号的个数, 使得当数据过多时, 一行的长度不会超过屏幕的宽度.
+    根据比例决定星号的个数, 使得当数据过多时, 一行的长度不会超过屏幕的宽度.
 \end{exercise}
 
 \begin{exercise}
@@ -217,15 +217,15 @@ row has the same number of entries.}. 下面的程序做的是同样的事件, �
 \label{subsec:numbers_with_commas}
 
 设想我们有一张包含了许多数的表, 每个数都有逗号与小数点, 就像
-\verb'12,345.67'. 因为 awk 认为第一个逗号会终止一个数, 所以这些数不能直接
-相加. 必须首先把逗号移除:
+\verb'12,345.67'. 因为第一个逗号会终止 awk 对数的解析, 所以它们不能直接
+相加, 必须首先把逗号移除:
 \begin{awkcode}
     # sumcomma - add up numbers containing commas
     
         { gsub(/,/, ""); sum += $0 }
     END { print sum }
 \end{awkcode}
-\verb'gsub(/,/, "")' 作为是把每一个逗号都替换成空字符串, 也就是删除逗号.
+\verb'gsub(/,/, "")' 把每一个逗号都替换成空字符串, 也就是删除逗号.
 
 这个程序不检查处于正确位置的逗号, 也不在答案中打印逗号. 往数字中加入逗号只
 需要很少的工作量, 下一个程序就展示了这点. 它为数字加上逗号, 保留两位小数.
