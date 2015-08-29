@@ -227,13 +227,14 @@ row has the same number of entries.}. 下面的程序做的是同样的事件, �
 \end{awkcode}
 \verb'gsub(/,/, "")' 把每一个逗号都替换成空字符串, 也就是删除逗号.
 
-这个程序不检查处于正确位置的逗号, 也不在答案中打印逗号. 往数字中加入逗号只
+这个程序不检查逗号是否处于正确的位置,
+也不在答案中打印逗号. 往数字中加入逗号只
 需要很少的工作量, 下一个程序就展示了这点. 它为数字加上逗号, 保留两位小数.
 这个程序的结构是非常值得效仿的: 一个函数只负责添加逗号, 剩下的部分只管读取
 与打印. 一旦测试通过, 新的函数就可以被包含到最终的程序中.
 
 基本思路是在一个循环中, 从小数点开始, 从左至右, 在适当的位置插入逗号, 每
-次迭代都把一个逗号放在最左边的三个数字的前面, 这三个数字后面跟着一个逗号或
+次迭代都把一个逗号插到最左边的三个数字的前面, 这三个数字后面跟着一个逗号或
 小数点, 而且每一个逗号的前面至少有一个数字. 算法使用递归来处理负数: 如果 
 输入参数是负数, 那么函数 \verb'addcomma' 使用正数来调用它自身, 返回时再加
 上负号.
@@ -271,16 +272,16 @@ row has the same number of entries.}. 下面的程序做的是同样的事件, �
 
 \begin{exercise}
     修复 \verb'sumcomma' (带逗号的数字求和程序), 使得它可以检查数字中的逗号
-    是否处于正确位置?
+    是否处于正确位置.
 \end{exercise}
 
 \subsection{字段固定的输入}
 \label{subsec:fixed_field_input}
 
-对于那些出现在宽度固定字段里的信息, 在直接使用它们之前, 通常需要某种形式的
+对于那些出现在宽度固定的字段里的信息, 在直接使用它们之前, 通常需要某种形式的
 预处理. 有些程序 (例如电子表格) 在固定的列上面放置序号, 而不是给它们带上
 字段分隔符\footnote{原文为 Some programs, such as spreadsheets, put out
-numbers in fixed columns, rather than with field separators.} 如果序号太宽
+numbers in fixed columns, rather than with field separators.}. 如果序号太宽
 了, 这些列就会邻接在一起. 字段固定的数据最适合用 \verb'substr' 处理,
 它可以将任意组合的列挑选出来. 举例来说, 假设每行的前6个字符包含一个日期, 
 日期的形式是 \verb'mmddyy', 如果我们想让它们按照日期排序, 最简单的办法是
@@ -311,5 +312,5 @@ numbers in fixed columns, rather than with field separators.} 如果序号太宽
 
 \begin{exercise}
     将日期转换成某种形式, 这种形式充许你对日期进行算术运算, 例如计算某两
-    个日期之间的天数?
+    个日期之间的天数.
 \end{exercise}
