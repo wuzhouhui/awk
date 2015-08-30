@@ -305,3 +305,67 @@ numbers in fixed columns, rather than with field separators.} 如果序号太宽
     将日期转换成某种形式, 这种形式充许你对日期进行算术运算, 例如计算某两
     个日期之间的天数?
 \end{exercise}
+
+\subsection{程序的交叉引用检查}
+\label{subsec:program_cross_reference_checking}
+
+Awk 经常用于从其他程序的输出中提取信息, 有时候这些输出仅仅是一些同种类的行
+的集合, 在这种情况下, 使用字段分割操作或函数 \verb'substr'
+是非常方便且合适的. 然而, 有时候产生输出的程序本来就打算将输出表示成人类
+可读的形式, 对于这种情况, awk 需要把精心格式化过的输出重新还原
+成机器容易处理的形式, 只要这样, 才能从互不相关的数据中提取信息. 下面是一个
+简单的例子.
+
+大型程序通常由多个源文件组成. 知道哪些文件定义了哪些函数, 以及这些函数在哪
+里被使用 ---- 可以带来许多方便之处 (有时候这是非常重要的). 为了完成这个
+任务, Unix 提供了命令 \verb'nm', \verb'nm' 从一个目标文件集合中提取信息,
+并打印一张精心格式化过的列表, 这张表包含了名字, 定义, 以及名字在哪里被使用
+到. \verb'nm' 的典型输出是
+\begin{shell}
+    file.o:
+    00000c80 T _addroot
+    00000b30 T _checkdev
+    00000a3c T _checkdupl
+             U _chown
+             U _client
+             U _close
+    funmount.o:
+    00000000 T _funmount
+             U cerror
+\end{shell}
+只有一个字段的行 (比如 \verb'file.o') 是文件名, 有两个字段的行 (比如 
+\verb'U _close') 表示的是名字被使用到的地方, 有三个字段的行表示的是名字
+被定义的地方. \verb'T' 表示这个定义是一个文本符号 (函数), \verb'U' 表示 
+这个名字是未定义的.
+
+如果直接利用这些未加处理过的信息, 来判断某个文件定义了哪些名字, 又或者是
+某个符号都在哪里被用到 ---- 将会非常的麻烦, 因为每个符号都没有和它所在的
+文件名放在一起. 对于稍微大型的 C 程序来说, \verb'nm' 的输出将会非常得长
+---- awk 源代码由 9 个文件组成, 它的 \verb'nm' 输出超过了 850 行.
+\marginpar{74}
+一个仅仅 3 行的 awk 程序就可以把文件名加到每个符号的前面, 经过它的处理,
+后续的程序仅通过一行就可以获取到有用的信息:
+\begin{awkcode}
+    # nm.format - add filename to each nm output line
+    
+    NF == 1 { file = $1 }
+    NF == 2 { print file, $1, $2 }
+    NF == 3 { print file, $2, $3 }
+\end{awkcode}
+把上面 \verb'nm' 的输出作为 \filename{nm.format} 的输入, 结果是
+\begin{awkcode}
+    file.o: T _addroot
+    file.o: T _checkdev
+    file.o: T _checkdupl
+    file.o: U _chown
+    file.o: U _client
+    file.o: U _close
+    funmount.o: T _funmount
+    funmount.o: U cerror
+\end{awkcode}
+现在, 如果有其他程序想要对输出进行进一步的处理就容易多了.
+
+上面的输出没有包括行号信息, 也没有指出某个名字在文件中被用到了多少次, 
+但是这些信息很容易通过文本编辑器或另一个 awk 程序来获取. 本小节的 awk 程序 
+不依赖于目标文件的编程语言, 所以它比通常的交叉引用工具更加灵活, 也更加
+简短.
