@@ -322,7 +322,7 @@ Awk 经常用于从其他程序的输出中提取信息, 有时候这些输出�
 的集合, 在这种情况下, 使用字段分割操作或函数 \verb'substr'
 是非常方便且合适的. 然而, 有时候产生输出的程序本来就打算将输出表示成人类
 可读的形式, 对于这种情况, awk 需要把精心格式化过的输出重新还原
-成机器容易处理的形式, 只要这样, 才能从互不相关的数据中提取信息. 下面是一个
+成机器容易处理的形式, 只有这样, 才能从互不相关的数据中提取信息. 下面是一个
 简单的例子.
 
 大型程序通常由多个源文件组成. 知道哪些文件定义了哪些函数, 以及这些函数在哪
@@ -347,8 +347,8 @@ Awk 经常用于从其他程序的输出中提取信息, 有时候这些输出�
 被定义的地方. \verb'T' 表示这个定义是一个文本符号 (函数), \verb'U' 表示 
 这个名字是未定义的.
 
-如果直接利用这些未加处理过的信息, 来判断某个文件定义了哪些名字, 又或者是
-某个符号都在哪里被用到 ---- 将会非常的麻烦, 因为每个符号都没有和它所在的
+如果直接使用这些未加处理过的信息, 来判断某个文件定义了哪些名字, 又或者是
+某个符号都在哪里被用到 ---- 将会非常得麻烦, 因为每个符号都没有和它所在的
 文件名放在一起. 对于稍微大型的 C 程序来说, \verb'nm' 的输出将会非常得长
 ---- awk 源代码由 9 个文件组成, 它的 \verb'nm' 输出超过了 850 行.
 \marginpar{74}
@@ -396,7 +396,7 @@ the sum of one hundred twenty three dollars and 45 cents exactly
 
 
 
-\edn{shell}
+\end{shell}
 这是打印支票的 awk 程序:
 \marginpar{75}
 \begin{awkcode}
@@ -456,9 +456,9 @@ the sum of one hundred twenty three dollars and 45 cents exactly
 
 程序中包含了几个比较有趣的部分. 首先, 要注意到我们在 \BEGIN 中是如何利用
 \marginpar{76}
-\verb'sprintf' 来生成空格字符串的, 并且通过替换将空格字符串转换成连字符
-字符串. 还要注意的是, 在函数 \verb'initnum' 中, 我们如何通过行的延续与
-字符串拼接来创建 \verb'split' 的参数, 这是很常见的编程技巧.
+\verb'sprintf' 来生成空格字符串的, 并且通过替换将空格字符串转换成
+破折号. 还要注意的是, 在函数 \verb'initnum' 中, 我们如何通过行的延续与
+字符串拼接来创建 \verb'split' 的参数 ---- 这是很常见的编程技巧.
 
 日期通过
 \begin{awkcode}
@@ -477,9 +477,9 @@ the sum of one hundred twenty three dollars and 45 cents exactly
 
 函数 \verb'numtowords' 与 \verb'intowords' 把数字转换成对应的单词, 转换过程
 非常直接 (虽然程序用了一半的代码来做这件事). \verb'intowords' 是一个递归
-函数, 它调用自身来处理一个规模较小的子问题, 这是本章的出现过的第 2 个递归
+函数, 它调用自身来处理一个规模较小的子问题, 这是本章出现过的第 2 个递归
 函数, 在后面我们还会遇到更多这样的函数. 在很多情况下, 为了把一个大问题分解
-成相对容易解决的小问题, 递归都是一个非常有效的方法.
+成相对容易解决的小问题, 递归都是一种非常有效的方法.
 
 \begin{exercise}
     利用前面提到过的程序 \verb'addcomma', 为金额加上逗号.
@@ -492,8 +492,9 @@ the sum of one hundred twenty three dollars and 45 cents exactly
 \end{exercise}
 
 \begin{exercise}
-    函数 \verb'numtowords' 有时会在一行中打印两个空格, 还会打印出像 
-    ``one dollars'' 这样有错误的句子, 你会如何消除这些瑕疵?
+    函数 \verb'numtowords' 有时会在一行中连着打印两个空格, 还会打印出像 
+    ``one dollars''\footnote{应该用单数形式 ---- 译者注}
+    这样有错误的句子, 你会如何消除这些瑕疵?
 \end{exercise}
 
 \begin{exercise}
