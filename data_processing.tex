@@ -314,3 +314,221 @@ numbers in fixed columns, rather than with field separators.}. 如果序号太�
     将日期转换成某种形式, 这种形式充许你对日期进行算术运算, 例如计算某两
     个日期之间的天数.
 \end{exercise}
+
+\subsection{程序的交叉引用检查}
+\label{subsec:program_cross_reference_checking}
+
+Awk 经常用于从其他程序的输出中提取信息, 有时候这些输出仅仅是一些同种类的行
+的集合, 在这种情况下, 使用字段分割操作或函数 \verb'substr'
+是非常方便且合适的. 然而, 有时候产生输出的程序本来就打算将输出表示成人类
+可读的形式, 对于这种情况, awk 需要把精心格式化过的输出重新还原
+成机器容易处理的形式, 只要这样, 才能从互不相关的数据中提取信息. 下面是一个
+简单的例子.
+
+大型程序通常由多个源文件组成. 知道哪些文件定义了哪些函数, 以及这些函数在哪
+里被使用 ---- 可以带来许多方便之处 (有时候这是非常重要的). 为了完成这个
+任务, Unix 提供了命令 \verb'nm', \verb'nm' 从一个目标文件集合中提取信息,
+并打印一张精心格式化过的列表, 这张表包含了名字, 定义, 以及名字在哪里被使用
+到. \verb'nm' 的典型输出是
+\begin{shell}
+    file.o:
+    00000c80 T _addroot
+    00000b30 T _checkdev
+    00000a3c T _checkdupl
+             U _chown
+             U _client
+             U _close
+    funmount.o:
+    00000000 T _funmount
+             U cerror
+\end{shell}
+只有一个字段的行 (比如 \verb'file.o') 是文件名, 有两个字段的行 (比如 
+\verb'U _close') 表示的是名字被使用到的地方, 有三个字段的行表示的是名字
+被定义的地方. \verb'T' 表示这个定义是一个文本符号 (函数), \verb'U' 表示 
+这个名字是未定义的.
+
+如果直接利用这些未加处理过的信息, 来判断某个文件定义了哪些名字, 又或者是
+某个符号都在哪里被用到 ---- 将会非常的麻烦, 因为每个符号都没有和它所在的
+文件名放在一起. 对于稍微大型的 C 程序来说, \verb'nm' 的输出将会非常得长
+---- awk 源代码由 9 个文件组成, 它的 \verb'nm' 输出超过了 850 行.
+\marginpar{74}
+一个仅仅 3 行的 awk 程序就可以把文件名加到每个符号的前面, 经过它的处理,
+后续的程序仅通过一行就可以获取到有用的信息:
+\begin{awkcode}
+    # nm.format - add filename to each nm output line
+    
+    NF == 1 { file = $1 }
+    NF == 2 { print file, $1, $2 }
+    NF == 3 { print file, $2, $3 }
+\end{awkcode}
+把上面 \verb'nm' 的输出作为 \filename{nm.format} 的输入, 结果是
+\begin{awkcode}
+    file.o: T _addroot
+    file.o: T _checkdev
+    file.o: T _checkdupl
+    file.o: U _chown
+    file.o: U _client
+    file.o: U _close
+    funmount.o: T _funmount
+    funmount.o: U cerror
+\end{awkcode}
+现在, 如果有其他程序想要对输出进行进一步的处理就容易多了.
+
+上面的输出没有包括行号信息, 也没有指出某个名字在文件中被用到了多少次, 
+但是这些信息很容易通过文本编辑器或另一个 awk 程序来获取. 本小节的 awk 程序 
+不依赖于目标文件的编程语言, 所以它比通常的交叉引用工具更加灵活, 也更加
+简短.
+
+\subsection{格式化的输出}
+\label{subsec:formatted_output}
+
+接下来我们要用 awk 赚点钱, 或者是打印支票. 输入数据由多行组成, 每一行都包括
+支票编号, 金额, 帐款人, 字段之间用制表符分开. 输出是标准的支票格式: 8行高,
+第2行与第3行是支票编号与日期, 都向右缩进 45 个空格, 第4行是收款人, 占用
+45 个字符宽的区域, 紧跟在它后面的是 3 个空格, 再后面是金额. 第 5 行是金额
+的大写形式, 其他行都是空白. 支票看起来就像这样:
+\begin{shell}
+
+                                             1026
+                                             Aug 31, 2015
+Pay to Mary R. Worth--------------------------------   $123.45
+the sum of one hundred twenty three dollars and 45 cents exactly
+
+
+
+\edn{shell}
+这是打印支票的 awk 程序:
+\marginpar{75}
+\begin{awkcode}
+    # prchecks - print formatted checks
+    #   input:  number \t amount \t payee
+    #   output: eight lines of text for preprinted check forms
+    
+    BEGIN {
+        FS = "\t"
+        dashes = sp45 = sprintf("%45s", " ")
+        gsub(/ /, "-", dashes)        # to protect the payee
+        "date" | getline date         # get today's date
+        split(date, d, " ")
+        date = d[2] " " d[3] ", " d[6]
+        initnum()    # set up tables for number conversion
+    }
+    NF != 3 || $2 >= 1000000 {        # illegal data
+        printf("\nline %d illegal:\n%s\n\nVOID\nVOID\n\n\n", NR, $0)
+        next                          # no check printed
+    }
+    {   printf("\n")                  # nothing on line 1
+        printf("%s%s\n", sp45, $1)    # number, indented 45 spaces
+        printf("%s%s\n", sp45, date)  # date, indented 45 spaces
+        amt = sprintf("%.2f", $2)     # formatted amount
+        printf("Pay to %45.45s   $%s\n", $3 dashes, amt)  # line 4
+        printf("the sum of %s\n", numtowords(amt))        # line 5
+        printf("\n\n\n")              # lines 6, 7 and 8
+    }
+    
+    function numtowords(n,   cents, dols) { # n has 2 decimal places
+        cents = substr(n, length(n)-1, 2)
+        dols = substr(n, 1, length(n)-3)
+        if (dols == 0)
+            return "zero dollars and " cents " cents exactly"
+        return intowords(dols) " dollars and " cents " cents exactly"
+    }
+    
+    function intowords(n) {
+        n = int(n)
+        if (n >= 1000)
+            return intowords(n/1000) " thousand " intowords(n%1000)
+        if (n >= 100)
+            return intowords(n/100) " hundred " intowords(n%100)
+        if (n >= 20)
+            return tens[int(n/10)] " " intowords(n%10)
+        return nums[n]
+    }
+    
+    function initnum() {
+        split("one two three four five six seven eight nine " \
+              "ten eleven twelve thirteen fourteen fifteen " \
+              "sixteen seventeen eighteen nineteen", nums, " ")
+        split("ten twenty thirty forty fifty sixty " \
+              "seventy eighty ninety", tens, " ")
+    }
+\end{awkcode}
+
+程序中包含了几个比较有趣的部分. 首先, 要注意到我们在 \BEGIN 中是如何利用
+\marginpar{76}
+\verb'sprintf' 来生成空格字符串的, 并且通过替换将空格字符串转换成连字符
+字符串. 还要注意的是, 在函数 \verb'initnum' 中, 我们如何通过行的延续与
+字符串拼接来创建 \verb'split' 的参数, 这是很常见的编程技巧.
+
+日期通过
+\begin{awkcode}
+    "data" | getline data   # get today's date
+\end{awkcode}
+从系统获取, 该行执行 \verb'date', 再把它的输出输送给 \verb'getline'. 为了把
+\begin{shell}
+    Wed Jun 17 13:39:36 EDT 1987
+\end{shell}
+转换成 
+\begin{shell}
+    Jun 17, 1987
+\end{shell}
+我们需要自己做一些处理工作.
+(在不支持管道的非Unix平台上, 该程序需要做些修改才能正确运行)
+
+函数 \verb'numtowords' 与 \verb'intowords' 把数字转换成对应的单词, 转换过程
+非常直接 (虽然程序用了一半的代码来做这件事). \verb'intowords' 是一个递归
+函数, 它调用自身来处理一个规模较小的子问题, 这是本章的出现过的第 2 个递归
+函数, 在后面我们还会遇到更多这样的函数. 在很多情况下, 为了把一个大问题分解
+成相对容易解决的小问题, 递归都是一个非常有效的方法.
+
+\begin{exercise}
+    利用前面提到过的程序 \verb'addcomma', 为金额加上逗号.
+\end{exercise}
+
+\begin{exercise}
+    对于负的, 或特别大的金额, 程序 \verb'prchecks' 处理得并不是很好. 修改 
+    程序, 使得程序能够拒绝金额为负的打印请求, 同时能将数额特别巨大的金额
+    分成两行打印出来.
+\end{exercise}
+
+\begin{exercise}
+    函数 \verb'numtowords' 有时会在一行中打印两个空格, 还会打印出像 
+    ``one dollars'' 这样有错误的句子, 你会如何消除这些瑕疵?
+\end{exercise}
+
+\begin{exercise}
+    修复 \verb'prchecks', 使得它能够在适当的地方, 为金额的大写形式加上
+    连字符, 比如 ``twenty-one dollars''.
+\end{exercise}
+
+\section{数据验证}
+\label{sec:data_validation}
+
+Awk 的另一个常用功能是数据验证: 确保数据是合法的, 或至少合理的. 本节包含了
+几个用于验证输入有效性的小程序, 例如, 考虑上一节出现的列求和程序, 有没有
+这样一种情况: 在本应是数值的字段上出现了非数值的量 (或反之) ? 下面这个程序 
+与列求和程序非常相似, 但没有求和操作:
+\marginpar{77}
+\begin{awkcode}
+    # colcheck - check consistency of columns
+    #   input:  rows of numbers and strings
+    #   output: lines whose format differs from first line
+    
+    NR == 1	{
+        nfld = NF
+        for (i = 1; i <= NF; i++)
+           type[i] = isnum($i)
+    }
+    {   if (NF != nfld)
+           printf("line %d has %d fields instead of %d\n",
+              NR, NF, nfld)
+        for (i = 1; i <= NF; i++)
+           if (isnum($i) != type[i])
+              printf("field %d in line %d differs from line 1\n",
+                 i, NR)
+    }
+    
+    function isnum(n) { return n ~ /^[+-]?[0-9]+$/ }
+\end{awkcode}
+同样, 我们把数值看成是仅由数字构成的序列, 可能有前导符号, 如果想让这个判断
+更加完整, 请参考 \ref{sec:patterns} 节关于正则表达式的讨论.
