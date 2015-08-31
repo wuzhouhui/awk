@@ -491,3 +491,35 @@ the sum of one hundred twenty three dollars and 45 cents exactly
     修复 \verb'prchecks', 使得它能够在适当的地方, 为金额的大写形式加上
     连字符, 比如 ``twenty-one dollars''.
 \end{exercise}
+
+\section{数据验证}
+\label{sec:data_validation}
+
+Awk 的另一个常用功能是数据验证: 确保数据是合法的, 或至少合理的. 本节包含了
+几个用于验证输入有效性的小程序, 例如, 考虑上一节出现的列求和程序, 有没有
+这样一种情况: 在本应是数值的字段上出现了非数值的量 (或反之) ? 下面这个程序 
+与列求和程序非常相似, 但没有求和操作:
+\marginpar{77}
+\begin{awkcode}
+    # colcheck - check consistency of columns
+    #   input:  rows of numbers and strings
+    #   output: lines whose format differs from first line
+    
+    NR == 1	{
+        nfld = NF
+        for (i = 1; i <= NF; i++)
+           type[i] = isnum($i)
+    }
+    {   if (NF != nfld)
+           printf("line %d has %d fields instead of %d\n",
+              NR, NF, nfld)
+        for (i = 1; i <= NF; i++)
+           if (isnum($i) != type[i])
+              printf("field %d in line %d differs from line 1\n",
+                 i, NR)
+    }
+    
+    function isnum(n) { return n ~ /^[+-]?[0-9]+$/ }
+\end{awkcode}
+同样, 我们把数值看成是仅由数字构成的序列, 可能有前导符号, 如果想让这个判断
+更加完整, 请参考 \ref{sec:patterns} 节关于正则表达式的讨论.
