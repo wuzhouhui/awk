@@ -531,3 +531,61 @@ Awk 的另一个常用功能是数据验证: 确保数据是合法的, 或至少
 \end{awkcode}
 同样, 我们把数值看成是仅由数字构成的序列, 可能有前导符号, 如果想让这个判断
 更加完整, 请参考 \ref{sec:patterns} 节关于正则表达式的讨论.
+
+\subsection{完整的分隔符}
+\label{subsec:balanced_delimiters}
+
+本书有一个机器可读的版本, 在该版本中, 每一个程序都由一种特殊行开始,
+这个特殊
+行以 \verb'.P1' 打头, 同样, 程序以一种特殊行结束, 该行以 \verb'.P2' 打头.
+这些特殊行叫作 ``文本格式化'' 命令, 有了这些命令的帮助, 在排版书籍的时候,
+程序可以以一种容易识别的字体显示出来. 因为程序之间不能互相嵌套, 所以这些 
+文本格式化命令必须按照交替序列, 轮流出现:
+\begin{shell}
+    .P1 .P2 .P1 .P2 ... .P1 .P2
+\end{shell}
+如果其中一个被漏掉了, 那么排版软件的输出将会是完全混乱的. 为了确保书籍被
+正确得排版, 我们写了这个小程序, 它可以用于检查分隔符是否按照正确的顺序出现,
+程序虽小, 但却是检查程序的典型代表:
+\begin{awkcode}
+    # p12check - check input for alternating .P1/.P2 delimiters
+    
+    /^\.P1/ { if (p != 0)
+                  print ".P1 after .P1, line", NR
+              p = 1
+            }
+    /^\.P2/ { if (p != 1)
+                  print ".P2 with no preceding .P1, line", NR
+              p = 0
+            }
+    END     { if (p != 0) print "missing .P2 at end" }
+\end{awkcode}
+如果分隔符按照正确的顺序出现, 那么变量 \verb'p' 就会按照 \texttt{0 1 0 1 0
+\cdots 1 0}, 否则, 一条错误消息被打印出来, 消息含有发生错误时, 当前输入行
+所在的行号.
+\marginpar{78}
+
+\begin{exercise}
+    如何修改这个程序, 使得它可以处理具有多种分隔符的文本?
+\end{exercise}
+
+\subsection{密码文件检查}
+\label{subsec:password_file checking}
+
+Unix 系统中的密码文件含有授权用户的用户名及其相关信息, 密码文件的每一行都
+由 7 个字段组成:
+\begin{awkcode}
+    root:qyxRi2uhuVjrg:0:2::/:
+    bwk:1L./v6iblzzNE:9:1:Brian Kernighan:/usr/bwk:
+    ava:otxs1oTVoyvMQ:15:1:Al Aho:/usr/ava:
+    uucp:xutIBs2hKtcls:48:1:uucp daemon:/usr/lib/uucp:uucico
+    pjw:xNqY//GDc8FFg:170:2:Peter Weinberger:/usr/pjw:
+    mark:j0z1fuQmqIvdE:374:1:Mark Kernighan:/usr/bwk/mark:
+    ...
+\end{awkcode}
+第1个字段是用户的登录名, 只能由字母或数字组成. 第 2 个字段是加密后的登录
+密码, 如果密码是空的, 那么任何人都可以利用这个用户名来登录系统, 如果这个
+字段非空, 那么只有知道密码的用户才能成功登录. 第 3 与第 4 个字段是数字,
+第 6 个字段以 \verb'/' 开始. 下面这个程序打印的行不符合前面描述的结构,
+顺带打印它们的行号, 及一条恰当的诊断消息. 每个晚上都让这个程序运行一遍可
+以让系统更加健康, 远离攻击.
