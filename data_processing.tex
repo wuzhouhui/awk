@@ -649,3 +649,61 @@ Unix 系统中的密码文件含有授权用户的用户名及其相关信息, �
     增强 \verb'checkgen' 的功能, 使得我们可以原封不动地向程序传递一段
     代码, 例如创建一个 \verb'BEGIN' 来设置字段分隔符.
 \end{exercise}
+
+\subsection{AWK 的版本}
+\label{subsec:which_version_of_awk}
+
+Awk 可以用来检验程序, 也可以用来组织程序测试. 本小节包含的程序有几分近亲
+相奸的味道: 用 awk 程序检查 awk 程序.
+
+Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有可能不小心用到了
+这些名字, 例如, 老程序用 \verb'sub' 命名一个变量, 而在新版 awk 中,
+\verb'sub' 是一个内建函数. 下面的程序可以用来检测这种错误:
+\begin{awkcode}
+    # compat - check if awk program uses new built-in names
+    
+    BEGIN { asplit("close system atan2 sin cos rand srand " \
+                   "match sub gsub", fcns)
+            asplit("ARGC ARGV FNR RSTART RLENGTH SUBSEP", vars)
+            asplit("do delete function return", keys)
+          }
+    
+          { line = $0 }
+    
+    /"/   { gsub(/"([^"]|\\")*"/, "", line) }     # remove strings,
+    /\//  { gsub(/\/([^\/]|\\\/)+\//, "", line) } # reg exprs,
+    /#/   { sub(/#.*/, "", line) }                # and comments
+    
+          { n = split(line, x, "[^A-Za-z0-9_]+")  # into words
+            for (i = 1; i <= n; i++) {
+                if (x[i] in fcns)	
+                    warn(x[i] " is now a built-in function")
+                if (x[i] in vars)
+                    warn(x[i] " is now a built-in variable")
+                if (x[i] in keys)
+                    warn(x[i] " is now a keyword")
+            }
+          }
+    
+    function asplit(str, arr) {  # make an assoc array from str
+        n = split(str, temp)
+        for (i = 1; i <= n; i++)
+            arr[temp[i]]++
+        return n
+    }
+    
+    function warn(s) {
+        sub(/^[ \t]*/, "")
+        printf("file %s, line %d: %s\n\t%s\n", FILENAME, FNR, s, $0)
+    }
+\end{awkcode}
+
+程序中真正复杂的地方在于替换语句: 在一个输入行被检查之前, 语句试图从输入
+行中移除被双引号包围的字符串, 正则表达式, 以及注释. 替换语句并不是非常
+完善, 所以有些行可能没有得到适当的处理.
+
+第 1 个 \verb'split' 函数的第 3 个参数被解释成一个正则表达式, 输入行中,
+被该表达式匹配的最左, 最长子字符串成为字段分隔符. \verb'split' 把不含
+字母或数字的字符串当作分隔符, 将输入行分割成一个个子字符串, 每个子字符串
+仅含有字母或数字. 这个分割操作把所有的运算符或标点符号一次性移除.
+\marginpar{81}
