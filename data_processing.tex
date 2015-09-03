@@ -591,3 +591,129 @@ Unix 系统中的密码文件含有授权用户的用户名及其相关信息, �
 第 6 个字段以 \verb'/' 开始. 下面这个程序打印的行不符合前面描述的结构,
 顺带打印它们的行号, 及一条恰当的诊断消息. 每个晚上都让这个程序运行一遍可
 以让系统更加健康, 远离攻击.
+\begin{awkcode}
+    # passwd - check password file
+    
+    BEGIN {
+        FS = ":" }
+    NF != 7 {
+        printf("line %d, does not have 7 fields: %s\n", NR, $0) }
+    $1 ~ /[^A-Za-z0-9]/ {
+        printf("line %d, nonalphanumeric user id: %s\n", NR, $0) }
+    $2 == "" {
+        printf("line %d, no password: %s\n", NR, $0) }
+    $3 ~ /[^0-9]/ {
+        printf("line %d, nonnumeric user id: %s\n", NR, $0) }
+    $4 ~ /[^0-9]/ {
+        printf("line %d, nonnumeric group id: %s\n", NR, $0) }
+    $6 !~ /^\// {
+        printf("line %d, invalid login directory: %s\n", NR, $0) }
+\end{awkcode}
+
+这是增量开发程序的好例子: 每当有人认为需要添加新的检查条件时, 只需要往
+程序中添加即可, 其他部分保持不动, 于是程序会越来越完善.
+
+\subsection{自动生成数据验证程序}
+\label{subsec:generating_data_validation_programs}
+
+\marginpar{79}
+密码文件检查程序由我们手工编写而成, 不过更有趣的方式是把条件与消息集合
+自动转化成检查程序. 下面这个集合含有几个错误条件及其对应的提示信息, 
+这些错误条件取自上一个程序. 如果某个输入行满足错误条件, 对应的提示信息
+就会被打印出来.
+\begin{shell}
+    NF != 7			does not have 7 fields
+    $1 ~ /[^A-Za-z0-9]/	nonalphanumeric user id
+    $2 == ""		no password
+\end{shell}
+下面这个程序把 条件-消息 对转化成检查程序:
+\begin{awkcode}
+    # checkgen - generate data-checking program
+    #     input:  expressions of the form: pattern tabs message
+    #     output: program to print message when pattern matches
+    
+    BEGIN { FS = "\t+" }
+    { printf("%s {\n\tprintf(\"line %%d, %s: %%s\\n\",NR,$0) }\n",
+          $1, $2)
+    }
+\end{awkcode}
+程序的输出是一系列的条件与打印消息的动作:
+\begin{awkcode}
+    NF != 7 {
+        printf("line %d, does not have 7 fields: %s\n",NR,$0) }
+    $1 ~ /[^A-Za-z0-9]/ {
+        printf("line %d, nonalphanumeric user id: %s\n",NR,$0) }
+    $2 == "" {
+        printf("line %d, no password: %s\n",NR,$0) }
+\end{awkcode}
+检查程序运行时, 如果当前输入行使得条件为真, 那么程序就会打印出一条消息, 
+消息含有当前输入行的行号, 错误消息, 及当前输入行. 需要注意的是, 在程序
+\verb'checkgen' 中, \verb'printf' 格式字符串的某些特殊字符需要用双引号
+括起来, 只有这样才能生成有效的程序. 举例来说, 为了输出一个 \verb'%',
+必须将它写成 \verb'%%'; 为了输出 \verb'\n', 必须写成 \verb'\\n'.
+
+用一个 awk 程序来生成另一个 awk 程序是一个应用很广泛的技巧 (不限于 awk
+程序), 在本书后面的章节里我们还会看到更多这样的例子.
+
+\begin{exercise}
+    增强 \verb'checkgen' 的功能, 使得我们可以原封不动地向程序传递一段
+    代码, 例如创建一个 \verb'BEGIN' 来设置字段分隔符.
+\end{exercise}
+
+\subsection{AWK 的版本}
+\label{subsec:which_version_of_awk}
+
+Awk 可以用来检验程序, 也可以用来组织程序测试. 本小节包含的程序有几分近亲
+相奸的味道: 用 awk 程序检查 awk 程序.
+
+Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有可能不小心用到了
+这些名字, 例如, 老程序用 \verb'sub' 命名一个变量, 而在新版 awk 中,
+\verb'sub' 是一个内建函数. 下面的程序可以用来检测这种错误:
+\begin{awkcode}
+    # compat - check if awk program uses new built-in names
+    
+    BEGIN { asplit("close system atan2 sin cos rand srand " \
+                   "match sub gsub", fcns)
+            asplit("ARGC ARGV FNR RSTART RLENGTH SUBSEP", vars)
+            asplit("do delete function return", keys)
+          }
+    
+          { line = $0 }
+    
+    /"/   { gsub(/"([^"]|\\")*"/, "", line) }     # remove strings,
+    /\//  { gsub(/\/([^\/]|\\\/)+\//, "", line) } # reg exprs,
+    /#/   { sub(/#.*/, "", line) }                # and comments
+    
+          { n = split(line, x, "[^A-Za-z0-9_]+")  # into words
+            for (i = 1; i <= n; i++) {
+                if (x[i] in fcns)	
+                    warn(x[i] " is now a built-in function")
+                if (x[i] in vars)
+                    warn(x[i] " is now a built-in variable")
+                if (x[i] in keys)
+                    warn(x[i] " is now a keyword")
+            }
+          }
+    
+    function asplit(str, arr) {  # make an assoc array from str
+        n = split(str, temp)
+        for (i = 1; i <= n; i++)
+            arr[temp[i]]++
+        return n
+    }
+    
+    function warn(s) {
+        sub(/^[ \t]*/, "")
+        printf("file %s, line %d: %s\n\t%s\n", FILENAME, FNR, s, $0)
+    }
+\end{awkcode}
+
+程序中真正复杂的地方在于替换语句: 在一个输入行被检查之前, 语句试图从输入
+行中移除被双引号包围的字符串, 正则表达式, 以及注释. 替换语句并不是非常
+完善, 所以有些行可能没有得到适当的处理.
+
+第 1 个 \verb'split' 函数的第 3 个参数被解释成一个正则表达式, 输入行中,
+被该表达式匹配的最左, 最长子字符串成为字段分隔符. \verb'split' 把不含
+字母或数字的字符串当作分隔符, 将输入行分割成一个个子字符串, 每个子字符串
+仅含有字母或数字. 这个分割操作把所有的运算符或标点符号一次性移除.
+\marginpar{81}
