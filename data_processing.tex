@@ -786,3 +786,58 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
     perhaps trailers. Evaluate the tradeoff between performance and program
     complexity.
 \end{exercise}
+
+\section{多行记录}
+\label{sec:multiline_records}
+
+到目前为止, 遇到的记录都是由一行组成的, 然而, 还有大量的数据, 其每一条记录
+都由多行组成, 比如地址薄
+\begin{shell}
+    Adam Smith
+    1234 Wall St., Apt. 5C
+    New York, NY 10021
+    212 555-4321
+\end{shell}
+或参考文献
+\begin{shell}
+    Donald E. Knuth
+    The Art of Computer Programming
+    Volumn 2: Seminumerical Algorithms, Second Edition
+    Addison-Wesley, Reading, Mass.
+    1981
+\end{shell}
+或个人笔记
+\begin{shell}
+    Chateau Lafite Rothschild 1947
+    12 bottles @ 12.95
+\end{shell}
+
+如果大小合适, 结构也很规范, 那么创建并维护这些信息相对来说还是比较容易的,
+在效果上, 每一条记录都等价于一张索引卡片\bootnote{原文为 In effect, each
+record is the equivalent of an index card.}. 与单行数据相比, 使用 awk 处理 
+多行数据所付出的工作量只是稍微多了一点. 我们将展示几种处理多行数据的方法.
+
+\subsection{由空行分隔的记录}
+\label{subsec:records_separated_by_blank_lines}
+
+假设我们有一本地址薄, 其每一条记录的前面 4 行分别是名字, 街道地址, 城市
+和州, 在这 4 行之后, 可能包含一行额外的信息. 记录之间由一行空白行分开:
+\marginpar{83}
+\begin{shell}
+    Adam Smith
+    1234 Wall St., Apt. 5C
+    New York, NY 10021
+    212 555-4321
+
+    David W. Copperfield
+    221 Dickens Lane
+    Monterey, CA 93940
+    408 555-0041
+    work phone 408 555-6532
+    Mary, birthday January 30
+
+    Canadian Consulate
+    555 Fifth Ave
+    New York, NY
+    212 586-2400
+\end{shell}
