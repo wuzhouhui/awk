@@ -715,3 +715,74 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
 字母或数字的字符串当作分隔符, 将输入行分割成一个个子字符串, 每个子字符串
 仅含有字母或数字. 这个分割操作把所有的运算符或标点符号一次性移除.
 \marginpar{81}
+
+函数 \verb'asplit' 类似于 \verb'split', 但前者创建一个数组, 数组的下标是字
+符串内的单词, 然后就可以测试新来的单词是否在数组内.
+
+如果把文件 \filename{compat} 作为输入, 输出是:
+\begin{shell}
+    file tmp.awk, line 12: gsub is now a built-in function
+        /\//  { gsub(/\/([^\/]|\\\/)+\//, "", line) } # reg exprs,
+    file tmp.awk, line 13: sub is now a built-in function
+        /#/   { sub(/#.*/, "", line) }                # and comments
+    file tmp.awk, line 26: function is now a keyword
+        function asplit(str, arr) {  # make an assoc array from str
+    file tmp.awk, line 30: return is now a keyword
+        return n
+    file tmp.awk, line 33: function is now a keyword
+        function warn(s) {
+    file tmp.awk, line 34: sub is now a built-in function
+        sub(/^[ \t]*/, "")
+    file tmp.awk, line 35: FNR is now a built-in variable
+        printf("file %s, line %d: %s\n\t%s\n", FILENAME, FNR, s, $0)
+\end{shell}
+
+\begin{exercise}
+    重写 \verb'compat', 不用 \verb'asplit', 而是用正则表达式来识别关键词,
+    内建函数等. 比较两个版本的复杂度与速度.
+\end{exercise}
+
+\begin{exercise}
+    因为 awk 的变量不需要事先声明, 所以如果你不小心把变量名写错了, awk 并
+    不会检测到该错误. 写一个程序, 这个程序搜索文件中只出现一次的名字.
+    为了让这个程序更具实用价值, 你可能需要对函数的定义及其用到的变量花点
+    心思.
+\end{exercise}
+
+\section{打包与拆包}
+\label{sec:bundle_and_unbundle}
+
+在讨论多行记录之前, 让我们先考虑一种特殊的情况: 如何将多个 ASCII 文件打包
+(bundle) 成一个文件, 在打包完之后, 还可以将它们还原 (unbundle) 成原来的文
+件. 这一节包含的两个程序分别用来完成这两件事情, 我们可以用它们将多个小文件
+打包在一个文件, 从而节省磁盘空间或方便邮寄.
+
+程序 \verb'bundle' 非常简短, 简短到你可以直接在命令行上输出, 它所做的工作
+仅仅是为每一行加上文件名前缀, 文件名可以通过内建变量 \verb'FILENAME' 得到.
+\begin{awkcode}
+    # bundle - combine multiple files into one
+    { print FILENAME, $0 }
+\end{awkcode}
+
+对应的 \verb'unbundle' 程序只是稍微需要花点心思:
+\marginpar{82}
+\begin{awkcode}
+    # unbundle - unpack a bundle into separate files
+    
+    $1 != prev { close(prev); prev = $1 }
+               { print substr($0, index($0, " ") + 1) >$1 }
+\end{awkcode}
+如果遇到一个新文件, 则关闭之前打开的文件, 如果文件不是很多 (小于同时处于打开
+状态的文件数的最大值), 那么这一行可以省略.
+
+实现 \verb'bundle' 与 \verb'unbundle' 的方法还有很多种, 但是这里介绍的方法是
+最简单的, 而且对于比较短的文件, 空间效率也比较高. 另一种组织方式是在每
+一个文件之前, 添加一行带有文件名的, 容易识别的行, 这样的话, 文件名只需要
+出现一次.
+
+\begin{exercise}
+    Compare the speed and space requirements of these versions of
+    \verb'bundle' and \verb'unbundle' with variations that use headers and
+    perhaps trailers. Evaluate the tradeoff between performance and program
+    complexity.
+\end{exercise}
