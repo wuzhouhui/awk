@@ -791,7 +791,7 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
 \section{多行记录}
 \label{sec:multiline_records}
 
-到目前为止, 遇到的记录都是由一行组成的, 然而, 还有大量的数据, 其每一条记录
+到目前为止遇到的记录都是由单行组成的, 然而, 还有大量的数据, 其每一条记录
 都由多行组成, 比如地址薄
 \begin{shell}
     Adam Smith
@@ -822,7 +822,7 @@ record is the equivalent of an index card.}. 与单行数据相比, 使用 awk �
 \label{subsec:records_separated_by_blank_lines}
 
 假设我们有一本地址薄, 其每一条记录的前面 4 行分别是名字, 街道地址, 城市
-和州, 在这 4 行之后, 可能包含一行额外的信息. 记录之间由一行空白行分开:
+和州, 在这 4 行之后, 可能包含一行额外的信息, 记录之间由一行空白行分开:
 \marginpar{83}
 \begin{shell}
     Adam Smith
@@ -882,4 +882,4 @@ record is the equivalent of an index card.}. 与单行数据相比, 使用 awk �
 \end{shell}
 前面提过, 不管 \verb'FS' 的值是什么, 换行符总是多行记录的字段分隔符之一.
 如果 \verb'RS' 被设置成 \verb'""', 则默认的字段分隔符就是空格符, 制表符,
-以及换行符, 如果 \verb'FS' 是 \verb'\n', 则换行符就是唯一的字段分隔符.
+以及换行符; 如果 \verb'FS' 是 \verb'\n', 则换行符就是唯一的字段分隔符.
