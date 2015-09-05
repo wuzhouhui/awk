@@ -791,7 +791,7 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
 \section{多行记录}
 \label{sec:multiline_records}
 
-到目前为止, 遇到的记录都是由一行组成的, 然而, 还有大量的数据, 其每一条记录
+到目前为止遇到的记录都是由单行组成的, 然而, 还有大量的数据, 其每一条记录
 都由多行组成, 比如地址薄
 \begin{shell}
     Adam Smith
@@ -822,7 +822,7 @@ record is the equivalent of an index card.}. 与单行数据相比, 使用 awk �
 \label{subsec:records_separated_by_blank_lines}
 
 假设我们有一本地址薄, 其每一条记录的前面 4 行分别是名字, 街道地址, 城市
-和州, 在这 4 行之后, 可能包含一行额外的信息. 记录之间由一行空白行分开:
+和州, 在这 4 行之后, 可能包含一行额外的信息, 记录之间由一行空白行分开:
 \marginpar{83}
 \begin{shell}
     Adam Smith
@@ -842,3 +842,44 @@ record is the equivalent of an index card.}. 与单行数据相比, 使用 awk �
     New York, NY
     212 586-2400
 \end{shell}
+
+如果记录是由空白行分隔的, 那么它们可以被直接处理: 若记录分隔符 \verb'RS'
+被设置成空值 (\verb'RS=""'), 则每一个行块都被当成一个记录, 于是 
+\begin{awkcode}
+    BEGIN { RS = "" }
+    /New York/
+\end{awkcode}
+打印所有的, 含有 \verb'New York' 的记录, 而不管这个记录有多少行:
+\begin{shell}
+    Adam Smith
+    1234 Wall St., Apt. 5C
+    New York, NY 10021
+    212 555-4321
+    Canadian Consulate
+    555 Fifth Ave
+    New York, NY
+    212 586-2400
+\end{shell}
+如果记录按照这种方式打印出来, 则输出记录之间是不会有空白行的, 输入格式并
+不会被保留下来. 为了解决这个问题, 最简单的办法是把输出记录分隔符 \verb'ORS'
+设置成 \verb'\n\n':
+\begin{awkcode}
+    BEGIN { RS = ""; ORS = "\n\n" }
+    /New York/
+\end{awkcode}
+
+假设我们想要输出 \verb'Smith''s 的全名和他的电话号码 (也就是第 1 行以 
+\verb'Smith' 结尾的记录的第 1 行与第 4 行), 如果每一行都表示一条记录, 那么 
+就比较容易, 只要把 \verb'FS' 设置成 \verb'\n' 即可:
+\marginpar{84}
+\begin{awkcode}
+    BEGIN           { RS = ""; FS = "\n" }
+    $1 ~ /Smith$/   { print $1, $4 } # name, phone
+\end{awkcode}
+程序的输出是 
+\begin{shell}
+    Adam Smith 212 555-4321
+\end{shell}
+前面提过, 不管 \verb'FS' 的值是什么, 换行符总是多行记录的字段分隔符之一.
+如果 \verb'RS' 被设置成 \verb'""', 则默认的字段分隔符就是空格符, 制表符,
+以及换行符; 如果 \verb'FS' 是 \verb'\n', 则换行符就是唯一的字段分隔符.
