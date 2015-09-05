@@ -1030,3 +1030,59 @@ unformatted lines.}, 例如, 地址可能含有国家名称, 也可能不包括�
 the value it corresponds to, but they are not otherwise connected.}.
 比如说, 如果我们想要计算存款与支票的总额, 只需要扫描存款项与支票项即可:
 \marginpar{87}
+\begin{awkcode}
+    # check1 - print total deposits and checks
+
+    /^check/   { ck = 1; next }
+    /^deposit/ { dep = 1; next }
+    /^amount/  { amt = $2; next }
+    /^$/       { addup() }
+
+    END        { addup()
+                 printf("deposits $%.2f, checks $%.2f\n",
+                     deposits, checks)
+               }
+
+    function addup() {
+        if (ck)
+            checks += amt
+        else if (dep)
+            deposits += amt
+        ck = dep = amt = 0
+    }
+\end{awkcode}
+输出是 
+\begin{shell}
+    deposits $500.00, checks $418.95
+\end{shell}
+
+程序非常简单, 只要输入数据格式正确, 不管记录中的项目以何种顺序出现, 程序 
+都能正确得工作. 但是程序也很脆弱, 它需要非常认真的初始化, 以及对文件结束
+标志的处理. 我们还有另一种方案可供选择, 那就是一次读取一条记录, 当需要时
+再对记录的项目进行挑选. 下面的程序也是对存款与支票进行求和, 但它使用了一
+个函数, 这个函数提取指定名字的项目的值:
+\begin{awkcode}
+    # check2 - print total deposits and checks
+
+    BEGIN           { RS = ""; FS = "\n" }
+    /(^|\n)deposit/ { deposits += field("amount"); next }
+    /(^|\n)check/   { checks += field("amount"); next }
+    END             { printf("deposits $%.2f, checks $%.2f\n",
+                          deposits, checks)
+                    }
+
+    function field(name,   i,f) {
+        for (i = 1; i <= NF; i++) {
+            split($i, f, "\t")
+            if (f[1] == name)
+                return f[2]
+        }
+        printf("error: no field %s in record\n%s\n", name, $0)
+    }
+\end{awkcode}
+函数 \verb'field(s)' 在当前记录中搜索名字是 \verb's' 的项目, 如果找到, 就
+把该项的值返回.
+
+第 3 种方案是把记录的每一个字段都分割到一个关联数组中, 然后再对值进行访问.
+下面将要介绍的程序以一种更加紧凑的方式打印支票信息:
+\marginpar{87}
