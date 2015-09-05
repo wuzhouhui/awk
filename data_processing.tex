@@ -974,3 +974,58 @@ awk 程序, 就可以把原来的程序应用到多行记录上. 第 1 个程序
 的初始值). 因为仅当 \verb'p' 为 1 时才会把当前输入行打印出来, 所以只有
 记录的主体部分与尾部被打印出来. 如果想要选择其他组合, 也是相当容易的
 \footnote{原文为 other combinations are easily selected instead.}.
+
+\subsection{名字-值}
+\label{subsec:name_value_data}
+
+
+\marginpar{85}
+在某些应用中, 数据可能包含更多的结构\footnote{原文为 In some applications
+    data may have more structure than can be captured by a sequence of
+unformatted lines.}, 例如, 地址可能含有国家名称, 也可能不包括街道地址.
+
+处理结构化数据的一种方法是为记录的每一个字段加上一个名字或关键词, 例如,
+我们有可能如此组织一本支票薄:
+\begin{shell}
+    check	1021
+    to	Champagne Unlimited
+    amount	123.10
+    date	1/1/87
+
+    deposit
+    amount	500.00
+    date	1/1/87
+
+    check	1022
+    date	1/2/87
+    amount	45.10
+    to	Getwell Drug Store
+    tax	medical
+
+    check	1023
+    amount	125.00
+    to	International Travel
+    date	1/3/87
+
+    amount	50.00
+    to	Carnegie Hall
+    date	1/3/87
+    check	1024
+    tax	charitable contribution
+
+    to	American Express
+    check	1025
+    amount	75.75
+    date	1/5/87
+\end{shell}
+我们仍然使用多行记录, 记录之间用一个空白行分隔, 但是在记录内部, 每一个 
+数据都是自描述的: 每一个字段都由一个项目名称, 一个制表符, 及信息组成.
+这意味着不同的记录可以包含不同的字段, 即使是类似的字段, 其排列顺序也可以
+不一样.
+
+处理这种数据的方法之一是把它们都当作单行数据, 但是要注意空白行被当作
+分隔符. 每一行都指出了它所对应的值,
+但是它们之间并没有以其他方式联系起来 \footnote{原文为 Each line identifies
+the value it corresponds to, but they are not otherwise connected.}.
+比如说, 如果我们想要计算存款与支票的总额, 只需要扫描存款项与支票项即可:
+\marginpar{87}
