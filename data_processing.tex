@@ -874,3 +874,48 @@ record is the equivalent of an index card.}. 与单行数据相比, 使用 awk �
 前面提过, 不管 \verb'FS' 的值是什么, 换行符总是多行记录的字段分隔符之一.
 如果 \verb'RS' 被设置成 \verb'""', 则默认的字段分隔符就是空格符, 制表符,
 以及换行符, 如果 \verb'FS' 是 \verb'\n', 则换行符就是唯一的字段分隔符.
+
+\subsection{处理多行记录}
+\label{subsec:processing_multiline_records}
+
+如果已经有一个程序可以以行为单位对输入进行处理, 那么我们只需要再写 2 个
+awk 程序, 就可以把原来的程序应用到多行记录上. 第 1 个程序把多行记录组合成
+单行记录, 然后由已存在的程序进行处理, 最后, 第 2 个程序再把输出转换成多行
+格式. (我们假设行的长度不会超过 awk 的上限)
+
+为了使过程更加具体, 现在让我们用 Unix 命令 \verb'sort' 对地址薄进行排序,
+下面的程序 \verb'pipeline' 按照姓氏对输入进行排序:
+\begin{awkcode}
+    # pipeline to sort address list by last names
+
+    awk '
+    BEGIN { RS = ""; FS = "\n" }
+          { printf("%s!!#", x[split($1, x, " ")])
+            for (i = 1; i <= NF; i++)
+                printf("%s%s", $i, i < NF ? "!!#" : "\n")
+          }
+    ' |
+    sort |
+    awk '
+    BEGIN { FS = "!!#" }
+          { for (i = 2; i <= NF; i++)
+                printf("%s\n", $i)
+            printf("\n")
+          }
+    '
+\end{awkcode}
+
+第 1 个程序中, 函数 \verb'split($1, x, " ")' 把每个记录的第 1 行切割并保
+存到数组 \verb'x' 中, 返回元素的个数, 于是, 姓氏保存在 
+元素 \verb'x[split($1, x, " ")]' 中 (前提是记录的第1行的最后一个单词确实是
+姓氏). 对每一条多行记录, 第 1 个程序都会创建一个单行记录, 记录包括姓氏,
+后面跟着字符串 \verb'!!#', 再后面是原多行记录的各个字段 (字段之间也是通过
+字符串 \verb'!!#' 分隔). 只要是输入数据中没有出现的, 并且在排序时
+可以排在输入数据之前的字符串, 都可以用来代替 \verb'!!#'. \verb'sort' 之后
+的程序通过分隔符 \verb'!!#' 识别原来的字段, 并重构出多行记录.
+\marginpar{85}
+
+\begin{exercise}
+    修改第 1 个 awk 程序, 使得它可以检查输入数据中是否包含魔术字符串
+    \verb'!!#'.
+\end{exercise}
