@@ -921,9 +921,56 @@ awk 程序, 就可以把原来的程序应用到多行记录上. 第 1 个程序
 字符串 \verb'!!#' 分隔). 只要是输入数据中没有出现的, 并且在排序时
 可以排在输入数据之前的字符串, 都可以用来代替 \verb'!!#'. \verb'sort' 之后
 的程序通过分隔符 \verb'!!#' 识别原来的字段, 并重构出多行记录.
-\marginpar{85}
 
 \begin{exercise}
     修改第 1 个 awk 程序, 使得它可以检查输入数据中是否包含魔术字符串
     \verb'!!#'.
 \end{exercise}
+
+\marginpar{85}
+\subsection{带有头部和尾部的记录}
+\label{subsec:records_with_headers_and_trailers}
+
+有时候, 记录通过一个头部信息与一个尾部信息来识别, 而不是字段分隔符. 考虑 
+一个简单的例子, 仍然是地址薄, 不过每个记录都带有一个头部信息, 该信息
+指出了记录的某些特征 (比如职业), 跟在头部后面的是名字, 每条记录 (除了最
+后一条) 都由一个尾部结束, 尾部由一个空白行组成:
+\begin{shell}
+    accountant
+    Adam Smith
+    1234 Wall St., Apt. 5C
+    New York, NY 10021
+
+    doctor - ophthalmologist
+    Dr. Will Seymour
+    798 Maple Blvd.
+    Berkeley Heights, NJ 07922
+
+    lawyer
+    David W. Copperfield
+    221 Dickens Lane
+    Monterey, CA 93940
+
+    doctor - pediatrician
+    Dr. Susan Mark
+    600 Mountain Avenue
+    Murray Hill, NJ 07974
+\end{shell}
+为了打印所有医生的记录, 范围模式是最简单的办法:
+\begin{awkcode}
+    /^doctor/, /^$/
+\end{awkcode}
+范围模式匹配以 \verb'doctor' 开始, 以空白行结束的记录 (\verb'/^$/' 匹配 
+一个空白行).
+
+为了从输出中移除掉头部信息, 我们可以用 
+\begin{awkcode}
+    /^doctor/ { p = 1; next }
+    p == 1
+    /^$/      { p = 0; next }
+\end{awkcode}
+这个程序使用了一个变量来控制行的打印, 如果当前输入行包含有期望的头部信息, 
+则 \verb'p' 被设置为 1, 随后的尾部信息将 \verb'p' 重置为 0 (也就是 \verb'p'
+的初始值). 因为仅当 \verb'p' 为 1 时才会把当前输入行打印出来, 所以只有
+记录的主体部分与尾部被打印出来. 如果想要选择其他组合, 也是相当容易的
+\footnote{原文为 other combinations are easily selected instead.}.
