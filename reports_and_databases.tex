@@ -46,7 +46,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 \end{shell}
 
 生成报表的前两个阶段由程序 \verb'prep1' 完成, 当文件 \filename{countries}
-作为输出时, \verb'prep1' 检查相关的信息, 并对其进行排序:
+作为输入时, \verb'prep1' 提取并计算相关的信息, 并对其进行排序:
 \begin{awkcode}
     # prep1 - prepare countries by continent and pop. den.
 
