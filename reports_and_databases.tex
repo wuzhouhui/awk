@@ -30,3 +30,68 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 我们还希望国家按照所在的大洲进行分组, 大洲按照字母顺序排列, 在每个大洲里,
 国家按照人口密度的降序排列, 就像这样:
 \marginpar{90}
+\begin{shell}
+    CONTINENT       COUNTRY    POPULATION    AREA    POP. DEN.
+    Asia            Japan          120        144      833.3
+    Asia            India          746       1267      588.8
+    Asia            China         1032       3705      278.5
+    Asia            USSR           275       8649       31.8
+    Europe          Germany         61         96      635.4
+    Europe          England         56         94      595.7
+    Europe          France          55        211      260.7
+    North America   Mexico          78        762      102.4
+    North America   USA            237       3615       65.6
+    North America   Canada          25       3852        6.5
+    South America   Brazil         134       3286       40.8
+\end{shell}
+
+生成报表的前两个阶段由程序 \verb'prep1' 完成, 当文件 \filename{countries}
+作为输入时, \verb'prep1' 提取并计算相关的信息, 并对其进行排序:
+\begin{awkcode}
+    # prep1 - prepare countries by continent and pop. den.
+
+    BEGIN { FS = "\t" }
+          { printf("%s:%s:%d:%d:%.1f\n",
+                $4, $1, $3, $2, 1000*$3/$2) | "sort -t: +0 -1 +4rn"
+          }
+\end{awkcode}
+输出是一系列的行, 每行都包括 5 个字段, 用冒号分隔, 从左至右, 字段依次表示
+大洲, 国家, 人口, 面积, 以及人口密度:
+\begin{shell}
+    Asia:Japan:120:144:833.3
+    Asia:India:746:1267:588.8
+    Asia:China:1032:3705:278.5
+    Asia:USSR:275:8649:31.8
+    Europe:Germany:61:96:635.4
+    Europe:England:56:94:595.7
+    Europe:France:55:211:260.7
+    North America:Mexico:78:762:102.4
+    North America:USA:237:3615:65.6
+    North America:Canada:25:3852:6.5
+    South America:Brazil:134:3286:40.8
+\end{shell}
+程序 \verb'prep1' 把输出直接输送给 \verb'sort' 命令, 参数 \verb'-t' 告诉 
+\verb'sort' 把冒号作为字段分隔符, \verb'+0 -1' 表示把第1个字段作为排序的
+主键, 参数 \verb'+4rn' 表示把第 5 个字段作为次要主键, 按照数值的逆序进行
+排序. (在 \ref{sec:a_sort_generator} 节, 我们将展示一个生成排序的程序,
+这个程序可以从单词描述中生成排序所需的参数列表)
+
+如果你的系统不支持管道, 那就把 \verb'sort' 命令删除, 使用 \verb'print >'
+\textit{file} 直接输出到文件中, 然后再利用单独的步骤对文件排序,
+这个方法适用于本章的所有例子.
+
+现在我们已经完成了三个步骤中的前两个: 准备与排序, 现在所要做的是把数据
+格式化成我们想要的报表格式, 程序 \verb'form1' 做的正是这个工作:
+\marginpar{91}
+\begin{awkcode}
+    # form1 - format countries data by continent, pop. den.
+
+    BEGIN { FS = ":"
+            printf("%-15s %-10s %10s %7s %12s\n",
+                "CONTINENT", "COUNTRY", "POPULATION",
+                "AREA", "POP. DEN.")
+          }
+          { printf("%-15s %-10s %7d %10d %10.1f\n",
+                $1, $2, $3, $4, $5)
+          }
+\end{awkcode}
