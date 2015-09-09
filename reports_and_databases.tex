@@ -95,3 +95,45 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
                 $1, $2, $3, $4, $5)
           }
 \end{awkcode}
+期望中的报表可以通过键入
+\begin{shell}
+    awk -f prep1 countries | awk -f form1
+\end{shell}
+来得到.
+
+\verb'prep1' 中 \verb'sort' 的参数非常古怪, 我们可以通过格式化输出, 使得
+ \verb'sort' 不再需要任何参数, 然后再让格式化程序对行重新格式化即可.
+默认情况下, \verb'sort' 对输入数据按照字母顺序进行排列, 但是在最终的报表
+中, 输出首先按照大洲的字母顺序排列, 然后再按人口密度的逆序排列. 为了避免
+让  \verb'sort' 带上参数, 准备程序可以预先在每一行的开始处放置一个数,
+数的大小依赖于大洲的字母顺序与人口密度, 使得按照这个数进行排序时, 排序结果
+是正确的. 数的一种可能的表示方法是大洲的名字, 后面再跟着人口密度的倒数,
+见程序 \verb'prep2':
+\begin{awkcode}
+    # prep2 - prepare countries by continent, inverse pop. den.
+
+    BEGIN { FS = "\t"}
+          { den = 1000*$3/$2
+            printf("%-15s:%12.8f:%s:%d:%d:%.1f\n",
+                $4, 1/den, $1, $3, $2, den) | "sort"
+          }
+\end{awkcode}
+当 \filename{countries} 作为输入时, \verb'prep2' 的输出是:
+\begin{shell}
+    Asia           :  0.00120000:Japan:120:144:833.3
+    Asia           :  0.00169839:India:746:1267:588.8
+    Asia           :  0.00359012:China:1032:3705:278.5
+    Asia           :  0.03145091:USSR:275:8649:31.8
+    Europe         :  0.00157377:Germany:61:96:635.4
+    Europe         :  0.00167857:England:56:94:595.7
+    Europe         :  0.00383636:France:55:211:260.7
+    North America  :  0.00976923:Mexico:78:762:102.4
+    North America  :  0.01525316:USA:237:3615:65.6
+    North America  :  0.15408000:Canada:25:3852:6.5
+    South America  :  0.02452239:Brazil:134:3286:40.8
+\end{shell}
+格式 \verb'%-15s' 对大洲名来说已经足够宽了, \verb'%12.8f' 对人口密度的倒数
+来说, 覆盖范围也已足够. 最终的格式化程序类似于 \verb'form1', 但是忽略了第
+2 个字段. 为了简化排序程序的选项, 而特地制造一个排序键, 这种技巧非常常见,
+我们会在第 \ref{chap:processing_words} 章的索引程序中再次用到.
+\marginpar{92}
