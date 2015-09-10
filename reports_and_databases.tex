@@ -137,3 +137,57 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 2 个字段. 为了简化排序程序的选项, 而特地制造一个排序键, 这种技巧非常常见,
 我们会在第 \ref{chap:processing_words} 章的索引程序中再次用到.
 \marginpar{92}
+
+如果我们想要一个更加精美的输出, 其只打印大洲名字一次, 那么我们可以使用
+程序 \verb'form2':
+\begin{verbatim}
+    # form2 - format countries by continent, pop. den.
+
+    BEGIN { FS = ":"
+            printf("%-15s %-10s %10s %7s %12s\n",
+                "CONTINENT", "COUNTRY", "POPULATION",
+                "AREA", "POP. DEN.")
+          }
+          { if ($1 != prev) {
+                print ""
+                prev = $1
+            } else
+                $1 = ""
+            printf("%-15s %-10s %7d %10d %10.1f\n",
+                $1, $2, $3, $4, $5)
+          }
+\end{verbatim}
+执行程序的命令行是 
+\begin{verbatim}
+    awk -f prep1 countries | awk -f form2
+\end{verbatim}
+程序的输出是
+\begin{verbatim}
+    CONTINENT       COUNTRY    POPULATION    AREA    POP. DEN.
+
+    Asia            Japan          120        144      833.3
+                    India          746       1267      588.8
+                    China         1032       3705      278.5
+                    USSR           275       8649       31.8
+
+    Europe          Germany         61         96      635.4
+                    England         56         94      595.7
+                    France          55        211      260.7
+
+    North America   Mexico          78        762      102.4
+                    USA            237       3615       65.6
+                    Canada          25       3852        6.5
+
+    South America   Brazil         134       3286       40.8
+\end{verbatim}
+
+格式化程序 \verb'form2' 是一个 ``control-break'' 程序, 变量 \verb'prev' 
+跟踪大洲的名字, 只有当大洲名字变化时才会打印出来. 在下一节, 我们将会看到 
+更复杂的 ``control-break'' 程序.
+
+\subsection{更加复杂的报表}
+\label{subsec:a_more_complex_report}
+
+典型的商业报表比我们现在看到的具有更多的内容 (至少在形式上), 为了详细说明,
+假设我们需要为每一个大洲作一个小计, 以及计算每一个国家占总人口与总面积的
+比重, 我们可以需要新增一个标题, 以及更多的列表头:
