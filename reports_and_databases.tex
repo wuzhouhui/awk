@@ -191,3 +191,35 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 典型的商业报表比我们现在看到的具有更多的内容 (至少在形式上), 为了详细说明,
 假设我们需要为每一个大洲作一个小计, 以及计算每一个国家占总人口与总面积的
 比重, 我们需要新增一个标题, 以及更多的列表头:
+\marginpar{93}
+\begin{shell}
+\end{shell}
+
+我们仍然可以使用 prepare-sort-format 三步骤策略来生成这张报表, \verb'prep3'
+从文件 \filename{countries} 中准备并排序必要的信息:
+\begin{shell}
+    # prep3 - prepare countries data for form3
+
+    BEGIN  { FS = "\t" }
+    pass == 1 {
+        area[$4] += $2
+        areatot += $2
+        pop[$4] += $3
+        poptot += $3
+    }
+    pass == 2 {
+        den = 1000*$3/$2
+        printf("%s:%s:%s:%f:%d:%f:%f:%d:%d\n",
+            $4, $1, $3, 100*$3/poptot, $2, 100*$2/areatot,
+            den, pop[$4], area[$4]) | "sort -t: +0 -1 +6rn"
+    }
+\end{shell}
+这个程序需要遍历输入数据两次, 第一次遍历累加每个大洲的面积与人口数, 并分别
+保存到数组 \verb'area' 与 \verb'pop' 中, 同时计算总面积与总人口数, 分别
+保存在变量 \verb'areatot' 与 \verb'poptot' 中. 第二次遍历对每个国家的统计
+结果进行格式化, 并输送给 \verb'sort'. 
+\marginpar{94}
+两次遍历通过变量 \verb'pass' 控制, 其值可以通过命令行设置:
+\begin{awkcode}
+    awk -f prep3 pass=1 countries pass=2 countries
+\end{awkcode}
