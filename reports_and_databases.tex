@@ -193,6 +193,38 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 比重, 我们需要新增一个标题, 以及更多的列表头:
 \marginpar{93}
 \begin{shell}
+Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
+
+ CONTINENT      COUNTRY        POPULATION              AREA           POP. DEN.  
+
+                           Millions   Pct. of   Thousands  Pct. of   People per
+                           of People   Total    of Sq. Mi.  Total      Sq. Mi. 
+                           ---------  -------   ---------- -------   ----------
+ Asia           Japan         120        4.3        144       0.6      833.3
+                India         746       26.5       1267       4.9      588.8
+                China        1032       36.6       3705      14.4      278.5
+                USSR          275        9.8       8649      33.7       31.8
+                             ----      -----      -----     -----
+   TOTAL for Asia            2173       77.1      13765      53.6
+                             ====      =====      =====     =====
+ Europe         Germany        61        2.2         96       0.4      635.4
+                England        56        2.0         94       0.4      595.7
+                France         55        2.0        211       0.8      260.7
+                             ----      -----      -----     -----
+   TOTAL for Europe           172        6.1        401       1.6
+                             ====      =====      =====     =====
+ North America  Mexico         78        2.8        762       3.0      102.4
+                USA           237        8.4       3615      14.1       65.6
+                Canada         25        0.9       3852      15.0        6.5
+                             ----      -----      -----     -----
+   TOTAL for North America    340       12.1       8229      32.0
+                             ====      =====      =====     =====
+ South America  Brazil        134        4.8       3286      12.8       40.8
+                             ----      -----      -----     -----
+   TOTAL for South America    134        4.8       3286      12.8
+                             ====      =====      =====     =====
+ GRAND TOTAL                 2819      100.0      25681     100.0
+                            =====     ======      =====    ======
 \end{shell}
 
 我们仍然可以使用 prepare-sort-format 三步骤策略来生成这张报表, \verb'prep3'
@@ -223,3 +255,73 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 \begin{awkcode}
     awk -f prep3 pass=1 countries pass=2 countries
 \end{awkcode}
+\verb'prep3' 产生的输出, 其每一行都由 9 个字段组成, 字段之间用冒号分隔,
+这些 字段包括:
+\begin{shell}
+    大洲 
+    国家 
+    人口 
+    人口所占的比重
+    面积 
+    面积所占的比重
+    人口密度
+    该国所在的大洲的总人口
+    该国所在的大洲的面积
+\end{shell}
+注意 \verb'sort' 的命令行参数, 该命令行参数使得排序后的记录先按照第 1 个字 
+段的字母顺序排列, 再按第 7 个字段的数值形式的逆序排列. 
+
+键入下面的命令行, 就可以生成前面那张精美的报表:
+\begin{awkcode}
+    awk -f prep3 pass=1 countries pass=2 countries | awk -f form3
+\end{awkcode}
+其中, 程序 \verb'form3' 的源代码是
+\begin{awkcode}
+    # form3 - format countries report number 3
+
+    BEGIN  {
+        FS = ":"; date = "January 1, 1988"
+        hfmt = "%36s %8s %12s %7s %12s\n"
+        tfmt = "%33s %10s %10s %9s\n"
+        TOTfmt = "   TOTAL for %-13s%7d%11.1f%11d%10.1f\n" 
+        printf("%-18s %-40s %19s\n\n", "Report No. 3",
+          "POPULATION, AREA, POPULATION DENSITY", date)
+        printf(" %-14s %-14s %-23s %-14s %-11s\n\n",
+          "CONTINENT", "COUNTRY", "POPULATION", "AREA", "POP. DEN.")
+        printf(hfmt, "Millions ", "Pct. of", "Thousands ",
+                     "Pct. of", "People per")
+        printf(hfmt, "of People", "Total ", "of Sq. Mi.",
+                     "Total ", "Sq. Mi. ")
+        printf(hfmt, "---------", "-------", "----------",
+                     "-------", "----------")
+    }
+    {   if ($1 != prev) { # new continent
+            if (NR > 1)
+                totalprint()
+            prev = $1     # first entry for continent
+            poptot = $8;  poppct = $4
+            areatot = $9; areapct = $6
+        } else {          # next entry for continent
+            $1 = ""
+            poppct += $4; areapct += $6
+        }
+        printf(" %-15s%-10s %6d %10.1f %10d %9.1f %10.1f\n",
+            $1, $2, $3, $4, $5, $6, $7)
+        gpop += $3;  gpoppct += $4
+        garea += $5; gareapct += $6
+    }
+
+    END {
+        totalprint()
+        printf(" GRAND TOTAL %20d %10.1f %10d %9.1f\n",
+            gpop, gpoppct, garea, gareapct)
+        printf(tfmt, "=====", "======", "=====", "======")
+    }
+
+    function totalprint() {	# print totals for previous continent
+        printf(tfmt, "----", "-----", "-----", "-----")
+        printf(TOTfmt, prev, poptot, poppct, areatot, areapct)
+        printf(tfmt, "====", "=====", "=====", "=====")
+    }
+\end{awkcode}
+\marginpar{95}
