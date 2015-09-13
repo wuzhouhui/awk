@@ -190,7 +190,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 
 典型的商业报表比我们现在看到的具有更多的内容 (至少在形式上), 为了详细说明,
 假设我们需要为每一个大洲作一个小计, 以及计算每一个国家占总人口与总面积的
-比重, 我们可以需要新增一个标题, 以及更多的列表头:
+比重, 我们需要新增一个标题, 以及更多的列表头:
 \marginpar{93}
 \begin{shell}
 Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
@@ -227,7 +227,9 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
                             =====     ======      =====    ======
 \end{shell}
 
-我们仍然可以使用 prepare-sort-format 三步骤策略来生成这张报表, \verb'prep3'
+我们仍然可以使用
+\mbox{准备}-\mbox{排序}-\mbox{格式化}
+三步骤策略来生成这张报表, \verb'prep3'
 从文件 \filename{countries} 中准备并排序必要的信息:
 \begin{shell}
     # prep3 - prepare countries data for form3
@@ -259,10 +261,10 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 这些 字段包括:
 \begin{shell}
     大洲 
-    国家 
-    人口 
+    国家
+    国家人口 
     人口所占的比重
-    面积 
+    国土面积 
     面积所占的比重
     人口密度
     该国所在的大洲的总人口
@@ -271,7 +273,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 注意 \verb'sort' 的命令行参数, 该命令行参数使得排序后的记录先按照第 1 个字 
 段的字母顺序排列, 再按第 7 个字段的数值形式的逆序排列. 
 
-键入下面的命令行, 就可以生成前面那张精美的报表:
+键入下面的命令行, 就可以生成前面那张精美的报表 \texttt{Report No. 3}:
 \begin{awkcode}
     awk -f prep3 pass=1 countries pass=2 countries | awk -f form3
 \end{awkcode}
