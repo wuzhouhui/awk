@@ -189,7 +189,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 \label{subsec:a_more_complex_report}
 
 典型的商业报表比我们现在看到的具有更多的内容 (至少在形式上), 为了详细说明,
-假设我们需要为每一个大洲作一个小计, 以及计算每一个国家占总人口与总面积的
+假设我们需要为每一个大洲作一个汇总, 以及计算每一个国家占总人口与总面积的
 比重, 我们需要新增一个标题, 以及更多的列表头:
 \marginpar{93}
 \begin{shell}
@@ -327,3 +327,84 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
     }
 \end{awkcode}
 \marginpar{95}
+除了格式化, \verb'form3' 累加并打印每个大洲的汇总信息. 除此之外, 它还会
+累加总人口, 总人口比重, 总面积, 总面积比重, 这些信息在 \END 中被打印出来.
+
+\verb'form3' 在打印完每个大洲的汇总信息之后, 再打印总计信息, 但是一般情况
+下, 除非读取到一个新的大洲, 否则它不会知道是否已经处理完所有的项目, 
+解决这种 ``我们已经走得太远了 (We've gone too far)'' 问题是 control-break
+编程的经典例子. 解决办法是在打印之前检查每一个输入行, 判断是否需要为
+前一个数据组生成合计信息, 同样的检查也出现在了 \END 中, 所以计算工作最好
+用一个单独的函数来完成. 如果层次只有一层, 那么 control-break 是一种非常简单
+且有效的方法, 但是当层次加深时, 事情就会变得很糟.
+
+正如上面的程序所呈现得那样, 复杂的格式化工作可以通过多个 awk 程序的组合来
+完成, 但是为了打印出适当的行, 我们必须精心地计算字符并编写 \printf 语句,
+这种工作其实非常乏味, 尤其是其中的某些部分需要进行修改时.
+
+一种可选的方案是让某个程序去计算量的大小, 然后再根据你的需求进行调整 
+\footnote{原文为 An alternative is to let a program compute how big things
+are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程序
+对简单的表格进行格式化 ---- 这是一种可行的做法, 我们待会儿再回来讨论.
+因为用的是 Unix 系统与排版程序, 所以我们可以用一些已经存在的工具 ----
+\texttt}{tbl} 程序可以对表格进行格式化. 程序 \verb'form4' 非常类似于
+\verb'form3', 但是它没有用于控制列宽度的魔数, 相反, 它生成了一些 
+\texttt{tbl} 命令与表格数据, 不同列的数据之间用制表符分隔, 剩下的工作
+由 \texttt{tbl} 完成. (如果你对 \texttt{tbl} 不太熟悉, 那么你可以忽略
+这些细节)
+\marginpar{96}
+\begin{awkcode}
+    # form4 - format countries data for tbl input
+
+    BEGIN  {
+        FS = ":"; OFS = "\t"; date = "January 1, 1988"
+        print ".TS\ncenter;"
+        print "l c s s s r s\nl\nl l c s c s c\nl l c c c c c."
+        printf("%s\t%s\t%s\n\n", "Report No. 3",
+            "POPULATION, AREA, POPULATION DENSITY", date)
+        print "CONTINENT", "COUNTRY", "POPULATION",
+              "AREA", "POP. DEN."
+        print "", "", "Millions", "Pct. of", "Thousands",
+              "Pct. of", "People per"
+        print "", "", "of People", "Total", "of Sq. Mi.",
+              "Total", "Sq. Mi."
+        print "\t\t_\t_\t_\t_\t_"
+        print ".T&\nl l n n n n n."
+    }
+
+    {    if ($1 != prev) {  # new continent
+            if (NR > 1)
+                totalprint()
+            prev = $1
+            poptot = $8;  poppct = $4
+            areatot = $9; areapct = $6
+        } else {            # next entry for current continent
+            $1 = ""
+            poppct += $4; areapct += $6
+        }
+        printf("%s\t%s\t%d\t%.1f\t%d\t%.1f\t%.1f\n",
+            $1, $2, $3, $4, $5, $6, $7)
+        gpop += $3;  gpoppct += $4
+        garea += $5; gareapct += $6
+    }
+
+    END {
+        totalprint()
+        print ".T&\nl s n n n n n."
+        printf("GRAND TOTAL\t%d\t%.1f\t%d\t%.1f\n",
+            gpop, gpoppct, garea, gareapct)
+        print "", "=", "=", "=", "=", "="
+        print ".TE"
+    }
+
+    function totalprint() {    # print totals for previous continent
+        print ".T&\nl s n n n n n."
+        print "", "_", "_", "_", "_", "_"
+        printf("   TOTAL for %s\t%d\t%.1f\t%d\t%.1f\n",
+            prev, poptot, poppct, areatot, areapct)
+        print "", "=", "=", "=", "=", "="
+        print ".T&\nl l n n n n n."
+    }
+\end{awkcode}
+
+\marginpar{97}
