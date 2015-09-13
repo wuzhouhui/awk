@@ -330,7 +330,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 除了格式化, \verb'form3' 累加并打印每个大洲的汇总信息. 除此之外, 它还会
 累加总人口, 总人口比重, 总面积, 总面积比重, 这些信息在 \END 中被打印出来.
 
-\verb'form3' 在打印完每个大洲的汇总信息之后, 再打印总计信息, 但是一般情况
+\verb'form3' 在打印完每个大洲的汇总信息之后, 再打印合计信息, 但是一般情况
 下, 除非读取到一个新的大洲, 否则它不会知道是否已经处理完所有的项目, 
 解决这种 ``我们已经走得太远了 (We've gone too far)'' 问题是 control-break
 编程的经典例子. 解决办法是在打印之前检查每一个输入行, 判断是否需要为
@@ -350,7 +350,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 \texttt{tbl} 程序可以对表格进行格式化. 程序 \verb'form4' 非常类似于
 \verb'form3', 但是它没有用于控制列宽度的魔数, 相反, 它生成了一些 
 \texttt{tbl} 命令与表格数据, 不同列的数据之间用制表符分隔, 剩下的工作
-由 \texttt{tbl} 完成. (如果你对 \texttt{tbl} 不太熟悉, 那么你可以忽略
+由 \texttt{tbl} 完成. (如果你对 \texttt{tbl} 不太熟悉, 大可不必理会
 这些细节)
 \marginpar{96}
 \begin{awkcode}
