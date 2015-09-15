@@ -468,3 +468,23 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
         return s substr(blanks, 1, int((wid[n]-nwid[n])/2))
     }
 \end{awkcode}
+第一次遍历记录数据与每列的最大宽度, 第二次遍历 (位于 \END) 在适当的位置打印
+每一项. 对字母项进行左对齐操作起来比较容易: 我们使用 \verb'wid[i]' (第 
+\verb'i' 列的最大宽度) 为 \printf 构造格式字符串, 比如列的最大宽度是 10,
+则第 \verb'i' 列的格式字符串就是 \verb'%-10s' (假设该列是字母项).
+
+如果是数字项, 则要多做点工作: 第 \verb'i' 列的项目 \verb'v' 需要右对齐,
+就像这样 
+%TODO
+\verb'v' 左边的空格数是 \verb'(wid[i]-nwid[i])/2', 所以 \verb'numjust' 会
+在 \verb'v' 的末尾拼接这么多的空格, 然后再按照 \verb'%10s' 的格式输出 (假设 
+该列的最大宽度是 10).
+
+\marginpar{99}
+\begin{exercise}
+	修改 \verb'form3' 与 \verb'form4', 使得程序可以从别处获取日期, 而
+	不是将日期硬编码到代码中.
+\end{exercise}
+
+\begin{exercise}
+\end{exercise}
