@@ -407,7 +407,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
     }
 \end{awkcode}
 \marginpar{97}
-如果把 \verb'form4' 的输出输送给 \verb'tbl', 输出的表格是:
+如果把 \verb'form4' 的输出输送给 \verb'tbl', 输出的表格是\footnote{TODO}:
 % TODO
 \begin{shell}
 \end{shell}
@@ -416,19 +416,21 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 复杂的程序的确很有野心, 但不妨让我们从一个小程序开始: 这个程序以左对齐的
 方式在列中打印项目, 如果是数值, 则右对齐, 并且在同一列中, 每一行的列宽度
 都是相同的 (都等于该列宽度的最大值). 如果给定头部与输入文件
-\filename{countries}, 程序的输出是:
+\filename{countries}, 程序的输出是\footnote{\filename{countries} 原来没有
+头部, 需要手工加上 ---- 译者注}:
 \begin{shell}
-    USSR      8649    275   Asia         
-    Canada    3852     25   North America
-    China     3705   1032   Asia         
-    USA       3615    237   North America
-    Brazil    3286    134   South America
-    India     1267    746   Asia         
-    Mexico     762     78   North America
-    France     211     55   Europe       
-    Japan      144    120   Asia         
-    Germany     96     61   Europe       
-    England     94     56   Europe       
+    COUNTRY   AREA   POPULATION   CONTINENT    
+    USSR      8649       275      Asia         
+    Canada    3852        25      North America
+    China     3705      1032      Asia         
+    USA       3615       237      North America
+    Brazil    3286       134      South America
+    India     1267       746      Asia         
+    Mexico     762        78      North America
+    France     211        55      Europe       
+    Japan      144       120      Asia         
+    Germany     96        61      Europe       
+    England     94        56      Europe       
 \end{shell}
 
 程序的实现代码非常紧凑:
@@ -470,11 +472,11 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 \end{awkcode}
 第一次遍历记录数据与每列的最大宽度, 第二次遍历 (位于 \END) 在适当的位置打印
 每一项. 对字母项进行左对齐操作起来比较容易: 我们使用 \verb'wid[i]' (第 
-\verb'i' 列的最大宽度) 为 \printf 构造格式字符串, 比如列的最大宽度是 10,
-则第 \verb'i' 列的格式字符串就是 \verb'%-10s' (假设该列是字母项).
+\verb'i' 列的最大宽度) 为 \printf 构造格式字符串, 比如说, 如果列的最大宽度
+是 10, 则第 \verb'i' 列的格式字符串就是 \verb'%-10s' (假设该列是字母项).
 
 如果是数字项, 则要多做点工作: 第 \verb'i' 列的项目 \verb'v' 需要右对齐,
-就像这样 
+就像这样\footnote{TODO}
 %TODO
 \verb'v' 左边的空格数是 \verb'(wid[i]-nwid[i])/2', 所以 \verb'numjust' 会
 在 \verb'v' 的末尾拼接这么多的空格, 然后再按照 \verb'%10s' 的格式输出 (假设 
