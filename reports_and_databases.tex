@@ -511,7 +511,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 \label{sec:packaged_queries_and_reports}
 
 如果某个查询经常被访问, 比较方便的做法是把它打包到一个命令中, 这样在下次
-执行的时候, 就可以少打点字. 假设我们想要判断某个国家的人口, 面积, 以及人口 
+执行的时候, 就可以少打点字. 假设我们想要查询某个国家的人口, 面积, 以及人口 
 密度, 比如说 Canada, 则可以键入 (假定用的是类Unix的 shell):
 \begin{awkcode}
     awk '
@@ -531,7 +531,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
         3.852 million sq. mi.
         6.5 people per sq. mi.
 \end{shell}
-现在, 如果我们想要查询其他国家的信息, 在执行每次查询前都需要国家的名字,
+现在, 如果我们想要查询其他国家的信息, 在执行每次查询前都需要修改国家的名字,
 但是更方便的做法是把程序放入一个可执行文件中, 比如就叫 \verb'info',
 查询时只要输入
 \begin{awkcode}
@@ -539,7 +539,9 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
     info USA
     ...
 \end{awkcode}
-我们可以利用 \ref{sec:interaction_with_other_programs} 节的技术, 把一个国家
+我们可以利用 
+\ref{sec:interaction_with_other_programs}
+ 节的技术, 把一个国家
 的名字传递给程序, 或者, 我们也可以利用 shell, 把国家的名字放到正确的位置上:
 \marginpar{100}
 \begin{awkcode}
