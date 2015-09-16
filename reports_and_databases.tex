@@ -489,4 +489,70 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 \end{exercise}
 
 \begin{exercise}
+    由于四舍五入, 由 \verb'form3' 与 \verb'form4' 打印的项并不总是等于对应
+    列的小计, 你会如何修正这个问题?
 \end{exercise}
+
+\begin{exercise}
+    表格格式化程序假定所有数字的小数部分的位数都是相同的, 修改它, 使得即使 
+    这个假定不成立, 程序也可以正确地工作.
+\end{exercise}
+
+\begin{exercise}
+    增强 \verb'table' 的功能, 增强后的 \verb'table' 允许输入数据中出现一个
+    格式说明行序列, 这个序列说明了每一列如何格式化随后的数据.
+    \footnote{原文为 
+        Enhance \texttt{table} to permit a sequence of specification lines
+        that tell how the subsequent data is to be formatted in each column.
+    } (\texttt{tbl} 就是这样控制输出格式的)
+\end{exercise}
+
+\section{打包的查询与报表}
+\label{sec:packaged_queries_and_reports}
+
+如果某个查询经常被访问, 比较方便的做法是把它打包到一个命令中, 这样在下次
+执行的时候, 就可以少打点字. 假设我们想要判断某个国家的人口, 面积, 以及人口 
+密度, 比如说 Canada, 则可以键入 (假定用的是类Unix的 shell):
+\begin{awkcode}
+    awk '
+    BEGIN { FS = "\t" }
+    $1 ~ /Canada/ {
+        printf("%s:\n", $1)
+        printf("\t%d million people\n", $3)
+        printf("\t%.3f million sq. mi.\n", $2/1000)
+        printf("\t%.1f people per sq. mi.\n", 1000*$3/$2)
+    }
+    ' countries
+\end{awkcode}
+输出是 
+\begin{shell}
+    Canada:
+        25 million people
+        3.852 million sq. mi.
+        6.5 people per sq. mi.
+\end{shell}
+现在, 如果我们想要查询其他国家的信息, 在执行每次查询前都需要国家的名字,
+但是更方便的做法是把程序放入一个可执行文件中, 比如就叫 \verb'info',
+查询时只要输入
+\begin{awkcode}
+    info Canada
+    info USA
+    ...
+\end{awkcode}
+我们可以利用 \ref{sec:interaction_with_other_programs} 节的技术, 把一个国家
+的名字传递给程序, 或者, 我们也可以利用 shell, 把国家的名字放到正确的位置上:
+\marginpar{100}
+\begin{awkcode}
+    awk '
+    # info - print information about country
+    #    usage: info country-name
+
+    BEGIN { FS = "\t" }
+    $1 ~ /'$1'/ {
+        printf("%s:\n", $1)
+        printf("\t%d million people\n", $3)
+        printf("\t%.3f million sq. mi.\n", $2/1000)
+        printf("\t%.1f people per sq. mi.\n", 1000*$3/$2)
+    }
+    ' countries
+\end{awkcode}
