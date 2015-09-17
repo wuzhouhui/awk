@@ -542,7 +542,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 我们可以利用 
 \ref{sec:interaction_with_other_programs}
  节的技术, 把一个国家
-的名字传递给程序, 或者, 我们也可以利用 shell, 把国家的名字放到正确的位置上:
+的名字传递给程序, 或者, 我们也可以利用 shell, 把国家的名字放到适当的位置上:
 \marginpar{100}
 \begin{awkcode}
     awk '
@@ -565,11 +565,11 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 第一个 \verb'$1' 指的是当前输入行的第一个字段, 而第二个 \verb'$1' (被单引号
 包围着的)指的是国家名称参数, 也就是执行 shell 命令 \verb'info' 时的第一个参
 数. 第二个 \verb'$1' 只对shell可见, 当命令被执行时, 它被 \verb'info' 后面 
-的字符串所替代. 具体过程是 shell 通过拼接三个字符串来组合成 awk程序, 这三 
+的字符串所替代. 具体过程是, shell 通过拼接三个字符串来组合成 awk程序, 这三 
 个字符串其中两个是被一对单引号包围起来的多行文本, 另外一个是 \verb'$1',
 即 \texttt{info} 的参数. 需要注意的是, 可以把任意一个正则表达式传递给
 \texttt{info}, 尤其是, 我们可以只给出国家名称的一部分, 或者一次指定多个国家
-名, 也可以查询到相关的国家信息, 比如 
+, 也可以查询到相关的国家信息, 比如 
 \begin{awkcode}
     info 'Can|USA'
 \end{awkcode}
@@ -583,7 +583,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 \label{subsec:form_letters}
 
 Awk 也可以用于生成套用信函,
-只需要用参数替换套用信函中的文本即可\footnote{TODO}:
+只需要用参数替换掉套用信函中的文本即可\footnote{TODO}:
 % TODO
 套用信函的文本内容存放在文件 \filename{letter.text} 中,文本中包含了许多参
 数, 只需要通过参数替换, 就可以生成不同内容的信函\footnote{原文为 The text
