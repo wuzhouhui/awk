@@ -5,3 +5,6 @@ Chinese, and typesetted by LaTeX.
 The AWK Programming Language 的中文翻译项目, 使用 LaTeX 排版, 光凭我一个人
 的力量不知道会翻译到何年何月, 我需要志同道合的网友加入进来, 加快项目的完成.
 有任何想说的话都可以给我发邮件: wuzhouhui250@gmail.com
+
+如果你的系统没有安装 LaTeX 编译环境, 或者无法编译成功, 请给我发邮件,
+我把编译好的 PDF 发送给你.
