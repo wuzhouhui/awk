@@ -531,7 +531,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
         3.852 million sq. mi.
         6.5 people per sq. mi.
 \end{shell}
-现在, 如果我们想要查询其他国家的信息, 在执行每次查询前都需要修改国家的名字,
+现在, 如果我们想要查询其他国家的信息, 在执行每次查询前都需要修改国家的名称,
 但是更方便的做法是把程序放入一个可执行文件中, 比如就叫 \verb'info',
 查询时只要输入
 \begin{awkcode}
@@ -542,7 +542,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 我们可以利用 
 \ref{sec:interaction_with_other_programs}
  节的技术, 把一个国家
-的名字传递给程序, 或者, 我们也可以利用 shell, 把国家的名字放到适当的位置上:
+的名称传递给程序, 或者, 我们也可以利用 shell, 把国家的名称放到适当的位置上:
 \marginpar{100}
 \begin{awkcode}
     awk '
@@ -582,7 +582,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 \subsection{套用信函}
 \label{subsec:form_letters}
 
-Awk 也可以用于生成套用信函,
+Awk 也可以用于生成套用信函, 生成时
 只需要用参数替换掉套用信函中的文本即可\footnote{TODO}:
 % TODO
 套用信函的文本内容存放在文件 \filename{letter.text} 中,文本中包含了许多参
@@ -601,3 +601,48 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     This gives #1 a population density of #4 people per
     square mile.
 \end{shell}
+
+如果输入参数是
+\begin{shell}
+	Canada:25:3.852:6.5
+\end{shell}
+输出的的套用信函是:
+\begin{shell}
+	Subject: Demographic Information About Canada
+	From: AWK Demographics, Inc.
+
+	In response to your request for information about Canada,
+	our latest research has revealed that its population is 25
+	million people and its area is 3.852 million square miles.
+	This gives Canada a population density of 6.5 people per
+	square mile.
+\end{shell}
+
+程序 \verb'form.gen' 是套用信函生成器:
+\begin{awkcode}
+	# form.gen - generate form letters
+	#   input:  prototype file letter.text; data lines
+	#   output: one form letter per data line
+
+	BEGIN {
+	    FS = ":"
+	    while (getline <"letter.text" > 0) # read form letter
+		form[++n] = $0
+	}
+
+	{   for (i = 1; i <= n; i++) { # read data lines
+		temp = form[i]         # each line generates a letter
+		for (j = 1; j <= NF; j++)
+		    gsub("#" j, $j, temp)
+		print temp
+	    }
+	}
+\end{awkcode}
+
+\verb'form.gen' 的 \BEGIN 从文件 \filename{letter.text} 中读取套用信函的
+文本, 并存放到数组 \verb'form' 中, 剩下的工作是读取输入参数, 调用 
+\verb'gsub' 将文本中的 \verb'#'\textit{n} 替换成对应的参数, 被修改的只 
+是存储在数组 \verb'form' 中的信函副本, 文件 \filename{letter.text} 的内容
+并没有发生改变. 注意程序是如何通过字符串拼接来生成 \verb'gsub' 的第一个
+参数的.
+\marginpar{102}
