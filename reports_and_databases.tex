@@ -597,3 +597,48 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     This gives #1 a population density of #4 people per
     square mile.
 \end{shell}
+
+如果输入参数是
+\begin{shell}
+	Canada:25:3.852:6.5
+\end{shell}
+输出的的套用信函是:
+\begin{shell}
+	Subject: Demographic Information About Canada
+	From: AWK Demographics, Inc.
+
+	In response to your request for information about Canada,
+	our latest research has revealed that its population is 25
+	million people and its area is 3.852 million square miles.
+	This gives Canada a population density of 6.5 people per
+	square mile.
+\end{shell}
+
+程序 \verb'form.gen' 是套用信函生成器:
+\begin{awkcode}
+	# form.gen - generate form letters
+	#   input:  prototype file letter.text; data lines
+	#   output: one form letter per data line
+
+	BEGIN {
+	    FS = ":"
+	    while (getline <"letter.text" > 0) # read form letter
+		form[++n] = $0
+	}
+
+	{   for (i = 1; i <= n; i++) { # read data lines
+		temp = form[i]         # each line generates a letter
+		for (j = 1; j <= NF; j++)
+		    gsub("#" j, $j, temp)
+		print temp
+	    }
+	}
+\end{awkcode}
+
+\verb'form.gen' 的 \BEGIN 从文件 \filename{letter.text} 中读取套用信函的
+文本, 并存放到数组 \verb'form' 中, 剩下的工作是读取输入参数, 调用 
+\verb'gsub' 将文本中的 \verb'#'\textit{n} 替换成对应的参数, 被修改的只 
+是存储在数组 \verb'form' 中的信函副本, 文件 \filename{letter.text} 的内容
+并没有发生改变. 需要注意的是如何通过字符串拼接来生成 \verb'gsub' 的第一个
+参数.
+\marginpar{102}
