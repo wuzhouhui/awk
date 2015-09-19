@@ -320,7 +320,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
         printf(tfmt, "=====", "======", "=====", "======")
     }
 
-    function totalprint() {	# print totals for previous continent
+    function totalprint() {     # print totals for previous continent
         printf(tfmt, "----", "-----", "-----", "-----")
         printf(TOTfmt, prev, poptot, poppct, areatot, areapct)
         printf(tfmt, "====", "=====", "=====", "=====")
@@ -504,8 +504,8 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 
 \marginpar{99}
 \begin{exercise}
-	修改 \verb'form3' 与 \verb'form4', 使得程序可以从别处获取日期, 而
-	不是将日期硬编码到代码中.
+    修改 \verb'form3' 与 \verb'form4', 使得程序可以从别处获取日期, 而
+    不是将日期硬编码到代码中.
 \end{exercise}
 
 \begin{exercise}
@@ -641,39 +641,39 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 
 如果输入参数是
 \begin{shell}
-	Canada:25:3.852:6.5
+    Canada:25:3.852:6.5
 \end{shell}
 输出的的套用信函是:
 \begin{shell}
-	Subject: Demographic Information About Canada
-	From: AWK Demographics, Inc.
+    Subject: Demographic Information About Canada
+    From: AWK Demographics, Inc.
 
-	In response to your request for information about Canada,
-	our latest research has revealed that its population is 25
-	million people and its area is 3.852 million square miles.
-	This gives Canada a population density of 6.5 people per
-	square mile.
+    In response to your request for information about Canada,
+    our latest research has revealed that its population is 25
+    million people and its area is 3.852 million square miles.
+    This gives Canada a population density of 6.5 people per
+    square mile.
 \end{shell}
 
 程序 \verb'form.gen' 是套用信函生成器:
 \begin{awkcode}
-	# form.gen - generate form letters
-	#   input:  prototype file letter.text; data lines
-	#   output: one form letter per data line
+    # form.gen - generate form letters
+    #   input:  prototype file letter.text; data lines
+    #   output: one form letter per data line
 
-	BEGIN {
-	    FS = ":"
-	    while (getline <"letter.text" > 0) # read form letter
-		form[++n] = $0
-	}
+    BEGIN {
+        FS = ":"
+        while (getline <"letter.text" > 0) # read form letter
+        form[++n] = $0
+    }
 
-	{   for (i = 1; i <= n; i++) { # read data lines
-		temp = form[i]         # each line generates a letter
-		for (j = 1; j <= NF; j++)
-		    gsub("#" j, $j, temp)
-		print temp
-	    }
-	}
+    {   for (i = 1; i <= n; i++) { # read data lines
+            temp = form[i]         # each line generates a letter
+            for (j = 1; j <= NF; j++)
+                gsub("#" j, $j, temp)
+            print temp
+        }
+    }
 \end{awkcode}
 
 \verb'form.gen' 的 \BEGIN 从文件 \filename{letter.text} 中读取套用信函的
@@ -694,8 +694,8 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 
 这个系统通过以下三种方式将 awk 扩展成一个数据库语言:
 \begin{itemize}
-	\item 字段通过名字来引用, 而不是数字.
-	\item 数据库可以分散在多个文件中, 而不是限定在一个文件上.
+    \item 字段通过名字来引用, 而不是数字.
+    \item 数据库可以分散在多个文件中, 而不是限定在一个文件上.
     \item 可以交互性地生成一个查询序列.
 \end{itemize}
 使用名字 (而非数字) 引用字段的优势是显而易见的 ---- \verb'$area' 看起来
@@ -713,17 +713,17 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 \verb'continent'. 现在我们打算在数据库中新增一个文件 \filename{capitals},
 文件的每一行都由两个字段组成 ---- 国家及其首都:
 \begin{shell}
-    USSR	Moscow
-    Canada	Ottawa
-    China	Beijing
-    USA	Washington
-    Brazil	Brasilia
-    India	New Delhi
-    Mexico	Mexico City
-    France	Paris
-    Japan	Tokyo
-    Germany	Bonn
-    England	London
+    USSR    Moscow
+    Canada  Ottawa
+    China   Beijing
+    USA     Washington
+    Brazil  Brasilia
+    India   New Delhi
+    Mexico  Mexico City
+    France  Paris
+    Japan   Tokyo
+    Germany Bonn
+    England London
 \end{shell}
 与 \verb'countries' 一样, 字段之间用制表符分开.
 
