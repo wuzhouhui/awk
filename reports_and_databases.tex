@@ -646,3 +646,61 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 并没有发生改变. 注意程序是如何通过字符串拼接来生成 \verb'gsub' 的第一个
 参数的.
 \marginpar{102}
+
+\section{关系数据库系统}
+\label{sec:a_relational_database_system}
+
+在这一节, 我们将会描述一个简单的关系型数据库系统, 这个系统的核心包括一个
+类 awk 查询语言 \textit{q}, 一个数据字典 \filename{relfile}, 以
+及一个查询处理程序 \verb'qawk', \verb'qawk' 的作用是把 \textit{q} 描述的
+查询翻译成 awk 程序.
+
+这个系统通过以下三种方式将 awk 扩展成一个数据库语言:
+\begin{itemize}
+	\item 字段通过名字来引用, 而不是数字.
+	\item 数据库可以分散在多个文件中, 而不是限定在一个文件上.
+    \item 可以交互性地生成一个查询序列.
+\end{itemize}
+使用名字 (而非数字) 引用字段的优势是显而易见的 ---- \verb'$area' 看起来
+比 \verb'$2' 更加自然, 但是, 把一个数据库分散存储在若干个文件中的优点
+就没那么容易看出来. 多个文件组成的数据库维护起来更容易, 这主要是因为编辑
+一个只含有少量字段的文件, 要比编辑一个包含全部字段的文件容易得多. 另外,
+利用本节开发的数据库系统, 我们就有可能在不改变数据库访问程序的情况下,
+重构数据库. 最后, 对于小查询来说, 访问一个小文件要比访问一个大文件高效
+得多. 另一方面, 当我们往数据库添加数据时, 必须小心修改所有的相关文件, 
+否则会带来一致性问题.
+
+根据前面的讨论\footnote{原文为 Up to this point}, 我们的数据库由一个单独
+的文件 \filename{countries} 组成, 文件的每一行都包括四个字段, 字段的名字
+分别是 \verb'country', \verb'area', \verb'population', 以及
+\verb'continent'. 现在我们打算在数据库中新增一个文件 \filename{capitals},
+文件的每一行都由两个字段组成, 国家及其首都:
+\begin{shell}
+    USSR	Moscow
+    Canada	Ottawa
+    China	Beijing
+    USA	Washington
+    Brazil	Brasilia
+    India	New Delhi
+    Mexico	Mexico City
+    France	Paris
+    Japan	Tokyo
+    Germany	Bonn
+    England	London
+\end{shell}
+与 \verb'countries' 一样, 字段之间用制表符分开.
+
+从这两个文件出发, 如果我们想要打印位于亚洲的国家, 及其人口与首都, 那就必须
+扫描这两个文件, 再拼凑出最终的结果. 举例来说, 如果输入数据不是很多, 下面
+的程序就可以完成这件工作:
+\marginpar{103}
+\begin{awkcode}
+    awk ' BEGIN { FS = "\t" }
+          FILENAME == "capitals" {
+              cap[$1] = $2
+          }
+          FILENAME == "countries" && $4 == "Asia" {
+              print $1, $3, cap[$1]
+          }
+    ' capitals countries
+\end{awkcode}
