@@ -603,8 +603,25 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 \label{subsec:form_letters}
 
 Awk 也可以用于生成套用信函, 生成时
-只需要用参数替换掉套用信函中的文本即可\footnote{TODO}:
-% TODO
+只需要用参数替换掉套用信函中的文本即可:
+\begin{center}
+\begin{tikzpicture}
+\draw[thick, ->]
+    (0.0, 0.5) -- (1.0, 0.5);
+\draw[thick, ->]
+    (3.0, 0.5) -- (4.0, 0.5);
+\draw[thick, ->]
+    (2.0, 2.0) -- (2.0, 1.0);
+
+\draw[thick]
+    (1.0, 0.0) -- (1.0, 1.0) -- (3.0, 1.0) -- (3.0, 0.0) -- (1.0, 0.0);
+
+\node at (2.0, 2.3) {\texttt{letter.text}};
+\node at (-0.7, 0.5) {参数值};
+\node at (4.8, 0.5) {套用信函};
+\node at (2.0, 0.5) {\texttt{form.gen}};
+\end{tikzpicture}
+\end{center}
 套用信函的文本内容存放在文件 \filename{letter.text} 中,文本中包含了许多参
 数, 只需要通过参数替换, 就可以生成不同内容的信函\footnote{原文为 The text
     contains parameters that will be replaced by a set of parameter values
