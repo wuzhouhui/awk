@@ -476,8 +476,28 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 是 10, 则第 \verb'i' 列的格式字符串就是 \verb'%-10s' (假设该列是字母项).
 
 如果是数字项, 则要多做点工作: 第 \verb'i' 列的项目 \verb'v' 需要右对齐,
-就像这样\footnote{TODO}
-%TODO
+就像这样:
+\begin{center}
+\begin{tikzpicture}
+\draw[thick, dashed]
+    (0.0, 0.0) -- (0.0, 1.0);
+\draw[thick, dashed]
+    (4.0, 0.0) -- (4.0, 1.0);
+
+\draw[thick]
+    (0.0, 1.0) -- (4.0, 1.0) -- (4.0, 1.5) -- (0.0, 1.5) -- (0.0, 1.0);
+
+\draw[thick]
+    (0.7, 0.5) -- (0.7, 1.0) -- (3.3, 1.0) -- (3.3, 0.5) -- (0.7, 0.5);
+
+\draw[thick]
+    (1.7, 0.0) -- (1.7, 0.5) -- (3.3, 0.5) -- (3.3, 0.0) -- (1.7, 0.0);
+
+\node at (2.0, 1.25) {\texttt{wid[i]}};
+\node at (2.0, 0.75) {\texttt{nwid[i]}};
+\node at (2.5, 0.25) {\texttt{v}};
+\end{tikzpicture}
+\end{center}
 \verb'v' 左边的空格数是 \verb'(wid[i]-nwid[i])/2', 所以 \verb'numjust' 会
 在 \verb'v' 的末尾拼接这么多的空格, 然后再按照 \verb'%10s' 的格式输出 (假设 
 该列的最大宽度是 10).
