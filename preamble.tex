@@ -17,6 +17,11 @@
 \usepackage{theorem}
 % for format of contents
 \usepackage{tocloft}
+% for number of footnote 
+\usepackage{pifont}
+
+% 脚注编号带圈
+\renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
 
 % from package geometry
 % 为边注加边框
