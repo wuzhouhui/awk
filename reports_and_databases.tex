@@ -704,3 +704,44 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
           }
     ' capitals countries
 \end{awkcode}
+
+如果我们只需要输入
+\begin{awkcode}
+    $continent ~ /Asia/ { print $country, $population, $capital }
+\end{awkcode}
+就可以查询到亚洲国家的相关信息, 那将会非常的方便. 执行这条命令时, 有一个
+程序会计算出字段的位置, 并将它们组成在一起, 这也是我们在 \textit{q} 中
+短语化查询的方式, 接下来马上就会讨论到 \textit{q}.
+
+\subsection{自然连接}
+\label{subsec:natural_joins}
+
+现在是时候讨论一些术语了. 在关系型数据库中, 一个文件被称为一张 \term{表} 
+(\term{table}) 或一个 \term{关系} (\term{relation}), 把列叫作 \term{属性}
+(\term{attribute}), 所以我们可以认为表格 \verb'capitals' 具有属性
+\verb'country' 与 \verb'capital'.
+
+一个 \term{自然连接} (\term{natural join}), 或简称为 \term{连接}, 指的是 
+一个运算, 它将两张表以公共属性为基础组合成一张表, 这张表包含了两张表所有
+的属性, 但是重复的属性会被移除. 如果我们把 \verb'countries' 与
+\verb'capitals' 这两张表作自然连接, 我们就会得到一张新表 (姑且称为
+\verb'cc'), 它的属性包括:
+\begin{file}
+    country, area, population, continent, capital
+\end{file}
+对于每一个同时出现在两张表中的国家来说, 我们都可以在 \verb'cc' 中找到一行
+记录, 它包含了国家的名称, 后面跟着面积, 所在大洲,
+以及国家的首都\footnote{TODO}:
+% TODO
+\begin{file}
+\end{file}
+
+我们实现连接运算的方法是根据它们的公共属性进行排序, 如果两张表的某一行的
+公共属性值相同, 那就把它们合并起来, 就像上面这张表显示的那样. 为了处理
+涉及到多张表的查询, 我们会先将表格作连接, 然后再对连接后的表作查询, 也就 
+是说, 如果有必要的话, 我们会创建一个临时文件.
+\marginpar{104}
+为了响应查询:
+\begin{awkcode}
+    $continent ~ /Asia/ { print $country, $population, $capital }
+\end{awkcode}
