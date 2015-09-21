@@ -745,3 +745,91 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 \begin{awkcode}
     $continent ~ /Asia/ { print $country, $population, $capital }
 \end{awkcode}
+我们将 表 \verb'countries' 与 表 \verb'capitals'  作连接, 再将查询应用到
+连接结果上, 通常来说, 最关键的地方在于将哪些表作连接.
+
+实际的连接操作可以通过 Unix 命令 \texttt{join} 来完成, 但是如果你的系统上
+没有该命令, 可以用这里提供的一个 用 awk 实现的简易版本. 它将两个文件按照
+各自的第一个字段进行连接, 比如下面两张表
+\begin{tabular}{c|c|c}
+    \hline
+    \hline
+    ATT1    & ATT2 & ATT3 \\
+    \texttt{A}       & \texttt{w}    & \texttt{p}    \\
+    \texttt{B}       & \texttt{x}    & \texttt{q}   \\
+    \texttt{B}      & \texttt{y}    & \texttt{r}    \\
+    \texttt{C}      & \texttt{z}    & \texttt{s}    \\
+    \hline
+\end{tabular}
+\begin{tabular}{c|c|c}
+    \hline
+    \hline
+    ATT1    & ATT2 & ATT3 \\
+    \texttt{A}       & \texttt{1}   \\  
+    \texttt{A}       & \texttt{2}   \\
+    \texttt{B}      & \texttt{3}    \\
+    \hline
+\end{tabular}
+作连接后得到
+\begin{tabular}{c|c|c|c}
+    \hline
+    \hline
+    ATT1        & ATT2  & ATT3   &   ATT4   \\
+    \texttt{A}  & \texttt{w}    & \texttt{p}    \texttt{1}  \\
+    \texttt{A}  & \texttt{w}    & \texttt{p}    \texttt{2}  \\
+    \texttt{B}  & \texttt{x}    & \texttt{q}    \texttt{3}  \\
+    \texttt{B}  & \texttt{y}    & \texttt{r}    \texttt{3}  \\
+\end{tabular}
+\texttt{join} 不假定输入表格是等长的, 但是它会认为表格是有序的, 互相匹配的
+输入字段的每一种组合都会在输出中占据一行.
+\begin{awkcode}
+    # join - join file1 file2 on first field
+    #   input:  two sorted files, tab-separated fields
+    #   output: natural join of lines with common first field
+
+    BEGIN {
+        OFS = sep = "\t"
+        file2 = ARGV[2]
+        ARGV[2] = ""  # read file1 implicitly, file2 explicitly
+        eofstat = 1   # end of file status for file2
+        if ((ng = getgroup()) <= 0)
+            exit      # file2 is empty
+    }
+
+    {   while (prefix($0) > prefix(gp[1]))
+            if ((ng = getgroup()) <= 0)
+                exit  # file2 exhausted
+        if (prefix($0) == prefix(gp[1]))  # 1st attributes in file1
+            for (i = 1; i <= ng; i++)     #     and file2 match
+                print $0, suffix(gp[i])   # print joined line
+    }
+
+    function getgroup() { # put equal prefix group into gp[1..ng]
+        if (getone(file2, gp, 1) <= 0)    # end of file
+            return 0
+        for (ng = 2; getone(file2, gp, ng) > 0; ng++)
+            if (prefix(gp[ng]) != prefix(gp[1])) {
+                unget(gp[ng])    # went too far
+                return ng-1
+            }
+        return ng-1
+    }
+
+    function getone(f, gp, n) {  # get next line in gp[n]
+        if (eofstat <= 0) # eof or error has occurred
+            return 0
+        if (ungot) {      # return lookahead line if it exists
+            gp[n] = ungotline
+            ungot = 0
+            return 1
+        }
+        return eofstat = (getline gp[n] <f)
+    }
+
+    function unget(s)  { ungotline = s; ungot = 1 }
+    function prefix(s) { return substr(s, 1, index(s, sep) - 1) }
+    function suffix(s) { return substr(s, index(s, sep) + 1) }
+\end{awkcode}
+\marginpar{105}
+执行 \verb'join' 时, 需要向它传递两个参数, 这两个参数都表示输入文件.
+
