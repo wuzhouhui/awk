@@ -721,7 +721,7 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 (\term{attribute}), 所以我们可以认为表格 \verb'capitals' 具有属性
 \verb'country' 与 \verb'capital'.
 
-一个 \cterm{自然连接} (\term{natural join}) (或简称为 \cterm{连接}), 指的是 
+一个 \cterm{自然连接} (\term{natural join}) (或简称为 \cterm{连接}) 指的是 
 一个运算, 它将两张表以公共属性为基础组合成一张表, 这张表包含了两张表所有
 的属性, 但是重复的属性会被移除. 如果我们把 \verb'countries' 与
 \verb'capitals' 这两张表作自然连接, 我们就会得到一张新表 (姑且称为
@@ -746,40 +746,55 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     $continent ~ /Asia/ { print $country, $population, $capital }
 \end{awkcode}
 我们将 表 \verb'countries' 与 表 \verb'capitals'  作连接, 再将查询应用到
-连接结果上, 通常来说, 最关键的地方在于将哪些表作连接.
+连接结果上, 通常来说, 完成这些操作最关键的地方在于将哪些表作连接.
 
 实际的连接操作可以通过 Unix 命令 \texttt{join} 来完成, 但是如果你的系统上
 没有该命令, 可以用这里提供的一个 用 awk 实现的简易版本. 它将两个文件按照
 各自的第一个字段进行连接, 比如下面两张表
+
+\begin{center}
 \begin{tabular}{c|c|c}
     \hline
     \hline
     ATT1    & ATT2 & ATT3 \\
+    \hline
     \texttt{A}       & \texttt{w}    & \texttt{p}    \\
     \texttt{B}       & \texttt{x}    & \texttt{q}   \\
     \texttt{B}      & \texttt{y}    & \texttt{r}    \\
     \texttt{C}      & \texttt{z}    & \texttt{s}    \\
     \hline
 \end{tabular}
-\begin{tabular}{c|c|c}
+\hspace{2em}
+\begin{tabular}{c|c}
     \hline
     \hline
-    ATT1    & ATT2 & ATT3 \\
+    ATT1    & ATT4 \\
+    \hline
     \texttt{A}       & \texttt{1}   \\  
     \texttt{A}       & \texttt{2}   \\
     \texttt{B}      & \texttt{3}    \\
     \hline
 \end{tabular}
+\end{center}
+
+\vspace{1em}
 作连接后得到
+\vspace{1em}
+
+\begin{center}
 \begin{tabular}{c|c|c|c}
     \hline
     \hline
     ATT1        & ATT2  & ATT3   &   ATT4   \\
-    \texttt{A}  & \texttt{w}    & \texttt{p}    \texttt{1}  \\
-    \texttt{A}  & \texttt{w}    & \texttt{p}    \texttt{2}  \\
-    \texttt{B}  & \texttt{x}    & \texttt{q}    \texttt{3}  \\
-    \texttt{B}  & \texttt{y}    & \texttt{r}    \texttt{3}  \\
+    \hline
+    \texttt{A}  & \texttt{w}    & \texttt{p} &  \texttt{1}  \\
+    \texttt{A}  & \texttt{w}    & \texttt{p} &  \texttt{2}  \\
+    \texttt{B}  & \texttt{x}    & \texttt{q} &  \texttt{3}  \\
+    \texttt{B}  & \texttt{y}    & \texttt{r} &  \texttt{3}  \\
 \end{tabular}
+\end{center}
+\vspace{1em}
+
 \texttt{join} 不假定输入表格是等长的, 但是它会认为表格是有序的, 互相匹配的
 输入字段的每一种组合都会在输出中占据一行.
 \begin{awkcode}
