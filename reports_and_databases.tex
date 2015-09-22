@@ -827,5 +827,38 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     function suffix(s) { return substr(s, index(s, sep) + 1) }
 \end{awkcode}
 \marginpar{105}
-执行 \verb'join' 时, 需要向它传递两个参数, 这两个参数都表示输入文件.
+执行 \verb'join' 时, 需要向它传递两个参数, 它们都表示输入文件名.
+Groups of lines with a common first attribute value are read from the
+second file. If the prefix of the line read from the first file matches the
+common attribute value of some group, each line of the group gives rise to
+a joined output line\footnote{待译}.
 
+函数 \texttt{getgroup} 把下一组前缀相同的行放入数组 \texttt{gp} 中, 它调用
+\texttt{getone} 来获取每一行, 如果发现获取到的行不属于本组, 就调用
+\texttt{unget} 将它放回. 我们把提取第一个属性值的代码局限在函数
+\texttt{prefix} 中, 这样以后改起来也比较方便.
+
+你应该注意一下函数 \texttt{getone} 与 \texttt{unget} 如何撤回一个输入行.
+在读取新行之前, \texttt{getone} 检查是否已经有一行被读取并由
+\texttt{unget} 存放在某个变量中, 如果是, 则返回该行. 撤回是解决过早遭遇
+问题的方法之一, reading one too many inputs\footnote{待译}.
+在本章早些时候出现 的 control-break 程序中, 我们把处理延迟了, 而在这里,
+通过一对函数, 我们假装不会看到额外的输入.
+
+\begin{exercise}
+    本节实现的 \texttt{join} 不会进行错误检查, 也不会检查文件是否是有序的.
+    修复这些问题, 在修复之后, 程序会变得多大?
+\end{exercise}
+
+\begin{exercise}
+    实现 \texttt{join} 的另一个版本, 它将一个文件整个读入内存, 然后再执行 
+    连接操作. 与原来的版本相比, 哪个更简单?
+\end{exercise}
+
+\begin{exercise}
+    修改 \texttt{join}, 使得它可以按照输入文件的任意一个字段或字段组来
+    进行连接, 并可以按照任意的顺序, 有选择地输出某些字段.
+\end{exercise}
+
+\subsection{\texttt{relfile}}
+\marginpar{106}
