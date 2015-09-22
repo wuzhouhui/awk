@@ -847,10 +847,9 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 \end{awkcode}
 \marginpar{105}
 执行 \verb'join' 时, 需要向它传递两个参数, 它们都表示输入文件名.
-Groups of lines with a common first attribute value are read from the
-second file. If the prefix of the line read from the first file matches the
-common attribute value of some group, each line of the group gives rise to
-a joined output line\footnote{待译}.
+第一个属性值相同的行组成一个行组, 它们从第二个文件中读出, 如果第一个文件
+的某一行的前缀与某些行组的公共属性值相同, 那么行组中的每一行都会出现在
+输出中.
 
 函数 \texttt{getgroup} 把下一组前缀相同的行放入数组 \texttt{gp} 中, 它调用
 \texttt{getone} 来获取每一行, 如果发现获取到的行不属于本组, 就调用
@@ -860,9 +859,10 @@ a joined output line\footnote{待译}.
 你应该注意一下函数 \texttt{getone} 与 \texttt{unget} 如何撤回一个输入行.
 在读取新行之前, \texttt{getone} 检查是否已经有一行被读取并由
 \texttt{unget} 存放在某个变量中, 如果是, 则返回该行. 撤回是解决过早遭遇
-问题的方法之一, reading one too many inputs\footnote{待译}.
-在本章早些时候出现 的 control-break 程序中, 我们把处理延迟了, 而在这里,
-通过一对函数, 我们假装不会看到额外的输入.
+问题 (在一次操作中, 读取了过多的输入\footnote{原文为 reading one too 
+many inputs.}) 的方法之一.
+在本章早些时候出现 的 control-break 程序中, 我们把处理操作延迟了, 而在这里,
+通过一对函数, 我们假定不会看到额外的输入.
 
 \begin{exercise}
     本节实现的 \texttt{join} 不会进行错误检查, 也不会检查文件是否是有序的.
