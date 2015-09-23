@@ -881,3 +881,56 @@ many inputs.}) 的方法之一.
 
 \subsection{\texttt{relfile}}
 \marginpar{106}
+为了回答分散在多张表中的数据库的问题, 我们必须知道每张表中包含什么内容,
+我们把这种信息存储在名为 \texttt{relfile} 的文件中 (``rel'' 指的是
+``relation''). 文件 \texttt{relfile} 包含了数据库中每张表的名字, 属性,
+如果表格不存在, 那么文件还包含了构造表格的规则. 文件 \texttt{relfile} 的
+内容是一系列的表格描述符, 表格描述符具有形式:
+\begin{pattern}
+    \indent\textit{tablename} \par 
+    \indent\indent\textit{attribute} \par 
+    \indent\indent\textit{attribute} \par 
+    \indent\indent\indent ...   \par
+    \indent\indent\texttt{!}\texttt{command} \par
+    \indent\indent\indent ...
+\end{pattern}
+\textit{tablename} 与 \textit{attribute} 都是字符串, 在 \textit{tablename} 
+之后是该表包含的属性名列表, 每一个属性名前面都有一个空格或制表符, 属性名
+之后是可选 的命令序列, 命令以感叹号开始, 它说明了如何构造这张表格.
+如果一张表不含构造命令, 则说明已经有一个文件以该表的名字命名, 且包含了
+该表的数据, 这样的表叫做 \cterm{基表} (\term{base table}), 数据可以插入
+到基表中, 也可以在表中更新数据, 在文件 \filename{relfile} 中, 如果某张表
+在属性名之后出现了构造命令, 则称这张表是 \cterm{导出表} (\term{derived
+table}), 只有在必要时才会构造导出表.
+
+我们使用下面的 \filename{relfile} 来表示扩展了的国家数据库:
+\begin{file}
+    countries:
+        country
+        area
+        population
+        continent
+    capitals:
+        country
+        capital
+    cc:
+        country
+        area
+        population
+        continent
+        capital
+        !sort countries >temp.countries
+        !sort capitals >temp.capitals
+        !join temp.countries temp.capitals >cc
+\end{file}
+这个文件说明数据库中有两张基表 ---- \filename{countries} 与
+\filename{capitals}, 一张导出表 \filename{cc}, 导出表 \filename{cc} 通过 
+把基表排序并存放在临时文件中, 再对临时文件执行连接操作来生成, 也就是说, 
+\filename{cc} 通过执行
+\marginpar{107}
+\begin{shell}
+    sort countries >temp.countries
+    sort capitals >temp.capitals
+    join temp.countries temp.capitals >cc
+\end{shell}
+来生成.
