@@ -934,3 +934,53 @@ table}), 只有在必要时才会构造导出表.
     join temp.countries temp.capitals >cc
 \end{shell}
 来生成.
+
+一个 \texttt{relfile} 经常包含一个 \cterm{通用关系表} (\term{universal
+relation}), 它是一张包含了所有属性的表, 是 \texttt{relfile} 的最后一张表,
+这种做法保证有一张表包含了属性的所有可能的组合, 表格 \texttt{cc} 就是 
+数据库 countries-capitals 的通用关系表.
+
+一个复杂数据库的优秀设计必须考虑到该数据库可能收到的查询种类, 属性间存在的
+依赖关系, 但是对于一个小数据库来说, \textit{q} 已经足够快了. 因为数据库
+的表比较少, 所以很难展现出 \texttt{relfile} 的设计的精妙之外.
+
+\subsection{\textit{q}---类 awk 查询语言}
+\label{subsec:q_an_awk_like_query_language}
+
+我们的数据库查询语言 \textit{q} 由单独一行的 awk 程序组成, 但字段名被属性名
+替代. 查询处理程序 \texttt{qawk} 按照下面的程序来响应一个查询:
+\begin{enumerate}
+	\item 判断查询所包含的属性集;
+	\item 从 \texttt{relfile} 第一行开始, 搜索第一张包含查询中全部属性
+	的表, 如果该表是基表, 则用它作为查询的输入, 如果是导出表, 则构造
+	出该表, 再用它作为查询的输入. (这意味着查询中可能出现的属性组合
+	一定也出现在 \texttt{relfile} 的基表或导出表中);
+	\item 通过把符号型的字段引用替换成对应 的数值型字段引用, 将
+	\textit{q} 查询转换成等价的 awk 程序, 这个程序接下来会把步骤 2 决定
+	的表作为输入数据.
+\end{enumerate}
+
+\textit{q} 查询:
+\begin{shell}
+	$continent ~ /Asia/ { print $country, $population }
+\end{shell}
+提到了属性 \texttt{continent}, \texttt{country} 与 \texttt{population},
+它们都是第一张表 \texttt{countries} 的属性子集. 查询处理程序把该查询转换
+成程序 
+\begin{awkcode}
+	$4 ~ /Asia/ { print $1, $3 }
+\end{awkcode}
+并把文件 \filename{countries} 作为输入数据.
+
+\textit{q} 查询 
+\begin{shell}
+	{ print $country, $population, $capital }
+\end{shell}
+包含属性 \texttt{country}, \texttt{population} 与 \texttt{capital}, 它们 
+都是导出表 \texttt{cc} 的属性子集. 于是查询处理程序利用 \filename{relfile}
+列出的构造命令构造出表格 \texttt{cc}, 并将该查询转换成程序
+\begin{awkcode}
+	{ print $1, $3, $5 }
+\end{awkcode}
+\marginpar{108}
+程序把刚构造而成的 \texttt{cc} 作为输入数据.
