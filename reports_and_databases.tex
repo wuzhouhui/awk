@@ -1000,8 +1000,9 @@ awk 程序.
 
 首先, \texttt{qawk} 读取文件 \filename{relfile}, 将表名收集到数组 
 \texttt{relname} 中. 为了构造第 \textit{i} 张表, 程序把必要的构造命令
-收集到数组 \texttt{array} 中, 从 \texttt{cmd[}\textit{i}\texttt{1]} 开始
-存放. 它还把每张表的属性收集到2维数组 \texttt{attr}, 元素 \texttt{attr[}
+收集到数组 \texttt{array} 中, 从 \texttt{cmd[}\textit{i}\texttt{,}
+\texttt{1]} 开始
+存放. 它还把每张表的属性收集到2维数组 \texttt{attr} 中, 元素 \texttt{attr[}
 \textit{i}\texttt{,}\texttt{a}\texttt{]} 存放的是第 \textit{i} 张表中,
 名为 \textit{a} 的属性的索引.
 
