@@ -1022,3 +1022,91 @@ relation}), 它是一张包含了所有属性的表, 是 \texttt{relfile} 的最
 \end{awkcode}
 \marginpar{108}
 程序把刚构造而成的 \texttt{cc} 作为输入数据.
+
+虽然我们用的是 ``查询'' 这个词来描述 \texttt{qawk}, 但实际上它也可以用
+来作计算, 下面这个查询打印面积的平均值:
+\begin{awkcode}
+    { area += $area }; END { print area/NR }
+\end{awkcode}
+
+\subsection{\texttt{qawk}, \textit{q}-to-awk 翻译器}
+\label{subsec:qawk_a_q_to_awk_translator}
+
+我们用 \texttt{qawk} 的实现来结束本章, 它把 \textit{q} 查询转换成等价的
+awk 程序.
+
+首先, \texttt{qawk} 读取文件 \filename{relfile}, 将表名收集到数组 
+\texttt{relname} 中. 为了构造第 \textit{i} 张表, 程序把必要的构造命令
+收集到数组 \texttt{array} 中, 从 \texttt{cmd[}\textit{i}\texttt{,}
+\texttt{1]} 开始
+存放. 它还把每张表的属性收集到2维数组 \texttt{attr} 中, 元素 \texttt{attr[}
+\textit{i}\texttt{,}\texttt{a}\texttt{]} 存放的是第 \textit{i} 张表中,
+名为 \textit{a} 的属性的索引.
+
+然后, \texttt{qawk} 读取一个查询, 判断它会用到哪些属性, 查询中的属性都
+是形式为 \verb'$'\textit{name} 的字符串. 利用函数 \texttt{subset}, 就可以 
+找到第一张包含了查询中全部属性的表 $T_i$. 程序通过把属性的索引替换成
+原始形式来生成 awk 程序, 并执行必要的命令来生成表格 $T_i$, 再执行 新生成
+的awk程序, 并把表格 $T_i$ 作为输入数据.
+
+对每一个查询, 第二个步骤都要重复一次, 下面这个流程图展示了 \texttt{qawk} 
+的轮廓\footnote{TODO}:
+% TODO
+
+\marginpar{109}
+这是 \texttt{qawk} 的源代码:
+\begin{awkcode}
+    # qawk - awk relational database query processor
+
+    BEGIN { readrel("relfile") }
+    /./   { doquery($0) }
+
+    function readrel(f) {
+        while (getline <f > 0)   # parse relfile
+            if ($0 ~ /^[A-Za-z]+ *:/) {     # name:
+                gsub(/[^A-Za-z]+/, "", $0)  # remove all but name
+                relname[++nrel] = $0
+            } else if ($0 ~ /^[ \t]*!/)     # !command...
+                cmd[nrel, ++ncmd[nrel]] = substr($0,index($0,"!")+1)
+            else if ($0 ~ /^[ \t]*[A-Za-z]+[ \t]*$/)  # attribute
+                attr[nrel, $1] = ++nattr[nrel]
+            else if ($0 !~ /^[ \t]*$/)      # not white space
+                print "bad line in relfile:", $0
+    }
+    function doquery(s,   i,j) {
+        for (i in qattr)  # clean up for next query
+            delete qattr[i]
+        query = s    # put $names in query into qattr, without $
+        while (match(s, /\$[A-Za-z]+/)) {
+            qattr[substr(s, RSTART+1, RLENGTH-1)] = 1
+            s = substr(s, RSTART+RLENGTH+1)
+        }
+        for (i = 1; i <= nrel && !subset(qattr, attr, i); ) 
+            i++
+        if (i > nrel)     # didn't find a table with all attributes
+            missing(qattr)
+        else {            # table i contains attributes in query
+            for (j in qattr)   # create awk program
+                gsub("\\$" j, "$" attr[i,j], query)
+            for (j = 1; j <= ncmd[i]; j++)  # create table i
+                if (system(cmd[i, j]) != 0) {
+                    print "command failed, query skipped\n", cmd[i,j]
+                    return
+               }
+            awkcmd = sprintf("awk -F'\t' '%s' %s", query, relname[i])
+            printf("query: %s\n", awkcmd)   # for debugging
+            system(awkcmd)
+        }
+    }
+    function subset(q, a, r,   i) {  # is q a subset of a[r]?
+        for (i in q)
+            if (!((r,i) in a))
+                return 0
+        return 1
+    }
+    function missing(x,     i) {
+        print "no table contains all of the following attributes:"
+        for (i in x)
+            print i
+    }
+\end{awkcode}
