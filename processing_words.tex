@@ -1,0 +1,45 @@
+\chapter{文本处理}
+\label{chap:processing_words}
+
+\marginpar{111}
+本章的程序指向一个共同主题: 文本处理. 示例程序涵盖的范围包括随机单词
+与句子的生成 (生成的句子可以和用户进行有限的对话), 以及文本处理. 大多数示例
+程序都很简单, 它们只是起说明作用, 但是, 其中一些文档准备程序的确拥有实际
+用途.
+
+\section{随机文本发生器}
+\label{sec:random_text_generation}
+
+生成随机数据的程序有许多种用途. 这种程序可以用内建函数 \texttt{rand} 来
+创建, 该函数每次被调用时, 都会返回一个伪随机数. \texttt{rand} 每次都使用
+同一个种子数来生成随机数, 所以, 如果你想要得到一个不同的随机数序列, 你
+就必须调用一次 \texttt{srand()}, 它根据当前时间计算出一个种子数, 并用
+该种子数初始化 \texttt{rand}.
+
+\subsection{随机选择}
+\label{subsec:random_choices}
+
+\texttt{rand} 每次被调用时都会返回 一个大于等于 0, 小于 1 的浮点数, 但是
+一般来说, 更通常的需求是返回一个 \texttt{1} 到 \texttt{n} 之间的随机整数,
+我们可以用 \texttt{rand} 来实现:
+\begin{awkcode}
+    # randint - return random integer x, 1 <= x <= n
+
+    function randint(n) {
+        return int(n * rand()) + 1
+    }
+\end{awkcode}
+\texttt{randint(n)} 按比例调整 \texttt{rand} 的返回值, 调整后的值大于
+等于 \texttt{0} 并且小于 \texttt{n}, 将小数部分截去可以得到 \texttt{0} 
+到 \texttt{n-1} 的整数, 然后再加 1, 就是 \texttt{1} 到 \texttt{n} 之间的 
+整数.
+
+我们可以用 \texttt{randint} 来随机选择一个字母:
+\marginpar{112}
+\begin{awkcode}
+    # randlet - generate random lower-case letter
+
+    function randlet() {
+        return substr("abcdefghijklmnopqrstuvwxyz", randint(26), 1)
+    }
+\end{awkcode}
