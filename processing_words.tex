@@ -7,13 +7,13 @@
 程序都很简单, 它们只是起说明作用, 但是, 其中一些文档准备程序的确拥有实际
 用途.
 
-\section{随机文件发生器}
+\section{随机文本发生器}
 \label{sec:random_text_generation}
 
 生成随机数据的程序有许多种用途. 这种程序可以用内建函数 \texttt{rand} 来
 创建, 该函数每次被调用时, 都会返回一个伪随机数. \texttt{rand} 每次都使用
 同一个种子数来生成随机数, 所以, 如果你想要得到一个不同的随机数序列, 你
-就必须调用一次 \texttt{srand()}, 函数根据当前时间计算出一个种子数, 并用
+就必须调用一次 \texttt{srand()}, 它根据当前时间计算出一个种子数, 并用
 该种子数初始化 \texttt{rand}.
 
 \subsection{随机选择}
@@ -29,7 +29,7 @@
         return int(n * rand()) + 1
     }
 \end{awkcode}
-\texttt{randint(n)} 按比例调整 \texttt{rand} 的返回值, 调用整后的值大于
+\texttt{randint(n)} 按比例调整 \texttt{rand} 的返回值, 调整后的值大于
 等于 \texttt{0} 并且小于 \texttt{n}, 将小数部分截去可以得到 \texttt{0} 
 到 \texttt{n-1} 的整数, 然后再加 1, 就是 \texttt{1} 到 \texttt{n} 之间的 
 整数.
