@@ -1073,3 +1073,57 @@ awk 程序.
             print i
     }
 \end{awkcode}
+
+\marginpar{110}
+\begin{exercise}
+	如果你的系统不支持 awk 的 \texttt{system} 函数, 请修改
+	\texttt{qawk}, 修改后的 \texttt{qawk} 把命令序列写入一个或多个文件
+	中, 这些文件可以被单独地执行.
+\end{exercise}
+
+\begin{exercise}
+	构造导出表的时候, \texttt{qawk} 为每一个命令调用一次
+	\texttt{system}, 修改 \texttt{qawk}, 修改后的 \texttt{qawk} 把
+	所有的构造表格的命令都收集到一个字符串中, 这样就可以只需要调用一次
+	\texttt{system}. 
+\end{exercise}
+
+\begin{exercise}
+	修改 \texttt{qawk}, 使得它可以检查即将作为输入的导出表是否已经
+	存在. 如果导出表已经存在, 并且基表在导出表被构造出来之后未曾
+	修改过, 那我们就可以直接使用该导出表, 而不用重新构造. 可以参考
+	第 \ref{chap:experiments_with_algorighms} 章的程序 \texttt{make}.
+\end{exercise}
+
+\begin{exercise}
+	提供一种输入并编辑多行查询的方式. 只要对 \texttt{qawk} 作些许修改,
+	就可以把多行查询收集起来. 编辑的一种可选方案是调用你喜欢的编辑器,
+	另一种方式是用 awk 写一个简单的编辑器.\footnote{原文为 Provide a
+		way to enter and edit multiline queries. Multiline queries
+		can be collected with minimal changes to \texttt{qawk}. One
+		possibility for editing is a way to invoke your favorite
+		text editor; another is to write a very simple editor in
+	awk itself.}
+\end{exercise}
+
+\section{小结}
+\label{sec:reports_and_databases_summary}
+在这一章, 我们主要学习了如何使用 awk, 按照结构化的方式来访问和打印信息,
+与第 \ref{chap:data_processing} 章的 \textit{ad hoc} 使用方式形成对照.
+\footnote{原文为 in contrast to the more typical \textit{ad hoc} uses of
+Chapter 3}
+
+为了生成表格, ``分而治之'' 通常是最好的方法: 在一个程序中准备数据, 如果 
+必要的话就对数据排序, 然后用第二个程序对数据进行格式化. Control break 可
+以通过向前看, 或者撤回输入 (通常是比较优雅的方式) 来处理. (有时候也可以
+通过管道来完成这些工作, 虽然我们在这章没有用到.) 为了处理格式的细节, 相对
+于手工计算字符个数, 一种更好的替代方案是用某些程序来完成机械化的部分.
+
+虽然 awk 并不是生产数据库的工具, 但是对于小型的个人数据库来说, 它是一个
+非常合理的选择, 而且在阐述某些数据库的基本概念方面, 它表现得也非常优秀,
+为了论证这两点, 我们开发了 \texttt{qawk}.
+
+\subsection*{参考资料}
+关于数据库有着非常丰富的优秀书籍, 你可以试一下 J. D. Ullman 的
+\textit{Principles of Database Systems} (Computer Science Press, 1986).
+
