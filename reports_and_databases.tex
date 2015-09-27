@@ -1050,8 +1050,33 @@ awk 程序.
 的awk程序, 并把表格 $T_i$ 作为输入数据.
 
 对每一个查询, 第二个步骤都要重复一次, 下面这个流程图展示了 \texttt{qawk} 
-的轮廓\footnote{TODO}:
-% TODO
+的框架:
+\begin{center}
+\begin{tikzpicture}
+    \draw[thick] (0.0, 0.0) -- (2.0, 0.0) -- (2.0, 1.0) -- (0.0, 1.0)
+    -- (0.0, 0.0);
+    \draw[thick] (0.0, 3.0) -- (2.0, 3.0) -- (2.0, 4.0) -- (0.0, 4.0)
+    -- (0.0, 3.0);
+
+    \node at (1.0, 0.5) {awk};
+    \node at (1.0, 3.5) {\texttt{qawk}};
+    \node at (1.0, 2.0) {awk program};
+    \node at (4.0, 2.0) {input $T_i$};
+    \node at (1.0, -1.2) {answer};
+    \node at (1.0, 5.2) {\textit{q} query};
+    \node at (-1.8, 3.5) {\texttt{relfile}};
+
+    \draw[thick,->] (-1.0, 3.5) -- (0.0, 3.5);
+    \draw[thick,->] (1.0, 5.0) -- (1.0, 4.0);
+    \draw[thick,->] (1.0, 3.0) -- (1.0, 2.2);
+    \draw[thick,->] (1.0, 1.8) -- (1.0, 1.0);
+    \draw[thick,->] (1.0, 0.0) -- (1.0, -1.0);
+    \draw[thick] (2.0, 3.5) -- (4.0, 3.5);
+    \draw[thick,->] (4.0, 3.5) -- (4.0, 2.2);
+    \draw[thick] (4.0, 1.8) -- (4.0, 0.5);
+    \draw[thick,->] (4.0, 0.5) -- (2.0, 0.5);
+\end{tikzpicture}
+\end{center}
 
 \marginpar{109}
 这是 \texttt{qawk} 的源代码:
