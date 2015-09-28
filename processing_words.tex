@@ -43,3 +43,59 @@
         return substr("abcdefghijklmnopqrstuvwxyz", randint(26), 1)
     }
 \end{awkcode}
+
+利用 \texttt{randint}, 很容易就可以从一个 \texttt{n} 项的数组中随机选择一
+个元素:
+\begin{awkcode}
+    print x[randint(n)]
+\end{awkcode}
+一个更有趣的问题是从某个数组中随机选择几项, 被选中的项必须按照原来的顺序
+排列. 举例来说, 如果数组 \texttt{x} 按照升序排列, 则被选中的元素也要按照
+升序排列.
+
+函数 \texttt{choose} 从数组 \texttt{A} 的前 \texttt{n} 中随机选择
+\texttt{k} 个元素, 并按照原来的顺序打印出来:
+\begin{awkcode}
+    # choose - print in order k random elements from A[1]..A[n]
+
+    function choose(A, k, n,    i) {
+        for (i = 1; n > 0; i++)
+            if (rand() < k/n--) {
+                print A[i]
+                k--
+            }
+    }
+\end{awkcode}
+在函数内, \texttt{k} 是还需要打印的项的数目, \texttt{n} 是数组中等待检验
+的元素个数. 打印第 \texttt{i} 个元素的条件是 \verb'rand() < k/n', 每当有
+一个元素被打印出来, \texttt{k} 就递减一次, 每当判断条件 \verb'rand() < k/n'
+被测试一次, \texttt{n} 就递减一次.
+
+\begin{exercise}
+    测试 \texttt{rand} 的输出是不是真的随机数.
+\end{exercise}
+\begin{exercise}
+    写一个程序, 该程序生成 1 到 $n$ 之间的 $k$ 个不同的随机整数,
+    程序的时间复杂 度与 $k$ 成正比.
+\end{exercise}
+\begin{exercise}
+    写一个程序, 该程序生成随机的桥牌手 (bridge hands).
+\end{exercise}
+
+\subsection{废话生成器}
+\label{subsec:cliche_generation}
+
+我们的下一个例子是废话生成器 (cliche generator),
+它根据已有的废话重新创建一个新的出来. 输入是一个句子集合:
+\begin{file}
+    A rolling stone:gathers no moss.
+    History:repeats itself.
+    He who lives by the sword:shall die by the sword.
+    A jack of all trades:is master of none.
+    Nature:abhors a vacuum.
+    Every man:has a price.
+    All's well that:ends well.
+\end{file}
+冒号将主语和谓语分开. 我们的废话生成器随机选择一个主语与另一个谓语作组合,
+\marginpar{113}
+如果运气好的话, 可能会产生很有意思的格言警句:
