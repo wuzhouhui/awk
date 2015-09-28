@@ -768,9 +768,19 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 \end{file}
 对于每一个同时出现在两张表中的国家来说, 我们都可以在 \verb'cc' 中找到一行
 记录, 它包含了国家的名称, 后面跟着面积, 所在大洲,
-以及国家的首都\footnote{TODO}:
-% TODO
+以及国家的首都:
 \begin{file}
+    Brazil  3286    134     South   America     Brasilia
+    Canada  3852    25      North   America     Ottawa
+    China   3705    1032    Asia                Beijing
+    England 94      56      Europe              London
+    France  211     55      Europe              Paris
+    Germany 96      61      Europe              Bonn
+    India   1267    746     Asia                New Delhi
+    Japan   144     120     Asia                Tokyo
+    Mexico  762     78      North   America     Mexico  City
+    USA     3615    237     North   America     Washington
+    USSR    8649    275     Asia                Moscow
 \end{file}
 
 我们实现连接运算的方法是根据它们的公共属性进行排序, 如果两张表的某一行的
