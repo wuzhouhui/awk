@@ -7,10 +7,11 @@
 其他程序配合使用的程序. 我们将会看到大量的工作中会经常遇到的数据处理问题,
 这些问题很难一步解决, 但是如果多次遍历数据, 就相对比较容易一些.
 
-本章的第一部分讨论如何扫描单个文件来生成报表, 虽然报表的最终格式的确需要花点
+本章的第一部分讨论如何扫描单个文件来生成报表, 虽然控制报表的最终格式的
+确需要花点
 心思, 但是其实扫描步骤也是挺复杂的. 第二部分讨论如何从多个相关的文件中
-收集数据, 我们考虑用一种比较一般的方法来解决这个问题, 通过把文件组当成
-关系数据库, 这样做的好外是字段可以用名字来标识, 而不是数字.
+收集数据, 我们考虑用一种比较一般的方法来解决这个问题, 基本思想是把文件组
+看成是关系数据库, 这样做的好外是字段可以用名字来标识, 而不是数字.
 
 \section{报表生成}
 \label{sec:generating_reports}
@@ -27,7 +28,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 \label{subsec:a_simple_report}
 
 假设我们想要一张报表, 这张表包含了每个国家的人口, 面积, 及人口密度. 
-我们还希望国家按照所在的大洲进行分组, 大洲按照字母顺序排列, 在每个大洲里,
+我们还希望国家按照所在的大洲进行分组, 大洲按照字母顺序排列, 大洲相同的
 国家按照人口密度的降序排列, 就像这样:
 \marginpar{90}
 \begin{shell}
@@ -105,10 +106,10 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
  \verb'sort' 不再需要任何参数, 然后再让格式化程序对行重新格式化即可.
 默认情况下, \verb'sort' 对输入数据按照字母顺序进行排列, 但是在最终的报表
 中, 输出首先按照大洲的字母顺序排列, 然后再按人口密度的逆序排列. 为了避免
-让  \verb'sort' 带上参数, 准备程序可以预先在每一行的开始处放置一个数,
-数的大小依赖于大洲的字母顺序与人口密度, 使得按照这个数进行排序时, 排序结果
-是正确的. 数的一种可能的表示方法是大洲的名字, 后面再跟着人口密度的倒数,
-见程序 \verb'prep2':
+让  \verb'sort' 带上参数, 准备程序可以预先在每一行的开始处放置一个分量,
+分量的大小依赖于大洲的字母顺序与人口密度, 使得按照这个量进行排序时,
+排序结果 是正确的. 分量的一种可取的表示方法是大洲的名字, 后面再跟着人
+口密度的倒数, 见程序 \verb'prep2':
 \begin{awkcode}
     # prep2 - prepare countries by continent, inverse pop. den.
 
@@ -134,7 +135,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 \end{shell}
 格式 \verb'%-15s' 对大洲名来说已经足够宽了, \verb'%12.8f' 对人口密度的倒数
 来说, 覆盖范围也已足够. 最终的格式化程序类似于 \verb'form1', 但是忽略了第
-2 个字段. 为了简化排序程序的选项, 而特地制造一个排序键, 这种技巧非常常见,
+2 个字段. 为了简化排序程序的选项而特意制造一个排序键, 这种技巧非常常见,
 我们会在第 \ref{chap:processing_words} 章的索引程序中再次用到.
 \marginpar{92}
 
@@ -344,9 +345,9 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 
 一种可选的方案是让某个程序去计算量的大小, 然后再根据你的需求进行调整 
 \footnote{原文为 An alternative is to let a program compute how big things
-are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程序
+are, then do the positioning for you.}. 为打印程序写一个 awk 程序, 该程序
 对简单的表格进行格式化 --- 这是一种可行的做法, 我们待会儿再回来讨论.
-因为用的是 Unix 系统与排版程序, 所以我们可以用一些已经存在的工具 ----
+因为用的是 Unix 系统与排版程序, 所以我们可以用一些已经存在的工具 ---
 \texttt{tbl} 程序可以对表格进行格式化. 程序 \verb'form4' 非常类似于
 \verb'form3', 但是它没有用于控制列宽度的魔数, 相反, 它生成了一些 
 \texttt{tbl} 命令与表格数据, 不同列的数据之间用制表符分隔, 剩下的工作
@@ -585,7 +586,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 第一个 \verb'$1' 指的是当前输入行的第一个字段, 而第二个 \verb'$1' (被单引号
 包围着的)指的是国家名称参数, 也就是执行 shell 命令 \verb'info' 时的第一个参
 数. 第二个 \verb'$1' 只对shell可见, 当命令被执行时, 它被 \verb'info' 后面 
-的字符串所替代. 具体过程是, shell 通过拼接三个字符串来组合成 awk程序, 这三 
+的字符串所替代. 具体过程是: shell 通过拼接三个字符串来组合成 awk程序, 这三 
 个字符串其中两个是被一对单引号包围起来的多行文本, 另外一个是 \verb'$1',
 即 \texttt{info} 的参数. 需要注意的是, 可以把任意一个正则表达式传递给
 \texttt{info}, 尤其是, 我们可以只给出国家名称的一部分, 或者一次指定多个国家
@@ -767,10 +768,20 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     country, area, population, continent, capital
 \end{file}
 对于每一个同时出现在两张表中的国家来说, 我们都可以在 \verb'cc' 中找到一行
-记录, 它包含了国家的名称, 后面跟着面积, 所在大洲,
-以及国家的首都\footnote{TODO}:
-% TODO
+记录, 它包含了国家的名称, 后面跟着面积, 人口, 所在大洲,
+以及国家的首都:
 \begin{file}
+    Brazil  3286    134     South America	Brasilia
+    Canada  3852    25      North America	Ottawa
+    China   3705    1032    Asia                Beijing
+    England 94      56      Europe              London
+    France  211     55      Europe              Paris
+    Germany 96      61      Europe              Bonn
+    India   1267    746     Asia                New Delhi
+    Japan   144     120     Asia                Tokyo
+    Mexico  762     78      North America	Mexico City
+    USA     3615    237     North America	Washington
+    USSR    8649    275     Asia                Moscow
 \end{file}
 
 我们实现连接运算的方法是根据它们的公共属性进行排序, 如果两张表的某一行的
@@ -1047,11 +1058,36 @@ awk 程序.
 是形式为 \verb'$'\textit{name} 的字符串. 利用函数 \texttt{subset}, 就可以 
 找到第一张包含了查询中全部属性的表 $T_i$. 程序通过把属性的索引替换成
 原始形式来生成 awk 程序, 并执行必要的命令来生成表格 $T_i$, 再执行 新生成
-的awk程序, 并把表格 $T_i$ 作为输入数据.
+的awk程序, 把表格 $T_i$ 作为输入数据.
 
 对每一个查询, 第二个步骤都要重复一次, 下面这个流程图展示了 \texttt{qawk} 
-的轮廓\footnote{TODO}:
-% TODO
+的框架:
+\begin{center}
+\begin{tikzpicture}
+    \draw[thick] (0.0, 0.0) -- (2.0, 0.0) -- (2.0, 1.0) -- (0.0, 1.0)
+    -- (0.0, 0.0);
+    \draw[thick] (0.0, 3.0) -- (2.0, 3.0) -- (2.0, 4.0) -- (0.0, 4.0)
+    -- (0.0, 3.0);
+
+    \node at (1.0, 0.5) {awk};
+    \node at (1.0, 3.5) {\texttt{qawk}};
+    \node at (1.0, 2.0) {awk program};
+    \node at (4.0, 2.0) {input $T_i$};
+    \node at (1.0, -1.2) {answer};
+    \node at (1.0, 5.2) {\textit{q} query};
+    \node at (-1.8, 3.5) {\texttt{relfile}};
+
+    \draw[thick,->] (-1.0, 3.5) -- (0.0, 3.5);
+    \draw[thick,->] (1.0, 5.0) -- (1.0, 4.0);
+    \draw[thick,->] (1.0, 3.0) -- (1.0, 2.2);
+    \draw[thick,->] (1.0, 1.8) -- (1.0, 1.0);
+    \draw[thick,->] (1.0, 0.0) -- (1.0, -1.0);
+    \draw[thick] (2.0, 3.5) -- (4.0, 3.5);
+    \draw[thick,->] (4.0, 3.5) -- (4.0, 2.2);
+    \draw[thick] (4.0, 1.8) -- (4.0, 0.5);
+    \draw[thick,->] (4.0, 0.5) -- (2.0, 0.5);
+\end{tikzpicture}
+\end{center}
 
 \marginpar{109}
 这是 \texttt{qawk} 的源代码:
