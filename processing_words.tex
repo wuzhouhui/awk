@@ -125,8 +125,10 @@
 
 \cterm{上下文无关语法} (\term{contex-free grammar}) 指的是一组规则, 这组
 规则定义了如何生成或分析一个语句集合. 每一条规则 (称为 \cterm{产生式}
-(\term{production})) 都具有形式\footnote{TODO}
-% TODO
+(\term{production})) 都具有形式:
+\begin{pattern}
+    \indent\indent\textit{A} $\longrightarrow$ \textit{B C D} ...
+\end{pattern}
 该产生式的意思是每一个 \textit{A} 都可以被 ``重写'' 为 \textit{B C D ...}.
 产生式左边的符号 (\textit{A}) 称为 \cterm{非终止符} (\term{nonterminal}),
 它可以被进一步地扩展. 产生式右边的符号可以是非终止符 (可以是多个
