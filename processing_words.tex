@@ -128,10 +128,10 @@
 (\term{production})) 都具有形式\footnote{TODO}
 % TODO
 该产生式的意思是每一个 \textit{A} 都可以被 ``重写'' 为 \textit{B C D ...}.
-产生式左边的符号 (\textit{A}) 称为 \cterm{非终止符} (\term{nonterminal}),
-它可以被进一步地扩展. 产生式右边的符号可以是非终止符 (可以是多个
-\textit{A}) 或 \cterm{终止符} (\term{terminal}), 终止符指的是不能被扩展的
-符号. 多个产生式可以共享同一个非终止符, 终止符与非终止符也可以在产生式的
+产生式左边的符号 (\textit{A}) 称为 \cterm{非终结符} (\term{nonterminal}),
+它可以被进一步地扩展. 产生式右边的符号可以是非终结符 (可以是多个
+\textit{A}) 或 \cterm{终结符} (\term{terminal}), 终结符指的是不能被扩展的
+符号. 多个产生式可以共享同一个非终结符, 终结符与非终结符也可以在产生式的
 右边出现多次.
 
 我们将在第 \ref{chap:little_languages} 章展示 awk 的部分语法规则, 并利用
@@ -151,7 +151,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 \end{file}
 
 \marginpar{114}
-如下所示, 产生式为非终止符生成语句. 假设 \texttt{Sentence} 是起始非终止符,
+如下所示, 产生式为非终结符生成语句. 假设 \texttt{Sentence} 是起始非终结符,
 那么选择一条以该符号作为左部的产生式:
 \begin{file}
     Sentence -> Nounphrase Verbphrase
