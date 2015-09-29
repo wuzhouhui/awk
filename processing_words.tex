@@ -99,3 +99,60 @@
 冒号将主语和谓语分开. 我们的废话生成器随机选择一个主语与另一个谓语作组合,
 \marginpar{113}
 如果运气好的话, 可能会产生很有意思的格言警句:
+\begin{file}
+    A rolling stone repeats itself.
+    History abhors a vacuum.
+    nature repeats itself.
+    All's well that gathers no moss.
+    He who lives by the sword has a price.
+\end{file}
+程序的代码实现非常明确:
+\begin{awkcode}
+    # cliche - generate an endless stream of cliches
+    #     input:  lines of form subject:predicate
+    #     output: lines of random subject and random predicate
+
+    BEGIN { FS = ":" }
+          { x[NR] = $1; y[NR] = $2 }
+    END   { for (;;) print x[randint(NR)], y[randint(NR)] }
+
+    function randint(n) { return int(n * rand()) + 1 }
+\end{awkcode}
+请注意, 程序中的死循环是有意为之.
+
+\subsection{随机语句}
+\label{subsec:random_sentences}
+
+\cterm{上下文无关语法} (\term{contex-free grammar}) 指的是一组规则, 这组
+规则定义了如何生成或分析一个语句集合. 每一条规则 (称为 \cterm{产生式}
+(\term{production})) 都具有形式\footnote{TODO}
+% TODO
+该产生式的意思是每一个 \textit{A} 都可以被 ``重写'' 为 \textit{B C D ...}.
+产生式左边的符号 (\textit{A}) 称为 \cterm{非终止符} (\term{nonterminal}),
+它可以被进一步地扩展. 产生式右边的符号可以是非终止符 (可以是多个
+\textit{A}) 或 \cterm{终止符} (\term{terminal}), 终止符指的是不能被扩展的
+符号. 多个产生式可以共享同一个非终止符, 终止符与非终止符也可以在产生式的
+右边出现多次.
+
+我们将在第 \ref{chap:little_languages} 章展示 awk 的部分语法规则, 并利用
+该规则开发一个语法分析器, 用来分析 awk 程序. 然而在这一章, 我们感兴趣的是
+规则的生成, 而不是分析. 举例来说, 类似 ``the boy walks slowly'' 和 ``the
+girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
+\begin{file}
+    Sentence -> Nounphrase Verbphrase
+    Nounphrase -> the boy
+    Nounphrase -> the girl
+    Verbphrase -> Verb Modlist Adverb
+    Verb -> runs
+    Verb -> walks
+    Modlist -> very Modlist
+    Adverb -> quickly
+    Adverb -> slowly
+\end{file}
+
+\marginpar{114}
+如下所示, 产生式为非终止符生成语句. 假设 \texttt{Sentence} 是起始非终止符,
+那么选择一条以该符号作为左部的产生式:
+\begin{file}
+    Sentence -> Nounphrase Verbphrase
+\end{file}
