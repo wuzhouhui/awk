@@ -158,3 +158,39 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 \begin{file}
     Sentence -> Nounphrase Verbphrase
 \end{file}
+接下来, 从右部选择一个非终结符, 比如说 \texttt{Nounphrase}, 然后用以
+\texttt{Nounphrase} 作为左部的产生式替换掉 \texttt{Nounphrase}:
+\begin{file}
+    Sentence -> Nounphrase Verbphrase
+             -> the boy Verbphrase
+\end{file}
+不断地使用该方法, 直到所有的非终结符都被替换掉为止:
+\begin{file}
+    Sentence -> Nounphrase Verbphrase
+             -> the boy Verbphrase
+             -> the bov Verb Modlist Adverb
+             -> the boy walks very Modlist Adverb
+             -> the boy walks very Adverb
+             -> the boy walks very quickly
+\end{file}
+\texttt{Sentence} 的最终展开结果是一个句子. 非终结符的推导过程与我们在初
+级学校所学到的语句图 (sentence-diagram) 刚好相反: 我们现在是把动词短语拆
+分成动词与副词, 而不是把动词与副词组合成动词短语.
+
+\texttt{Modlist} 的产生式比较有趣. 一条规则是说用 \texttt{very Modlist}
+替换 \texttt{Modlist}, 每次使用这条规则都会使句子变长. 幸运地是, 只要运用
+另一条产生式规则 (该规则用空字符串替换掉 \texttt{Modlist}) 就可以终止潜在
+的无限循环.
+
+我们现在要开发一个程序, 该程序根据语法生成语句, 每次生成都从一个指定的非
+终结符开始. 程序从文件中读取语法规则, 记录下每一个左部出现的次数, 
+左部所拥有的右部的个数, 以及它们各自的组成成分. 然后, 每输入一个非
+终结符, 就会为该非终结符生成一个随机语句.
+
+程序使用三个数组来存放语法规则:
+\texttt{lhs[A]} 给出了非终结符 \texttt{A} 的产 
+生式个数, \texttt{rhscnt[A, i]} 存放的是 \texttt{A} 的第 \texttt{i} 条产生
+式右部的符号个数, \texttt{rhslist[A, i, j]} 存放的是 \texttt{A} 的第 
+\texttt{i} 条产生式右部的第 \texttt{j} 个符号. 对于前面提到的语法规则, 
+三个数组的内容分别是:
+\marginpar{115}
