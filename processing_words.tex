@@ -193,4 +193,127 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 式右部的符号个数, \texttt{rhslist[A, i, j]} 存放的是 \texttt{A} 的第 
 \texttt{i} 条产生式右部的第 \texttt{j} 个符号. 对于前面提到的语法规则, 
 三个数组的内容分别是:
+
+\begin{tabular}{ccc}
+
+\begin{varwidth}[t]{\textwidth}
+\vspace{0pt}
+\begin{tikzpicture}
+    \pgfmathsetmacro\height{0.5};
+    \pgfmathsetmacro\maxheight{4.5};
+
+    \foreach \i in {0,...,3}
+        \draw (0, \maxheight - \i * \height) -- (1, \maxheight - \i *
+        \height);
+    \draw (0, \maxheight - 0) -- (0, \maxheight - 3 * \height);
+    \draw (1, \maxheight - 0) -- (1, \maxheight - 3 * \height);
+    \node[left] at (0, \maxheight - \height * 0.5) {\texttt{Sentence}};
+    \node[left] at (0, \maxheight - \height * 1.5) {\texttt{Nounphrase}};
+    \node[left] at (0, \maxheight - \height * 2.5) {\texttt{Verbphrase}};
+    \node at (0.5, \maxheight - \height * 0.5) {\texttt{1}};
+    \node at (0.5, \maxheight - \height * 1.5) {\texttt{2}};
+    \node at (0.5, \maxheight - \height * 2.5) {\texttt{1}};
+    \node at (0.5, \maxheight - \height * 3.5) {\textit{etc.}};
+    \node[left] at (0, \maxheight + 0.5) {\texttt{lhs}:};
+\end{tikzpicture}
+\end{varwidth}
+&
+\begin{varwidth}[t]{\textwidth}
+\vspace{0pt}
+\begin{tikzpicture}
+    \pgfmathsetmacro\height{0.5};
+    \pgfmathsetmacro\maxheight{4.5};
+
+    \foreach \i in {0,...,4}
+        \draw (0, \maxheight - \i * \height) -- (1, \maxheight - \i *
+        \height);
+    \draw (0, \maxheight - 0) -- (0, \maxheight - 4 * \height);
+    \draw (1, \maxheight - 0) -- (1, \maxheight - 4 * \height);
+    \node[left] at (0, \maxheight - \height * 0.5) {\texttt{Sentence,1}};
+    \node[left] at (0, \maxheight - \height * 1.5) {\texttt{Nounphrase,1}};
+    \node[left] at (0, \maxheight - \height * 2.5) {\texttt{Nounphrase,2}};
+    \node[left] at (0, \maxheight - \height * 3.5) {\texttt{Verbphrase,1}};
+    \node at (0.5, \maxheight - \height * 0.5) {\texttt{2}};
+    \node at (0.5, \maxheight - \height * 1.5) {\texttt{2}};
+    \node at (0.5, \maxheight - \height * 2.5) {\texttt{2}};
+    \node at (0.5, \maxheight - \height * 3.5) {\texttt{3}};
+    \node at (0.5, \maxheight - \height * 4.5) {\textit{etc.}};
+    \node at (0, \maxheight + 0.5) {\texttt{rhscnt}:};
+\end{tikzpicture}
+\end{varwidth}
+&
+\begin{varwidth}[t]{\textwidth}
+\vspace{0pt}
+\begin{tikzpicture}
+    \pgfmathsetmacro\height{0.5};
+    \pgfmathsetmacro\maxheight{4.5};
+
+    \foreach \i in {0,...,9}
+        \draw (0, \maxheight - \i * \height) -- (2.5, \maxheight - \i *
+        \height);
+    \draw (0, \maxheight - 0) -- (0, \maxheight - 9 * \height);
+    \draw (2.5, \maxheight - 0) -- (2.5, \maxheight - 9 * \height);
+    \node[left] at (0, \maxheight - \height * 0.5) {\texttt{Sentence,1,1}};
+    \node[left] at (0, \maxheight - \height * 1.5) {\texttt{Sentence,1,2}};
+    \node[left] at (0, \maxheight - \height * 2.5) {\texttt{Nounphrase,1,1}};
+    \node[left] at (0, \maxheight - \height * 3.5) {\texttt{Nounphrase,1,2}};
+    \node[left] at (0, \maxheight - \height * 4.5) {\texttt{Nounphrase,2,1}};
+    \node[left] at (0, \maxheight - \height * 5.5) {\texttt{Nounphrase,2,2}};
+    \node[left] at (0, \maxheight - \height * 6.5) {\texttt{Verbphrase,1,1}};
+    \node[left] at (0, \maxheight - \height * 7.5) {\texttt{Verbphrase,1,2}};
+    \node[left] at (0, \maxheight - \height * 8.5) {\texttt{Verbphrase,1,3}};
+    \node at (1.25, \maxheight - \height * 0.5) {\texttt{Nounphrase}};
+    \node at (1.25, \maxheight - \height * 1.5) {\texttt{Verbphrase}};
+    \node at (1.25, \maxheight - \height * 2.5) {\texttt{the}};
+    \node at (1.25, \maxheight - \height * 3.5) {\texttt{boy}};
+    \node at (1.25, \maxheight - \height * 4.5) {\texttt{the}};
+    \node at (1.25, \maxheight - \height * 5.5) {\texttt{girl}};
+    \node at (1.25, \maxheight - \height * 6.5) {\texttt{Verb}};
+    \node at (1.25, \maxheight - \height * 7.5) {\texttt{Modlist}};
+    \node at (1.25, \maxheight - \height * 8.5) {\texttt{Adverb}};
+    \node at (1.25, \maxheight - \height * 9.5) {\textit{etc.}};
+    \node at (0, \maxheight + 0.5) {\texttt{rhslist}:};
+\end{tikzpicture}
+\end{varwidth}
+\end{tabular}
+
 \marginpar{115}
+程序的源代码是:
+\begin{awkcode}
+    # sentgen - random sentence generator
+    #   input:  grammar file; sequence of nonterminals
+    #   output: a random sentence for each nonterminal
+
+    BEGIN {  # read rules from grammar file
+        while (getline < "grammar" > 0)
+            if ($2 == "->") {
+                i = ++lhs[$1]              # count lhs
+                rhscnt[$1, i] = NF-2       # how many in rhs
+                for (j = 3; j <= NF; j++)  # record them
+                   rhslist[$1, i, j-2] = $j
+            } else
+                print "illegal production: " $0
+    }
+
+    {   if ($1 in lhs) {  # nonterminal to expand
+            gen($1)
+            printf("\n")
+        } else 
+            print "unknown nonterminal: " $0   
+    }
+
+    function gen(sym,    i, j) {
+        if (sym in lhs) {       # a nonterminal
+            i = int(lhs[sym] * rand()) + 1   # random production
+            for (j = 1; j <= rhscnt[sym, i]; j++) # expand rhs's
+                gen(rhslist[sym, i, j])
+        } else
+            printf("%s ", sym)
+    }
+\end{awkcode}
+
+函数 \texttt{gen("A")} 为非终结符 \texttt{A} 生成一条语句. 如果前一次的扩展
+引入了非终结符, 那么函数通过递归调用自身来展开. 请记住, 所有被递归函数用%
+\marginpar{116}%
+到的临时变量都需要出现在函数的参数列表中, 如果某个变量没有出现在参数列表,
+那它就是全局变量, 此时程序就无法正确地工作.
