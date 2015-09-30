@@ -191,6 +191,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 式右部的符号个数, \texttt{rhslist[A, i, j]} 存放的是 \texttt{A} 的第 
 \texttt{i} 条产生式右部的第 \texttt{j} 个符号. 对于前面提到的语法规则, 
 三个数组的内容分别是:
+
 \begin{tabular}{ccc}
 
 \begin{varwidth}[t]{\textwidth}
@@ -273,6 +274,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 \end{tikzpicture}
 \end{varwidth}
 \end{tabular}
+
 \marginpar{115}
 程序的源代码是:
 \begin{awkcode}
@@ -309,7 +311,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 \end{awkcode}
 
 函数 \texttt{gen("A")} 为非终结符 \texttt{A} 生成一条语句. 如果前一次的扩展
-引入了非终结符, 那么函数通过递归调用自身来展开. 请记住, 所有被递归函数用
-\marginpar{116}
+引入了非终结符, 那么函数通过递归调用自身来展开. 请记住, 所有被递归函数用%
+\marginpar{116}%
 到的临时变量都需要出现在函数的参数列表中, 如果某个变量没有出现在参数列表,
-那么它就是全局变量, 此时程序就无法正确地工作.
+那它就是全局变量, 此时程序就无法正确地工作.
