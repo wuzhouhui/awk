@@ -352,7 +352,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 使用 awk 很容易就可以写出一个交互式程序, 我们将通过两个示例程序来阐明
 基本思路. 第一个程序测试运算能力, 第二个程序测试某一特定领域的相关知识.
 
-\subsection{技巧测试: 运算}
+\subsection{技巧测试之运算}
 \label{subsec:skills_testing_arithmetic}
 
 下面的程序 \texttt{arith} (最适用于幼儿) 显示一系列加法运算问题, 比如 
@@ -400,3 +400,36 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 
     function randint(n) { return int(rand()*n)+1 }
 \end{awkcode}
+
+\begin{exercise}
+    除了加法外, 再新增几种数学运算. 另外, 如果用户的回答是错误的, 显示 
+    一条提示信息.
+\end{exercise}
+
+\subsection{技巧测试之测验}
+\label{subsec:skills_testing_quiz}
+
+我们的第二个例子是程序 \texttt{quiz}, \texttt{quiz} 从题库中抽取特定的文件,
+并用文件中的问题向用户提问. 例如, 我们可以测试用户对化学元素的了解程度.
+假设化学元素的题库文件是 \texttt{quiz.elems}, 文件包含了化学元素的符号, 
+原子序数, 以及元素的全称, 字段之间用冒号分开. 文件的第一行比较特殊, 它
+标明了各个字段的意义:
+\begin{file}
+    symbol:number:name|element
+    H:1:Hydrogen
+    He:2:Helium
+    Li:3:Lithium
+    Be:4:Beryllium
+    B:5:Boron
+    C:6:Carbon
+    N:7:Nitrogen
+    O:8:Oxygen
+    F:9:Fluorine
+    Ne:10:Neon
+    Na:11:Sodium|Natrium
+    ...
+\end{file}
+程序根据第一行来判断哪个字段是问题, 哪个字段是正确答案, 然后把文件剩下的
+\marginpar{118}
+部分读取到一个数组中, 通过该数组, 程序就可以随机地选择问题并检查回答的
+正确性.
