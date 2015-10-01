@@ -344,9 +344,9 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
     的概率是不同的.
 \end{exercise}
 
-\begin{awkcode}
+\begin{exercise}
     实现一个非递归的语句生成程序.
-\end{awkcode}
+\end{exercise}
 
 \section{交互式的文本处理}
 \label{sec:interactive_text_manipulation}
@@ -367,11 +367,11 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 
 调用程序的命令行有两种形式:
 \begin{pattern}
-    \indent\indent\texttt{awk -f arith} \par 
-    \indent\indent\texttt{awk -f arith} \textit{n}
+    \indent\texttt{awk -f arith} \par 
+    \indent\texttt{awk -f arith} \textit{n}
 \end{pattern}
 如果在 \texttt{arith} 之后有一个参数, 程序将使用该参数限制每个问题的数的
-最大值. 该参数被读取之后, \texttt{ARGV[1]} 被设置为 ``\texttt{-}'',
+最大值. 该参数被读取之后, \texttt{ARGV[1]} 被设置为 \texttt{"-"},
 于是程序从标准输入读取用户的回答. 如果没有指定参数, 那么数的最大值就是
 10.
 \marginpar{117}
