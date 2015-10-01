@@ -317,3 +317,90 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 \marginpar{116}%
 到的临时变量都需要出现在函数的参数列表中, 如果某个变量没有出现在参数列表,
 那它就是全局变量, 此时程序就无法正确地工作.
+
+我们把右部个数及其组成成分分别存放在两个数组中, 不过实际上, 不使用下标
+来编码不同的字段也是有可能的, 在其他语言中可以通过记录或结构体来实现. 
+举例来说, 数组 \texttt{rhscnt[i,j]} 可以是 \texttt{rhslist} 的元素,
+表示成 \texttt{rhslist[i,j,"cnt"]}.\footnote{原文为 We chose to use
+    separate arrays for the right-hand-side counts and components, but it
+    is possible instead to use subscripts to encode different fields,
+    rather like records or structures in other languages. For example, the
+    array \texttt{rhscnt[i,j]} could be part of \texttt{rhslist}, as
+    \texttt{rhslist[i,j,"cnt"]}.}
+
+\begin{exercise}
+    写一套语法规则, 该规则能够生成关于某学科的, 听起来貌似合理的文本 ---
+    商业, 政治, 计算科学都是很好的选择.\footnote{原文为 Write a grammar for
+        generating plausible-sounding text from a field that appeals to you
+    -- business, politics, and computing are all good possibilities.}
+\end{exercise}
+
+\begin{exercise}
+    在某些语法规则下, 语句生成程序很有可能落入到这样一种境地:
+    推导过程越来越长, 却没有停下来的迹象, 添加一条机制, 使得程序可以限制
+    推导过程的长度.
+\end{exercise}
+
+\begin{exercise}
+    给语法规则加上权重, 使得对同一个非终结符来说, 它的各个展开规则被选中
+    的概率是不同的.
+\end{exercise}
+
+\begin{exercise}
+    实现一个非递归的语句生成程序.
+\end{exercise}
+
+\section{交互式的文本处理}
+\label{sec:interactive_text_manipulation}
+
+使用 awk 很容易就可以写出一个交互式程序, 我们将通过两个示例程序来阐明
+基本思路. 第一个程序测试运算能力, 第二个程序测试某一特定领域的相关知识.
+
+\subsection{技巧测试: 运算}
+\label{subsec:skills_testing_arithmetic}
+
+下面的程序 \texttt{arith} (最适用于幼儿) 显示一系列加法运算问题, 比如 
+\begin{file}
+    7 + 9 = ?
+\end{file}
+在每个问题之后, 用户输入问题的答案. 如果回答是正确的, 用户就会收到一句
+赞美, 然后显示下一个问题; 如果回答是错误的, 那么程序会再次请求输入答案;
+如果用户没有输入答案, 那么在显示下一个问题之前, 程序输出正确答案.
+
+调用程序的命令行有两种形式:
+\begin{pattern}
+    \indent\texttt{awk -f arith} \par 
+    \indent\texttt{awk -f arith} \textit{n}
+\end{pattern}
+如果在 \texttt{arith} 之后有一个参数, 程序将使用该参数限制每个问题的数的
+最大值. 该参数被读取之后, \texttt{ARGV[1]} 被设置为 \texttt{"-"},
+于是程序从标准输入读取用户的回答. 如果没有指定参数, 那么数的最大值就是
+10.
+\marginpar{117}
+\begin{awkcode}
+    # arith - addition drill
+    #   usage:  awk -f arith [ optional problem size ]
+    #   output: queries of the form "i + j = ?"
+
+    BEGIN {
+        maxnum = ARGC > 1 ? ARGV[1] : 10   # default size is 10
+        ARGV[1] = "-"  # read standard input subsequently
+        srand()        # reset rand from time of day
+        do {
+            n1 = randint(maxnum)
+            n2 = randint(maxnum)
+            printf("%g + %g = ? ", n1, n2)
+            while ((input = getline) > 0)
+                if ($0 == n1 + n2) {
+                    print "Right!"
+                    break
+                } else if ($0 == "") {
+                    print n1 + n2
+                    break
+                } else
+                    printf("wrong, try again: ")
+        } while (input > 0)
+    }
+
+    function randint(n) { return int(rand()*n)+1 }
+\end{awkcode}
