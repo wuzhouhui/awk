@@ -23,6 +23,8 @@
 \usepackage{pifont}
 % 一页结束时, 脚注编号清零
 \usepackage[perpage]{footmisc}
+% 边框
+\usepackage[framemethod=default]{mdframed}
 
 % 脚注编号带圈
 \renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
@@ -92,19 +94,15 @@
 {\end{quotation}}
 
 % environment for summary
+% FIXME: 当边框分页时, 会在分页后的边框的左边打印 "break" 字样,
+% 这不是我想要的效果, 请精通 LaTeX 的人帮忙修复这个问题.
 \newenvironment{summary}[1]
 {
-    \begin{center}
-        \rule{\textwidth}{2.0pt}
-    \end{center}
-    \vspace{-2.0em}
+    \begin{mdframed}
     \begin{center} \Large{#1} \end{center}%
 }
 {
-    \vspace{-1.2em}
-    \begin{center}
-        \rule{\textwidth}{2.0pt}
-    \end{center}
+\end{mdframed}
 }
 
 % term in English
