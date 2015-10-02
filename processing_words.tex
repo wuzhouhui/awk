@@ -436,4 +436,65 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 程序根据第一行来判断哪个字段是问题, 哪个字段是正确答案, 然后把文件剩下的
 \marginpar{118}
 部分读取到一个数组中, 通过该数组, 程序就可以随机地选择问题并检查回答的
-正确性.
+正确性. 输入命令行
+\begin{shell}
+    awk -f quiz quiz.elems name symbol
+\end{shell}
+之后, 我们将会得到类似下面的对话:
+\begin{shell}
+    Beryllium? B
+    wrong, try again: Be
+    Right!
+    Fluorine?
+    ...
+\end{shell}
+注意, 备选答案 (例如 sodium 或 natrium) 很容易通过数据文件中的正则表达
+式来处理.
+\begin{awkcode}
+    # quiz - present a quiz
+    #   usage: awk -f quiz topicfile question-subj answer-subj
+
+    BEGIN {
+        FS = ":"
+        if (ARGC != 4)
+            error("usage: awk -f quiz topicfile question answer")
+        if (getline <ARGV[1] < 0)    # 1st line is subj:subj:...
+            error("no such quiz as " ARGV[1])
+        for (q = 1; q <= NF; q++)
+            if ($q ~ ARGV[2])
+                break
+        for (a = 1; a <= NF; a++)
+            if ($a ~ ARGV[3])
+                break
+        if (q > NF || a > NF || q == a)
+            error("valid subjects are " $0)
+        while (getline <ARGV[1] > 0) # load the quiz
+            qa[++nq] = $0
+        ARGC = 2; ARGV[1] = "-"      # now read standard input
+        srand()
+        do {
+            split(qa[int(rand()*nq + 1)], x)
+            printf("%s? ", x[q])
+            while ((input = getline) > 0)
+                if ($0 ~ "^(" x[a] ")$") {
+                    print "Right!"
+                    break
+                } else if ($0 == "") {
+                    print x[a]
+                    break
+                } else
+                    printf("wrong, try again: ")
+        } while (input > 0)
+    }
+
+    function error(s) { printf("error: %s\n", s); exit }
+\end{awkcode}
+\marginpar{119}
+为了辨别出正确答案, 我们用 \texttt{\^} 和 \texttt{\$} 包围正则表达式, 否则的
+话, 只要用户的回答中含有与标准答案匹配的子字符串, 那么该回答就会被认为是
+正确的 (于是, \texttt{Ne}, \texttt{Na} 与 \texttt{N} 都会被当作标准答案
+\texttt{N}).
+
+\begin{exercise}
+    修改 \texttt{quiz}, 使得它对于同一道问题, 最多输出一次.
+\end{exercise}
