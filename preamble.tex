@@ -23,8 +23,6 @@
 \usepackage{pifont}
 % 一页结束时, 脚注编号清零
 \usepackage[perpage]{footmisc}
-% 边框
-\usepackage[framemethod=default]{mdframed}
 
 % 脚注编号带圈
 \renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
@@ -98,11 +96,17 @@
 % 这不是我想要的效果, 请精通 LaTeX 的人帮忙修复这个问题.
 \newenvironment{summary}[1]
 {
-    \begin{mdframed}
+    \begin{center}
+        \rule{\textwidth}{2.0pt}
+    \end{center}
+    \vspace{-2.0em}
     \begin{center} \Large{#1} \end{center}%
 }
 {
-\end{mdframed}
+    \vspace{-1.2em}
+    \begin{center}
+        \rule{\textwidth}{2.0pt}
+    \end{center}
 }
 
 % term in English
