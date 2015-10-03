@@ -5,7 +5,7 @@
 \marginpar{111}
 本章的程序指向一个共同主题: 文本处理. 示例程序涵盖的范围包括随机单词
 与句子的生成 (生成的句子可以和用户进行有限的对话), 以及文本处理. 大多数示例
-程序都很简单, 它们只是起说明作用, 但是, 其中一些文档准备程序的确拥有实际
+程序都很简单, 它们只是起说明作用, 但是, 其中一些文件准备程序的确拥有实际
 用途.
 
 \section{随机文本发生器}
@@ -503,7 +503,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 \section{文本处理}
 \label{sec:text_processing}
 
-由于强大的字符串处理能力, 对于涉及到文本处理与文档准备的工作来说, awk 是
+由于强大的字符串处理能力, 对于涉及到文本处理与文件准备的工作来说, awk 是
 一个非常有用的工具. 作为示例, 这一节包含的程序可以用于单词计数, 文本格式
 化, 交叉索引维护, 制作 KWIC 索引, 以及索引准备工作.
 
@@ -554,3 +554,62 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
     写一个 control-break 程序, 用来计算单词的个数. 与 \texttt{wordfreq} 
     相比, 它的性能表现如何?
 \end{exercise}
+
+\subsection{文本格式化}
+\label{subsec:text_formatting}
+
+程序 \texttt{fmt} 把它的输入格式化成每行至多 60 个字符, 基本思路是通过移动
+单词, 尽可能地把每一行都塞满. 空行表示分段, 除此之外没有其他控制指令.
+有些文本在创建时没有考虑到每行的长度, 可以使用 \texttt{fmt} 对这些文本
+进行格式化.
+\begin{awkcode}
+    # fmt - format
+    #    input:  text
+    #    output: text formatted into lines of <= 60 characters
+
+    /./  { for (i = 1; i <= NF; i++) addword($i) }
+    /^$/ { printline(); print "" }
+    END  { printline() }
+
+    function addword(w) {
+        if (length(line) + length(w) > 60)
+            printline()
+        line = line " " w
+    }
+
+    function printline() {
+        if (length(line) > 0) {
+            print substr(line, 2)   # removes leading blank
+            line = ""
+        }
+    }
+\end{awkcode}
+
+\begin{exercise}
+    修改 \texttt{fmt}, 使得它可以对齐输出文本的右边空白.
+\end{exercise}
+
+\begin{exercise}
+    增强 \texttt{fmt}的功能, 使得它可以通过识别文档中可能的标题, 列表等信息,
+    推断出文档的正确格式. 这次不是直接对文档进行格式化, 而是生成排版
+    程序 (例如 \texttt{troff}, TEX 等) 的格式化命令.
+\end{exercise}
+
+\subsection{维护手稿的交叉引用}
+\label{subsec:maintaining_cross_reference_in_manuscripts}
+
+文件准备的一个常见问题是为条目创建一个一致的名字或数字集合, 条目可以是
+文献引用, 图表, 示例等.\footnote{原文为 A common problem in document
+    preparation is creating a consistent set of names or numbers for items
+like bibliographic citations, figures, tables, examples, and so on.}
+某些文本格式化程序可以帮助我们完成这件工作, 但是大多数情况下需要你自己来
+完成. 我们的下一个例子是对交叉引用进行编号, 该技术对于技术文档编写来说
+特别有用.
+
+编写文档时, 作者为不同的条目创建并使用不同的符号名, 这些条目之后会被
+交叉引用. 因为名字是符号化的, 所以条目可以被添加, 删除, 重新编排, 而不用
+修改已存在的名字. 两个程序共同创建一个文本, 文本中的符号名被适当的数字
+所替代\footnote{原文为 Two programs create the version in which the
+symbolic names are replaced by suitable numbers}. 这里有一个示例文档,
+文档中包含了
+\marginpar{121}
