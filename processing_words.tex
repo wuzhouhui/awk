@@ -557,7 +557,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 \label{subsec:text_formatting}
 
 程序 \texttt{fmt} 把它的输入格式化成每行至多 60 个字符, 基本思路是通过移动
-单词, 尽可能地把每一行都塞满. 空行表示分段, 除此之外没有其他的控制指令.
+单词, 尽可能地把每一行都塞满. 空行表示分段, 除此之外没有其他控制指令.
 有些文本在创建时没有考虑到每行的长度, 可以使用 \texttt{fmt} 对这些文本
 进行格式化.
 \begin{awkcode}
@@ -607,5 +607,7 @@ like bibliographic citations, figures, tables, examples, and so on.}
 编写文档时, 作者为不同的条目创建并使用不同的符号名, 这些条目之后会被
 交叉引用. 因为名字是符号化的, 所以条目可以被添加, 删除, 重新编排, 而不用
 修改已存在的名字. 两个程序共同创建一个文本, 文本中的符号名被适当的数字
-所替代. 这里有一个示例文档, 文档中包含了
+所替代\footnote{原文为 Two programs create the version in which the
+symbolic names are replaced by suitable numbers}. 这里有一个示例文档,
+文档中包含了
 \marginpar{121}
