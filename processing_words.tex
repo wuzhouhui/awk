@@ -502,7 +502,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 \label{sec:text_processing}
 
 由于强大的字符串处理能力, 对于涉及到文本处理与文档准备的工作来说, awk 是
-一个非常有用的工具. 作为示例, 这一节包含的程序可以用来单词计数, 文本格式
+一个非常有用的工具. 作为示例, 这一节包含的程序可以用于单词计数, 文本格式
 化, 交叉索引维护, 制作 KWIC 索引, 以及索引准备工作.
 
 \subsection{单词计数}
@@ -511,13 +511,13 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 在第 \ref{chap:an_awk_tutorial} 章, 我们展示了一个用于计算某个文件的行数,
 单词数与字符数的程序, 在该程序中, 单词被定义为由多个非空白字符组成的字
 符序列. 与此相关的问题是计算某个文档中, 每个单词的出现次数, 解决这个问题
-一种思路是把文档中的单词都分解出来, 对它们排序, 这样相同的单词就会紧挨在
+的一种思路是把文档中的单词分解出来, 对它们排序, 这样相同的单词就会紧挨在
 一起, 最后再用 control-break 程序计算每个单词的出现次数.
 
 另一种思路 (与 awk 非常契合) 是分解出每一个单词, 把单词的出现次数记录在
 关联数组中. 为了更好地完成这个任务, 我们必须搞清楚一个单词究竟是由什么
 组成的. 在下面的程序里, 单词是一个移除了标点符号的字段, 于是,
-\texttt{"word"} ,\texttt{"word;"} 以及 \texttt{"(word)"} 都看作是单词
+\texttt{"word"}, \texttt{"word;"} 以及 \texttt{"(word)"} 都看作是单词
 \texttt{word}. \END 降序输出每个单词的出现次数.
 \begin{awkcode}
     # wordfreq - print number of occurrences of each word
@@ -532,7 +532,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
               print count[w], w | "sort -rn"
         }
 \end{awkcode}
-本章草稿出现最多的二个单词是:
+本章草稿出现最多的十个单词是:
 \begin{file}
     312 the     152 a       126 of      121 is      110 to
     92 and      72 in       71 The      59 at       54 that
