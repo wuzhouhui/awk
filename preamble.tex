@@ -23,6 +23,8 @@
 \usepackage{pifont}
 % 一页结束时, 脚注编号清零
 \usepackage[perpage]{footmisc}
+% summary 的边框
+\usepackage{mdframed}
 
 % 脚注编号带圈
 \renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
@@ -93,19 +95,14 @@
 
 % environment for summary
 % TODO: 使用 mdframed 定义 summary
+\newmdenv{summaryframe}
 \newenvironment{summary}[1]
 {
-    \begin{center}
-        \rule{\textwidth}{2.0pt}
-    \end{center}
-    \vspace{-2.0em}
+    \begin{summaryframe}
     \begin{center} \Large{#1} \end{center}%
 }
 {
-    \vspace{-1.2em}
-    \begin{center}
-        \rule{\textwidth}{2.0pt}
-    \end{center}
+    \end{summaryframe}
 }
 
 % term in English
