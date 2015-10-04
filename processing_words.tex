@@ -608,8 +608,76 @@ like bibliographic citations, figures, tables, examples, and so on.}
 
 编写文档时, 作者为不同的条目创建并使用不同的符号名, 这些条目之后会被
 交叉引用. 因为名字是符号化的, 所以条目可以被添加, 删除, 重新编排, 而不用
-修改已存在的名字. 两个程序共同创建一个文本, 文本中的符号名被适当的数字
+修改已存在的名字. 本节所提出的交叉引用技术是使用两个程序共同创建一个文本,
+文本中的符号名被适当的数字
 所替代\footnote{原文为 Two programs create the version in which the
-symbolic names are replaced by suitable numbers}. 这里有一个示例文档,
-文档中包含了
+symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不经
+过渡就直接提到 ``Two programs ...''}.
+这里有一个示例文档, 文档中包含了两个文献引用和一张图的符号名:
 \marginpar{121}
+\begin{file}
+    .#Fig _quotes_
+    Figure _quotes_ gives two brief quotations from famous books.
+
+                            Figure _quotes_:
+
+    .#Bib _alice_
+      "... `and what is the use of a book,' thought Alice,
+      `without pictures or conversations?'" [_alice_]
+
+    .#Bib _huck_
+      "... if I'd a knowed what a trouble it was to make a book
+      I wouldn't a tackled it and ain't agoing to no more." [_huck_]
+
+
+    [_alice_] Carroll, L., Alice's Adventures in Wonderland,
+        Macmillan, 1865.
+    [_huck_] Twain, M., Adventures of Huckleberry Finn,
+        Webster & Co., 1885.
+\end{file}
+每一个符号名均由下面这种形式的行来定义:
+\begin{file}
+    .#Category _SymbolicName_
+\end{file}
+这样的定义可以出现在文档中的任何地方, 只要作者愿意, 他可以定义多种不同的
+\texttt{Category}. 在整篇文档中, 某一条目总是通过它的符号名来引用. 我们 
+规定符号名以下划线开始并结尾, 不过你也可以使用其他任意的名字, 前提是
+你可以从文本中把它们分离出来 (条目的名字不可以相同, 即使它们在不同的
+类别中). 名字 \texttt{.\#Fig} 与 \texttt{.\#Big} 以句点开始, 这样的话即使
+交叉引用未被解析, 格式化程序 \texttt{troff} 也可以忽略它们, 对于不同的
+格式化程序, 我们可能需要作不同的约定.
+
+转换程序创建一份新版本的文档, 在新版本中, 定义被删除, 并且每一个符号名
+都被一个数字所替代. 在每一个类别中, 数字从 1 开始, 并按照原始文档中该
+类别定义出现的顺序而递增. 
+
+把文档输送给两个程序就可以完成上面所说的转换过程. 这里体现出的工作划分
+思想是强大的通用编程技巧的又一个实例: 第一个程序创建第二个程序, 并让
+第二个程序完成剩下的部分. 在这个案例中, 第一个程序 \texttt{xref} 扫描原始
+文档并创建第二个程序 \texttt{xref.temp}, 实际的转换过程将由
+\texttt{xref.temp} 来完成. 假设手稿的原版是 \texttt{document}, 只需要键入
+\begin{shell}
+    awk -f xref document > xref.temp
+    awk -f xref.temp document
+\end{shell}
+就可以得到带有数字形式引用的文档. 第二个程序的输出可以被重定向到打印机
+或文本格式化程序.
+\marginpar{122}
+上面所提到的示例文档的转换结果是:
+\begin{file}
+    Figure 1 gives two brief quotations from famous books.
+
+                            Figure 1:
+
+      "... `and what is the use of a book,' thought Alice,
+      `without pictures or conversations?'" [1]
+
+      "... if I'd a knowed what a trouble it was to make a book
+      I wouldn't a tackled it and ain't agoing to no more." [2]
+
+
+    [1] Carroll, L., Alice's Adventures in Wonderland,
+        Macmillan, 1865.
+    [2] Twain, M., Adventures of Huckleberry Finn,
+        Webster & Co., 1885.
+\end{file}
