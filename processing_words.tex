@@ -124,7 +124,7 @@
 \subsection{随机语句}
 \label{subsec:random_sentences}
 
-\cterm{上下文无关语法} (\term{contex-free grammar}) 指的是一组规则, 这组
+\cterm{上下文无关语法} (\term{context-free grammar}) 指的是一组规则, 这组
 规则定义了如何生成或分析一个语句集合. 每一条规则 (称为 \cterm{产生式}
 (\term{production})) 都具有形式\footnote{TODO}
 % TODO
@@ -673,3 +673,53 @@ like bibliographic citations, figures, tables, examples, and so on.}
     [2] Twain, M., Adventures of Huckleberry Finn,
         Webster & Co., 1885.
 \end{file}
+
+程序 \texttt{xref} 在文档中搜索以 \texttt{.\#} 开始的行, 对该行的每一次
+出现, 程序都会递增数组 \texttt{count} 中与该类别对应的元素的值, 然后打印
+一条 \texttt{gsub} 语句.
+\begin{awkcode}
+    # xref - create numeric values for symbolic names
+    #    input:  text with definitions for symbolic names
+    #    output: awk program to replace symbolic names by numbers          
+
+    /^\.#/ { printf("{ gsub(/%s/, \"%d\") }\n", $2, ++count[$1]) }
+    END    { printf("!/^[.]#/\n") }
+\end{awkcode}
+对于文件 \texttt{document}, \texttt{xref} 的输出是第二个程序
+\texttt{xref.temp}:
+\begin{awkcode}
+    { gsub(/_quotes_/, "1") }
+    { gsub(/_alice_/, "1") }
+    { gsub(/_huck_/, "2") }
+    !/^[.]#/
+\end{awkcode}
+\texttt{gsub} 把符号名全局性地替换成数字, 最后一条语句忽略以 \texttt{.\#}
+开始的行, 从而删除掉符号名定义.
+
+\begin{exercise}
+    如果符号名末尾的下划线被不小心遗漏了, 会发生什么事?
+\end{exercise}
+
+\begin{exercise}
+    修改 \texttt{xref}, 使得它可以侦测到某个符号名的多次定义
+\end{exercise}
+
+\begin{exercise}
+    修改 \texttt{xref}, 使得它可以生成你所喜爱的文本编辑器或流式编辑器
+    (比如 \texttt{sed}) 的编辑命令, 而非awk命令. 这会对编辑器的性能产生
+    什么影响 ?
+\end{exercise}
+
+\begin{exercise}
+    你有没有办法使得 \texttt{xref} 只需要对输入数据遍历一次 ? ``遍历一次''
+    对定义的放置位置而言, 隐含着什么限制条件?
+\end{exercise}
+
+\subsection{制作 KWIC 索引}
+\label{subsec:making_a_kwic_index}
+
+一个 KWIC (Keyword-In-Context) 索引指的是一种显示了其所在行的上下文内的每
+一个单词的索引\footnote{原文为 A Keyword-In-Context or KWIC index is an
+index that shows each word in the context of the line it is found in.}
+在本质上, 它所提供的信息等价于重要语汇索引 (concordance), 虽然形式上有点
+不同. 考虑下面三个句子
