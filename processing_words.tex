@@ -691,7 +691,7 @@ symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不�
     /^\.#/ { printf("{ gsub(/%s/, \"%d\") }\n", $2, ++count[$1]) }
     END    { printf("!/^[.]#/\n") }
 \end{awkcode}
-对于文件 \texttt{document}, \texttt{xref} 的输出是第二个程序
+对于文件 \texttt{document}, \texttt{xref} 输出的是第二个程序
 \texttt{xref.temp}:
 \begin{awkcode}
     { gsub(/_quotes_/, "1") }
@@ -726,6 +726,6 @@ symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不�
 
 一个 KWIC (Keyword-In-Context) 索引指的是一种显示了其所在行的上下文内的每
 一个单词的索引\footnote{原文为 A Keyword-In-Context or KWIC index is an
-index that shows each word in the context of the line it is found in.}
+index that shows each word in the context of the line it is found in.}.
 在本质上, 它所提供的信息等价于重要语汇索引 (concordance), 虽然形式上有点
 不同. 考虑下面三个句子
