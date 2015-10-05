@@ -722,4 +722,64 @@ like bibliographic citations, figures, tables, examples, and so on.}
 一个单词的索引\footnote{原文为 A Keyword-In-Context or KWIC index is an
 index that shows each word in the context of the line it is found in.}
 在本质上, 它所提供的信息等价于重要语汇索引 (concordance), 虽然形式上有点
-不同. 考虑下面三个句子
+\marginpar{123}
+不同. 考虑下面三个句子:
+\begin{file}
+    All's well that ends well.
+    Nature abhors a vacuum.
+    Every man has a price.
+\end{file}
+这三个句子的 KWIC 索引是\footnote{这个索引是在我的系统上运行
+    \texttt{kwic} 得到的, 某几行的出现顺序与英文原版不太一致,
+我也不知道是什么原因 (我甚至没搞懂 KWIC 究竟是什么} --- 译者注}:
+\begin{file}
+                        Nature  abhors a vacuum.
+                                All's well that ends well.
+                 Every man has  a price.
+                 Nature abhors  a vacuum.
+               All's well that  ends well.
+                                Every man has a price.
+                     Every man  has a price.
+                         Every  man has a price.
+                                Nature abhors a vacuum.
+               Every man has a  price.
+                    All's well  that ends well.
+               Nature abhors a  vacuum.
+          All's well that ends  well.
+                         All's  well that ends well.
+\end{file}
+
+在软件工程领域, 关于如何构造 KWIC 索引有一段很有趣的历史. 该问题由 Parnas 
+在 1972 年提出, 当时是把它当作一个设计习题, 他提供了一个基于单个程序的
+解决方案. Unix 命令 \texttt{ptx} 用于构造 KWIC 索引, 它的方法与 Parnas 相
+比非常相似, 大约只有 500 行 C 代码.
+
+Unix 管道提供了一个三步骤的解决方案: 第一个程序生成每一个输入行的旋转,
+于是, 行内的每一个单词轮流移动到其所在行的行首; 第二个程序对它们进行
+排序; 最后一个程序把它们恢复到旋转前的样子. \textit{Software Tools}
+也提供了一个构造 KWIC 索引的程序, 该程序就是以本段所提出的方案为基础
+实现的, 除了排序, 大约包含 70 行 Ratfor (一种结构化的 Fortran 衍生语言)
+代码.
+
+使用 awk 的话会更加方便, 只需要两个简短的 awk 程序, 程序之间再放置一个
+\texttt{sort} 命令即可:
+\begin{shell}
+    awk '
+    # kwic - generate kwic index
+
+    {   print $0
+        for (i = length($0); i > 0; i--) # compute length only once
+            if (substr($0,i,1) == " ")
+                # prefix space suffix ==> suffix tab prefix
+                print substr($0,i+1) "\t" substr($0,1,i-1)
+    } ' |
+    sort -f |
+    awk '
+    BEGIN { FS = "\t"; WID = 30 }
+          { printf("%" WID "s  %s\n", substr($2,length($2)-WID+1),
+                substr($1,1,WID))
+    } '
+\end{shell}
+第一个程序首先打印每个输入行的副本, 然后, 对输入行内的每一个空格打印一
+个输出行, 
+\marginpar{124}
