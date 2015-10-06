@@ -820,7 +820,7 @@ Unix 管道提供了一个三步骤的解决方案: 第一个程序生成每一�
 
 编写大型文档 (例如书籍或手册) 时, 一个附带的任务是为文档制作索引. 这
 个任务由两部分组成: 第一部分是决定为哪些术语制作索引, 想把这部分工作
-做好需要多花点脑子, 而且它无法通过机械化步骤完成; 另一部分则完成是机械
+做好需要多动点脑子, 而且它无法通过机械化步骤完成; 另一部分则完成是机械
 化的: 根据索引字和页码列表, 生成按字母排序且精心格式化过的索引, 本书的
 最后几页就是由索引组成的.
 
@@ -836,21 +836,21 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
 
 我们通过在文本当中插入格式化命令来为书籍制作索引. 当 \texttt{troff} 扫描 
 文本时, 这些命令使得索引字与页码被搜集到一个文件中. 文件的内容类似于下面
-的文本, 这些文本是索引准备程序的原材料 (索引字与页码之间用一个制表符分
-开):
+的文本, 这些文本是索引准备程序加工处理的原材料
+(索引字与页码之间用一个制表符分开):
 \marginpar{125}%
 \begin{file}
-    [FS] variable	35
-    [FS] variable	36
-    arithmetic operators	36
-    coercion rules	44
-    string comparison	44
-    numeric comparison	44
-    arithmetic operators	44
-    coercion~to number	45
-    coercion~to string	45
-    [if]-[else] statement	47
-    control-flow statements	48
-    [FS] variable	52
+    [FS] variable       35
+    [FS] variable       36
+    arithmetic operators        36
+    coercion rules      44
+    string comparison   44
+    numeric comparison  44
+    arithmetic operators        44
+    coercion~to number  45
+    coercion~to string  45
+    [if]-[else] statement       47
+    control-flow statements     48
+    [FS] variable       52
     ...
 \end{file}
