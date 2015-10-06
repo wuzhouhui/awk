@@ -952,3 +952,79 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
     numeric comparison  44
     string comparison   44
 \end{file}
+
+下一个程序 \texttt{ix.rotate} 为索引字生成旋转, 例如根据 ``\texttt{string
+comparison}'' 生成 ``\texttt{comparison, string}''. 旋转操作与 KWIC
+索引制作过程中出现的旋转大致相同, 虽然我们用了不同的方法来编写. 注意 
+\texttt{for} 循环中的赋值表达式.
+\begin{awkcode}
+    # ix.rotate - generate rotations of index terms
+    #   input:  string tab num num ...
+    #   output: rotations of string tab num num ...
+
+    BEGIN { FS = OFS = "\t" }
+    {   print $1, $2    # unrotated form
+        for (i = 1; (j = index(substr($1, i+1), " ")) > 0; ) {
+            i += j      # find each blank, rotate around it
+            printf("%s, %s\t%s\n",
+                substr($1, i+1), substr($1, 1, i-1), $2)
+        }
+    }
+\end{awkcode}
+\texttt{ix.rotate} 的部分输出内容是
+\begin{file}
+    arithmetic operators        36 44
+    operators, arithmetic       36 44
+    coercion rules      44
+    rules, coercion     44
+    coercion~to number  45
+    number, coercion~to 45
+    coercion~to string  45
+    string, coercion~to 45
+    control-flow statements     48
+    statements, control-flow    48
+    ...
+\end{file}
+
+下一个步骤是对旋转后的索引字排序. 但是如果直接对它们进行排序的话, 由于它们
+仍然嵌入有格式化命令 (比如 \texttt{[...]}, 所以这些命令会对排序结果造成
+干扰. 我们的解决办法是为每一行加上一个前缀 (排序键), 这个前缀确保排序结果
+是正确的, 在后面的步骤中会把这些前缀移除. 程序 \texttt{ix.genkey} 通过移除 
+\texttt{troff} 的字号与字体设置命令来构造前缀, \texttt{troff} 的字号与 
+字体设置命令类似于 \verb'\s+'\textit{n}, \verb'\s-'\textit{n},
+\verb'\f'\textit{x}, 或 \verb'\f('\textit{xx}. \texttt{ix.genkey} 还会
+把排序键中的波浪号替换成空格, 移除任意非字母数字字符 (除了空格).
+\footnote{从前面的输出中可以看到, 对于现代 \texttt{sort} 命令来说,
+这个步骤是多余的 --- 译者注}
+\marginpar{128}
+\begin{awkcode}
+    # ix.genkey - generate sort key to force ordering
+    #   input:  string tab num num ...
+    #   output: sort key tab string tab num num ...
+
+    BEGIN { FS = OFS = "\t" }
+
+    {   gsub(/~/, " ", $1)       # tildes now become blanks
+        key = $1
+        # remove troff size and font change commands from key
+        gsub(/\\f.|\\f\(..|\\s[-+][0-9]/, "", key)
+        # keep blanks, letters, digits only
+        gsub(/[^a-zA-Z0-9 ]+/, "", key)
+        if (key ~ /^[^a-zA-Z]/)  # force nonalpha to sort first
+            key = " " key        # by prefixing a blank
+        print key, $1, $2
+    } 
+\end{awkcode}
+输出是
+\begin{file}
+    arithmetic operators        arithmetic operators    36 44
+    operators arithmetic        operators, arithmetic   36 44
+    coercion rules      coercion rules  44
+    rules coercion      rules, coercion 44
+    coercion to number  coercion to number      45
+    number coercion to  number, coercion to     45
+    coercion to string  coercion to string      45
+    string coercion to  string, coercion to     45
+    controlflow statements      control-flow statements 48
+    ...
+\end{file}
