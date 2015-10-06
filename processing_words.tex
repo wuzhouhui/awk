@@ -1117,3 +1117,44 @@ actual data.}
 \end{pattern}
 
 \marginpar{130}
+可以对这些程序进行一些增强或变形, 针对这点, 习题给出了几点比较有用的
+建议. 不过最重要的是, 把一个大型任务分解成若干个小任务可以使整个工作
+完成起来更加简单容易, 也更容易适应需求的变化.
+
+\begin{exercise}
+    修改或增强索引程序的功能, 使得它可以提供分层的索引 (\textit{See} 与
+    \textit{See also}) 与罗马数字形式的页码.
+\end{exercise}
+
+\begin{exercise}
+    允许索引字中出现字面意义上的 \texttt{[}, \texttt{]}, \verb'~' 与 
+    \verb'%'
+\end{exercise}
+
+\begin{exercise}
+    构造一个准备单词, 短语列表的工具程序, 利用该程序来自动创建索引.
+    在促成索引词与主题方面, \texttt{wordfreq} 所生成的单词频率列表
+    表现如何?
+\end{exercise}
+
+\section{小结}
+\label{sec:processing_words_summary}
+
+Awk 处理文本就像 C 或 Pascal 处理数字那样轻松 --- 自动管理存储, 内建运算
+符与内建函数提供了许多必需的功能. 结果是 awk 擅长于原型构造, 有时候即使
+是对产品化的使用来说, 原型也已足够\footnote{原文为 As a result, awk is
+    usually good for prototyping, and sometimes it is quite adequate for
+production use.}. 索引程序就是一个很好的例子 --- 我们使用该程序的另一个
+版本为本书制作索引.
+
+\subsection*{参考资料}
+我们的测试程序以 Unix 的测试程序为原型构造而来, 后者最初由 Doug McIlroy
+开发而成. 废话生成器这个主意来自于 Ron Hardin. Parnas 的一篇关于
+KWIC 索引的论文 ``On the criteria to be used in decomposing systems into
+modules'' 载于 \textit{Communications of the ACM}, 1972 年 12 月.
+Jon Bentley 提供了 KWIC 索引程序的早期版本, 详细内容在 \texttt{Programming
+Pearls}, \textit{Communications of the ACM}, 1985 年 6 月. 维护交叉引用
+的程序基于 Aho 与 Sethi 的工作, ``Maintaining Cross-Reference in
+Manuscripts'', CSTR 129, AT\&T Bell Laboratories, Murray Hill, NJ (1986). 
+构造索引的程序源自 Bentley 与 Kernighan 的工作, ``Tools for Printing
+Indexes'', CSTR 130, AT\&T Bell Laboratories, Murray Hill, NJ (1986).
