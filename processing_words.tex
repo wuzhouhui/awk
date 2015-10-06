@@ -780,6 +780,71 @@ Unix 管道提供了一个三步骤的解决方案: 第一个程序生成每一�
                 substr($1,1,WID))
     } '
 \end{shell}
-第一个程序首先打印每个输入行的副本, 然后, 对输入行内的每一个空格打印一
-个输出行, 
-\marginpar{124}
+第一个程序首先打印每个输入行的副本, 然后, 为输入行内的每一个空格打印一
+行输出, 输出行由三部分构成: 当前输入行空格后的内容, 制表符, 当前输入行%
+\marginpar{124}%
+空格前的内容.
+
+所有的输出行再以管道的方式输送给 Unix 命令 \texttt{sort -f}, 选项
+\texttt{-f} 表示 ``合并 (folding)'' 大小写, 比如, \texttt{Jack} 与 
+\texttt{jack} 将会紧挨在一起出现.
+
+第二个 awk 程序对 \texttt{sort} 的输出进行重构与格式化. 它首先打印当前
+输入行制表符后面的内容, 再是一个制表符, 最后是当前输入行制表符前面的
+内容.
+
+\begin{exercise}
+    为 \texttt{kwic} 添加一个 ``停止列表 (stop list)'', ``停止列表'' 指的是 
+    不能看作关键词的单词集合, 比如 ``a'', ``the''.
+\end{exercise}
+
+\begin{exercise}
+    修改 \texttt{kwic}, 使得它可以显示尽可能多行内数据, 方法是在末尾换行,
+    而非截断.\footnote{原文为 Fix \texttt{kwic} to show as much as possible
+    of lines, by wrapping around at the ends rather than truncating.}
+\end{exercise}
+
+\begin{exercise}
+    编写一个创建重要语汇索引 (concordance) 的程序: 对每一个重要的单词,
+    显示所有的出现了该单词的句子或短语.
+\end{exercise}
+
+\subsection{制作索引}
+\label{subsec:making_indexes}
+
+编写大型文档 (例如书籍或手册) 时, 一个附带的任务是为文档制作索引. 这
+个任务由两部分组成: 第一部分是决定为哪些术语制作索引, 想把这部分工作
+做好需要多花点脑子, 而且它无法通过机械化步骤完成; 另一部分则完成是机械
+化的: 根据索引字和页码列表, 生成按字母排序且精心格式化过的索引, 本书的
+最后几页就是由索引组成的.
+
+在本节的剩下部分里, 我们将使用 awk 和 \texttt{sort} 构造一个索引器的
+核心部分 (用于构造本书索引的索引器只比它稍微复杂了一点). 基本思路类似于
+KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小任务只需要
+一行排序命令或一个简短的 awk 程序就可以完成. 由于每一个小任务都很简单
+且独立, 所以它们很容易通过扩充或修改, 来满足更加复杂的索引需求.
+
+这些程序包含了许多与 \texttt{troff} 相关的细节 (本书就是用 \texttt{troff}
+排版的), 如果我们用了其他排版程序 (比如 TEX 或 Scribe), 那么这些细节
+都会发生变化, 不过程序的基本结构是一样的.
+
+我们通过在文本当中插入格式化命令来为书籍制作索引. 当 \texttt{troff} 扫描 
+文本时, 这些命令使得索引字与页码被搜集到一个文件中. 文件的内容类似于下面
+的文本, 这些文本是索引准备程序的原材料 (索引字与页码之间用一个制表符分
+开):
+\marginpar{125}%
+\begin{file}
+    [FS] variable	35
+    [FS] variable	36
+    arithmetic operators	36
+    coercion rules	44
+    string comparison	44
+    numeric comparison	44
+    arithmetic operators	44
+    coercion~to number	45
+    coercion~to string	45
+    [if]-[else] statement	47
+    control-flow statements	48
+    [FS] variable	52
+    ...
+\end{file}
