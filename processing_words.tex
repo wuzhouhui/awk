@@ -1054,3 +1054,60 @@ actual data.}
     number coercion to  number, coercion to     45
     ...
 \end{file}
+
+\marginpar{129}
+最后一步是用程序 \texttt{ix.format} 移除排序键, 把 \texttt{[...]} 扩展
+成\texttt{troff} 的字体设置命令, 并在每个术语之前加上一个格式化命令
+\texttt{.XX}, 格式化程序可以利用这个命令控制文本的大小, 位置等. (实际 
+产生的命令只对 \texttt{troff} 有意义, 你大可忽略这些细节)
+\begin{awkcode}
+    # ix.format - remove key, restore size and font commands
+    #   input:  sort key tab string tab num num ...
+    #   output: troff format, ready to print
+
+    BEGIN { FS = "\t" }
+
+    {   gsub(/ /, ", ", $3)        # commas between page numbers
+        gsub(/\[/, "\\f(CW", $2)   # set constant-width font
+        gsub(/\]/, "\\fP", $2)     # restore previous font
+        print ".XX"                # user-definable command
+        printf("%s  %s\n", $2, $3) # actual index entry
+    }
+\end{awkcode}
+输出的部分内容是
+\begin{file}
+    .XX
+    arithmetic operators  36, 44
+    .XX
+    coercion rules  44
+    .XX
+    coercion to number  45
+    ...
+\end{file}
+
+概括起来, 索引构造过程由六个命令的流水线组成
+\begin{shell}
+    sh ix.sort1 |
+    awk -f ix.collapse |
+    awk -f ix.rotate |
+    awk -f ix.genkey |
+    sh ix.sort2 |
+    awk -f ix.format
+\end{shell}
+如果把本节开头所展示的 \mbox{索引字}-页码\ 对集合作为输入数据, 再对输出
+进行格式化, 则最终的排版结果是
+\begin{pattern}
+\indent\indent    arithmetic operators 36, 44\par
+\indent\indent    coercion rules 44\par
+\indent\indent    coercion to number 45\par
+\indent\indent    coercion to string 45\par
+\indent\indent    comparison, numeric 44\par
+\indent\indent    comparison, string 44\par
+\indent\indent    control-flow statements 48\par
+\indent\indent    \texttt{FS} variable 35, 36, 52\par
+\indent\indent    \texttt{if-else} statement 47\par
+\indent\indent    number, coercion to 45\par
+\indent\indent    numeric comparison 44\par
+\end{pattern}
+
+\marginpar{130}
