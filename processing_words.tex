@@ -3,7 +3,7 @@
 \label{chap:processing_words}
 
 \marginpar{111}
-本章的程序指向一个共同主题: 文本处理. 示例程序涵盖的范围包括随机单词
+本章的程序都指向一个共同主题: 文本处理. 示例程序涵盖的范围包括随机单词
 与句子的生成 (生成的句子可以和用户进行有限的对话), 以及文本处理. 大多数示例
 程序都很简单, 它们只是起说明作用, 但是, 其中一些文件准备程序的确拥有实际
 用途.
@@ -11,16 +11,16 @@
 \section{随机文本发生器}
 \label{sec:random_text_generation}
 
-生成随机数据的程序有许多种用途. 这种程序可以用内建函数 \texttt{rand} 来
-创建, 该函数每次被调用时, 都会返回一个伪随机数. \texttt{rand} 每次都使用
-同一个种子数来生成随机数, 所以, 如果你想要得到一个不同的随机数序列, 你
+生成随机数据的程序有多种用途, 这种程序可以用内建函数 \texttt{rand} 
+创建, 每次调用该函数都会返回一个伪随机数. \texttt{rand} 每次都使用
+同一个种子数来生成随机数, 所以, 如果你想要得到一个不同的随机数序列,
 就必须调用一次 \texttt{srand()}, 它根据当前时间计算出一个种子数, 并用
 该种子数初始化 \texttt{rand}.
 
 \subsection{随机选择}
 \label{subsec:random_choices}
 
-\texttt{rand} 每次被调用时都会返回 一个大于等于 0, 小于 1 的浮点数, 但是
+ 每次调用\texttt{rand}都会返回 一个大于等于 0, 小于 1 的浮点数, 但是
 一般来说, 更通常的需求是返回一个 \texttt{1} 到 \texttt{n} 之间的随机整数,
 我们可以用 \texttt{rand} 来实现:
 \begin{awkcode}
@@ -32,10 +32,10 @@
 \end{awkcode}
 \texttt{randint(n)} 按比例调整 \texttt{rand} 的返回值, 调整后的值大于
 等于 \texttt{0} 并且小于 \texttt{n}, 将小数部分截去可以得到 \texttt{0} 
-到 \texttt{n-1} 的整数, 然后再加 1, 就是 \texttt{1} 到 \texttt{n} 之间的 
+至 \texttt{n-1} 的整数, 然后再加 1, 就是 \texttt{1} 到 \texttt{n} 之间的 
 整数.
 
-我们可以用 \texttt{randint} 来随机选择一个字母:
+我们可以用 \texttt{randint} 随机选择一个字母:
 \marginpar{112}
 \begin{awkcode}
     # randlet - generate random lower-case letter
@@ -45,14 +45,14 @@
     }
 \end{awkcode}
 
-利用 \texttt{randint}, 很容易就可以从一个 \texttt{n} 项的数组中随机选择一
+利用 \texttt{randint}, 我们可以从 \texttt{n} 项的数组中随机选择一
 个元素:
 \begin{awkcode}
     print x[randint(n)]
 \end{awkcode}
-一个更有趣的问题是从某个数组中随机选择几项, 被选中的项必须按照原来的顺序
-排列. 举例来说, 如果数组 \texttt{x} 按照升序排列, 则被选中的元素也要按照
-升序排列.
+一个更有趣的问题是如何从数组中随机选择几项, 并且被选中的项必须按照原来
+的顺序 排列. 举例来说, 如果数组 \texttt{x} 按照升序排列, 则被选中的元
+素也要按照升序排列.
 
 函数 \texttt{choose} 从数组 \texttt{A} 的前 \texttt{n} 中随机选择
 \texttt{k} 个元素, 并按照原来的顺序打印出来:
@@ -68,15 +68,15 @@
     }
 \end{awkcode}
 在函数内, \texttt{k} 是还需要打印的项的数目, \texttt{n} 是数组中等待检验
-的元素个数. 打印第 \texttt{i} 个元素的条件是 \verb'rand() < k/n', 每当有
-一个元素被打印出来, \texttt{k} 就递减一次, 每当判断条件 \verb'rand() < k/n'
-被测试一次, \texttt{n} 就递减一次.
+的元素个数. 打印第 \texttt{i} 个元素的条件是 \verb'rand() < k/n', 每输出
+一个元素, \texttt{k} 就递减一次, 每测试一次 \verb'rand() < k/n',
+\texttt{n} 就递减一次.
 
 \begin{exercise}
     测试 \texttt{rand} 的输出是不是真的随机数.
 \end{exercise}
 \begin{exercise}
-    写一个程序, 该程序生成 1 到 $n$ 之间的 $k$ 个不同的随机整数,
+    写一个程序, 该程序生成 1 到 $n$ 之间 $k$ 个不同的随机整数,
     程序的时间复杂 度与 $k$ 成正比.
 \end{exercise}
 \begin{exercise}
@@ -97,7 +97,7 @@
     Every man:has a price.
     All's well that:ends well.
 \end{file}
-冒号将主语和谓语分开. 我们的废话生成器随机选择一个主语与另一个谓语作组合,
+冒号将主语和谓语分开. 废话生成器随机选择一个主语与另一个谓语作组合,
 \marginpar{113}
 如果运气好的话, 可能会产生很有意思的格言警句:
 \begin{file}
@@ -107,7 +107,7 @@
     All's well that gathers no moss.
     He who lives by the sword has a price.
 \end{file}
-程序的代码实现非常明确:
+实现代码非常简单:
 \begin{awkcode}
     # cliche - generate an endless stream of cliches
     #     input:  lines of form subject:predicate
@@ -163,7 +163,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
     Sentence -> Nounphrase Verbphrase
              -> the boy Verbphrase
 \end{file}
-不断地使用该方法, 直到所有的非终结符都被替换掉为止:
+不断进行下去, 直到所有的非终结符都被替换掉为止:
 \begin{file}
     Sentence -> Nounphrase Verbphrase
              -> the boy Verbphrase
@@ -181,7 +181,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 另一条产生式规则 (该规则用空字符串替换掉 \texttt{Modlist}) 就可以终止潜在
 的无限循环.
 
-我们现在要开发一个程序, 该程序根据语法生成语句, 每次生成都从一个指定的非
+我们现在打算开发一个程序, 该程序根据语法生成语句, 每次生成都从一个指定的非
 终结符开始. 程序从文件中读取语法规则, 记录下每一个左部出现的次数, 
 左部所拥有的右部的个数, 以及它们各自的组成成分. 然后, 每输入一个非
 终结符, 就会为该非终结符生成一个随机语句.
@@ -314,11 +314,11 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 函数 \texttt{gen("A")} 为非终结符 \texttt{A} 生成一条语句. 如果前一次的扩展
 引入了非终结符, 那么函数通过递归调用自身来展开. 请记住, 所有被递归函数用%
 \marginpar{116}%
-到的临时变量都需要出现在函数的参数列表中, 如果某个变量没有出现在参数列表,
-那它就是全局变量, 此时程序就无法正确地工作.
+到的临时变量都需要出现在函数的参数列表中, 否则的话
+就是全局变量, 此时程序就无法正确地工作.
 
-我们把右部个数及其组成成分分别存放在两个数组中, 不过实际上, 不使用下标
-来编码不同的字段也是有可能的, 在其他语言中可以通过记录或结构体来实现. 
+我们把右部个数及其组成成分分别存放在两个数组中, 实际上, 不使用下标
+来编码字段也是可以的, 但并非通过其他语言中的记录或结构体来实现. 
 举例来说, 数组 \texttt{rhscnt[i,j]} 可以是 \texttt{rhslist} 的元素,
 表示成 \texttt{rhslist[i,j,"cnt"]}.\footnote{原文为 We chose to use
     separate arrays for the right-hand-side counts and components, but it
@@ -329,7 +329,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 
 \begin{exercise}
     写一套语法规则, 该规则能够生成关于某学科的, 听起来貌似合理的文本 ---
-    商业, 政治, 计算科学都是很好的选择.\footnote{原文为 Write a grammar for
+    学科可以是商业, 政治, 或计算机.\footnote{原文为 Write a grammar for
         generating plausible-sounding text from a field that appeals to you
     -- business, politics, and computing are all good possibilities.}
 \end{exercise}
@@ -447,8 +447,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
     Fluorine?
     ...
 \end{shell}
-注意, 备选答案 (例如 sodium 或 natrium) 很容易通过数据文件中的正则表达
-式来处理.
+注意, 我们可以通过正则表达式来处理备选答案 (例如 sodium 或 natrium).
 \begin{awkcode}
     # quiz - present a quiz
     #   usage: awk -f quiz topicfile question-subj answer-subj
@@ -489,13 +488,13 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
     function error(s) { printf("error: %s\n", s); exit }
 \end{awkcode}
 \marginpar{119}
-为了辨别出正确答案, 我们用 \texttt{\^} 和 \texttt{\$} 包围正则表达式, 否则的
+为了辨别出正确答案, 我们用 \verb'^' 和 \texttt{\$} 包围正则表达式, 否则的
 话, 只要用户的回答中含有与标准答案匹配的子字符串, 那么该回答就会被认为是
 正确的 (于是, \texttt{Ne}, \texttt{Na} 与 \texttt{N} 都会被当作标准答案
 \texttt{N}).
 
 \begin{exercise}
-    修改 \texttt{quiz}, 使得它对于同一道问题, 最多输出一次.
+    修改 \texttt{quiz}, 使得它对于同一道问题最多输出一次.
 \end{exercise}
 
 \section{文本处理}
@@ -558,7 +557,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 
 程序 \texttt{fmt} 把它的输入格式化成每行至多 60 个字符, 基本思路是通过移动
 单词, 尽可能地把每一行都塞满. 空行表示分段, 除此之外没有其他控制指令.
-有些文本在创建时没有考虑到每行的长度, 可以使用 \texttt{fmt} 对这些文本
+如果某些文本在创建时没有考虑到每行的长度, 就可以使用 \texttt{fmt} 对它们
 进行格式化.
 \begin{awkcode}
     # fmt - format
@@ -600,7 +599,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 文献引用, 图表, 示例等.\footnote{原文为 A common problem in document
     preparation is creating a consistent set of names or numbers for items
 like bibliographic citations, figures, tables, examples, and so on.}
-某些文本格式化程序可以帮助我们完成这件工作, 但是大多数情况下需要你自己来
+某些文本格式化程序可以帮助我们完成这件工作, 但是大多数情况下还是需要自己来
 完成. 我们的下一个例子是对交叉引用进行编号, 该技术对于技术文档编写来说
 特别有用.
 
@@ -633,7 +632,7 @@ symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不�
     [_huck_] Twain, M., Adventures of Huckleberry Finn,
         Webster & Co., 1885.
 \end{file}
-每一个符号名均由下面这种形式的行来定义:
+每一个定义符号名的行都具有形式:
 \begin{file}
     .#Category _SymbolicName_
 \end{file}
@@ -642,8 +641,8 @@ symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不�
 规定符号名以下划线开始并结尾, 不过你也可以使用其他任意的名字, 前提是
 你可以从文本中把它们分离出来 (条目的名字不可以相同, 即使它们在不同的
 类别中). 名字 \texttt{.\#Fig} 与 \texttt{.\#Big} 以句点开始, 这样的话即使
-交叉引用未被解析, 格式化程序 \texttt{troff} 也可以忽略它们, 对于不同的
-格式化程序, 我们可能需要作不同的约定.
+交叉引用未被解析, 格式化程序 \texttt{troff} 也可以忽略它们 (对于不同的
+格式化程序, 我们可能需要作不同的约定)
 
 转换程序创建一份新版本的文档, 在新版本中, 定义被删除, 并且每一个符号名
 都被一个数字所替代. 在每一个类别中, 数字从 1 开始, 并按照原始文档中该
@@ -703,7 +702,7 @@ symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不�
 开始的行, 从而删除掉符号名定义.
 
 \begin{exercise}
-    如果符号名末尾的下划线被不小心遗漏了, 会发生什么事?
+    如果遗漏了符号名末尾的下划线, 会发生什么事?
 \end{exercise}
 
 \begin{exercise}
@@ -805,7 +804,7 @@ Unix 管道提供了一个三步骤的解决方案: 第一个程序生成每一�
 \end{exercise}
 
 \begin{exercise}
-    修改 \texttt{kwic}, 使得它可以显示尽可能多行内数据, 方法是在末尾换行,
+    修改 \texttt{kwic}, 使得它可以显示尽可能多的行内数据, 方法是在末尾换行,
     而非截断.\footnote{原文为 Fix \texttt{kwic} to show as much as possible
     of lines, by wrapping around at the ends rather than truncating.}
 \end{exercise}
@@ -818,25 +817,25 @@ Unix 管道提供了一个三步骤的解决方案: 第一个程序生成每一�
 \subsection{制作索引}
 \label{subsec:making_indexes}
 
-编写大型文档 (例如书籍或手册) 时, 一个附带的任务是为文档制作索引. 这
+编写大型文档 (例如书籍或手册) 时, 通常情况下需要制作一份索引. 这
 个任务由两部分组成: 第一部分是决定为哪些术语制作索引, 想把这部分工作
 做好需要多动点脑子, 而且它无法通过机械化步骤完成; 另一部分则完成是机械
-化的: 根据索引字和页码列表, 生成按字母排序且精心格式化过的索引, 本书的
+化的: 根据索引字和页码列表, 生成按字母排序且精心格式化过的索引. 本书的
 最后几页就是由索引组成的.
 
 在本节的剩下部分里, 我们将使用 awk 和 \texttt{sort} 构造一个索引器的
-核心部分 (用于构造本书索引的索引器只比它稍微复杂了一点). 基本思路类似于
+核心部分 (本书所用的索引构造程序只比它稍微复杂了一点). 基本思路类似于
 KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小任务只需要
 一行排序命令或一个简短的 awk 程序就可以完成. 由于每一个小任务都很简单
-且独立, 所以它们很容易通过扩充或修改, 来满足更加复杂的索引需求.
+且独立, 所以很容易通过扩充或修改它们, 来满足更加复杂的索引需求.
 
 这些程序包含了许多与 \texttt{troff} 相关的细节 (本书就是用 \texttt{troff}
-排版的), 如果我们用了其他排版程序 (比如 TEX 或 Scribe), 那么这些细节
+排版的), 如果用的是其他排版程序 (比如 TEX 或 Scribe), 那么这些细节
 都会发生变化, 不过程序的基本结构是一样的.
 
-我们通过在文本当中插入格式化命令来为书籍制作索引. 当 \texttt{troff} 扫描 
-文本时, 这些命令使得索引字与页码被搜集到一个文件中. 文件的内容类似于下面
-的文本, 这些文本是索引准备程序加工处理的原材料
+我们通过在文本中插入格式化命令来为书籍制作索引. 当 \texttt{troff} 扫描 
+文本时, 根据命令把索引字与页码搜集到一个文件中. 文件的内容类似于下面
+的文本, 这些文本是索引准备程序进一步加工处理的原材料
 (索引字与页码之间用一个制表符分开):
 \marginpar{125}%
 \begin{file}
@@ -863,7 +862,7 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
     string comparison 44
     comparison, string 44
 \end{file}
-索引字通常按照术语中出现的每一个空格进行分割并旋转, 波浪号 \texttt{\~}
+索引字通常按照术语中出现的每一个空格进行分割并旋转, 波浪号 \verb'~'
 用于阻止分割:
 \begin{file}
     coercion~to number      45
@@ -871,8 +870,8 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
 将不会对 ``to'' 进行索引.
 
 有几个细节需要注意. 由于我们用的是 \texttt{troff}, 它有一些字号与字体
-设置命令, 所以我们在排序时需要识别并忽略它们. 另外, 由于在索引中我们需要
-经常改变字体, 所以我们使用简写 \texttt{[...]} 表示在索引中用等宽字体显示
+设置命令, 所以在排序时需要识别并忽略它们. 另外, 由于字体需要经常改变,
+所以我们用命令 \texttt{[...]} 表示在索引中用等宽字体显示
 被方括号包围的文本, 例如 
 \begin{file}
     [if]-[else] statement
@@ -992,7 +991,7 @@ comparison}'' 生成 ``\texttt{comparison, string}''. 旋转操作与 KWIC
     ...
 \end{file}
 
-下一个步骤是对旋转后的索引字排序. 但是如果直接对它们进行排序的话, 由于它们
+下一个步骤是对旋转后的索引字排序. 如果直接对它们进行排序, 由于文本内
 仍然嵌入有格式化命令 (比如 \texttt{[...]}), 这些命令会对排序结果造成
 干扰. 我们的解决办法是为每一行加上一个前缀 (排序键), 这个前缀确保排序结果
 是正确的, 在后面的步骤中会把这些前缀移除. 程序 \texttt{ix.genkey} 通过移除 
@@ -1132,7 +1131,7 @@ actual data.}
 \end{exercise}
 
 \begin{exercise}
-    构造一个准备单词, 短语列表的工具程序, 利用该程序来自动创建索引.
+    构造一个准备单词与短语列表的工具程序, 利用该程序来自动创建索引.
     在促成索引字与主题方面, \texttt{wordfreq} 所生成的单词频率列表
     表现如何?\footnote{Attack the problem of creating an index
         automatically by building tools that prepare lists of words,
