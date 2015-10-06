@@ -887,7 +887,7 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
 制作索引的过程由六个命令共同完成:
 \begin{tabbing}
 \indent\texttt{ix.sort1} \hspace{5em} \= 先按索引字, 再按页码对输入进行排序 \\
-\indent\texttt{ix.collapse}    \> 折叠同一个术语的页码 \\
+\indent\texttt{ix.collapse}    \> 合并同一个术语的页码 \\
 \indent\texttt{ix.rotate}  \> 生成索引字的旋转 \\
 \indent\texttt{ix.genkey}  \> 为了强制按照正确的顺序进行排序, 生成一个排序键 \\
 \indent\texttt{ix.sort2}   \> 按照排序键进行排序 \\
@@ -1034,5 +1034,31 @@ comparison}'' 生成 ``\texttt{comparison, string}''. 旋转操作与 KWIC
     coercion to string  coercion to string      45
     string coercion to  string, coercion to     45
     controlflow statements      control-flow statements 48
+    ...
+\end{file}
+前面几行应该能够阐明排序键与实际数据之间的区别.\footnote{原文为 The first
+    few lines should clarify the distinction between the sort key and the
+actual data.}
+
+第二个排序命令对输入按照字母顺序排序, 同之前的一样, 选项 \texttt{-f}
+表示合并大小写字母, \texttt{-d} 表示按照字典序排序.
+\begin{awkcode}
+    # ix.sort2 - sort by sort key
+    #     input/output: sort-key tab string tab num num ...
+
+    sort -f -d
+\end{awkcode}
+程序的输出是索引最终的排列顺序:
+\begin{file}
+    arithmetic operators        arithmetic operators    36 44
+    coercion rules      coercion rules  44
+    coercion to number  coercion to number      45
+    coercion to string  coercion to string      45
+    comparison numeric  comparison, numeric     44
+    comparison string   comparison, string      44
+    controlflow statements      control-flow statements 48
+    FS variable [FS] variable   35 36 52
+    ifelse statement    [if]-[else] statement   47
+    number coercion to  number, coercion to     45
     ...
 \end{file}
