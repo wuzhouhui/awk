@@ -898,4 +898,57 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
     #     sort by string, then by number; discard duplicates
 \end{awkcode}
 \texttt{sort -t '}\textit{tab}\texttt{' +0 -1 +1n -2 -u} \par 
+解释一下 \texttt{sort} 的命令行参数: \texttt{-t'}\textit{tab}\texttt{'}
+表示使用制表符作为字段分隔符; \texttt{+0 -1} 表示第一个排序键是第一个字段,
+结果是按照字母排序; \texttt{+1n -2} 表示第二个排序键是第二个字段, 结果 
+是按照数值排序; \texttt{-u} 表示丢弃重复条目. (在第
+\ref{chap:little_languages} 章我们将展示一个排序生成程序, 它可以根据你
+的需要构建排序命令的参数) 如果以上面的数据作为输入, 则 \texttt{ix.sort1}
+的输出是:
+\begin{file}
+    arithmetic operators        36
+    arithmetic operators        44
+    coercion rules      44
+    coercion~to number  45
+    coercion~to string  45
+    control-flow statements     48
+    [FS] variable       35
+    [FS] variable       36
+    [FS] variable       52
+    [if]-[else] statement       47
+    numeric comparison  44
+    string comparison   44
+\end{file}
 
+这个输出成为下一个程序 \texttt{ix.collapse} 的输入, 它把同一个术语的页码
+都放在同一行, 该程序是通常的 control-break 程序的变形.
+\begin{awkcode}
+    # ix.collapse - combine number lists for identical terms
+    #   input:  string tab num \n string tab num ...
+    #   output: string tab num num ...
+
+    BEGIN { FS = OFS = "\t" }
+    $1 != prev {
+        if (NR > 1)
+            printf("\n")
+        prev = $1
+        printf("%s\t%s", $1, $2)
+        next
+    }
+        { printf(" %s", $2) }
+
+    END { if (NR > 1) printf("\n") }
+\end{awkcode}
+\texttt{ix.collapse} 的输出是 
+\marginpar{127}
+\begin{file}
+    arithmetic operators        36 44
+    coercion rules      44
+    coercion~to number  45
+    coercion~to string  45
+    control-flow statements     48
+    [FS] variable       35 36 52
+    [if]-[else] statement       47
+    numeric comparison  44
+    string comparison   44
+\end{file}
