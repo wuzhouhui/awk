@@ -7,8 +7,8 @@
 某些应用领域的专用编程语言), 
 开发翻译器的原因主要有三点. 首先, 它可以帮助你了解语言处理程序的工作流程.
 本章的第一个例子是一个汇编程序, 虽然只有 20 来行, 但已经包含了汇编过程
-的核心要素, 为了执行汇编程序, 我们还要开发一个解释器程序. 汇编程序与
-解释器反映了早期阶段 汇编语言与机器架构的关系. 其他例子还包括一个
+的核心要素, 为了执行汇编程序, 我们还要开发一个解释程序. 汇编程序与
+解释程序反映了早期阶段汇编语言与机器架构的关系. 其他例子还包括一个
 后缀计算器, awk 子集的递归下降分析器.
 
 第二个原因是在实际工作中, 为了实现一个专用的编程语言, 通常需要投入大
@@ -62,3 +62,160 @@
 虽然我们把语言的处理过程描述成多个界限分明的不同步骤, 但实际上, 这些界限
 通常很模糊, 而且有些步骤有可能被合并成一个.
 \marginpar{132}
+
+利用 awk 为实验性语言构造处理程序非常方便, 这是因为它支持许多和语言翻译
+相关的操作. 对源程序的分析可以通过字段分割与正则表达式来完成, 用关联数组
+管理符号表, 用 \texttt{printf} 生成目标代码.
+
+关于上面提到的几点, 我们将通过开发几个翻译器来进一步说明. 在保证足够说明
+问题的前提下,  将尽量保持程序的简短, 而把润色与优化留到习题中.
+
+\subsection{汇编程序与解释程序}
+\label{subsec:an_assembler_and_interpreter}
+
+我们的第一个例子是虚拟计算机的汇编程序, 虚拟计算机这个概念经常出现在
+计算机体系 结构或系统编程的基础课程中. 虚拟计算机有一个累加器, 十条
+指令, 按字编址且大小为 1000 字的内存, 我们假设内存的一个 ``字'' 可以
+保存5个十进制数位, 如果某个字存放的是一条指令, 那么前两个数位表示操作
+码, 最后三个数位表示内存地址. 所有的汇编语言指令在表
+\ref{tbl:assembly_language_instructions} 中列出.
+\begin{figure}[ht]
+\captionsetup{type=table}
+\caption{汇编语言指令集}
+\label{tbl:assembly_language_instructions}
+\begin{center}
+    \begin{tabular}{c|l|l}
+        \hline
+        \hline
+        操作码          & 指令    &
+        \multicolumn{1}{c}{意义}  \\
+        \hline
+        \texttt{01}     & \texttt{get}  & 从输入读取一个数, 并存放到累
+        加器中 \\
+        \texttt{02}     & \texttt{put}  & 把累加器的值写到输出 \\
+        \texttt{03}     & \texttt{ld M}  & 把地址为 \texttt{M} 的内存单元
+        的值读取到累加器中 \\
+        \texttt{04}     & \texttt{st M}  & 把累加器的值存放到地址为 
+        \texttt{M} 的内存单元中 \\
+        \texttt{05}     & \texttt{add M} & 把地址为 \texttt{M} 的内存单元 
+        的值与累加器的值相加, 再把结果存放到累加器中 \\
+        \texttt{06}     & \texttt{sub M} & 把地址为 \texttt{M} 的内存单元 
+        的值与累加器的值相减, 再把结果存放到累加器中 \\
+        \texttt{07}     & \texttt{jpos M} & 如果累加器的值为正, 则跳转到
+        内存地址 \texttt{M} \\
+        \texttt{08}     & \texttt{jz M} & 如果累加器的值为零, 则跳转到 
+        内存地址 \texttt{M}     \\
+        \texttt{09}     & \texttt{j M}  & 跳转到内存地址 \texttt{M} \\
+        \texttt{10}     & \texttt{halt} & 停止执行 \\
+                        & \texttt{const C} & 伪操作符, 用于定义一个常量
+                        \texttt{C} \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{figure}
+
+汇编语言程序由语句序列组成, 每一条语句都包括三个部分: 标号, 操作符, 
+操作数, 任意一个部分都可以省略, 标号如果存在, 则必须是所在行的第一个
+字段. 程序可以包含 awk 形式的注释. 这里有一个简单的汇编语言程序, 它
+的功能是输出多个整数的和, 0 表示输入结束.
+\marginpar{133}
+\begin{file}
+    # print sum of input numbers (terminated by zero)
+
+         ld    zero   # initialize sum to zero
+         st    sum
+    loop get          # read a number
+         jz    done   # no more input if number is zero
+         add   sum    # add in accumulated sum
+         st    sum    # store new value back in sum
+         j     loop   # go back and read another number
+
+    done ld    sum    # print sum
+         put
+         halt
+
+    zero const 0
+    sum  const
+\end{file}
+
+对应的目标程序由整数序列组成, 这些整数其实就是程序的机器码形式, 当目标
+程序运行时, CPU 从内存中读取指令, 译码并执行. 上面程序的机器码是:
+\begin{file}
+     0: 03010           ld      zero    # initialize sum to zero
+     1: 04011           st      sum
+     2: 01000      loop get             # read a number
+     3: 08007           jz      done    # no more input if number is zero
+     4: 05011           add     sum     # add in accumulated sum
+     5: 04011           st      sum     # store new value back in sum
+     6: 09002           j       loop    # go back and read another number
+     7: 03011      done ld      sum     # print sum
+     8: 02000           put
+     9: 10000           halt
+    10: 00000      zero const 0
+    11: 00000      sum  const
+\end{file}
+第一个字段是内存地址, 第二个字段是编码后的指令. 内存地址 0 存放的是汇编
+语言程序的第一条指令: \texttt{ld zero}.
+
+汇编程序对源程序进行汇编时需要遍历两次. 第一次遍历利用字段分割操作对源
+程序进行词法与语法检查: 读取汇编语言源程序, 忽略注释, 为每一个标号分配
+内存地址, 把操作符与操作数的中间表示形式写到一个临时文件中. 第二次遍历
+读取临时文件, 根据第一次遍历时计算的结果, 把符号化的操作数转换成内存地
+址, 对操作符与操作数进行编码, 把最终的机器语言程序保存到数组 \texttt{mem}
+中.
+
+我们将会开发一个解释器来完成另一半的工作, 解释器可以用来模拟计算机执行
+机器语言程序时所表现出的行为. 解释器循环地从 \texttt{mem} 中读取指令,
+把指令译码成操作符与操作数, 再模拟指令的执行. 变量 \texttt{pc} 用来模拟
+程序计数器 (program counter).
+\marginpar{134}
+\begin{file}
+    # asm - assembler and interpreter for simple computer
+    #   usage: awk -f asm program-file data-files...
+
+    BEGIN {
+        srcfile = ARGV[1]
+        ARGV[1] = ""  # remaining files are data
+        tempfile = "asm.temp"
+        n = split("const get put ld st add sub jpos jz j halt", x)
+        for (i = 1; i <= n; i++)   # create table of op codes
+            op[x[i]] = i-1
+
+    # ASSEMBLER PASS 1
+        FS = "[ \t]+"
+        while (getline <srcfile > 0) {
+            sub(/#.*/, "")         # strip comments
+            symtab[$1] = nextmem   # remember label location
+            if ($2 != "") {        # save op, addr if present
+                print $2 "\t" $3 >tempfile
+                nextmem++
+            }
+        }
+        close(tempfile)
+
+    # ASSEMBLER PASS 2
+        nextmem = 0
+        while (getline <tempfile > 0) {
+            if ($2 !~ /^[0-9]*$/)  # if symbolic addr,
+                $2 = symtab[$2]    # replace by numeric value
+            mem[nextmem++] = 1000 * op[$1] + $2  # pack into word
+        }
+
+    # INTERPRETER
+        for (pc = 0; pc >= 0; ) {
+            addr = mem[pc] % 1000
+            code = int(mem[pc++] / 1000)
+            if      (code == op["get"])  { getline acc }
+            else if (code == op["put"])  { print acc }
+            else if (code == op["st"])   { mem[addr] = acc }
+            else if (code == op["ld"])   { acc  = mem[addr] }
+            else if (code == op["add"])  { acc += mem[addr] }
+            else if (code == op["sub"])  { acc -= mem[addr] }
+            else if (code == op["jpos"]) { if (acc >  0) pc = addr }
+            else if (code == op["jz"])   { if (acc == 0) pc = addr }
+            else if (code == op["j"])    { pc = addr }
+            else if (code == op["halt"]) { pc = -1 }
+            else                         { pc = -1 }
+        }
+    }
+\end{file}
