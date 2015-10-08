@@ -68,7 +68,7 @@
 管理符号表, 用 \texttt{printf} 生成目标代码.
 
 关于上面提到的几点, 我们将通过开发几个翻译器来进一步说明. 在保证足够说明
-问题的前提下,  我们将尽量保持程序的简短, 而把润色与优化留到习题中.
+问题的前提下,  将尽量保持程序的简短, 而把润色与优化留到习题中.
 
 \subsection{汇编程序与解释程序}
 \label{subsec:an_assembler_and_interpreter}
@@ -78,12 +78,17 @@
 指令, 按字编址且大小为 1000 字的内存, 我们假设内存的一个 ``字'' 可以
 保存5个十进制数位, 如果某个字存放的是一条指令, 那么前两个数位表示操作
 码, 最后三个数位表示内存地址. 所有的汇编语言指令在表
-\ref{tbl:assembly-language instructions} 中列出.
+\ref{tbl:assembly_language_instructions} 中列出.
+\begin{figure}[ht]
+\captionsetup{type=table}
+\caption{汇编语言指令集}
+\label{tbl:assembly_language_instructions}
 \begin{center}
     \begin{tabular}{c|l|l}
         \hline
         \hline
-        操作码          & 指令          & 意义  \\
+        操作码          & 指令    &
+        \multicolumn{1}{c}{意义}  \\
         \hline
         \texttt{01}     & \texttt{get}  & 从输入读取一个数, 并存放到累
         加器中 \\
@@ -102,10 +107,12 @@
         内存地址 \texttt{M}     \\
         \texttt{09}     & \texttt{j M}  & 跳转到内存地址 \texttt{M} \\
         \texttt{10}     & \texttt{halt} & 停止执行 \\
-                        & \texttt{const C} & 定义一个常量 \texttt{C} \\
+                        & \texttt{const C} & 伪操作符, 用于定义一个常量
+                        \texttt{C} \\
         \hline
     \end{tabular}
 \end{center}
+\end{figure}
 
 汇编语言程序由语句序列组成, 每一条语句都包括三个部分: 标号, 操作符, 
 操作数, 任意一个部分都可以省略, 标号如果存在, 则必须是所在行的第一个
@@ -133,8 +140,19 @@
 
 对应的目标程序由整数序列组成, 这些整数其实就是程序的机器码形式, 当目标
 程序运行时, CPU 从内存中读取指令, 译码并执行. 上面程序的机器码是:
-\footnote{TODO}
 \begin{file}
+     0: 03010           ld      zero    # initialize sum to zero
+     1: 04011           st      sum
+     2: 01000      loop get             # read a number
+     3: 08007           jz      done    # no more input if number is zero
+     4: 05011           add     sum     # add in accumulated sum
+     5: 04011           st      sum     # store new value back in sum
+     6: 09002           j       loop    # go back and read another number
+     7: 03011      done ld      sum     # print sum
+     8: 02000           put
+     9: 10000           halt
+    10: 00000      zero const 0
+    11: 00000      sum  const
 \end{file}
 第一个字段是内存地址, 第二个字段是编码后的指令. 内存地址 0 存放的是汇编
 语言程序的第一条指令: \texttt{ld zero}.
