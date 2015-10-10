@@ -70,7 +70,7 @@
 关于上面提到的几点, 我们将通过开发几个翻译器来进一步说明. 在保证足够说明
 问题的前提下,  将尽量保持程序的简短, 而把润色与优化留到习题中.
 
-\subsection{汇编程序与解释程序}
+\section{汇编程序与解释程序}
 \label{subsec:an_assembler_and_interpreter}
 
 我们的第一个例子是虚拟计算机的汇编程序, 虚拟计算机这个概念经常出现在
@@ -236,18 +236,22 @@
 可以同时用来存放常数与指令.
 
 \begin{exercise}
-    修改 \texttt{asm}, 使它可以打印出程序与内存内容, 就像上面显示的那样.
+    修改 \texttt{asm}, 打印程序与内存的内容, 就像上面显示的那样.
 \end{exercise}
 
 \begin{exercise}
-    增强解释器的功能, 使得它可以打印出指令的执行轨迹.
+    增强解释器的功能, 打印指令的执行轨迹.
 \end{exercise}
 
 \begin{exercise}
     适当扩大汇编语言的规模, 比如添加错误处理代码与其他条件判断指令. 为了 
-    方便用户使用, 你会怎么处理字面操作数, 比如 \texttt{add = 1} (如果 
-    不支持字面操作数, 就必须要求用户自己创建一个名为 \texttt{one} 的
+    方便用户使用, 你会怎么处理立即数, 比如 \texttt{add = 1} (如果 
+    不支持立即数, 就必须要求用户自己创建一个名为 \texttt{one} 的
     内存单元)?
+\end{exercise}
+
+\begin{exercise}
+    写一个反汇编程序, 把内存中的内容转换成对应的汇编语言.
 \end{exercise}
 
 \begin{exercise}
@@ -269,11 +273,11 @@
 An optional nonnumeric plotting character can follow either form of data
 value. 标签信息由一个关键词和多个参数值组成:
 \begin{pattern}
-\indent\texttt{label}\ \textit{caption}
+\indent\texttt{label}\ \textit{caption} \par
 \indent\texttt{range}\ \textit{xmin}\ \textit{ymin}\ \textit{xmax}\
     \textit{ymax} \par 
-\indent\texttt{left ticks}\ \textit{t}$_1$\ \textit{t}$_2$ ... \par 
-\indent\texttt{bottom ticks}\ \textit{t}$_1$\ \textit{t}$_2$ ... \par 
+\indent\texttt{left ticks}\ \ \textit{t}$_1$\ \textit{t}$_2$ ... \par 
+\indent\texttt{bottom ticks}\ \ \textit{t}$_1$\ \textit{t}$_2$ ... \par 
 \indent\texttt{height}\ \textit{number}\par
 \indent\texttt{width}\ \textit{number}\par
 \end{pattern}
