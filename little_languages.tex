@@ -119,7 +119,7 @@
 把指令译码成操作符与操作数, 再模拟指令的执行. 变量 \texttt{pc} 用来模拟
 程序计数器 (program counter).
 \marginpar{134}
-\begin{file}
+\begin{awkcode}
     # asm - assembler and interpreter for simple computer
     #   usage: awk -f asm program-file data-files...
 
@@ -168,7 +168,7 @@
             else                         { pc = -1 }
         }
     }
-\end{file}
+\end{awkcode}
 
 数组 \texttt{symtab} 记录标号的内存地址, 如果当前输入行没有标号, 那么内存
 地址赋值给 \texttt{symtab[""]}.
@@ -178,3 +178,59 @@
 \texttt{FS} 设置成 \verb'[ \t]+', 于是字段分隔符变成由多个空格符或制表
 符组成的序列. 比较特殊的是, 前导空格也被当作字段分隔符, 所以 \verb'$1'
 总是标号, 而 \verb'$2' 总是操作符.
+
+因为伪操作符 \texttt{const} 的操作码是 0, 所以在第二次遍历时, 语句
+\begin{awkcode}
+    mem[nextmem++] = 1000 * op[$1] + $2  # pack into word
+\end{awkcode}
+可以同时用来存放常数与指令.
+
+\begin{exercise}
+    修改 \texttt{asm}, 使它可以打印出程序与内存内容, 就像上面显示的那样.
+\end{exercise}
+
+\begin{exercise}
+    增强解释器的功能, 使得它可以打印出指令的执行轨迹.
+\end{exercise}
+
+\begin{exercise}
+    适当扩大汇编语言的规模, 比如添加错误处理代码与其他条件判断指令. 为了 
+    方便用户使用, 你会怎么处理字面操作数, 比如 \texttt{add = 1} (如果 
+    不支持字面操作数, 就必须要求用户自己创建一个名为 \texttt{one} 的
+    内存单元)?
+\end{exercise}
+
+\begin{exercise}
+    查看一台真实的机器 (比如 Apple-II 和 Commodore 的 6502 芯片, 或
+    IBM PC 及其兼容机的 8086 芯片族), 尝试为它的汇编语言子集写
+    一个汇编程序.
+\end{exercise}
+
+\section{画图语言}
+\label{sec:a_language_for_drawing_graphs}
+
+利用字段分割操作, 很容易就可以对我们自己定义的汇编语言作词法和语法分析,
+这种简易性对一些高级语言来说同样成立. 我们的下一个例子是 \texttt{graph} 
+的语言处理程序, \texttt{graph} 是一种用来画数据坐标图的原型语言. 输入
+是一张图的规范说明, 规范说明的每一行都表示一个数据点, 或坐标轴的标签
+信息. 数据点是由一对 \textit{x}-\textit{y} 表示, 如果只有一个 \textit{y},
+则 \textit{x} 是从 1 开始的递增序列, 即 1, 2, 3, ..., 
+% TODO
+An optional nonnumeric plotting character can follow either form of data
+value. 标签信息由一个关键词和多个参数值组成:
+\begin{pattern}
+\indent\texttt{label}\ \textit{caption}
+\indent\texttt{range}\ \textit{xmin}\ \textit{ymin}\ \textit{xmax}\
+    \textit{ymax} \par 
+\indent\texttt{left ticks}\ \textit{t}$_1$\ \textit{t}$_2$ ... \par 
+\indent\texttt{bottom ticks}\ \textit{t}$_1$\ \textit{t}$_2$ ... \par 
+\indent\texttt{height}\ \textit{number}\par
+\indent\texttt{width}\ \textit{number}\par
+\end{pattern}
+这些行的出现顺序是任意的, 任意一行都可以省略, 而且没有必要指定数据的值的
+范围.
+
+处理程序按比例调整数据点的大小, 并生成绘图命令. 为了使讨论更加具体,
+我们把它们打印到个 $24 \times 80$ 的字符数组中, 但是, 如果是为某些
+图像设备生成绘图命令, 实现起来其实也很容易. 例如, 输入数据:
+\marginpar{136}
