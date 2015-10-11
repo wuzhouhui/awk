@@ -119,7 +119,7 @@ row has the same number of entries.}. 下面的程序做的是同样的事情, �
 一般的定义可以在 \ref{sec:patterns} 节的正则表达式那里找到.
 
 \begin{exercise}
-    修改程序 \verb'sum3', 使它忽略空行.
+    修改程序 \verb'sum3': 忽略空行.
 \end{exercise}
 \begin{exercise}
     为数值添加更加一般的正则表达式. 它会如何影响运行时间?
@@ -130,8 +130,8 @@ row has the same number of entries.}. 下面的程序做的是同样的事情, �
 \end{exercise}
 \begin{exercise}
     写一个程序, 这个程序读取一个\ \mbox{条目}--数额\ 对列表, 对列表中的
-    每一个 条目, 累加它的数额; 在结束时, 打印条目以及它的总数额, 条目按
-    照字母顺序排序.
+    每一个 条目, 累加它的数额; 在结束时, 打印条目以及它的总数额, 条目
+    按照字母顺序排序.
 \end{exercise}
 
 \subsection{计算百分比与分位数}
@@ -209,7 +209,7 @@ row has the same number of entries.}. 下面的程序做的是同样的事情, �
 
 \marginpar{71}
 \begin{exercise}
-    根据比例决定星号的个数, 使得当数据过多时, 一行的长度不会超过屏幕的宽度.
+    根据比例决定星号的个数: 当数据过多时, 一行的长度不会超过屏幕的宽度.
 \end{exercise}
 
 \begin{exercise}
@@ -275,7 +275,7 @@ row has the same number of entries.}. 下面的程序做的是同样的事情, �
 \end{shell}
 
 \begin{exercise}
-    修复 \verb'sumcomma' (带逗号的数字求和程序), 使得它可以检查数字中的逗号
+    修复 \verb'sumcomma' (带逗号的数字求和程序): 检查数字中的逗号
     是否处于正确位置.
 \end{exercise}
 
@@ -492,7 +492,7 @@ the sum of one hundred twenty three dollars and 45 cents exactly
 
 \begin{exercise}
     对于负的, 或特别大的金额, 程序 \verb'prchecks' 处理得并不是很好. 修改 
-    程序, 使得程序能够拒绝金额为负的打印请求, 同时能将数额特别巨大的金额
+    程序: 拒绝金额为负的打印请求, 同时能将数额特别巨大的金额
     分成两行打印出来.
 \end{exercise}
 
@@ -503,7 +503,7 @@ the sum of one hundred twenty three dollars and 45 cents exactly
 \end{exercise}
 
 \begin{exercise}
-    修复 \verb'prchecks', 使得它能够在适当的地方, 为金额的大写形式加上
+    修改 \verb'prchecks': 在适当的地方, 为金额的大写形式加上
     连字符, 比如 ``twenty-one dollars''.
 \end{exercise}
 
@@ -931,7 +931,7 @@ awk 程序, 就可以把原来的程序应用到多行记录上. 第 1 个程序
 的程序通过分隔符 \verb'!!#' 识别原来的字段, 并重构出多行记录.
 
 \begin{exercise}
-    修改第 1 个 awk 程序, 使得它可以检查输入数据中是否包含魔术字符串
+    修改第 1 个 awk 程序: 检查输入数据中是否包含魔术字符串
     \verb'!!#'.
 \end{exercise}
 
@@ -1064,7 +1064,7 @@ the value it corresponds to, but they are not otherwise connected.}.
 \end{shell}
 
 程序非常简单, 只要输入数据格式正确, 不管记录中的条目以何种顺序出现, 程序 
-都能正确得工作. 但是程序也很脆弱, 它需要非常认真得初始化, 以及对文件结束
+都能正确得工作. 但是程序也很脆弱, 它需要非常认真地初始化, 以及对文件结束
 标志的处理. 我们还有另一种方案可供选择, 那就是一次读取一条记录, 当需要时
 再对记录的条目进行挑选. 下面的程序也是对存款与支票进行求和, 但它使用了一
 个函数, 这个函数提取具有指定名字的条目的值:
