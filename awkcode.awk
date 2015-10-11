@@ -2029,6 +2029,55 @@ asm.print     }
 asm.print     for (i = 0; i < nextmem; i++)    # new: print memory
 asm.print         printf("%3d:  %05d   %s\n", i, mem[i], input[i])  # new
 asm.print }
+graph.data label Annual Traffic Deaths, USA, 1925-1984
+graph.data range 1920 5000 1990 60000
+graph.data left ticks 10000 30000 50000
+graph.data bottom ticks 1930 1940 1950 1960 1970 1980
+graph.data 
+graph.data 1925 21800
+graph.data 1930 31050
+graph.data 1935 36369
+graph.data 1940 30234
+graph.data 1945 28354
+graph.data 1946 34922
+graph.data 1947 34852
+graph.data 1948 31932
+graph.data 1949 30432
+graph.data 1950 32943
+graph.data 1951 33213
+graph.data 1952 38345
+graph.data 1953 37453
+graph.data 1954 32987
+graph.data 1955 37043
+graph.data 1956 31943
+graph.data 1957 38432
+graph.data 1958 32345
+graph.data 1959 36943
+graph.data 1960 31942
+graph.data 1961 34832
+graph.data 1962 34945
+graph.data 1963 38456
+graph.data 1964 39845
+graph.data 1965 38495
+graph.data 1966 40345
+graph.data 1967 41094
+graph.data 1968 41294
+graph.data 1969 42945
+graph.data 1970 47309
+graph.data 1971 50324
+graph.data 1972 50943
+graph.data 1973 51945
+graph.data 1974 42945
+graph.data 1975 48945
+graph.data 1976 45039
+graph.data 1977 48946
+graph.data 1978 51028
+graph.data 1979 40395
+graph.data 1980 48934
+graph.data 1981 51500
+graph.data 1982 46000
+graph.data 1983 44600
+graph.data 1984 46200
 graph # graph - processor for a graph-drawing language
 graph #   input:  data and specification of a graph
 graph #   output: data plotted in specified area
