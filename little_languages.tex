@@ -267,7 +267,7 @@
 这种简易性对一些高级语言来说同样成立. 我们的下一个例子是 \texttt{graph} 
 的语言处理程序, \texttt{graph} 是一种用来画数据坐标图的原型语言. 输入
 是一张图的规范说明, 规范说明的每一行都表示一个数据点, 或坐标轴的标签
-信息. 数据点是由一对 \textit{x}-\textit{y} 表示, 如果只有一个 \textit{y},
+信息. 数据点由一对 \textit{x}-\textit{y} 表示, 如果只有一个 \textit{y},
 则 \textit{x} 是从 1 开始的递增序列, 即 1, 2, 3, ..., 
 An optional nonnumeric plotting character can follow either form of data
 value\footnote{TODO}. 标签信息由一个关键词和多个参数值组成:
@@ -280,11 +280,11 @@ value\footnote{TODO}. 标签信息由一个关键词和多个参数值组成:
 \indent\texttt{height}\ \textit{number}\par
 \indent\texttt{width}\ \textit{number}\par
 \end{pattern}
-这些行的出现顺序是任意的, 任意一行都可以省略, 而且没有必要指定数据的值的
+这些行的出现顺序是任意的, 任意一行都可以省略, 也不需要指定数据的值的
 范围.
 
 处理程序按比例调整数据点的大小, 并生成绘图命令. 为了使讨论更加具体,
-我们把它们打印到个 $24 \times 80$ 的字符数组中, 但是, 如果是为某些
+我们把它们打印到 $24 \times 80$ 的字符数组中, 但是, 如果是为某些
 图像设备生成绘图命令, 实现起来其实也很容易. 例如, 输入数据:
 \marginpar{136}
 \begin{file}
@@ -371,7 +371,7 @@ value\footnote{TODO}. 标签信息由一个关键词和多个参数值组成:
         frame(); ticks(); label(); data(); draw()
     }
 \end{awkcode}
-\marginpar{139}
+\marginpar{138}
 \begin{awkcode}
     function frame() {        # create frame for graph
         for (i = ox; i < wid; i++) plot(i, oy, "-")     # bottom
