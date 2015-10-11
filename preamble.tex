@@ -6,6 +6,8 @@
 \usepackage{geometry}
 \usepackage{fontspec}
 \usepackage{xeCJK}
+% for tikz
+\usepackage{tikz}
 \usepackage{hyperref}
 %\usepackage{fancyhdr}
 \usepackage{verbatim}
@@ -16,6 +18,15 @@
 % for varwidth
 \usepackage{varwidth}
 \usepackage{tikz}
+% for format of contents
+\usepackage{tocloft}
+% for number of footnote 
+\usepackage{pifont}
+% 一页结束时, 脚注编号清零
+\usepackage[perpage]{footmisc}
+
+% 脚注编号带圈
+\renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
 
 % from package geometry
 % 为边注加边框
@@ -41,7 +52,12 @@
 
 % from package hyperref
 \hypersetup{
-    bookmarksnumbered = true
+    bookmarksnumbered = true,
+    pdftitle = {The AWK Programming Language},
+    pdfcreator = {wuzhouhui250@gmail.com},
+    pdfauthor = {Alfred V. Aho, Brian W. Kernighan, Peter J. Weinberger},
+    pdfsubject = {awk programming},
+    pdfkeywords = {awk, pattern scanning, text processing}
 }
 
 % from package fontspec and xeCJK
@@ -128,6 +144,13 @@
 \theoremheaderfont{\bfseries}
 \theorembodyfont{\normalfont}
 \newtheorem{exercise}{Exercise}[chapter]
+
+% 设置目录中 subsection 的缩进
+\settowidth\cftsubsecindent{2}
+% 设置目录中 chapter 章节编号的宽度 (ctex 章节编号为中文, 需要特别注意).
+% 参考 <<LaTeX 入门>>, 刘海洋 编著, 电子工业出版社, 2013.6
+\settowidth\cftchapnumwidth{第十章} % 最宽的可能编号
+\renewcommand\cftchapaftersnumb{\hspace{0.5em}} % 额外间距
 
 \title{AWK 程序设计语言}
 \author{Alfred V.Aho \and Brian W.Kernighan \and Peter J.Weinberger \and
