@@ -364,3 +364,47 @@ value. 标签信息由一个关键词和多个参数值组成:
             array[x+i, y] = substr(s, i+1, 1)
     }
 \end{awkcode}
+
+Awk 很适合处理面向模式的 \texttt{graph} 语言, 之所以这样说是因为它的
+规范说明语句是带有值的关键词. 使用这种风格来设计语言是一个很好的
+开始: 既方便用户使用, 也方便处理.
+
+\texttt{graph} 是坐标绘图语言 \texttt{grap} 的简化版本, 而 \texttt{grap}
+是绘图语言 \texttt{pic} 的预处理器. 
+\marginpar{139} 当同时使用 \texttt{grap}, \texttt{pic} 与 \texttt{troff}
+时, 同样的数据与几乎相同的描述可以生成下面这张图片:\footnote{TODO}
+
+Awk 擅长于设计与测验小型语言, 如果设计被证明是合理的, 那么就可以用更
+高效的语言 (比如 C) 来实现一个产品化的版本. 在某些情况下, 即使是一个
+原型化的版本也可以用在实际生产中. 典型的例子包括糖衣或者对已有工具的
+定制.\footnote{原文为 These situations typically involve sugar-coating or
+specializing an existing tool.}
+
+一个特定的实例是定制图表的准备, 在这个实例中, 我们把一门简单的语言, 用
+awk 程序转换成 \texttt{grap} 命令. 其他例子还包括散点矩阵 (scatter-plot
+matrices), 点阵图 (dotchart, 直方图的一种), 箱线图 (boxplot, 显示了某
+个观测集的期望值 (mean) , 四分位数 (quartile) 和 极值 (extreme)) 以及
+饼图.
+
+\begin{exercise}
+    修改 \texttt{graph}: 对图进行转置, 即 \textit{x} 轴在垂直方向上,
+    而 \textit{y} 轴在水平方向上, 而且可以指定是否以对数的方式显示
+    \textit{x} 坐标或 \textit{y} 坐标.
+\end{exercise}
+
+\begin{exercise}
+    为 \texttt{graph} 添加一条命令, 这条命令可以让 \texttt{graph} 从
+    文件中读取数据.
+\end{exercise}
+
+\begin{exercise}
+    自动计算刻度的位置. (即使最终的实现要用到另一种语言, 但 awk 仍然
+    很适合于对算法进行测验)
+\end{exercise}
+
+\begin{exercise}
+    如果你的系统提供了图形库, 修改 \texttt{graph}, 为图形库生成命令.
+    (这又是一个糖衣的例子\footnote{This is an example of sugar-coating})
+\end{exercise}
+
+\marginpar{140}
