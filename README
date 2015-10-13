@@ -8,3 +8,6 @@ The AWK Programming Language 的中文翻译项目, 使用 LaTeX 排版, 光凭�
 
 如果你的系统没有安装 LaTeX 编译环境, 或者无法编译成功, 请给我发邮件,
 我把编译好的 PDF 发送给你.
+
+TODO/ISSUES
+	egrep -i 'todo|fixme' *.tex
