@@ -601,3 +601,84 @@ matrices), 点阵图 (dotchart, 直方图的一种), 箱线图 (boxplot, 显示�
 \end{awkcode}
 
 \marginpar{142}
+为了避免处理类似于 ``don't discard duplicates'' 或 ``no numeric data'' 
+这样的输入, \texttt{sortgen} 会拒绝含有否定短语的行, 接下来的规则处理
+全局选项, 然后是针对当前排序键的选项, 如果程序无法理解某一行的意思,
+就会向用户打印一条消息.
+
+这个程序虽然不够聪明, 但是, 如果用户想要用它来获取正确的答案, 而不是
+诱导它犯错, 那么\texttt{sortgen} 仍然是一个很有用的工具.
+
+\begin{exercise}
+    实现一个新版的 \texttt{sortgen}, 它提供了访问 \texttt{sort} 全部功能
+    的方法, 要求程序能够检测出不一致的请求, 比如同时按照字典序与数值对
+    数据进行排序.
+\end{exercise}
+
+\begin{exercise}
+    在对输入语言规范性不作过多要求的前提下, 如何提高 \texttt{sortgen} 
+    的精确度.
+\end{exercise}
+
+\begin{exercise}
+    写一个程序, 把一个排序命令翻译成对应的英文句子, 然后再把句子作
+    为 \texttt{sortgen} 的输入.
+\end{exercise}
+
+\section{逆波兰式计算器}
+\label{sec:a_reverse_polish_calculator}
+
+假设我们现在想要一个计算器, 用来结算支票或计算数学表达式的值. Awk 本身
+很适合处理这种计算工作, 但是每次程序发生变化时, 我们都必须重新运行.
+我们需要一个随着表达式的输入, 可以自动读取并运算的计算器程序.
+
+为了避免开发语法解析器, 我们要求用户按照逆波兰表示法输入表达式. (``逆''
+指的是运算符跟在操作数的后面, ``波兰'' 是因为这种表示法是波兰数学家
+Jan Lukasiewicz 发明的). 中缀表达式
+\begin{shell}
+    (1 + 2) * (3 - 4) / 5
+\end{shell}
+写成逆波兰表示法变成
+\begin{shell}
+    1 2 + 3 4 - * 5 /
+\end{shell}
+逆波兰式不需要括号 --- 如果提前知道运算符的操作数个数, 那么表达式就不会
+有歧义. 逆波兰式非常适合用栈来处理, 由于这个特点, 许多编程语言 (包括
+Forth 和 Postscript) 和口袋计算器都把它作为基本表示法来使用.
+
+我们的第一个计算器只能用来计算采用逆波兰式表示法表示的数学表达式,
+所有的运算符与操作数都用空格分开. 如果某个字段是操作数, 就把它入栈;
+如果是运算符, 就对栈顶的操作数执行对应的运算. 每当一个输入行结束时,
+打印栈顶元素的值, 并把它弹出.
+\marginpar{143}
+\begin{awkcode}
+    # calc1 - reverse-Polish calculator, version 1
+    #   input:  arithmetic expressions in reverse Polish
+    #   output: values of expressions
+
+    {   for (i = 1; i <= NF; i++)
+            if ($i ~ /^[+-]?([0-9]+[.]?[0-9]*|[.][0-9]+)$/) {
+                stack[++top] = $i
+            } else if ($i == "+" && top > 1) {
+                stack[top-1] += stack[top]; top--
+            } else if ($i == "-" && top > 1) {
+                stack[top-1] -= stack[top]; top--
+            } else if ($i == "*" && top > 1) {
+                stack[top-1] *= stack[top]; top--
+            } else if ($i == "/" && top > 1) {
+                stack[top-1] /= stack[top]; top--
+            } else if ($i == "^" && top > 1) {
+                stack[top-1] ^= stack[top]; top--
+            } else {
+                printf("error: cannot evaluate %s\n", $i)
+                top = 0
+                next
+            }
+        if (top == 1)
+            printf("\t%.8g\n", stack[top--])
+        else if (top > 1) {
+            printf("error: too many operands\n")
+            top = 0
+        }
+    }
+\end{awkcode}
