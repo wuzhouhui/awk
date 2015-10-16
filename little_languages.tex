@@ -601,3 +601,75 @@ Forth 和 Postscript) 和口袋计算器都把它作为基本表示法来使用.
         }
     }
 \end{awkcode}
+对于输入 
+\begin{file}
+    1 2 + 3 4 - * 5 /
+\end{file}
+\texttt{calc1} 给出的答案是 \texttt{-0.6}.
+
+我们的第二个逆波兰式计算器支持用户自定义变量, 并且可以调用数学函数.
+变量名由字母开始, 后跟字母或数字, 语句 \textit{var}\texttt{=} 表示把
+栈顶元素弹出, 并赋值给变量 \textit{var}. 如果输入行以赋值语句结束, 
+则不会打印出任何值. 一个典型的交互过程看起来就像这样 (由程序打印的内容
+向右缩进):
+\begin{shell}
+    0 -1 stan2 pi=
+    pi 
+        3.1415927
+    355 113 / x= x
+        3.1415929
+    x pi /
+        1.0000001
+    2 sqrt 
+        1.4142136
+\end{shell}
+直接对前一个程序进行扩展, 就可以得到新版的计算器:
+\begin{awkcode}
+    # calc2 - reverse-Polish calculator, version 2
+    #     input:  expressions in reverse Polish
+    #     output: value of each expression
+
+    { for (i = 1; i <= NF; i++)
+          if ($i ~ /^[+-]?([0-9]+[.]?[0-9]*|[.][0-9]+)$/) {
+              stack[++top] = $i
+          } else if ($i == "+" && top > 1) {
+              stack[top-1] += stack[top]; top--
+          } else if ($i == "-" && top > 1) {
+              stack[top-1] -= stack[top]; top--
+          } else if ($i == "*" && top > 1) {
+              stack[top-1] *= stack[top]; top--
+          } else if ($i == "/" && top > 1) {
+              stack[top-1] /= stack[top]; top--
+          } else if ($i == "^" && top > 1) {
+              stack[top-1] ^= stack[top]; top--
+          } else if ($i == "sin" && top > 0) {
+              stack[top] = sin(stack[top])
+          } else if ($i == "cos" && top > 0) {
+              stack[top] = cos(stack[top])
+          } else if ($i == "atan2" && top > 1) {
+              stack[top-1] = atan2(stack[top-1],stack[top]); top--
+          } else if ($i == "log" && top > 0) {
+              stack[top] = log(stack[top])
+          } else if ($i == "exp" && top > 0) {
+              stack[top] = exp(stack[top])
+          } else if ($i == "sqrt" && top > 0) {
+              stack[top] = sqrt(stack[top])
+          } else if ($i == "int" && top > 0) {
+              stack[top] = int(stack[top])
+          } else if ($i in vars) {
+              stack[++top] = vars[$i]
+          } else if ($i ~ /^[a-zA-Z][a-zA-Z0-9]*=$/ && top > 0) {
+              vars[substr($i, 1, length($i)-1)] = stack[top--]
+          } else {
+              printf("error: cannot evaluate %s\n", $i)
+              top = 0
+              next
+          }
+      if (top == 1 && $NF !~ /\=$/)
+          printf("\t%.8g\n", stack[top--])
+      else if (top > 1) {
+          printf("error: too many operands\n")
+          top = 0
+      }
+    }
+\end{awkcode}
