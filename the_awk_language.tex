@@ -16,17 +16,17 @@
 ...
 \end{pattern}
 在某些语句中, 模式可以不存在; 还有些语句, 动作及其包围它的花括号也可以不存
-在. 如果你的程序经过 awk 检查后没有发现语法错误, 它就会每次读取一个输入行,
+在. 如果程序经过 awk 检查后没有发现语法错误, 它就会每次读取一个输入行,
 对读取到的每一行, 按顺序检查每一个模式. 对每一个与当前行匹配的模式, 对应
 的动作就会执行. 一个缺失的模式匹配每一个输入行, 因此每一个不带有模式的动
 作对每一个输入行都会执行. 只含有模式而没有动作的语句, 会打印每一个匹配模式
 的输入行. 大部分情况下, 在这一章出现的术语 ``输入行'' 与 ``记录'' 被当作
-一对同义词. 在 \ref{sec:input} 节, 我们都会讨论多行记录, 多行记录指的是一
-个记录包含了多个行.
+一对同义词. 在 \ref{sec:input} 节, 我们会讨论多行记录, 多行记录指的
+由多行数据组成的单个记录.
 
-这一章的第一节会详细讨论模式. 第二节通过描述表达式, 赋值语句与流程控制语句,
-展开对动作的讨论. 剩下的小节包括函数定义, 输出, 输入, 以及 awk 如何调用其
-他程序. 大部分小节都包含对主要性质的总结.
+本章的第一节详细讨论模式. 第二节通过描述表达式, 赋值语句与流程控制语句,
+展开对动作的讨论. 剩下的小节包括函数定义, 输出, 输入, 以及 awk 调用其
+他程序的方式. 大部分小节都包含对主要性质的总结.
 
 \pdfbookmark[1]{输入文件}{the_input_file_countries}
 \subsection*{输入文件\filename{countries}}
@@ -35,7 +35,7 @@
 作为本章许多 awk 程序的输入数据, 我们将使用文件 \filename{countries}. 每一
 行都包括一个国家的名字, 面积 (以千平方英里为单位), 人口 (以百万为单位), 以
 及这个国家所在的大陆. 数据来源于 1984 年, 苏联被归到了亚洲. 在文件里, 四列
-数据用制表符分隔; 用一个空白符分隔 \texttt{North} (\texttt{South}) 与
+数据用制表符分隔, 用一个空格分隔 \texttt{North} (\texttt{South}) 与
 \texttt{America}.
 
 文件 \filename{countries} 包含下面几行:
@@ -97,7 +97,8 @@
 \label{sec:patterns}
 \marginpar{23}
 
-模式控制动作的执行. 这一小节描述模式的6种类型, 以及匹配它们的条件.
+模式控制着动作的执行: 当模式匹配时, 相应的动作便会执行. 
+这一小节描述模式的6种类型, 以及匹配它们的条件.
 \begin{summary}{模式汇总}
     \begin{enumerate}
         \item \BEGIN \verb'{' \stmt \verb'}' \par
@@ -107,8 +108,7 @@
         \item \expr \verb'{' \stmt \verb'}' \par
             每碰到一个使 \expr 为真的输入行, \stmt 就执行. \expr 为真指
             的是其值非零或非空.
-        \item \verb'/'\regexpr\verb'/' \verb'{' \par
-            \stmt \verb'}'
+        \item \verb'/'\regexpr\verb'/' \verb'{' \stmt \verb'}' \par
             当碰到这样一个输入行时, \stmt 就执行: 输入行含有一段字符串,
             而该字符串可以被 \regexpr 匹配.
         \item \textit{compound pattern} \verb'{' \stmt \verb'}' \par
@@ -137,7 +137,7 @@
 \BEGIN 的一个常用用途是更改输入行被分割为字段的默认方式. 分割字符由一个内
 建变量 \fs 控制. 默认情况下字段由空格或 (和) 制表符分割, 此时 \fs 的值被%
 \marginpar{24}%
-设置为一个空格符. 将 \fs 设置为一个不是空格的字符, 就会使该字符成为字段分
+设置为一个空格符. 将 \fs 设置成一个非空格字符, 就会使该字符成为字段分
 割符.
 
 下面这个程序在 \BEGIN 的动作里将字段字割符设置为制表符 (\verb'\t'), 并在
@@ -179,7 +179,7 @@
 \subsection{将表达式用作模式}
 \label{subsec:expressions_as_patterns}
 
-就像大多数程序设计语言一样, awk 有着非常丰富的用来描述数值计算的表达式,
+就像大多数程序设计语言一样, awk 拥有非常丰富的用来描述数值计算的表达式,
 但是与许多语言不同的是, awk 还有用于描述字符串操作的表达式. 贯穿全书,
 \textit{string} 都表示一个由 0 个或多个字符组成的序列. 这些字符串可以存储
 在变量中, 也可以以字符串常量的形式出现, 就像 \verb'""' 或 \verb'"Asia"'.
@@ -234,8 +234,8 @@
 否则的话, 数值操作数会被转换成字符串, 再将操作数按字符串的形式进行比较.
 两个字符串间的比较以字符为单位逐个相比,
 字符间的先后顺序依赖于机器的字符
-集 (大多数情况下是 ASCII 字符集). 一个字符串 ``小于'' 另一个, 如果它比另
-一个字符串更早出现的话, 例如 \verb'"Canada" < "China"',
+集 (大多数情况下是 ASCII 字符集). 一个字符串 ``小于'' 另一个, 指的是它比另
+一个字符串更早出现, 例如 \verb'"Canada" < "China"',
 \verb'"Asia" < "Asian"'.
 
 模式
@@ -288,7 +288,7 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 测试一个字符串是否包含一段可以被正则表达式匹配的子字符串.
 
 最简单的正则表达式是仅由数字与字母组成的字符串, 就像 \verb'Asia', 它匹配的
-就是它自己. 为了将一个正则表达式切换成一个模式, 只需要用一对斜杆包围起来即
+就是它本身. 为了将一个正则表达式切换成一个模式, 只需要用一对斜杆包围起来即
 可:
 \begin{awkcode}
     /Asia/
@@ -372,9 +372,9 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
     \verb'^' 匹配一行的开始. \par
     \verb'$' 匹配一行的结束. \par
     \verb'.' 匹配任意一个字符. \par
-    一个字符集合: \verb'[ABC]' 匹配字符 \verb'A', \verb'B' 或 \verb'C'. \par
-    字符集合可能包含缩写形式: \verb'[A-Za-z]' 匹配单个字母. \par
-    一个互补的字母集合: \verb'[^0-9]' 匹配任意一个字符, 但是除了数字.
+    一个字符类: \verb'[ABC]' 匹配字符 \verb'A', \verb'B' 或 \verb'C'. \par
+    字符类可能包含缩写形式: \verb'[A-Za-z]' 匹配单个字母. \par
+    一个互补的字符类: \verb'[^0-9]' 匹配任意一个字符, 但是除了数字.
 \item 这些运算符将正则表达式组合起来:   \par
     选择: \verb'A|B' 匹配 \verb'A' 或 \verb'B'. \par
     拼接: \verb'AB' 匹配后面紧跟着 \verb'B' 的 \verb'A'. \par
@@ -400,45 +400,45 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 未被引用的美元符 \verb'$' 匹配一行的结束, 一个未被引用的句点 \verb'.'
 匹配任意一个字符. 于是,
 \begin{tabbing}
-    \verb'^C' \hspace{4em}  \= 匹配以字符 \verb'C' 开始的字符串; \\
-    \verb'C$'   \> 匹配以字符 \verb'C' 结束的字符串; \\
-    \verb'^C$'  \> 匹配只含有单个字符 \verb'C' 的字符串; \\
-    \verb'^.$'  \> 匹配有且仅有一个字符的字符串; \\
-    \verb'^...$' \> 匹配有且仅有3个字符的字符串; \\
-    \verb'...'  \> 匹配任意3个字符; \\
-    \verb'\.$'  \> 匹配以句点结束的字符串.
+\indent\verb'^C' \hspace{4em}  \= 匹配以字符 \verb'C' 开始的字符串; \\
+\indent\verb'C$'   \> 匹配以字符 \verb'C' 结束的字符串; \\
+\indent\verb'^C$'  \> 匹配只含有单个字符 \verb'C' 的字符串; \\
+\indent\verb'^.$'  \> 匹配有且仅有一个字符的字符串; \\
+\indent\verb'^...$' \> 匹配有且仅有3个字符的字符串; \\
+\indent\verb'...'  \> 匹配任意3个字符; \\
+\indent\verb'\.$'  \> 匹配以句点结束的字符串.
 \end{tabbing}
 \marginpar{29}
 
-由一组被包围在方括号中的字符组成的正则表达式称为 \cterm{字符集合}
-(\term{character class}); 这个表达式匹配字符集合中的任意一个字符. 例如,
+由一组被包围在方括号中的字符组成的正则表达式称为 \cterm{字符类}
+(\term{character class}); 这个表达式匹配字符类中的任意一个字符. 例如,
 \verb'[AEIOU]' 匹配 \verb'A', \verb'E', \verb'I', \verb'O' 或 \verb'U'.
 
-使用连字符的字符集合可以表示一段字符范围. 紧跟在连字符左边的字符定义了范围
+使用连字符的字符类可以表示一段字符范围. 紧跟在连字符左边的字符定义了范围
 的开始, 紧跟在连字符右边的字符定义了范围的结束. 于是, \verb'[0-9]' 匹配
 任意一个数字, \verb'[a-zA-Z][0-9]' 匹配一个后面紧跟着一个数字的字母. 如果
-左右两边都没有操作数, 那么字符集合中的连字符就表示它本身, 所以 \verb'[+-]'
+左右两边都没有操作数, 那么字符类中的连字符就表示它本身, 所以 \verb'[+-]'
 与 \verb'[-+]' 匹配一个 \verb'+' 或 \verb'-'. \verb'[A-Za-z-]+' 匹配一个
 可能包含连字符的单词.
 
-一个 \cterm{互补} (\term{complemented}) 的字符集合在 \verb'[' 之后以
-\verb'^' 开始. 这样一个集合匹配任意一个不在集合中的字符, ``集合中的字符''%
+一个 \cterm{互补} (\term{complemented}) 的字符类在 \verb'[' 之后以
+\verb'^' 开始. 这样一个类匹配任意一个不在类中的字符, ``类中的字符''%
 指的
 是方括号内排在脱字符之后的那些字符. 于是, \verb'[^0-9]' 匹配任意一个不是
 数字的字符; \verb'[^a-zA-Z]' 匹配任意一个不是字母的字符.
 \begin{tabbing}
-    \verb'^[ABC]' \hspace{4em}  \= 匹配以 \verb'A', \verb'B', 或 \verb'C'
+    \indent\verb'^[ABC]' \hspace{4em}  \= 匹配以 \verb'A', \verb'B', 或 \verb'C'
         开始的字符串; \\
-    \verb'^[^ABC]' \> 匹配以任意一个字符 (除了 \verb'A', \verb'B',
+    \indent\verb'^[^ABC]' \> 匹配以任意一个字符 (除了 \verb'A', \verb'B',
         或 \verb'C') 开始的字符串; \\
-    \verb'[^ABC]' \> 匹配任意一个字符, 除了 \verb'A', \verb'B', 或
+    \indent\verb'[^ABC]' \> 匹配任意一个字符, 除了 \verb'A', \verb'B', 或
         \verb'C'; \\
-    \verb'^[^a-z]$' \> 匹配任意一个有且仅有一个字符的字符串, 且该字
+    \indent\verb'^[^a-z]$' \> 匹配任意一个有且仅有一个字符的字符串, 且该字
         符不能是小写字母.
 \end{tabbing}
 
-在一个字符集合内, 所有的字符都具有它自身的字面意义, 除了引用字符 \verb'\',
-互补字符集合开头的 \verb'^', 以及两个字符间的 \verb'-'.
+在一个字符类中, 所有的字符都具有它自身的字面意义, 除了引用字符 \verb'\',
+互补字符类开头的 \verb'^', 以及两个字符间的 \verb'-'.
 于是, \verb'[.]' 匹配一个句点, \verb'^[^^]' 匹配不以脱字符开始的字符串.
 
 可以使用括号来指定正则表达式中的各个成分如何组合. 有两种二元正则表达式运算
@@ -468,17 +468,17 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 
 符号 \verb'*', \verb'+' 与 \verb'?' 是一元运算符, 用来指定正则表达式的
 重复次数. 如果 \textit{r} 是一个正则表达式, 那么
-\verb'('\textit{r}\verb')'\verb'*' 所匹配的字符串含有零个或连续的多个
+\verb'('\textit{r}\verb')'\verb'*' 所匹配的字符串含有零个或连续多个
 能被 \textit{r} 匹配的子符串. \textit{r}\verb'?' 匹配的字符串, 要么是空字
 符串, 要么是能够被 \textit{r} 匹配的字符串. 如果 \textit{r} 是一个基本的
 正则表达式, 那么括号可以省略.
 \begin{tabbing}
-    \verb'B*' \hspace{4em} \= 匹配空字符串, 或 \verb'B', \verb'BB', 等等.\\
-    \verb'AB*C' \> 匹配 \verb'AC', 或 \verb'ABC', \verb'ABBC', 等等. \\
-    \verb'AB+C' \> 匹配 \verb'ABC', 或 \verb'ABBC', \verb'ABBBC', 等等.\\
-    \verb'AB?C' \> 匹配 \verb'AC' 或 \verb'ABC' \\
-    \verb'[A-Z]+' \> 匹配由一个或多个大写字母组成的字符串. \\
-    \verb'(AB)+C' \> 匹配 \verb'ABC', \verb'ABABC', \verb'ABABABC', 等等.
+\indent\verb'B*' \hspace{4em} \= 匹配空字符串, 或 \verb'B', \verb'BB', 等等.\\
+\indent\verb'AB*C' \> 匹配 \verb'AC', 或 \verb'ABC', \verb'ABBC', 等等. \\
+\indent\verb'AB+C' \> 匹配 \verb'ABC', 或 \verb'ABBC', \verb'ABBBC', 等等.\\
+\indent\verb'AB?C' \> 匹配 \verb'AC' 或 \verb'ABC' \\
+\indent\verb'[A-Z]+' \> 匹配由一个或多个大写字母组成的字符串. \\
+\indent\verb'(AB)+C' \> 匹配 \verb'ABC', \verb'ABABC', \verb'ABABABC', 等等.
 \end{tabbing}
 
 在正则表达式中, 选择运算符 \verb'|' 的优先级最低, 然后是拼接运算, 最后是重
@@ -510,7 +510,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     \qquad 同样是一个字母, 又或者是一个后面跟着一个数字的字母.
 \end{enumerate}
 在第3个例子中, 为了匹配元字符\verb'+' 与 \verb'-' 的字面值, 必须在它们的
-前面加上反斜线, 而在字符集合中则不需要, 所以第 3 项与 第 4 项的功能是等价
+前面加上反斜线, 而在字符类中则不需要, 所以第 3 项与 第 4 项的功能是等价
 的.
 \marginpar{31}
 
@@ -520,8 +520,8 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \end{awkcode}
 打印那些第2个字段不全是数字的行.
 
-在正则表达式与字符串内部, awk 使用一个特定的字符序列--{}\cterm{转义序列}
-(\term{escape sequences}){}--来表示那些无法用其他方式表示的字符. 例如,
+在正则表达式与字符串内部, awk 使用一个特定的字符序列---{}\cterm{转义序列}
+(\term{escape sequences}){}---来表示那些无法用其他方式表示的字符. 例如,
 \verb'\n'
 表示一个换行符, 它无法以其他方式出现在字符串或正则表达式中; \verb'\b' 表示
 退格符; \verb'\t' 表示制表符; \verb'007' 表示 ASCII 中的响铃符; \verb'\/'
@@ -662,10 +662,10 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \end{awkcode}
 输出
 \begin{file}
-France  211     55      Europe
-Japan   144     120     Asia
-Germany 96      61      Europe
-England 94      56      Europe
+    France  211     55      Europe
+    Japan   144     120     Asia
+    Germany 96      61      Europe
+    England 94      56      Europe
 \end{file}
 
 在下一个例子里, 变量 \verb'FNR' 表示从当前输入文件中, 到目前为止读取到的
@@ -790,6 +790,7 @@ England 94      56      Europe
 \begin{tabular}{l|l|c}
 	\hline
 	\hline
+    % FIXME "意义" 与 "默认值" 之间本来应该有一条竖线
 	变量	& \multicolumn{1}{c}{意义}	& 默认值 \\
 	\hline
 	\verb'ARGC'	& 命令行参数的个数	& - \\
@@ -835,7 +836,7 @@ England 94      56      Europe
 \verb'$0' 就会被重新构造, 构造的方式是使用 \OFS 重新分割字段.
 
 字段也可以通过表达式指定. 例如, \verb'$(NF-1)' 表示当前输入行的倒数第 2 个
-字段. 表达式两边的括号不能省略: \verb'$NF-1' 表示最后一个字段减一后的值.
+字段. 表达式两边的括号不能省略: \verb'$NF-1' 表示最后一个字段减1后的值.
 
 如果字段变量引用到了不存在的字段, 例如 \verb'$(NF+1)', 那么它的值就是初始
 值 --- 空字符串. 可以通过向一个字段变量赋值来创建它. 例如, 下面这个程序创建
@@ -937,8 +938,8 @@ England 94      56      Europe
 被显式地初始化, 但程序仍然按照期望得那样运行, 这是因为每个变量都会默认
 初始化为空字符串 \verb'""' 或数值 0.
 
-在下面这个程序里, 我们仍然利用了默认的初始化行为, 程序的功能是寻找拥有最
-多人口的国家:
+在下面这个程序里, 我们仍然利用了默认的初始化行为, 程序的功能是寻找
+人口最多的国家:
 \begin{awkcode}
     $3 > maxpop { maxpop = $3; country = $1 }
     END         { print "country with largest population:",
@@ -1127,6 +1128,7 @@ England 94      56      Europe
         \begin{tabular}{l|p{25em}}
             \hline
             \hline
+            % FIXME "函数" 与 "描述" 之间本来应该有一条竖线
             \multicolumn{1}{c}{函数}    & \multicolumn{1}{c}{描述}  \\
             \hline
             \verb'gsub('\textit{r}\verb','\textit{s}\verb')' &  将
@@ -1219,9 +1221,9 @@ England 94      56      Europe
 \verb'gsub('\textit{r}\verb','\textit{s}\verb','\verb'$0'\verb')'.
 
 \verb'gsub' 是类似的, 但是它会连续地替换最左最长且不重叠的子串, 而不是只
-替换子串的第一次出现; 函数返回值仍然是替换发生的次数\footnote{由此可见,
-\texttt{sub} 的返回值小于等于 1, 而 \texttt{gsub}
-返回值大于等于 0. --- 译者}.
+替换子串的第一次出现; 函数返回值仍然是替换发生的次数%\footnote{由此可见,
+%\texttt{sub} 的返回值小于等于 1, 而 \texttt{gsub}
+%返回值大于等于 0. ---- 译者}.
 \marginpar{43}
 (\verb'gsub' 的 \verb'g' 是 ``global'' 的缩写, 表示替换是全局的). 例如,
 程序
@@ -1382,7 +1384,7 @@ England 94      56      Europe
 \end{file}
 
 数值的字符串形式需要根据 \verb'OFMT' 转换后才会输出. 为了拼接, 比较, 与
-数组下标的创建而需要将数值转换成字符串时, \verb'OFMT' 也会影响转换的过程.
+创建数组下标而需要把数值转换成字符串时, \verb'OFMT' 也会影响转换的过程.
 \verb'OFMT' 的默认值是 \verb'"%.6g"'. 于是
 \begin{awkcode}
     BEGIN { print 1E2 "", 12E-2 "", E12 "", 1.23456789 "" }
@@ -1530,8 +1532,8 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
 \end{summary}
 \marginpar{48}
 \begin{pattern}
-    \verb'while ('\expr\verb')'
-    \stmt
+    \verb'while ('\expr\verb')' \par
+    \indent\indent\stmt
 \end{pattern}
 右括号后面的换行符是可选的. 在这个循环语句里, \expr 被求值; 如果它的值为
 真, \stmt 就会执行, 然后 \expr 再被求值. 只要 \expr 为真, 循环就会一直
@@ -1554,10 +1556,10 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
 \marginpar{49}
 右括号后面的换行符是可选的. \verb'for' 等效于
 \begin{pattern}
-    \expr$_1$
-    \verb'while ('\expr$_2$\verb') {' \\
-        \stmt  \\
-        \expr$_3$ \\
+    \expr$_1$ \par
+    \verb'while ('\expr$_2$\verb') {' \par
+        \indent\indent\stmt  \par
+        \indent\indent\expr$_3$ \par
     \verb'}'
 \end{pattern}
 所以
@@ -1574,8 +1576,8 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
 
 \verb'do' 语句具有形式
 \begin{pattern}
-    \verb'do'
-    \stmt\ 
+    \verb'do' \par
+    \indent\indent\stmt\par
     \verb'while ('\expr\verb')'
 \end{pattern}
 关键字 \verb'do' 与 \stmt 后面的换行符是可选的. 如果 \verb'while' 与 \stmt
@@ -1587,7 +1589,7 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
 有两种语句可以影响循环的运行: \verb'break' 和 \verb'continue'. \verb'break'
 会导致控制流马上从包围着它的循环内退出, 循环可以是 \verb'while', \verb'for'
 , 或 \verb'do'. \verb'continue' 导致下一次迭代开始; 它使得执行流马上进入
-\verb'while' 与 \verb'do' 测试表达式, 或 \verb'for' 的 \expr$_3$.
+\verb'while' 与 \verb'do' 的测试表达式, 或 \verb'for' 的 \expr$_3$.
 
 \verb'next' 与 \verb'exit' 控制用于读取输入行的外层循环. \verb'next' 使
 awk 抓取下一个输入行, 然后从第一个 \patact 语句开始匹配测试. 在 \END 动作
@@ -1694,8 +1696,8 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \end{file}
 上面的程序使用 \verb'for' 语句的另一种形式来遍历数组下标:
 \begin{pattern}
-    \verb'for ('\textit{variable} \verb'in' \textit{array}\verb')'
-        \stmt
+    \verb'for ('\textit{variable} \verb'in' \textit{array}\verb')' \par
+        \indent\indent\stmt
 \end{pattern}
 这个循环将 \textit{variable} 轮流地设置为数组的每一个下标, 并执行 \stmt.
 下标的排列顺序依赖于实现. 如果 \stmt 往数组里加入了新元素, 那么结果是不可
@@ -2040,7 +2042,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
     $3 <= 100   { print $1, $3 > "smallpop" }
 \end{awkcode}
 注意, 文件名必须用双引号括起来; 如果没有双引号的话, \verb'bigpop' 与 
-\verb'smallpop' 将被当作未初化的变量.
+\verb'smallpop' 将被当作未初始化的变量.
 \marginpar{58} 文件名也可以是表达式或变量:
 \begin{awkcode}
     { print($1, $3) > ($3 > 100 ? "bigpop" : "smallpop") }
@@ -2477,9 +2479,9 @@ awk 的话, 最简单的方式是扫描内建数组 \verb'ARGV', 获取 \textit{
 \label{sec:the_awk_language_summary}
 
 正如我刚开始说的那样, 这一章很长, 讨论了许多细节, 如果你是逐字逐词地读到
-这里来的话, 那你确实是非常专注. 到后面你就会发现, 时不时的就需要回到这章
-再看一下某些小节, 有时候是为了精确的了解程序如何工作的, 有时候则是因为后面
-的章节出现了一些你之前没有试过的构造方法.
+这里来的话, 那确实是非常专注. 到后面你就会发现, 时不时的就需要回到这章
+再看一下某些小节, 有时候是为了精确地了解程序如何工作的, 有时候则是因为后面
+的章节出现了一些之前没有试过的构造方法.
 
 和其他语言一样, awk 也需要通过经验与实践来学习, 所以我们鼓励你开始自己写
 程序. 程序不需要有多么的庞大或复杂 --- 你可以通过仅仅几行代码, 来了解
