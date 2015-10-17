@@ -1221,7 +1221,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \verb'gsub('\textit{r}\verb','\textit{s}\verb','\verb'$0'\verb')'.
 
 \verb'gsub' 是类似的, 但是它会连续地替换最左最长且不重叠的子串, 而不是只
-替换子串的第一次出现, 函数返回值仍然是替换发生的次数%\footnote{由此可见,
+替换子串的第一次出现; 函数返回值仍然是替换发生的次数%\footnote{由此可见,
 %\texttt{sub} 的返回值小于等于 1, 而 \texttt{gsub}
 %返回值大于等于 0. ---- 译者}.
 \marginpar{43}
@@ -1474,10 +1474,10 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
 
 \verb'if-else' 具有形式:
 \begin{pattern}
-    \verb'if ('\expr\verb')'
-    \stmt$_1$
-    \verb'else'
-    \stmt$_2$
+    \verb'if ('\expr\verb')' \par
+    \indent\indent\stmt$_1$ \par
+    \verb'else' \par
+    \indent\indent\stmt$_2$ \par
 \end{pattern}
 \verb'else '\stmt$_2$ 是可选的. 右括号, \stmt$_1$, 和关键词 \verb'else' 后
 面的换行符是可选的. 如果 \verb'else' 与 \stmt$_1$ 出现在同一行, 并且
@@ -1550,8 +1550,8 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
 
 \verb'for' 语句是 \verb'while' 的更加一般的形式:
 \begin{pattern}
-    \verb'for ('\expr$_1$\verb';'\expr$_2$\verb';'\expr$_3$\verb')'
-    \stmt
+    \verb'for ('\expr$_1$\verb';'\expr$_2$\verb';'\expr$_3$\verb')' \par
+    \indent\indent\stmt
 \end{pattern}
 \marginpar{49}
 右括号后面的换行符是可选的. \verb'for' 等效于
