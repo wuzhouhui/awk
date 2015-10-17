@@ -1474,10 +1474,10 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
 
 \verb'if-else' 具有形式:
 \begin{pattern}
-    \verb'if ('\expr\verb')'
-    \stmt$_1$
-    \verb'else'
-    \stmt$_2$
+    \verb'if ('\expr\verb')' \par
+    \indent\indent\stmt$_1$ \par
+    \verb'else' \par
+    \indent\indent\stmt$_2$ \par
 \end{pattern}
 \verb'else '\stmt$_2$ 是可选的. 右括号, \stmt$_1$, 和关键词 \verb'else' 后
 面的换行符是可选的. 如果 \verb'else' 与 \stmt$_1$ 出现在同一行, 并且
@@ -1550,8 +1550,8 @@ Awk 提供花括号用于语句组合, \verb'if-else' 用于决策, \verb'while'
 
 \verb'for' 语句是 \verb'while' 的更加一般的形式:
 \begin{pattern}
-    \verb'for ('\expr$_1$\verb';'\expr$_2$\verb';'\expr$_3$\verb')'
-    \stmt
+    \verb'for ('\expr$_1$\verb';'\expr$_2$\verb';'\expr$_3$\verb')' \par
+    \indent\indent\stmt
 \end{pattern}
 \marginpar{49}
 右括号后面的换行符是可选的. \verb'for' 等效于
