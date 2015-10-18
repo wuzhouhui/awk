@@ -695,13 +695,13 @@ writing a full-fledged parser, as one would in any language.\footnote{TODO}
 带有运算符 \verb'+', \verb'-', \verb'*' 和 \verb'/' 的数学表达式语法,
 可以用我们在第 \ref{chap:processing_words} 章讲过的方法来描述:
 \begin{tabbing}
-    \textit{expr}\hspace{2em}\=\to\hspace{2em}\=\textit{term} \\
+    \textit{expr}\hspace{2em}\=$\to$\hspace{2em}\=\textit{term} \\
     \> \> \textit{expr}\ \verb'+'\ \textit{term} \\
     \> \> \textit{expr}\ \verb'-'\ \textit{term} \\
-    \textit{term} \> \to \> \textit{factor} \\
+    \textit{term} \> $\to$ \> \textit{factor} \\
     \> \> \textit{term}\ \verb'*'\ \textit{factor} \\
     \> \> \textit{term}\ \verb'/'\ \textit{factor} \\
-    \textit{factor}\>\to\>\textit{number} \\
+    \textit{factor}\>$\to$\>\textit{number} \\
     \> \> \verb'('\ \textit{expr}\ \verb')'
 \end{tabbing}
 
@@ -710,7 +710,7 @@ writing a full-fledged parser, as one would in any language.\footnote{TODO}
 \textit{term} 由多个 \textit{factor} 组成, 这确保了乘除在加减之前完成.
 
 我们可以把解析过程画成一张语句图来帮助理解, 这与第
-\refv{chap:processing_words} 章所描述的生成过程刚好相反. 比如, 表达式 
+\ref{chap:processing_words} 章所描述的生成过程刚好相反. 比如, 表达式 
 \texttt{1 + 2 * 3} 的解析过程是:\footnote{TODO}
 
 为了开发中缀计算器, 我们需要一个表达式解析程序. 只需要多花点精力, 
