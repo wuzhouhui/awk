@@ -680,3 +680,45 @@ Forth 和 Postscript) 和口袋计算器都把它作为基本表示法来使用.
 \end{exercise}
 
 \marginpar{145}
+\section{中缀计算器}
+\label{sec:an_infix_calculator}
+
+到目前为止, 本章所介绍的语言都拥有易于分析的语法规则. 然而, 大多数高级
+语言拥有大量不同优先级的运算符, 嵌套结构 (比如括号与 if-then-else 语句),
+以及其他复杂的构造, 所有的这些都要求更强大的解析技术, 而不仅仅是字段
+分割与正则表达式匹配. It is possible to process such languages in awk by
+writing a full-fledged parser, as one would in any language.\footnote{TODO}
+本节将开发一个对数学表达式进行求值的程序, 表达式使用人们通常所熟悉的中
+缀表示法表示. 以该程序作为先导项目, 我们会在下一节开发一个更加复杂的
+解析程序.
+
+带有运算符 \verb'+', \verb'-', \verb'*' 和 \verb'/' 的数学表达式语法,
+可以用我们在第 \ref{chap:processing_words} 章讲过的方法来描述:
+\begin{tabbing}
+    \textit{expr}\hspace{2em}\=\to\hspace{2em}\=\textit{term} \\
+    \> \> \textit{expr}\ \verb'+'\ \textit{term} \\
+    \> \> \textit{expr}\ \verb'-'\ \textit{term} \\
+    \textit{term} \> \to \> \textit{factor} \\
+    \> \> \textit{term}\ \verb'*'\ \textit{factor} \\
+    \> \> \textit{term}\ \verb'/'\ \textit{factor} \\
+    \textit{factor}\>\to\>\textit{number} \\
+    \> \> \verb'('\ \textit{expr}\ \verb')'
+\end{tabbing}
+
+该语法规则不仅描述了数学表达式的有效形式, 还规定了运算符的优先级和结合
+性. 例如, 一个 \textit{expr} 是多个 \textit{term} 的和或差, 一个 
+\textit{term} 由多个 \textit{factor} 组成, 这确保了乘除在加减之前完成.
+
+我们可以把解析过程画成一张语句图来帮助理解, 这与第
+\refv{chap:processing_words} 章所描述的生成过程刚好相反. 比如, 表达式 
+\texttt{1 + 2 * 3} 的解析过程是:\footnote{TODO}
+
+为了开发中缀计算器, 我们需要一个表达式解析程序. 只需要多花点精力, 
+就可以利用语法规则来构造解析器, 除此之外, 它还可以用来组织程序.
+写一个函数, 按照语法规则处理每一个非终结符: 程序使用函数 \texttt{expr}
+处理由加号或负号分隔的 \textit{term}, 使用函数 \textit{term} 处理 
+由乘号或除号分隔的 \textit{factor}, 最后, 使用函数 \textit{factor} 来
+识别数学和被括号包围起来的 \textit{expr}.
+
+在下面的程序里, 每一个输入都被当作一个单独的表达式, 表达式被求值并打印
+出来.\marginpar{146}
