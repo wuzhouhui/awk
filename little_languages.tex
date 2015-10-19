@@ -796,7 +796,46 @@ writing a full-fledged parser, as one would in any language}.
 
 我们可以把解析过程画成一张语句图来帮助理解, 这与第
 \ref{chap:processing_words} 章所描述的生成过程刚好相反. 比如, 表达式 
-\texttt{1 + 2 * 3} 的解析过程是:\footnote{TODO}
+\texttt{1 + 2 * 3} 的解析过程是:
+\begin{center}
+\begin{tikzpicture}
+    \node at (0, 0) {\texttt{3}};
+    \node at (0, 1) {\texttt{*}};
+    \node at (0, 2) {\texttt{2}};
+    \node at (0, 3) {\texttt{+}};
+    \node at (0, 4) {\texttt{1}};
+
+    \node at (1.5, 0) {\textit{number}};
+    \node at (1.5, 2) {\textit{number}};
+    \node at (1.5, 4) {\textit{number}};
+    \node at (3.5, 0) {\textit{factor}};
+    \node at (3.5, 2) {\textit{factor}};
+    \node at (3.5, 4) {\textit{factor}};
+    \node at (5.5, 2) {\textit{term}};
+    \node at (5.5, 4) {\textit{term}};
+    \node at (7.5, 4) {\textit{expr}};
+
+    \draw[thick] (0.3, 0) -- (0.7, 0);
+    \draw[thick] (2.3, 0) -- (2.7, 0);
+    \draw[thick] (0.3, 2) -- (0.7, 2);
+    \draw[thick] (2.3, 2) -- (2.7, 2);
+    \draw[thick] (4.3, 2) -- (4.7, 2);
+    \draw[thick] (0.3, 4) -- (0.7, 4);
+    \draw[thick] (2.3, 4) -- (2.7, 4);
+    \draw[thick] (4.3, 4) -- (4.7, 4);
+    \draw[thick] (6.3, 4) -- (6.7, 4);
+
+    \draw[thick] (0.3, 1) -- (7.0, 1);
+    \draw[thick] (6.2, 2.0) -- (7.0, 1.3);
+    \draw[thick] (4.2, 0.0) -- (7.0, 0.7);
+    \node at (7.5, 1) {\textit{term}};
+
+    \draw[thick] (8.3, 4) -- (9.5, 3.3);
+    \draw[thick] (0.3, 3) -- (9.5, 3);
+    \node at (10.0, 3) {\textit{expr}};
+    \draw[thick] (8.0, 1) -- (9.5, 2.8);
+\end{tikzpicture}
+\end{center}
 
 为了开发中缀计算器, 我们需要一个表达式解析程序. 只需要多花点精力, 
 就可以利用语法规则来构造解析器, 除此之外, 它还可以用来组织程序.
