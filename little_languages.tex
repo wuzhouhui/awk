@@ -782,3 +782,51 @@ writing a full-fledged parser, as one would in any language.\footnote{TODO}
 \marginpar{147}
 \section{递归下降语法分析}
 \label{sec:recursive_descent_parsing}
+
+在这一节, 我们为 awk 的子集开发一个递归下降翻译器, 开发语言还是用 awk.
+其中处理算术表达式的部分和我们在上一节里展示的程序, 在本质上是一样的.
+为了增加真实性, 翻译器将会生成 C 程序, 原来代码中的 awk 运算符用函数
+调用来替换. 这个程序在一定程度上说明了语法制导翻译的原理, 以及生成
+C 版本 awk 程序的一种方式, C 版本的程序运行起来更快, 也更容易扩展.
+基本思路是用函数调用替换掉每一个算术运算符, 比如, \texttt{x=y} 变成
+\texttt{assign(x,y)}, \texttt{x+y} 变成 \texttt{eval("+",x,y)}. 主输入
+循环用 \texttt{while} 来表示, 每次循环都会调用 \texttt{getrec} 来读取
+输入行, 并把输入行分割成字段. 于是, 由
+\begin{awkcode}
+    BEGIN   { x = 0; y = 1 }
+
+    $1 > x  { if (x == y+1) {
+                  x = 1
+                  y = x * 2
+              } else
+                  print x, z[x]
+            }
+
+    NR > 1  { print $1 }
+
+    END     { print NR }
+\end{awkcode}
+得到的 C 代码是
+\begin{file}
+    assign(x, num((float)0));
+    assign(y, num((float)1));
+    while (getrec()) {
+            if (eval(">", field(num((float)1)), x)) {
+                    if (eval("==", x, eval("+", y, num((float)1)))) {
+                            assign(x, num((float)1));
+                            assign(y, eval("*", x, num((float)2)));
+                    } else {
+                            print(x, array(z, x));
+                    }
+            }
+            if (eval(">", NR, num((float)1))) {
+                    print(field(num((float)1)));
+            }
+    }
+    print(NR);
+\end{file}
+
+如果你要为某个语言处理程序设计前端, 一个比较好的开始是为输入语言写一套
+语法规则. 利用 \ref{sec:random_text_generation} 节介绍的表示法, 我们可 
+以这样描述 awk 子集的语法规则:
+\marginpar{148}
