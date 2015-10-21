@@ -830,7 +830,7 @@ C 版本 awk 程序的一种方式, C 版本的程序运行起来更快, 也更�
 以这样描述 awk 子集的语法规则:
 \marginpar{148}
 \begin{tabbing}
-    \textit{program}\hspace{4em}\=$\to\=\textit{opt-begin pa-stats
+    \textit{program}\hspace{4em}\=$\to$\=\textit{opt-begin pa-stats
     opt-end}\\
     \textit{opt-begin}\>$\to$\>\texttt{BEGIN}\ \textit{statlist} |
     \texttt{""}\\
@@ -839,7 +839,7 @@ C 版本 awk 程序的一种方式, C 版本的程序运行起来更快, 也更�
     \textit{pa-stats}\>$\to$\>\textit{statlist}|\textit{pattern}|
     \textit{pattern statlist} \\
     \textit{pattern}\>$\to$\>\textit{expr}\\
-    \textit{statlist\>$\to$\>\verb'{'\ \textit{stats}\ \verb'}'\\
+    \textit{statlist}\>$\to$\>\verb'{'\ \textit{stats}\ \verb'}'\\
     \textit{stats}\>$\to$\>\textit{stat stats}|\texttt{""}\\
     \textit{stat}\>$\to$\>\texttt{print}\ \textit{exprlist}|\\
     \>\>\texttt{if (}\ \textit{expr}\ \textit{stat opt-else} |\\
@@ -852,7 +852,7 @@ C 版本 awk 程序的一种方式, C 版本的程序运行起来更快, 也更�
     \textit{expr}\>$\to$\>\textit{number}|\textit{ident}|\texttt{\$}
     \textit{expr}|\texttt{(}\ \textit{expr}\ | \\
     \>\>\textit{expr}\texttt{<}\textit{expr}|\textit{expr}\texttt{<=}
-    |\cdots|\textit{expr}\texttt{>}\textit{expr}|\\
+    |...|\textit{expr}\texttt{>}\textit{expr}|\\
     \>\>\textit{expr}\texttt{+}\textit{expr}|\textit{expr}\texttt{-}
     \textit{expr}|\\
     \>\>\textit{expr}\texttt{*}\textit{expr}|\textit{expr}\texttt{/}
