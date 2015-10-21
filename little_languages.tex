@@ -910,7 +910,7 @@ writing a full-fledged parser, as one would in any language}.
 其中处理算术表达式的部分和我们在上一节里展示的程序, 在本质上是一样的.
 为了增加真实性, 翻译器将会生成 C 程序, 原来代码中的 awk 运算符用函数
 调用来替换. 这个程序在一定程度上说明了语法制导翻译的原理, 以及生成
-C 版本 awk 程序的一种方式, C 版本的程序运行起来更快, 也更容易扩展.
+C 版本 awk 程序的一种方式, C 程序运行起来更快, 也更容易扩展.
 基本思路是用函数调用替换掉每一个算术运算符, 比如, \texttt{x=y} 变成
 \texttt{assign(x,y)}, \texttt{x+y} 变成 \texttt{eval("+",x,y)}. 主输入
 循环用 \texttt{while} 来表示, 每次循环都会调用 \texttt{getrec} 来读取
@@ -954,7 +954,7 @@ C 版本 awk 程序的一种方式, C 版本的程序运行起来更快, 也更�
 我们可以这样描述 awk 子集的语法规则:
 \marginpar{148}
 \begin{tabbing}
-    \textit{program}\hspace{4em}\=$\to$\=\textit{opt-begin pa-stats
+    \textit{program}\hspace{2em}\=$\to$\hspace{2em}\=\textit{opt-begin pa-stats
     opt-end}\\
     \textit{opt-begin}\>$\to$\>\texttt{BEGIN}\ \textit{statlist} |
     \texttt{""}\\
@@ -966,29 +966,29 @@ C 版本 awk 程序的一种方式, C 版本的程序运行起来更快, 也更�
     \textit{statlist}\>$\to$\>\verb'{'\ \textit{stats}\ \verb'}'\\
     \textit{stats}\>$\to$\>\textit{stat stats}|\texttt{""}\\
     \textit{stat}\>$\to$\>\texttt{print}\ \textit{exprlist}|\\
-    \>\>\texttt{if (}\ \textit{expr}\ \textit{stat opt-else} |\\
-    \>\>\texttt{while )}\ \textit{expr}\ \texttt{)}\ \textit{stat} |\\
+    \>\>\texttt{if (}\ \textit{expr}\ \texttt{)}\textit{stat opt-else} |\\
+    \>\>\texttt{while (}\ \textit{expr}\ \texttt{)}\ \textit{stat} |\\
     \>\>\textit{statlist} | \\
     \>\>\textit{ident}\ \texttt{=}\ \textit{expr} \\
     \textit{opt-else}\>$\to$\>\texttt{else}\ \textit{stat} |\texttt{""} \\
     \textit{exprlist}\>$\to$\>\textit{expr}|\textit{expr}\texttt{,}
     \textit{exprlist}\\
     \textit{expr}\>$\to$\>\textit{number}|\textit{ident}|\texttt{\$}
-    \textit{expr}|\texttt{(}\ \textit{expr}\ | \\
-    \>\>\textit{expr}\texttt{<}\textit{expr}|\textit{expr}\texttt{<=}
-    |...|\textit{expr}\texttt{>}\textit{expr}|\\
-    \>\>\textit{expr}\texttt{+}\textit{expr}|\textit{expr}\texttt{-}
+    \textit{expr}|\texttt{(}\ \textit{expr}\ \texttt{)}| \\
+    \>\>\textit{expr}\texttt{ < }\textit{expr}|\textit{expr}\texttt{ <= }
+    |...|\textit{expr}\texttt{ > }\textit{expr}|\\
+    \>\>\textit{expr}\texttt{ + }\textit{expr}|\textit{expr}\texttt{ - }
     \textit{expr}|\\
-    \>\>\textit{expr}\texttt{*}\textit{expr}|\textit{expr}\texttt{/}
-    \textit{expr}|\textit{expr}\verb'%'\textit{expr}\\
-    \textit{ident}\>$\to$\textit{name}|\textit{name}\texttt{[}\textit{expr}
-    \texttt{]}|\textit{name}\texttt{(}\textit{exprlist}\texttt{)}
+    \>\>\textit{expr}\texttt{ * }\textit{expr}|\textit{expr}\texttt{ / }
+    \textit{expr}|\textit{expr}\verb' % '\textit{expr}\\
+    \textit{ident}\>$\to$\>\textit{name}|\textit{name}\texttt{[}\textit{expr}%
+    \texttt{]}|\textit{name}\texttt{( }\textit{exprlist}\texttt{ )}
 \end{tabbing}
 记号 \texttt{""} 表示空字符串, 而 | 表示选择.
 
 递归下降语法分析器的关键部分在于它的一整套递归分析函数, 它们负责识别
 由非终结符生成的字符串. 每一个函数都按照产生式规则调用其他函数, 一直
-分析到终结符为止, 到这时, 输入中所含的词法单元都被读取出来并另以分类.
+分析到终结符为止, 到这时, 输入中所含的词法单元都被读取出来并加以分类.
 由于该方法的自顶向下与递归这两个特性, 所以被称为 ``递归下降语法分析''.
 
 解析函数的结构紧紧依赖于语言的语法结构. 例如, 函数 \texttt{program}
