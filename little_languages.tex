@@ -829,3 +829,56 @@ C 版本 awk 程序的一种方式, C 版本的程序运行起来更快, 也更�
 语法规则. 利用 \ref{sec:random_text_generation} 节介绍的表示法, 我们可 
 以这样描述 awk 子集的语法规则:
 \marginpar{148}
+\begin{tabbing}
+    \textit{program}\hspace{4em}\=$\to\=\textit{opt-begin pa-stats
+    opt-end}\\
+    \textit{opt-begin}\>$\to$\>\texttt{BEGIN}\ \textit{statlist} |
+    \texttt{""}\\
+    \textit{opt-end}\>$\to$\>\texttt{END}\ \textit{statlist} |
+    \texttt{""}\\
+    \textit{pa-stats}\>$\to$\>\textit{statlist}|\textit{pattern}|
+    \textit{pattern statlist} \\
+    \textit{pattern}\>$\to$\>\textit{expr}\\
+    \textit{statlist\>$\to$\>\verb'{'\ \textit{stats}\ \verb'}'\\
+    \textit{stats}\>$\to$\>\textit{stat stats}|\texttt{""}\\
+    \textit{stat}\>$\to$\>\texttt{print}\ \textit{exprlist}|\\
+    \>\>\texttt{if (}\ \textit{expr}\ \textit{stat opt-else} |\\
+    \>\>\texttt{while )}\ \textit{expr}\ \texttt{)}\ \textit{stat} |\\
+    \>\>\textit{statlist} | \\
+    \>\>\textit{ident}\ \texttt{=}\ \textit{expr} \\
+    \textit{opt-else}\>$\to$\>\texttt{else}\ \textit{stat} |\texttt{""} \\
+    \textit{exprlist}\>$\to$\>\textit{expr}|\textit{expr}\texttt{,}
+    \textit{exprlist}\\
+    \textit{expr}\>$\to$\>\textit{number}|\textit{ident}|\texttt{\$}
+    \textit{expr}|\texttt{(}\ \textit{expr}\ | \\
+    \>\>\textit{expr}\texttt{<}\textit{expr}|\textit{expr}\texttt{<=}
+    |\cdots|\textit{expr}\texttt{>}\textit{expr}|\\
+    \>\>\textit{expr}\texttt{+}\textit{expr}|\textit{expr}\texttt{-}
+    \textit{expr}|\\
+    \>\>\textit{expr}\texttt{*}\textit{expr}|\textit{expr}\texttt{/}
+    \textit{expr}|\textit{expr}\verb'%'\textit{expr}\\
+    \textit{ident}\>$\to$\textit{name}|\textit{name}\texttt{[}\textit{expr}
+    \texttt{]}|\textit{name}\texttt{(}\textit{exprlist}\texttt{)}
+\end{tabbing}
+记号 \texttt{""} 表示空字符串, 而 | 表示选择.
+
+递归下降语法分析器的关键部分在于它的一整套递归分析函数, 它们负责识别
+由非终结符生成的字符串. 每一个函数都按照产生式规则调用其他函数, 一直
+分析到终结符为止, 到这时, 输入中所含的词法单元都被读取出来并另以分类.
+由于该方法的自顶向下与递归这两个特性, 所以被称为 ``递归下降语法分析''.
+
+解析函数的结构紧紧依赖于语言的语法结构. 例如, 函数 \texttt{program}
+搜索的语句, 开头可能有 \texttt{BEGIN} 动作, 后面跟着一个 \patact 语句
+列表, 最后面可能还有 \texttt{END} 动作.
+
+在我们的递归下降语法分析器中, 词法分析由子例程 \texttt{advance} 完成, 
+它搜索下一个词法单元, 并把它保存到变量 \texttt{tok} 中. 每次识别到 
+\textit{stat} 时, 就产生一个输出, 下层函数返回的字符串会拼接成一个更
+长的字符串. 为了使输出更具有可读性, 程序会尝试在适当的地方加上制表符,
+嵌套的层次在变量 \texttt{nt} 中维护.
+
+程序并不完整 --- 它无法识别出 awk 的全部语法, 也无法生成 awk 子集所需的
+所有 C 代码, 而且程序的健壮性还有待加强. 但是作为一个示例, 它足够
+说明整个过程是如何进行的. 虽然分析的只是真实语言的子集, 但是这个子集
+处理起来并不简单, 通过对该子集的分析, 我们可以看到递归下降翻译器的
+基本结构.
