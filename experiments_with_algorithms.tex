@@ -1,0 +1,38 @@
+% vim: ts=8 sts=8 sw=4 et tw=75
+\chapter{算法实验}
+\label{chap:experiments_with_algorithms}
+\marginpar{153}
+
+一般而言, 理解事物如何工作的最好方式就是自己动手做一些小实验, 算法学习
+就是一个典型的例子: 编写实际代码有助于弄清楚那些容易被伪码掩盖的问题.
+不仅如此, 最终得到的程序是运行的, 通过观察运行结果, 就可以知道算法的
+的正确性, 而这是伪码所无法办到的.
+
+Awk 很适合做这种测试工作. 如果某个程序使用 awk 编写, 那我们就可以把精力
+集中在算法上, 而不是语言本身. 如果某个算法最终要应用到某个大型程序中,
+那么先让算法能够单独地运行起来可能会更有效率. 当需要为某个算法进行调试,
+测试与性能评价时, 通常需要构造一些脚手架程序, 在这一方面, awk 是一款
+优秀的脚手架构造工具, 它并不管算法本身是用什么语言实现的.
+
+这一章讨论算法实验. 前半章描述三种排序算法, 这三种算法常常是算法课首
+先要介绍的内容, 我们将使用 awk 程序对这些算法进行测试, 性能度量和
+刻画. 后半章展示几种拓扑排序算法, 实现 Unix 的文件更新实用程序
+\texttt{make}.
+
+\section{排序}
+\label{sec:sorting}
+
+这一小节讨论三种著名并且很有用的算法: 插入排序, 快速排序, 以及堆排序.
+插入排序非常简单, 但是只有在元素很少的情况下, 效率才足够高; 快速排序
+是最好的通用排序算法之一; 堆排序可以保证即使在最坏的情况下, 也可以拥有
+较高的效率. 我们对每一种算法都进行介绍, 并加以实现, 然后再用测试例程
+对它们进行测试, 最后评价性能.
+
+\subsection{插入排序}
+\label{subsec:insertion_sort}
+\cterm{基本概念}. 插入排序的过程类似于给一堆卡片排序: 每次从卡片堆里
+拿出一张, 把它插入到合适的位置.\footnote{原文为 Insertion sort is similar
+    to the method of sorting a sequence of cards by picking up the cards
+    one at a time and inserting each card into its proper position in the
+hand}
+\marginpar{154}
