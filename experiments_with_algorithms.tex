@@ -88,4 +88,23 @@ hand}
 把这些集合作为 \texttt{isort} 的输入数据. 这的确是一个不错的办法,
 但是还可以做得更好: 为了测试程序的薄弱环节, 我们还需要构造一些特殊
 的测试用例, 测试边界与异常情况.
-\marginpar{155}
+\marginpar{155} 对排序来说, 典型的边界或异常情况包括:
+\begin{pattern}
+\indent\indent序列长度为 0 \par
+\indent\indent序列长度为 1 \par
+\indent\indent序列包含 \textit{n} 个随机数 \par
+\indent\indent序列包含 \textit{n} 个已排序的数 \par
+\indent\indent序列包含 \textit{n} 个逆序排列的数 \par
+\indent\indent序列包含 \textit{n} 个相同的数
+\end{pattern}
+
+本章的目标之一是展示如何使用 awk 来帮助测试和评价程序. 为了说明, 我们现在
+要对排序例程的测试与结果评价进行自动化.
+
+主要有两种办法来实现测试与评价过程的自动化, 每一种都有它各自的优点. 第一 
+种称为 ``批处理模式'': write a program to execute a pre-planned set of
+tests, exercising the sort function as suggested above.\footnote{TODO}
+下面的程序可以生成测试数据并检查测试结果. 除了 \texttt{isort}, 还有其他
+几个函数, 它们用来生成不同类型的数组, 以及检查排序后的数组是否是有序的.
+\begin{awkcode}
+\end{awkcode}
