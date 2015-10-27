@@ -9,7 +9,7 @@
 本章的第一个例子是一个汇编程序, 虽然只有 20 来行, 但已经包含了汇编过程
 的核心要素, 为了执行汇编程序, 我们还要开发一个解释程序. 汇编程序与
 解释程序反映了早期阶段汇编语言与机器架构的关系. 其他例子还包括一个
-后缀计算器, awk 子集的递归下降分析器.
+后缀计算器, 和 awk 子集的递归下降分析器.
 
 第二个原因是在实际工作中, 为了实现一个专用的编程语言, 通常需要投入大
 量的精力与财力, 不过在这之前, 我们有必要测试一下新语言的语法和语义. 
@@ -956,33 +956,33 @@ C 版本 awk 程序的一种方式, C 程序运行起来更快, 也更容易扩�
 \begin{tabbing}
     \textit{program}\hspace{2em}\=$\to$\hspace{2em}\=\textit{opt-begin pa-stats
     opt-end}\\
-    \textit{opt-begin}\>$\to$\>\texttt{BEGIN}\ \textit{statlist} |
+    \textit{opt-begin}\>$\to$\>\texttt{BEGIN}\ \textit{statlist}\ |\ 
     \texttt{""}\\
-    \textit{opt-end}\>$\to$\>\texttt{END}\ \textit{statlist} |
+    \textit{opt-end}\>$\to$\>\texttt{END}\ \textit{statlist}\ |\ 
     \texttt{""}\\
-    \textit{pa-stats}\>$\to$\>\textit{statlist}|\textit{pattern}|
+    \textit{pa-stats}\>$\to$\>\textit{statlist}\ |\ \textit{pattern}\ |\ 
     \textit{pattern statlist} \\
     \textit{pattern}\>$\to$\>\textit{expr}\\
     \textit{statlist}\>$\to$\>\verb'{'\ \textit{stats}\ \verb'}'\\
-    \textit{stats}\>$\to$\>\textit{stat stats}|\texttt{""}\\
-    \textit{stat}\>$\to$\>\texttt{print}\ \textit{exprlist}|\\
-    \>\>\texttt{if (}\ \textit{expr}\ \texttt{)}\textit{stat opt-else} |\\
-    \>\>\texttt{while (}\ \textit{expr}\ \texttt{)}\ \textit{stat} |\\
-    \>\>\textit{statlist} | \\
+    \textit{stats}\>$\to$\>\textit{stat stats}\ |\ \texttt{""}\\
+    \textit{stat}\>$\to$\>\texttt{print}\ \textit{exprlist}\ |\ \\
+    \>\>\texttt{if (}\ \textit{expr}\ \texttt{)}\ \textit{stat opt-else}\ |\\
+    \>\>\texttt{while (}\ \textit{expr}\ \texttt{)}\ \textit{stat}\ |\\
+    \>\>\textit{statlist} \ | \\
     \>\>\textit{ident}\ \texttt{=}\ \textit{expr} \\
-    \textit{opt-else}\>$\to$\>\texttt{else}\ \textit{stat} |\texttt{""} \\
-    \textit{exprlist}\>$\to$\>\textit{expr}|\textit{expr}\texttt{,}
+    \textit{opt-else}\>$\to$\>\texttt{else}\ \textit{stat}\ |\texttt{""} \\
+    \textit{exprlist}\>$\to$\>\textit{expr}\ |\ \textit{expr}\texttt{,}
     \textit{exprlist}\\
-    \textit{expr}\>$\to$\>\textit{number}|\textit{ident}|\texttt{\$}
-    \textit{expr}|\texttt{(}\ \textit{expr}\ \texttt{)}| \\
-    \>\>\textit{expr}\texttt{ < }\textit{expr}|\textit{expr}\texttt{ <= }
-    |...|\textit{expr}\texttt{ > }\textit{expr}|\\
-    \>\>\textit{expr}\texttt{ + }\textit{expr}|\textit{expr}\texttt{ - }
-    \textit{expr}|\\
-    \>\>\textit{expr}\texttt{ * }\textit{expr}|\textit{expr}\texttt{ / }
-    \textit{expr}|\textit{expr}\verb' % '\textit{expr}\\
-    \textit{ident}\>$\to$\>\textit{name}|\textit{name}\texttt{[}\textit{expr}%
-    \texttt{]}|\textit{name}\texttt{( }\textit{exprlist}\texttt{ )}
+    \textit{expr}\>$\to$\>\textit{number}\ |\ \textit{ident}\ |\ \texttt{\$}
+    \textit{expr}\ |\ \texttt{(}\ \textit{expr}\ \texttt{)}\ | \\
+    \>\>\textit{expr}\texttt{ < }\textit{expr}\ |\ \textit{expr}\texttt{ <= }
+    \ |\ ...\ |\ \textit{expr}\texttt{ > }\textit{expr}\ |\\
+    \>\>\textit{expr}\texttt{ + }\textit{expr}\ |\ \textit{expr}\texttt{ - }
+    \textit{expr}\ |\\
+    \>\>\textit{expr}\texttt{ * }\textit{expr}\ |\ \textit{expr}\texttt{ / }
+    \textit{expr}\ |\ \textit{expr}\verb' % '\textit{expr}\\
+    \textit{ident}\>$\to$\>\textit{name}\ |\ \textit{name}\texttt{[}\textit{expr}%
+    \texttt{]}\ |\ \textit{name}\texttt{( }\textit{exprlist}\texttt{ )}
 \end{tabbing}
 记号 \texttt{""} 表示空字符串, 而 | 表示选择.
 
@@ -1202,7 +1202,7 @@ C 版本 awk 程序的一种方式, C 程序运行起来更快, 也更容易扩�
 \subsection*{参考资料}
 汇编程序与解释程序来源于 Jon Bentley 和 John Dallen, 当时是为了教授
 软件工程专业课而开发了这两个程序, 具体描述载于 ``Exercises in software
-design'', \textit{IEEE Transactions on Software Engineering}, 1987.
+design'', \textit{IEEE Transactions on Software Engineering}, 1987年.
 
 关于排版制图语言 \texttt{grap} 的相关信息可以在 Jon Bentley 和 Brian
 Kernighan 写的一篇文章中找到, 文章登在 \textit{Communications of the
