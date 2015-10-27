@@ -90,4 +90,83 @@ hand}
 把这些集合作为 \texttt{isort} 的输入数据. 这的确是一个不错的办法,
 但是还可以做得更好: 为了测试程序的薄弱环节, 我们还需要构造一些特殊
 的测试用例, 用来测试边界与异常情况.
-\marginpar{155}
+\marginpar{155} 对排序来说, 典型的边界与异常情况包括:
+\begin{pattern}
+\indent 序列长度为 0 \par
+\indent 序列长度为 1 \par
+\indent 序列包含 \textit{n} 个随机数 \par
+\indent 序列包含 \textit{n} 个已排序的数 \par
+\indent 序列包含 \textit{n} 个逆序排列的数 \par
+\indent 序列包含 \textit{n} 个相同的数
+\end{pattern}
+
+本章的目标之一是展示如何使用 awk 来帮助测试和评价程序. 为了说明, 我们现在
+要对排序例程的测试与运行结果评价过程进行自动化.
+
+主要有两种办法来实现测试与评价过程的自动化, 每一种都有它各自的优点. 第一 
+种称为 ``批处理模式'': write a program to execute a pre-planned set of
+tests, exercising the sort function as suggested above.\footnote{TODO}
+下面的程序可以生成测试数据并检查测试结果. 除了 \texttt{isort}, 还有其他
+几个函数, 它们用来生成不同类型的数组, 以及检查排序后的数组是否是有序的.
+\begin{awkcode}
+    # batch test of sorting routines
+
+    BEGIN {
+        print "    0 elements"
+        isort(A, 0); check(A, 0)    
+        print "    1 element"
+        genid(A, 1); isort(A, 1); check(A, 1)
+        
+        n = 10
+        print "    " n " random integers"
+        genrand(A, n); isort(A, n); check(A, n)
+        
+        print "    " n " sorted integers"
+        gensort(A, n); isort(A, n); check(A, n)
+        
+        print "    " n " reverse-sorted integers"
+        genrev(A, n); isort(A, n); check(A, n)
+        
+        print "    " n " identical integers"
+        genid(A, n); isort(A, n); check(A, n)
+    }
+
+    function isort(A,n,     i,j,t) {
+        for (i = 2; i <= n; i++)
+            for (j = i; j > 1 && A[j-1] > A[j]; j--) {
+                # swap A[j-1] and A[j]
+                t = A[j-1]; A[j-1] = A[j]; A[j] = t
+            }
+    }
+
+\end{awkcode}
+\marginpar{156}
+\begin{awkcode}
+    # test-generation and sorting routines...
+
+    function check(A,n,   i) {
+        for (i = 1; i < n; i++)
+            if (A[i] > A[i+1])
+                printf("array is not sorted, element %d\n", i)
+    }
+
+    function genrand(A,n,  i) { # put n random integers in A
+        for (i = 1; i <= n; i++)
+            A[i] = int(n*rand())
+    }
+
+    function gensort(A,n,  i) { # put n sorted integers in A
+        for (i = 1; i <= n; i++)
+            A[i] = i
+    }
+
+    function genrev(A,n,  i) {  # put n reverse-sorted integers
+        for (i = 1; i <= n; i++)  # in A
+            A[i] = n+1-i
+    }
+
+    function genid(A,n,  i) {   # put n identical integers in A
+        for (i = 1; i <= n; i++)
+            A[i] = 1
+    }
+\end{awkcode}
