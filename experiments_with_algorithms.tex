@@ -215,3 +215,28 @@ exercised.\footnote{TODO} 我们省略了排序和数据生成子程序, 它们�
     # test-generation and sorting routines ...
     ...
 \end{awkcode}
+正则表达式提供了一种非常宽松的输入语法: 只要短语和快速排序稍微有点接近,
+比如 ``quicksort'', 就选择快速排序算法. 我们也可以直接手工输入数据, 
+而不是自动生成, 这个功能允许我们既可以基于文本, 也可以基于数字对算法
+进行测试. 为了说明, 上面程序的一个输出是:
+\begin{shell}
+    10 random 
+     9 8 4 6 7 2 4 0 4 0
+    isort 
+     0 0 2 4 4 4 6 7 8 9
+    10 reverse 
+     10 9 8 7 6 5 4 3 2 1
+    qsort
+     1 2 3 4 5 6 7 8 9 10 
+    data now is the time for all good men
+    hsort
+     all for good is men now the time
+\end{shell}
+
+\cterm{性能}. \texttt{isort} 所执行的操作次数取决于 \textit{n} 的值,
+即待排序的元素个数, 以及它们原来的排列顺序. 插入排序是 \cterm{平方} 级
+算法, 也就是说, 在最坏的情况下, 算法的运行时间增长速度与元素个数的平方成
+正比. 这意味着如果元素个数变成原来的 2 倍, 那么运行时间将会是原来的
+4 倍. 如果待排序元素碰巧就处于一种基本有序的状态, 那么程序的工作量
+就会少很多, 于是运行时间将会按照线性增长, 线性增长指的是与元素的个数
+成正比.
