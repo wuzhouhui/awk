@@ -176,4 +176,42 @@ tests, exercising the sort function as suggested above.\footnote{TODO}
 
 特别地, 我们将要设计的程序, 在效果上等价于一个专门用于构造测试数据与操作
 的微型语言, 因为语言并不需要做太多的工作, 也不必处理大量用户的情况,
-所以
+所以不用设计得多么复杂. 如果必要的话, 我们甚至可以丢掉写了一半的代码,
+重新开始. Our language provides for automatic generation of an array, and,
+looking ahead to the rest of this chapter, for naming the sort to be
+exercised.\footnote{TODO} 我们省略了排序和数据生成子程序, 它们和前一个
+示例相同.
+
+程序的基本组织是一系列的正则表达式, 它们负责扫描输入数据, 判断数据类型
+和使用的排序算法. 如果某个输入数据不与任何一个模式相匹配, 程序就会输出
+一条错误消息, 并演示正确的使用方法. 如果仅仅说明输入数据有错, 可能没
+多大帮助.
+
+\marginpar{157}
+\begin{awkcode}
+    # interactive test framework for sort routines
+
+    /^[0-9]+.*rand/ { n = $1; genrand(A, n); dump(A, n); next }
+    /^[0-9]+.*id/   { n = $1; genid(A, n); dump(A, n); next }
+    /^[0-9]+.*sort/ { n = $1; gensort(A, n); dump(A, n); next }
+    /^[0-9]+.*rev/  { n = $1; genrev(A, n); dump(A, n); next }
+    /^data/ {   # use data right from this line
+            for (i = 2; i <= NF; i++)
+                    A[i-1] = $i
+            n = NF - 1
+            next
+    }
+    /q.*sort/ { qsort(A, 1, n); check(A, n); dump(A, n); next }
+    /h.*sort/ { hsort(A, n); check(A, n); dump(A, n); next }
+    /i.*sort/ { isort(A, n); check(A, n); dump(A, n); next }
+    /./  { print "data ... | N [rand|id|sort|rev]; [qhi]sort" }
+
+    function dump(A, n) {    # print A[1]..A[n]
+            for (i = 1; i <= n; i++)
+                    printf(" %s", A[i])
+            printf("\n")
+    }
+
+    # test-generation and sorting routines ...
+    ...
+\end{awkcode}
