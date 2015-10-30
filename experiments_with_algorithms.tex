@@ -257,7 +257,7 @@ exercised.\footnote{TODO} 我们省略了排序和数据生成子程序, 它们�
 的性能就会快速下降, 除非输入数据基本有序.
 
 通过为每个排序函数添加两个计数器, 我们就可以为上面的图, 以及本章中的
-其他图生成所需要的数据. 一个计数器计算比较的次数, 另一个计算交换的次数.
+其他图生成所需要的数据. 其中一个计算比较的次数, 另一个计算交换的次数.
 这是带计数功能的 \texttt{isort} 函数:
 \begin{awkcode}
     function isort(A,n,     i,j,t) {  # insertion sort
@@ -275,3 +275,65 @@ exercised.\footnote{TODO} 我们省略了排序和数据生成子程序, 它们�
 数组中的元素每比较一次, \texttt{comp} 的值就加 1, 递增操作在比较之前
 完成. 当且仅当某两个元素被交换时, \texttt{exch} 的值才会加 1.
 \marginpar{159}
+
+下面的程序用于组织测试, 以及为坐标图准备数据. 同样, 它的功能相当于一
+个微型编程语言, 可以灵活地指定参数.
+\begin{awkcode}
+    # test framework for sort performance evaluation
+    #   input:  lines with sort name, type of data, sizes...
+    #   output: name, type, size, comparisons, exchanges, c+e
+
+    {   for (i = 3; i <= NF; i++)
+            test($1, $2, $i)
+    }
+
+    function test(sort, data, n) {
+        comp = exch = 0
+        if (data ~ /rand/)
+            genrand(A, n)
+        else if (data ~ /id/)
+            genid(A, n)
+        else if (data ~ /rev/)
+            genrev(A, n)
+        else
+            print "illegal type of data in", $0
+        if (sort ~ /q.*sort/)
+            qsort(A, 1, n)
+        else if (sort ~ /h.*sort/)
+            hsort(A, n)
+        else if (sort ~ /i.*sort/)
+            isort(A, n)
+        else print
+            "illegal type of sort in", $0
+        print sort, data, n, comp, exch, comp+exch
+    }
+
+    # test-generation and sorting routines ...
+
+\end{awkcode}
+输入数据是由多行组成的序列, 类似于
+\begin{shell}
+    isort random 0 20 40 60 80 100 
+    isort ident 0 20 40 60 80 100
+\end{shell}
+输出数据的每一行都包括名字, 类型, 大小, 以及每一种大小的数量.\footnote{
+    原文为 And the output consist of lines containing the name, type, size,
+and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 它
+是我们在第 \ref{chap:little_languages} 章讨论的绘图程序的原始版本.
+
+\begin{exercise}
+    实际上, 函数 \texttt{check} 并不是一个很强大的测试, 什么样的错误会
+    使它检测失败? 你会如何改进?
+\end{exercise}
+
+\begin{exercise}
+    我们的大多数测试都基于整数排序, 面对其他类型的数据时, \texttt{isort}
+    的表现会如何? 为了处理更一般的数据, 你会如何改进测试框架程序?
+\end{exercise}
+
+\begin{exercise}
+    我们默认每一种基本操作都需要相同的时间, 也就是说, 访问一个元素, 比较 
+    两个元素的值, 加法, 赋值等操作所消耗的时间是相同的. 对于 awk 程序来说 
+    这个假设是否合理? 写一个处理大量数据的程序, 来验证你的想法.
+\end{exercise}
+\marginpar{160}
