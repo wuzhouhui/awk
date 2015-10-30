@@ -23,7 +23,7 @@ Awk 很适合做这种测试工作. 如果某个程序使用 awk 编写, 那我�
 \label{sec:sorting}
 
 这一小节讨论三种著名并且很有用的算法: 插入排序, 快速排序, 以及堆排序.
-插入排序非常简单, 但是只有在元素很少的情况下, 效率才足够高; 快速排序
+插入排序非常简单, 但是只有在元素很少的情况下效率才足够高; 快速排序
 是最好的通用排序算法之一; 堆排序可以保证即使在最坏的情况下, 也可以拥有
 较高的效率. 我们对每一种算法都进行介绍, 并加以实现, 然后再用测试例程
 对它们进行测试, 最后评价性能.
@@ -31,7 +31,8 @@ Awk 很适合做这种测试工作. 如果某个程序使用 awk 编写, 那我�
 \subsection{插入排序}
 \label{subsec:insertion_sort}
 \cterm{基本概念}. 插入排序的过程类似于给一堆卡片排序: 每次从卡片堆里
-拿出一张, 把它插入到合适的位置.\footnote{原文为 Insertion sort is similar
+拿出一张, 把它插入到手上拿着的牌的合适位置.
+\footnote{原文为 Insertion sort is similar
     to the method of sorting a sequence of cards by picking up the cards
     one at a time and inserting each card into its proper position in the
 hand}
@@ -104,8 +105,10 @@ hand}
 要对排序例程的测试与运行结果评价过程进行自动化.
 
 主要有两种办法来实现测试与评价过程的自动化, 每一种都有它各自的优点. 第一 
-种称为 ``批处理模式'': write a program to execute a pre-planned set of
-tests, exercising the sort function as suggested above.\footnote{TODO}
+种称为 ``批处理模式'': 编写一个程序来运行事先计划好的测试集, 并运用前面提到
+的几种排序算法.\footnote{原文为 write a program to execute a pre-planned
+    set of tests, exercising the sort function as suggested
+above.}
 下面的程序可以生成测试数据并检查测试结果. 除了 \texttt{isort}, 还有其他
 几个函数, 它们用来生成不同类型的数组, 以及检查排序后的数组是否是有序的.
 \begin{awkcode}
@@ -172,17 +175,18 @@ tests, exercising the sort function as suggested above.\footnote{TODO}
 \end{awkcode}
 
 第二种方法相对来说没那么方便, 但很适合用 awk 来处理. 基本思想是构建一个
-构架程序, 利用该框架可以很容易以交互性的方式来完成测试. 交互式方案是
+框架程序, 利用该框架可以很容易以交互性的方式来完成测试. 交互式方案是
 批处理模式的一个很好的补充, 特别是当待测试的算法没有排序那么容易理解
 时. 交互式处理模式在调试程序时也很方便.
 
 特别地, 我们将要设计的程序, 在效果上等价于一个专门用于构造测试数据与操作
-的微型语言, 因为语言并不需要做太多的工作, 也不必处理大量用户的情况,
+的微型编程语言, 因为语言并不需要做太多的工作, 也不必处理大量用户的情况,
 所以不用设计得多么复杂. 如果必要的话, 我们甚至可以丢掉写了一半的代码,
-重新开始. Our language provides for automatic generation of an array, and,
-looking ahead to the rest of this chapter, for naming the sort to be
-exercised.\footnote{TODO} 我们省略了排序和数据生成子程序, 它们和前一个
-示例相同.
+重新开始. 我们的语言提供了自动生成数组的功能, 如果再继续往下看的话, 
+就会发现它还可以命名待运用的排序算法.\footnote{原文为 Our language provides
+    for automatic generation of an array, and, looking ahead to the rest of
+    this chapter, for naming the sort to be exercised.}
+我们省略了排序和数据生成子程序, 它们和前一个示例相同.
 
 程序的基本组织是一系列的正则表达式, 它们负责扫描输入数据, 判断数据类型
 和使用的排序算法. 如果某个输入数据不与任何一个模式相匹配, 程序就会输出
