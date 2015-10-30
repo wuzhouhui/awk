@@ -272,3 +272,61 @@ exercised.\footnote{TODO} 我们省略了排序和数据生成子程序, 它们�
 数组中的元素每比较一次, \texttt{comp} 的值就加 1, 递增操作在比较之前
 完成. 当且仅当某两个元素被交换时, \texttt{exch} 的值才会加 1.
 \marginpar{159}
+
+下面的程序用于组织测试, 以及为坐标图准备数据. 同样, 它的功能相当于一
+个微型编程语言, 可以用来指定参数.
+\begin{awkcode}
+    BEGIN { srand(1111) }
+    { print }
+    # interactive test framework for sort routines
+
+    /^[0-9]+.*rand/ { n = $1; genrand(A, n); dump(A, n); next }
+    /^[0-9]+.*id/   { n = $1; genid(A, n); dump(A, n); next }
+    /^[0-9]+.*sort/ { n = $1; gensort(A, n); dump(A, n); next }
+    /^[0-9]+.*rev/  { n = $1; genrev(A, n); dump(A, n); next }
+    /^data/ {   # use data right from this line
+            for (i = 2; i <= NF; i++)
+                    A[i-1] = $i
+            n = NF - 1
+            next
+    }
+    /q.*sort/ { qsort(A, 1, n); check(A, n); dump(A, n); next }
+    /h.*sort/ { hsort(A, n); check(A, n); dump(A, n); next }
+    /i.*sort/ { isort(A, n); check(A, n); dump(A, n); next }
+    /./  { print "data ... | N [rand|id|sort|rev]; [qhi]sort" }
+
+    function dump(A, n) {    # print A[1]..A[n]
+            for (i = 1; i <= n; i++)
+                    printf(" %s", A[i])
+            printf("\n")
+    }
+
+    # test-generation and sorting routines ...
+
+\end{awkcode}
+输入数据是由多行组成的序列, 类似于
+\begin{shell}
+    isort random 0 20 40 60 80 100 
+    isort ident 0 20 40 60 80 100
+\end{shell}
+输出数据的每一行都包括名字, 类型, 大小, 以及每一种大小的数量.\footnote{
+    原文为 And the output consist of lines containing the name, type, size,
+and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 它
+是我们在第 \ref{chap:little_languages} 章讨论的绘图程序的原始版本.
+
+\begin{exercise}
+    实际上, 函数 \texttt{check} 并不是一个很强大的测试, 什么样错误会
+    使它检测失败? 你会如何改进?
+\end{exercise}
+
+\begin{exercise}
+    我们的大多数测试都基于整数排序, 面对其他类型的数据时, \texttt{isort}
+    的表现会如何? 为了处理更一般的数据, 你会如何改进测试框架程序?
+\end{exercise}
+
+\begin{exercise}
+    我们默认每一种基本操作都需要相同的时间, 也就是说, 访问一个元素, 比较 
+    两个元素的值, 加法, 赋值等操作所消耗的时间是相同的. 对于 awk 程序来说 
+    这个假设是否合理? 写一个处理大量数据的程序, 来验证你的想法.
+\end{exercise}
+\marginpar{160}
