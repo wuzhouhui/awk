@@ -277,31 +277,35 @@ exercised.\footnote{TODO} 我们省略了排序和数据生成子程序, 它们�
 \marginpar{159}
 
 下面的程序用于组织测试, 以及为坐标图准备数据. 同样, 它的功能相当于一
-个微型编程语言, 可以用来指定参数.
+个微型编程语言, 可以灵活地指定参数.
 \begin{awkcode}
-    BEGIN { srand(1111) }
-    { print }
-    # interactive test framework for sort routines
+    # test framework for sort performance evaluation
+    #   input:  lines with sort name, type of data, sizes...
+    #   output: name, type, size, comparisons, exchanges, c+e
 
-    /^[0-9]+.*rand/ { n = $1; genrand(A, n); dump(A, n); next }
-    /^[0-9]+.*id/   { n = $1; genid(A, n); dump(A, n); next }
-    /^[0-9]+.*sort/ { n = $1; gensort(A, n); dump(A, n); next }
-    /^[0-9]+.*rev/  { n = $1; genrev(A, n); dump(A, n); next }
-    /^data/ {   # use data right from this line
-            for (i = 2; i <= NF; i++)
-                    A[i-1] = $i
-            n = NF - 1
-            next
+    {   for (i = 3; i <= NF; i++)
+            test($1, $2, $i)
     }
-    /q.*sort/ { qsort(A, 1, n); check(A, n); dump(A, n); next }
-    /h.*sort/ { hsort(A, n); check(A, n); dump(A, n); next }
-    /i.*sort/ { isort(A, n); check(A, n); dump(A, n); next }
-    /./  { print "data ... | N [rand|id|sort|rev]; [qhi]sort" }
 
-    function dump(A, n) {    # print A[1]..A[n]
-            for (i = 1; i <= n; i++)
-                    printf(" %s", A[i])
-            printf("\n")
+    function test(sort, data, n) {
+        comp = exch = 0
+        if (data ~ /rand/)
+            genrand(A, n)
+        else if (data ~ /id/)
+            genid(A, n)
+        else if (data ~ /rev/)
+            genrev(A, n)
+        else
+            print "illegal type of data in", $0
+        if (sort ~ /q.*sort/)
+            qsort(A, 1, n)
+        else if (sort ~ /h.*sort/)
+            hsort(A, n)
+        else if (sort ~ /i.*sort/)
+            isort(A, n)
+        else print
+            "illegal type of sort in", $0
+        print sort, data, n, comp, exch, comp+exch
     }
 
     # test-generation and sorting routines ...
@@ -318,7 +322,7 @@ and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 
 是我们在第 \ref{chap:little_languages} 章讨论的绘图程序的原始版本.
 
 \begin{exercise}
-    实际上, 函数 \texttt{check} 并不是一个很强大的测试, 什么样错误会
+    实际上, 函数 \texttt{check} 并不是一个很强大的测试, 什么样的错误会
     使它检测失败? 你会如何改进?
 \end{exercise}
 
