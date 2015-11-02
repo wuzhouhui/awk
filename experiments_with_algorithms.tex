@@ -330,3 +330,22 @@ and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 
     这个假设是否合理? 写一个处理大量数据的程序, 来验证你的想法.
 \end{exercise}
 \marginpar{160}
+
+首先需要选择一个划分元素: 从范围 \texttt{[left,right]} 中随机选取一个数
+\texttt{r} 作为划分点, 任何一个元素都可以作为划分点, 但是如果序列已经具
+有了某种程度上的有序, 那么随机选择会工作得更好. 位置 \texttt{r} 上的元素
+\texttt{p} 现在成了划分元素. 交换 \texttt{A[left]} 与 \texttt{A[r]},
+在划分的过程中, 数组始终把元素 \texttt{p} 放在 \texttt{A[left]}, 
+\texttt{A[left]} 的后面是比 \texttt{p} 小的元素, 再接下来是大于或等于
+\texttt{p} 的元素, 最后是到目前为止未处理的元素:\footnote{TODO}
+
+下标 \texttt{last} 指向最后一个比 \texttt{p} 小的元素, 下标 \texttt{i}
+指向下一个未处理的元素. 初始化时, \texttt{last} 等于 \texttt{left},
+\texttt{i} 等于 \texttt{left+1}.
+
+在划分过程的循环中, 我们比较元素 \texttt{A[i]} 与 \texttt{p}. 如果 
+\texttt{A[i] >= p}, 只需要递增 \texttt{i} 即可; 如果 \texttt{A[i] < p},
+此时需要递增 \texttt{last}, 并交换 \texttt{A[last]} 与 \texttt{A[i]},
+最后再递增 \texttt{i}. 按照这种方式, 一旦所有的元素都处理完毕, 我们需要
+交换 \texttt{A[left]} 与 \texttt{A[last]}. 到这里, 我们已经完成的一次
+划分, 此时的数组看起来就像这样:\footnote{TODO}
