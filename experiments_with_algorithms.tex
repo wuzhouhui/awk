@@ -388,8 +388,11 @@ and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 
 \begin{file}
     2 1 3|4|5 6 8 7
 \end{file}
-接下再递归地对子数组 \texttt{2 1 3} 与 \texttt{5 6 8 7} 进行快速排序. 
-我们可以用插入排序的测试例程对该算法进行测试.
+然后再递归地对子数组 \texttt{2 1 3} 与 \texttt{5 6 8 7} 进行快速排序,
+当子数组的元素个数少于 2 时, 递归过程就会停止.
+
+下面程序所包含的函数 \texttt{qsort} 实现了快速排序算法, 我们可以用插入排序
+的测试例程对该程序进行测试.
 \begin{awkcode}
     # quicksort
 
