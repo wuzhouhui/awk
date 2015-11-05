@@ -346,7 +346,7 @@ Awk 提供了另一个内建变量 \nr, 这个变量计算到目前为止, 读�
 
 这个程序使用 \printf 打印每位雇员的报酬:
 \begin{awkcode}
-    { printf("total pay for %s is $%.2f\n", $1, $2 * $3 }
+    { printf("total pay for %s is $%.2f\n", $1, $2 * $3) }
 \end{awkcode}
 这个 \printf 语句的格式字符串包含两个格式说明符. 第一个格式说明符
 \marginpar{8}
