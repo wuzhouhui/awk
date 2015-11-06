@@ -376,8 +376,8 @@ and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 
 \texttt{i} 等于 \texttt{left+1}.
 
 在划分过程的循环中, 我们比较元素 \texttt{A[i]} 与 \texttt{p}. 如果 
-% TODO
-\texttt{A[i]>=p}, 只需要递增 \texttt{i} 即可; 如果 \texttt{A[i] < p},
+\texttt{A[i]} $\geqslant$ \texttt{p}, 只需要递增 \texttt{i} 即可; 如果
+\texttt{A[i]} $<$ \texttt{p},
 此时需要递增 \texttt{last}, 并交换 \texttt{A[last]} 与 \texttt{A[i]},
 最后再递增 \texttt{i}. 按照这种方式, 一旦所有的元素都处理完毕, 我们需要
 交换 \texttt{A[left]} 与 \texttt{A[last]}. 到这里, 我们已经完成了一次
