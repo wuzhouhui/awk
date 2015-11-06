@@ -255,7 +255,12 @@ above.}
 和交换的次数, 对于一个排序过程来说, 这是两个很客观的指标. 正如你
 所看到的那样, 逆序序列拥有最差的性能, 随机序列居中, 而同一元素
 序列表现出了最佳的性能. 有序序列的性能表现和同一元素序列非常接近
-(在图中没有显示出来). \footnote{TODO}
+(在图中没有显示出来).\footnote{最好用矢量图, 而不是从原版中截图 --- 
+译者注}
+
+\begin{center}
+    \includegraphics[scale=0.7]{./images/insertion_sort.png}
+\end{center}
 
 总得来说, 插入排序适用于元素个数较少的情况, 当元素个数过多时, 该算法
 的性能就会快速下降, 除非输入数据基本有序.
@@ -371,8 +376,8 @@ and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 
 \texttt{i} 等于 \texttt{left+1}.
 
 在划分过程的循环中, 我们比较元素 \texttt{A[i]} 与 \texttt{p}. 如果 
-% TODO
-\texttt{A[i]>=p}, 只需要递增 \texttt{i} 即可; 如果 \texttt{A[i] < p},
+\texttt{A[i]} $\geqslant$ \texttt{p}, 只需要递增 \texttt{i} 即可; 如果
+\texttt{A[i]} $<$ \texttt{p},
 此时需要递增 \texttt{last}, 并交换 \texttt{A[last]} 与 \texttt{A[i]},
 最后再递增 \texttt{i}. 按照这种方式, 一旦所有的元素都处理完毕, 我们需要
 交换 \texttt{A[left]} 与 \texttt{A[last]}. 到这里, 我们已经完成了一次
