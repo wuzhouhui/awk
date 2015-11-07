@@ -381,8 +381,26 @@ and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 
 此时需要递增 \texttt{last}, 并交换 \texttt{A[last]} 与 \texttt{A[i]},
 最后再递增 \texttt{i}. 按照这种方式, 一旦所有的元素都处理完毕, 我们需要
 交换 \texttt{A[left]} 与 \texttt{A[last]}. 到这里, 我们已经完成了一次
-划分, 此时的数组看起来就像这样:\footnote{TODO}
+划分, 此时的数组看起来就像这样:
 \marginpar{161}
+\begin{center}
+\begin{tikzpicture}
+    \draw[thick] (0, 0) -- (0, 1) -- (7, 1) -- (7, 0) -- (0, 0);
+    \draw[thick] (3, 0) -- (3, 1);
+    \draw[thick] (4, 0) -- (4, 1);
+
+    \draw[thick, ->] (0.5, -0.8) -- (0.5, -0.1);
+    \draw[thick, ->] (3.5, -0.8) -- (3.5, -0.1);
+    \draw[thick, ->] (6.5, -0.8) -- (6.5, -0.1);
+
+    \node at (0.5, -1.0) {\texttt{left}};
+    \node at (3.5, -1.0) {\texttt{last}};
+    \node at (6.5, -1.0) {\texttt{right}};
+    \node at (1.5, 0.5) {\texttt{< p}};
+    \node at (3.5, 0.5) {\texttt{p}};
+    \node at (5.5, 0.5) {\texttt{$\geqslant$ p}};
+\end{tikzpicture}
+\end{center}
 现在, 我们对左边的子数组与右边的子组执行同样的操作.
 
 假设我们对下列8个元素进行快速排序:
