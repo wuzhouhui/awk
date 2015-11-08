@@ -442,3 +442,43 @@ and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 
 插入到队列中, 然后每次抽取一个元素. 因为每次移除的都是最大的元素, 所以 
 元素是以降序地方式从队列中抽取出来. 这种排序方法叫作堆排序, 由
 J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
+
+\marginpar{163}
+堆排序使用一种称为 \cterm{堆} (\term{heap}) 的数据结构来维护优先级队列,
+我们可以把堆想像成一棵二叉树, 但是带有两条额外的性质:
+\begin{enumerate}
+    \item 树是高度平衡的: 叶子结点最多只在两个不同的层次上出现, 另外,
+        位于最底层 (距离根结点最远的层次) 的叶子尽量靠左排列;
+    \item 树是部分有序的: 每个结点的值大于或等于它的孩子结点.
+\end{enumerate}
+这是带有 10 个元素的堆:\footnote{TODO}
+
+堆具有两条非常重要的性质. 第一条性质是如果有 \textit{n} 个结点, 那么所
+有的从根结点到叶子结点的路径长度都不会大于 $\log_2^n$. 第二条性质是
+具有最大值的元素总是在根结点 (这个位置称为 ``堆顶'').
+
+如果我们用一个数组 \texttt{A} 来模拟堆, 那么就不需要构造显式的二叉树.
+树中的结点按照宽度优先遍历的顺序出现在数组中, 也就是说, 根结点在 
+\texttt{A[1]}, 它的左孩子与右孩子分别在 \texttt{A[2]} 和 \texttt{A[3]}.
+总的来说, 如果某个结点在 \texttt{A[}\textit{i}\texttt{]}, 那么它的孩子就
+在 \texttt{A[2}\textit{i}\texttt{]} 和 \texttt{A[2}\textit{i}\texttt{+1]},
+如果只有一个孩子的话, 那就在 \texttt{A[2}\textit{i}\texttt{]}.
+于是, 上面那棵树对应的数组 \texttt{A} 就是:\footnote{TODO}
+
+堆的部分有序性质指的是元素 \texttt{A[}\textit{i}\texttt{]} 大于或等于
+它的孩子结点 \texttt{A[2}\textit{i}\texttt{]} 与
+\texttt{A[2}\textit{i}\texttt{+1]}, 如果只有一个孩子的话, 就那大于或等于
+\texttt{A[2}\textit{i}\texttt{]}. 如果某个数组满足这个条件, 我们就说
+这个数组具有 ``堆属性''.
+
+\cterm{实现} (\term{Implementation}). 堆排序由两个阶段组成: 构造堆, 以及 
+按顺序从堆中提取元素. 两个阶段都要调用函数 \texttt{heapify(A,i,j)}, 使得
+子数组 \texttt{A[i]},\texttt{A[i+1]},...,\texttt{A[j]} 具有堆属性 (假设 
+\texttt{A[i+1]},...,\texttt{A[j]} 已经具有了堆属性). \texttt{heapify}
+的基本操作是比较 \texttt{A[i]} 与它的孩子, 如果 \texttt{A[i]} 没有孩子,
+或者比它的孩子大, 那么函数就直接返回; 否则, 交换 \texttt{A[i]} 和它的最
+大孩子, 然后再对孩子重复这个操作.
+
+在第一个阶段, 堆排序通过调用
+\texttt{heapify(A,}\textit{i}\texttt{,}\textit{n}\texttt{)} (\textit{i} 从
+\textit{n}/2 递减到 1), 把数组转化成一个堆.
