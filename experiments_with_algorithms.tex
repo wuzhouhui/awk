@@ -494,8 +494,8 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 \end{enumerate}
 这是带有 10 个元素的堆:\footnote{TODO}
 
-堆具有两条非常重要的性质. 第一条性质是如果有 \textit{n} 个结点, 那么所
-有的从根结点到叶子结点的路径长度都不会大于 $\log_2^n$. 第二条性质是
+堆具有两条非常重要的性质. 第一条性质是, 如果有 \textit{n} 个结点, 那么所
+有的从根结点到叶子结点的路径长度都不会大于 $\log_2 n$. 第二条性质是,
 具有最大值的元素总是在根结点 (这个位置称为 ``堆顶'').
 
 如果我们用一个数组 \texttt{A} 来模拟堆, 那么就不需要构造显式的二叉树.
@@ -514,11 +514,11 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 
 \cterm{实现} (\term{Implementation}). 堆排序由两个阶段组成: 构造堆, 以及 
 按顺序从堆中提取元素. 两个阶段都要调用函数 \texttt{heapify(A,i,j)}, 使得
-子数组 \texttt{A[i]},\texttt{A[i+1]},...,\texttt{A[j]} 具有堆属性 (假设 
-\texttt{A[i+1]},...,\texttt{A[j]} 已经具有了堆属性). \texttt{heapify}
+子数组 \texttt{A[i]}, \texttt{A[i+1]}, ..., \texttt{A[j]} 具有堆属性 (假设 
+\texttt{A[i+1]}, ..., \texttt{A[j]} 已经具有了堆属性). \texttt{heapify}
 的基本操作是比较 \texttt{A[i]} 与它的孩子, 如果 \texttt{A[i]} 没有孩子,
 或者比它的孩子大, 那么函数就直接返回; 否则, 交换 \texttt{A[i]} 和它的最
-大孩子, 然后再对孩子重复这个操作.
+大孩子, 然后再对孩子重复这个基本操作.
 
 在第一个阶段, 堆排序通过调用
 \texttt{heapify(A,}\textit{i}\texttt{,}\textit{n}\texttt{)} (\textit{i} 从
