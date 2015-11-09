@@ -523,3 +523,47 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 在第一个阶段, 堆排序通过调用
 \texttt{heapify(A,}\textit{i}\texttt{,}\textit{n}\texttt{)} (\textit{i} 从
 \textit{n}/2 递减到 1), 把数组转化成一个堆.
+
+\marginpar{164}
+第2个阶段开始时, \textit{i} 被赋值为 \textit{n}, 然后重复执行以下三个
+步骤: 首先, 把堆的最大元素 \texttt{A[1]} 与 \texttt{A[}\textit{i}\texttt{]}
+作交换, \texttt{A[}\textit{i}\texttt{]} 是堆中最靠右的元素. 然后, 堆的 
+元素个数减 1 (即 \textit{i} 减 1). 这两个步骤相当于从堆中移除最大元素.
+注意到, 这样做的结果是数组中最后的
+\textit{n}\texttt{-}\textit{i}\texttt{+1} 个元素处于有序状态. 最后,
+对数组 \texttt{A} 的前 \textit{i}\texttt{-1} 个元素调用
+\texttt{heapify(A,1,}\textit{i}\texttt{-1)}.
+
+这三个步骤一直重复到堆中只剩下一个元素为止, 而这个元素其实就是序列中的
+最小值. 由于数组中剩下的元素按照升序排列, 所以当操作结束时, 序列就是有
+序的了. 在操作过程中, 数组看起来就像这样:
+\begin{center}
+    \begin{tikzpicture}
+        \draw[thick] (0, 0) -- (0, 1) -- (8, 1) -- (8, 0) -- (0, 0);
+	\draw[thick] (4, 0) -- (4, 1);
+	\draw[->] (0.3, -0.8) -- (0.3, -0.1);
+	\draw[->] (3.7, -0.8) -- (3.7, -0.1);
+	\draw[->] (7.7, -0.8) -- (7.7, -0.1);
+	\node at (2, 0.5) {heap};
+	\node at (6, 0.5) {sorted};
+	\node at (0.3, -1.2) {1};
+	\node at (3.7, -1.2) {\textit{i}};
+	\node at (7.7, -1.2) {\textit{n}};
+    \end{tikzpicture}
+\end{center}
+数组中从 1 到 \textit{i} 的元素具有堆属性, 从 \textit{i}\texttt{+1} 到 
+\textit{n} 是数组中最大的 \textit{n}\texttt{-}\textit{i} 个元素,
+按照升序排列.
+开始时, \textit{i}=\textit{n}, 因此数组中没有已排好序的部分.
+
+考虑上面展示的元素所组成的数组, 该数组已经具有堆属性. 在第二个阶段的第
+一个步骤, 我们交换元素 \texttt{76} 和 \texttt{28}:
+\begin{file}
+    28 72 34 59 63 17 29 37 33 | 76
+\end{file}
+在第 2 个步骤, 我们把堆的大小递减到 9. 然后在第 3 个步骤中, 通过一系列的
+交换操作, 把 \texttt{28} 移动到合适的位置, 从而维持住前 9 个元素的堆属性:
+\begin{file}
+    72 63 34 59 28 17 29 37 33 | 76
+\end{file}
+
