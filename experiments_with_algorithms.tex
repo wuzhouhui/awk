@@ -526,7 +526,7 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 
 \marginpar{164}
 第2个阶段开始时, \textit{i} 被赋值为 \textit{n}, 然后重复执行以下三个
-步骤: 首先, 堆的最大元素 \texttt{A[1]} 与 \texttt{A[}\textit{i}\texttt{]}
+步骤: 首先, 把堆的最大元素 \texttt{A[1]} 与 \texttt{A[}\textit{i}\texttt{]}
 作交换, \texttt{A[}\textit{i}\texttt{]} 是堆中最靠右的元素. 然后, 堆的 
 元素个数减 1 (即 \textit{i} 减 1). 这两个步骤相当于从堆中移除最大元素.
 注意到, 这样做的结果是数组中最后的
@@ -552,7 +552,8 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
     \end{tikzpicture}
 \end{center}
 数组中从 1 到 \textit{i} 的元素具有堆属性, 从 \textit{i}\texttt{+1} 到 
-\textit{n} 是数组中最大 \textit{n}-\textit{i} 个元素, 按照升序排列.
+\textit{n} 是数组中最大的 \textit{n}\texttt{-}\textit{i} 个元素,
+按照升序排列.
 开始时, \textit{i}=\textit{n}, 因此数组中没有已排好序的部分.
 
 考虑上面展示的元素所组成的数组, 该数组已经具有堆属性. 在第二个阶段的第
