@@ -7,7 +7,7 @@ The AWK Programming Language 的中文翻译项目, 使用 LaTeX 排版, 光凭�
 有任何想说的话都可以给我发邮件: wuzhouhui250@gmail.com
 
 The_AWK_Programming_Language.djvu:              英文原版
-The_AWK_Programming_Language_zh_cn.pdf:         中文版
+AWK程序设计语言.pdf:				中文版
 
 目前翻译还未结束, 所以仓库中的 PDF 文件可能不是最新的, 如果你想要最新的中
 文版, 但是却没有 LaTeX 编译环境, 请给我发邮件, 我把编译好的 PDF 发送给你.
