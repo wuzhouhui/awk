@@ -524,4 +524,65 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 \begin{file}
     72 63 34 59 28 17 29 37 33 | 76
 \end{file}
+我们可以把这个过程可视化: 让元素 \texttt{28} 沿着二叉树的路径, 从根结点
+开始, 朝着叶子结点方向, 逐渐向下渗透, 直到到达一个这样的结点: 它的孩子 
+小于或等于 \texttt{28}:\footnote{TODO}
 
+在下一次迭代中, 第一个步骤交换元素 \texttt{72} 和 \texttt{33}:
+\begin{file}
+    33 63 34 59 28 17 29 37 | 72 76
+\end{file}
+第二个步骤把 \textit{i} 递减到 8, 第三次迭代把 \texttt{33} 移动到合适的 
+位置:
+\marginpar{165}
+\begin{file}
+    63 59 34 37 28 17 29 33 | 72 76
+\end{file}
+下一次迭代以交换 \verb'63' 与 \verb'33' 作为开始, 迭代结束时, 序列变成:
+\begin{file}
+    59 37 34 33 28 17 29 | 63 72 76
+\end{file}
+当数组处于有序状态时, 迭代过程结束.
+
+下面的程序对输入数据按照升序进行排列, 使用的正是上面提到的过程. 我们把 
+大部分的, 由单独一条表达式组成的语句用花括号包围起来, 至于这样做的原因
+将会在下一节讨论刻画时说明.
+\begin{awkcode}
+    # heapsort
+
+        { A[NR] = $0 }
+
+    END { hsort(A, NR)
+          for (i = 1; i <= NR; i++)
+              { print A[i] }
+        }
+
+    function hsort(A,n,  i) {
+        for (i = int(n/2); i >= 1; i--)  # phase 1
+             { heapify(A, i, n) }
+        for (i = n; i > 1; i--) {        # phase 2
+             { swap(A, 1, i) }
+             { heapify(A, 1, i-1) }
+        }
+    }
+    function heapify(A,left,right,   p,c) {
+        for (p = left; (c = 2*p) <= right; p = c) {
+            if (c < right && A[c+1] > A[c])
+                { c++ }
+            if (A[p] < A[c])
+                { swap(A, c, p) }
+        }
+    }
+    function swap(A,i,j,   t) {
+        t = A[i]; A[i] = A[j]; A[j] = t
+    }
+\end{awkcode}
+
+\cterm{性能}. \verb'hsort' 总的操作次数正比于 $n\log n$, 即使是在最坏的
+情况下也是如此. 同样, 我们用三种类型的元素序列对 \verb'hsort' 进行性能
+测试, 下面这张图显示了测试结果, 可以看到, \verb'hsort' 面对相同元素序列
+时, 性能优于快速排序.\footnote{应该用矢量图}
+\marginpar{166}
+\begin{center}
+    \includegraphics[scale=0.7]{images/heap_sort.png}
+\end{center}
