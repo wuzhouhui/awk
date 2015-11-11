@@ -566,4 +566,17 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 \begin{file}
     72 63 34 59 28 17 29 37 33 | 76
 \end{file}
+我们可以把这个过程可视化: 让元素 \texttt{28} 沿着二叉树的路径, 从根结点
+开始, 朝着叶子结点方向, 逐渐向下渗透, 直到到达一个这样的结点: 它的孩子 
+小于或等于 \texttt{28}:\footnote{TODO}
 
+在下一次迭代中, 第一个步骤交换元素 \texttt{72} 和 \texttt{33}:
+\begin{file}
+    33 63 34 59 28 17 29 37 | 72 76
+\end{file}
+第二个步骤把 \textit{i} 递减到 8, 第三次迭代把 \texttt{33} 移动到合适的 
+位置:
+\marginpar{165}
+\begin{file}
+    63 59 34 37 28 17 29 33 | 72 76
+\end{file}
