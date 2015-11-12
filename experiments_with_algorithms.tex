@@ -369,7 +369,31 @@ and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 
 \texttt{p} 现在成了划分元素. 交换 \texttt{A[left]} 与 \texttt{A[r]},
 在划分的过程中, 数组始终把元素 \texttt{p} 放在 \texttt{A[left]}, 
 \texttt{A[left]} 的后面是比 \texttt{p} 小的元素, 再接下来是大于或等于
-\texttt{p} 的元素, 最后是到目前为止未处理的元素:\footnote{TODO}
+\texttt{p} 的元素, 最后是到目前为止未处理的元素:
+\begin{center}
+\begin{tikzpicture}
+    \draw[thick] (0, 0) -- (0, 1) -- (10, 1) -- (10, 0) -- (0, 0);
+    \draw[thick] (1, 0) -- (1, 1);
+    \draw[thick] (4, 0) -- (4, 1);
+    \draw[thick] (7, 0) -- (7, 1);
+    \draw[thick] (7, 0) -- (7, 1);
+
+    \node at (0.5, 0.5) {\texttt{p}};
+    \node at (2.5, 0.5) {\texttt{<p}};
+    \node at (5.5, 0.5) {\texttt{$\geqslant$p}};
+    \node at (8.5, 0.5) {unprocessed};
+
+    \draw[->] (0.5, -0.8) -- (0.5, -0.2);
+    \draw[->] (3.7, -0.8) -- (3.7, -0.2);
+    \draw[->] (7.2, -0.8) -- (7.2, -0.2);
+    \draw[->] (9.8, -0.8) -- (9.8, -0.2);
+
+    \node at (0.5, -1.1) {\texttt{left}};
+    \node at (3.7, -1.1) {\texttt{last}};
+    \node at (7.2, -1.1) {\texttt{i}};
+    \node at (9.8, -1.1) {\texttt{right}};
+\end{tikzpicture}
+\end{center}
 
 下标 \texttt{last} 指向最后一个比 \texttt{p} 小的元素, 下标 \texttt{i}
 指向下一个未处理的元素. 初始化时, \texttt{last} 等于 \texttt{left},
