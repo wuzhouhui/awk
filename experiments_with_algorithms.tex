@@ -580,3 +580,68 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 \begin{file}
     63 59 34 37 28 17 29 33 | 72 76
 \end{file}
+下一次迭代以交换 \verb'63' 与 \verb'33' 作为开始, 迭代结束时, 序列变成:
+\begin{file}
+    59 37 34 33 28 17 29 | 63 72 76
+\end{file}
+当数组处于有序状态时, 迭代过程结束.
+
+下面的程序对输入数据按照升序进行排列, 使用的正是上面提到的过程. 我们把 
+大部分的, 由单独一条表达式组成的语句用花括号包围起来, 至于这样做的原因
+将会在下一节讨论刻画时说明.
+\begin{awkcode}
+    # heapsort
+
+        { A[NR] = $0 }
+
+    END { hsort(A, NR)
+          for (i = 1; i <= NR; i++)
+              { print A[i] }
+        }
+
+    function hsort(A,n,  i) {
+        for (i = int(n/2); i >= 1; i--)  # phase 1
+             { heapify(A, i, n) }
+        for (i = n; i > 1; i--) {        # phase 2
+             { swap(A, 1, i) }
+             { heapify(A, 1, i-1) }
+        }
+    }
+    function heapify(A,left,right,   p,c) {
+        for (p = left; (c = 2*p) <= right; p = c) {
+            if (c < right && A[c+1] > A[c])
+                { c++ }
+            if (A[p] < A[c])
+                { swap(A, c, p) }
+        }
+    }
+    function swap(A,i,j,   t) {
+        t = A[i]; A[i] = A[j]; A[j] = t
+    }
+\end{awkcode}
+
+\cterm{性能}. \verb'hsort' 总的操作次数正比于 $n\log n$, 即使是在最坏的
+情况下也是如此. 同样, 我们用三种类型的元素序列对 \verb'hsort' 进行性能
+测试, 下面这张图显示了测试结果, 可以看到, \verb'hsort' 面对相同元素序列
+时, 性能优于快速排序.\footnote{应该用矢量图}
+\marginpar{166}
+\begin{center}
+    \includegraphics[scale=0.7]{images/heap_sort.png}
+\end{center}
+
+接下来的这张图显示了本节所讨论的三种排序算法, 在面对随机输入数据时的性能
+表现.
+\begin{center}
+    \includegraphics[scale=0.7]{images/sort_cmp.png}
+\end{center}
+
+前面曾经说过, \texttt{isort} 对随机数据进行排序的时间复杂度是二次的, 而
+\texttt{hsort} 与 \texttt{qsort} 的复杂度却是 $n \log n$. 这张图清楚地
+展示了一个优秀算法的重要性: 随着数据规模的增加, 二次方程序的性能与
+$n \log n$ 程序性能之间的差距急剧加大.
+\marginpar{167}
+\begin{exercise}
+    \texttt{check} 总是发现 \texttt{isort} 的输出是有序的. 对于
+    \texttt{qsort} 与 \texttt{hsort} 是否也成立 ? 如果输入数据仅仅由
+    数值组成, 或者是一些看起来不太像数值的字符串, 那么是否还成立 ?
+\end{exercise}
