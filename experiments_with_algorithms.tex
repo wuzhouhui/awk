@@ -586,3 +586,20 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 \begin{center}
     \includegraphics[scale=0.7]{images/heap_sort.png}
 \end{center}
+
+接下来的这张图显示了本节所讨论的三种排序算法, 在面对随机输入数据时的性能
+表现.
+\begin{center}
+    \includegraphics[scale=0.7]{images/sort_cmp.png}
+\end{center}
+
+前面曾经说过, \texttt{isort} 对随机数据进行排序的时间复杂度是二次的, 而
+\texttt{hsort} 与 \texttt{qsort} 的复杂度却是 $n \log n$. 这张图清楚地
+展示了一个优秀算法的重要性: 随着数据规模的增加, 二次方程序的性能与
+$n \log n$ 程序性能之间的差距急剧加大.
+\marginpar{167}
+\begin{exercise}
+    \texttt{check} 总是发现 \texttt{isort} 的输出是有序的. 对于
+    \texttt{qsort} 与 \texttt{hsort} 是否也成立 ? 如果输入数据仅仅由
+    数值组成, 或者是一些看起来不太像数值的字符串, 那么是否还成立 ?
+\end{exercise}
