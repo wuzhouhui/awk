@@ -255,9 +255,9 @@ above.}
 和交换的次数, 对于一个排序过程来说, 这是两个很客观的指标. 正如你
 所看到的那样, 逆序序列拥有最差的性能, 随机序列居中, 而同一元素
 序列表现出了最佳的性能. 有序序列的性能表现和同一元素序列非常接近
-(在图中没有显示出来).\footnote{最好用矢量图, 而不是从原版中截图 --- 
-译者注}
+(在图中没有显示出来).
 
+% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
     \includegraphics[scale=0.7]{./images/insertion_sort.png}
 \end{center}
@@ -481,9 +481,9 @@ and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 
 会退化到二次方. 幸运的是, 对于随机数据来说, 不会出现这种极不均匀的划分. 
 下面这张图显示了快速排序面对三种类型的输入数据时的性能表现 (在测试插入
 排序时, 也用到了这三种类型的数据). 正如你所看到的那样, 对于同元素序列
-来说, 操作次数的增长速度要比另外两种类型的增长速度快得多. \footnote{应该 
-用矢量图, 而不是从原版中截图 --- 译者注}
+来说, 操作次数的增长速度要比另外两种类型的增长速度快得多.
 
+% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
     \includegraphics[scale=0.7]{images/quicksort.png}
 \end{center}
@@ -516,7 +516,11 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
         位于最底层 (距离根结点最远的层次) 的叶子尽量靠左排列;
     \item 树是部分有序的: 每个结点的值大于或等于它的孩子结点.
 \end{enumerate}
-这是带有 10 个元素的堆:\footnote{TODO}
+这是带有 10 个元素的堆:
+% TODO 应该用 LaTeX 画图, 而不是截图
+\begin{center}
+    \includegraphics[scale=0.8]{images/heap_with_10_elem.png}
+\end{center}
 
 堆具有两条非常重要的性质. 第一条性质是, 如果有 \textit{n} 个结点, 那么所
 有的从根结点到叶子结点的路径长度都不会大于 $\log_2 n$. 第二条性质是,
@@ -592,7 +596,11 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 \end{file}
 我们可以把这个过程可视化: 让元素 \texttt{28} 沿着二叉树的路径, 从根结点
 开始, 朝着叶子结点方向, 逐渐向下渗透, 直到到达一个这样的结点: 它的孩子 
-小于或等于 \texttt{28}:\footnote{TODO}
+小于或等于 \texttt{28}:
+% TODO 应该用 LaTeX 画图, 而不是截图
+\begin{center}
+    \includegraphics[scale=0.8]{images/heap_iter1.png}
+\end{center}
 
 在下一次迭代中, 第一个步骤交换元素 \texttt{72} 和 \texttt{33}:
 \begin{file}
@@ -647,14 +655,16 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 \cterm{性能}. \verb'hsort' 总的操作次数正比于 $n\log n$, 即使是在最坏的
 情况下也是如此. 同样, 我们用三种类型的元素序列对 \verb'hsort' 进行性能
 测试, 下面这张图显示了测试结果, 可以看到, \verb'hsort' 面对相同元素序列
-时, 性能优于快速排序.\footnote{应该用矢量图}
+时, 性能优于快速排序.
 \marginpar{166}
+% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
     \includegraphics[scale=0.7]{images/heap_sort.png}
 \end{center}
 
 接下来的这张图显示了本节所讨论的三种排序算法, 在面对随机输入数据时的性能
 表现.
+% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
     \includegraphics[scale=0.7]{images/sort_cmp.png}
 \end{center}
@@ -669,3 +679,60 @@ $n \log n$ 程序性能之间的差距急剧加大.
     \texttt{qsort} 与 \texttt{hsort} 是否也成立 ? 如果输入数据仅仅由
     数值组成, 或者是一些看起来不太像数值的字符串, 那么是否还成立 ?
 \end{exercise}
+
+% TODO "profiling" 这个词很难翻译, 我就把它译作 "剖析"
+\section{剖析}
+\label{sec:profiling}
+
+在上一节中, 为了评价排序程序的性能, 我们计算了特定操作的执行次数. 评价
+程序性能的另一个有效方法是对程序进行剖析, 也就是计算每条语句的执行次数.
+许多编程环境都会提供一个称为 \cterm{剖析器} (\term{profiler}) 的工具
+程序, 剖析器可以打印某个程序中每条语句的执行次数.
+
+我们并没有为 awk 开发一个剖析器, 但是在这一节, 我们将展示如何使用两个
+简短的程序, 来近似地模拟剖析器的功能. 第一个程序  \texttt{makeprof} 通过 
+在代码中插入计数与打印语句, 为 awk 程序构造剖析版本. 当剖析版的程序
+运行时, 它会计算每条语句的执行次数, 并把计数结果写到文件 \texttt{prof.cnts}
+中. 第二个程序 \texttt{printprof} 从 \texttt{prof.cnts} 中获取语句的执行
+次数, 并添加到原版程序中.
+
+为了简单起见, 当程序运行时, 我们只对 ``可执行的'' 的左花括号进行计数.
+通常来说, 这种计数安排已经足够反映问题了, 因为每一个动作, 以及每一块
+组合语句都被一对花括号包围起来. 任何一条语句都可以用一对花括号包围起来,
+所以, 通过为语句加花括号, 我们可以按照自己的需要来控制计数的精度.
+
+程序 \texttt{makeprof} 把一个普通的 awk 程序转换成一个剖析版程序.
+它在每个输入行的左花括号的右边插入计数语句, 计数语句具有形式:
+\begin{pattern}
+    \indent \texttt{\_LBcnt[}\textit{i}\texttt{]++;}
+\end{pattern}
+除此之外, 它还会添加一个 \verb'END' 动作, 用于输出计数结果到文件 
+\texttt{prof.cnts} 中, 每行一个.
+\begin{awkcode}
+    # makeprof - prepare profiling version of an awk program
+    #   usage:  awk -f makeprof awkprog >awkprog.p
+    #   running awk -f awkprog.p data creates a
+    #       file prof.cnts of statement counts for awkprog
+
+        { if ($0 ~ /{/) sub(/{/, "{ _LBcnt[" ++_numLB "]++; ")
+          print
+        }
+
+    END { printf("END { for (i = 1; i <= %d; i++)\n", _numLB)
+          printf("\t\t print _LBcnt[i] > \"prof.cnts\"\n}\n")
+        }
+\end{awkcode}
+
+给定一些输入数据, 运行完某个程序的剖析版之后, 我们可以用
+\texttt{printprof}, 把 \texttt{protf.cnts} 中的语句计数结果附加到原始%
+\marginpar{168}%
+程序中:
+\begin{awkcode}
+    # printprof - print profiling counts
+    #     usage:  awk -f printprof awkprog
+    #     prints awkprog with statement counts from prof.cnts
+
+    BEGIN { while (getline < "prof.cnts" > 0) cnt[++i] = $1 }
+    /{/   { printf("%5d", cnt[++j]) }
+          { printf("\t%s\n", $0) }
+\end{awkcode}
