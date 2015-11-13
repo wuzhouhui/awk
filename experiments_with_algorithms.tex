@@ -628,7 +628,7 @@ $n \log n$ 程序性能之间的差距急剧加大.
 程序 \texttt{makeprof} 把一个普通的 awk 程序转换成一个剖析版程序.
 它在每个输入行的左花括号的右边插入计数语句, 计数语句具有形式:
 \begin{pattern}
-    \indent \texttt{_LBcnt[}\textit{i}\texttt{]++;}
+    \indent \texttt{\_LBcnt[}\textit{i}\texttt{]++;}
 \end{pattern}
 除此之外, 它还会添加一个 \verb'END' 动作, 用于输出计数结果到文件 
 \texttt{prof.cnts} 中, 每行一个.
