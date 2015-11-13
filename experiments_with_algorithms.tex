@@ -255,9 +255,9 @@ above.}
 和交换的次数, 对于一个排序过程来说, 这是两个很客观的指标. 正如你
 所看到的那样, 逆序序列拥有最差的性能, 随机序列居中, 而同一元素
 序列表现出了最佳的性能. 有序序列的性能表现和同一元素序列非常接近
-(在图中没有显示出来).\footnote{最好用矢量图, 而不是从原版中截图 --- 
-译者注}
+(在图中没有显示出来).
 
+% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
     \includegraphics[scale=0.7]{./images/insertion_sort.png}
 \end{center}
@@ -481,9 +481,9 @@ and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 
 会退化到二次方. 幸运的是, 对于随机数据来说, 不会出现这种极不均匀的划分. 
 下面这张图显示了快速排序面对三种类型的输入数据时的性能表现 (在测试插入
 排序时, 也用到了这三种类型的数据). 正如你所看到的那样, 对于同元素序列
-来说, 操作次数的增长速度要比另外两种类型的增长速度快得多. \footnote{应该 
-用矢量图, 而不是从原版中截图 --- 译者注}
+来说, 操作次数的增长速度要比另外两种类型的增长速度快得多.
 
+% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
     \includegraphics[scale=0.7]{images/quicksort.png}
 \end{center}
@@ -517,6 +517,7 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
     \item 树是部分有序的: 每个结点的值大于或等于它的孩子结点.
 \end{enumerate}
 这是带有 10 个元素的堆:
+% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
     \includegraphics[scale=0.8]{images/heap_with_10_elem.png}
 \end{center}
@@ -596,6 +597,7 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 我们可以把这个过程可视化: 让元素 \texttt{28} 沿着二叉树的路径, 从根结点
 开始, 朝着叶子结点方向, 逐渐向下渗透, 直到到达一个这样的结点: 它的孩子 
 小于或等于 \texttt{28}:
+% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
     \includegraphics[scale=0.8]{images/heap_iter1.png}
 \end{center}
@@ -653,14 +655,16 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 \cterm{性能}. \verb'hsort' 总的操作次数正比于 $n\log n$, 即使是在最坏的
 情况下也是如此. 同样, 我们用三种类型的元素序列对 \verb'hsort' 进行性能
 测试, 下面这张图显示了测试结果, 可以看到, \verb'hsort' 面对相同元素序列
-时, 性能优于快速排序.\footnote{应该用矢量图}
+时, 性能优于快速排序.
 \marginpar{166}
+% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
     \includegraphics[scale=0.7]{images/heap_sort.png}
 \end{center}
 
 接下来的这张图显示了本节所讨论的三种排序算法, 在面对随机输入数据时的性能
 表现.
+% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
     \includegraphics[scale=0.7]{images/sort_cmp.png}
 \end{center}
