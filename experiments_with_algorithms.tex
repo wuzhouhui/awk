@@ -532,7 +532,33 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 总的来说, 如果某个结点在 \texttt{A[}\textit{i}\texttt{]}, 那么它的孩子就
 在 \texttt{A[2}\textit{i}\texttt{]} 和 \texttt{A[2}\textit{i}\texttt{+1]},
 如果只有一个孩子的话, 那就在 \texttt{A[2}\textit{i}\texttt{]}.
-于是, 上面那棵树对应的数组 \texttt{A} 就是:\footnote{TODO}
+于是, 上面那棵树对应的数组 \texttt{A} 就是:
+\newcounter{j}
+\begin{center}
+\begin{tikzpicture}
+    \pgfmathsetmacro\width{1.4};
+
+    \draw (0, 0) -- (\width * 10, 0);
+    \draw (0, 1) -- (\width * 10, 1);
+    \foreach \i in {0, ..., 10}
+    \draw (\i * \width, 0) -- (\i * \width, 1);
+
+    \setcounter{j}{0};
+    \foreach \ind/\data in { 0/{76}, 1/{72},
+    2/{34}, 3/{59},
+    4/{63}, 5/{17},
+    6/{29}, 7/{37}, 8/{33},
+    9/{28}} {
+
+        \node at (\arabic{j} * \width + \width / 2, 0.5)
+        {\data};
+        \addtocounter{j}{1};
+    }
+
+    \foreach \i in {1, ..., 10}
+    \node at (\i * \width - 0.5 * \width, 1.5) {\texttt{A[\i]}};
+\end{tikzpicture}
+\end{center}
 
 堆的部分有序性质指的是元素 \texttt{A[}\textit{i}\texttt{]} 大于或等于
 它的孩子结点 \texttt{A[2}\textit{i}\texttt{]} 与
