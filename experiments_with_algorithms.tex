@@ -687,7 +687,7 @@ $n \log n$ 程序性能之间的差距急剧加大.
 在上一节中, 为了评价排序程序的性能, 我们计算了特定操作的执行次数. 评价
 程序性能的另一个有效方法是对程序进行剖析, 也就是计算每条语句的执行次数.
 许多编程环境都会提供一个称为 \cterm{剖析器} (\term{profiler}) 的工具
-程序, 剖析器可以打印某个程序中, 每条语句的执行次数.
+程序, 剖析器可以打印某个程序中每条语句的执行次数.
 
 我们并没有为 awk 开发一个剖析器, 但是在这一节, 我们将展示如何使用两个
 简短的程序, 来近似地模拟剖析器的功能. 第一个程序  \texttt{makeprof} 通过 
@@ -724,8 +724,8 @@ $n \log n$ 程序性能之间的差距急剧加大.
 \end{awkcode}
 
 给定一些输入数据, 运行完某个程序的剖析版之后, 我们可以用
-\texttt{printprof}, 把 \texttt{protf.cnts} 中的语句计数结果附加到原始
-\marginpar{168}
+\texttt{printprof}, 把 \texttt{protf.cnts} 中的语句计数结果附加到原始%
+\marginpar{168}%
 程序中:
 \begin{awkcode}
     # printprof - print profiling counts
