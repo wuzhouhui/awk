@@ -595,7 +595,10 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 \end{file}
 我们可以把这个过程可视化: 让元素 \texttt{28} 沿着二叉树的路径, 从根结点
 开始, 朝着叶子结点方向, 逐渐向下渗透, 直到到达一个这样的结点: 它的孩子 
-小于或等于 \texttt{28}:\footnote{TODO}
+小于或等于 \texttt{28}:
+\begin{center}
+    \includegraphics[scale=0.8]{images/heap_iter1.png}
+\end{center}
 
 在下一次迭代中, 第一个步骤交换元素 \texttt{72} 和 \texttt{33}:
 \begin{file}
