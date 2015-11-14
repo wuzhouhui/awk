@@ -705,3 +705,41 @@ $n \log n$ 程序性能之间的差距急剧加大.
 \texttt{END} 动作等价于按照它们出现的顺序, 组合到一个单独的 \texttt{END}
 中.
 \marginpar{169}
+
+现在, 假设把 100 个随机数作为输入数据, 运行 \texttt{heapsort.p}, 程序运行 
+结束后, 键入并执行命令
+\begin{shell}
+    awk -f printprof heapsort
+\end{shell}
+就可以得到带有语句执行次数的原版程序 (每条语句的执行次数仅对本次运行有效).
+命令的执行结果是:
+\begin{awkcode}
+	# heapsort
+	
+  100	    { A[NR] = $0 }
+	
+    1	END { hsort(A, NR)
+	      for (i = 1; i <= NR; i++)
+  100	          { print A[i] }
+	    }
+	
+    1	function hsort(A,n,  i) {
+	    for (i = int(n/2); i >= 1; i--)  # phase 1
+   50	         { heapify(A, i, n) }
+   99	    for (i = n; i > 1; i--) {        # phase 2
+   99	         { swap(A, 1, i) }
+   99	         { heapify(A, 1, i-1) }
+	    }
+	}
+  149	function heapify(A,left,right,   p,c) {
+  526	    for (p = left; (c = 2*p) <= right; p = c) {
+	        if (c < right && A[c+1] > A[c])
+  228	            { c++ }
+	        if (A[p] < A[c])
+  473	            { swap(A, c, p) }
+	    }
+	}
+  572	function swap(A,i,j,   t) {
+	    t = A[i]; A[i] = A[j]; A[j] = t
+	}
+\end{awkcode}
