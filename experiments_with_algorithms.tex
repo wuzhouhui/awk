@@ -517,9 +517,51 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
     \item 树是部分有序的: 每个结点的值大于或等于它的孩子结点.
 \end{enumerate}
 这是带有 10 个元素的堆:
-% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
-    \includegraphics[scale=0.8]{images/heap_with_10_elem.png}
+\begin{tikzpicture}
+    \coordinate (p0) at (0, 0);
+    \coordinate (p1) at (-2.0, -0.8);
+    \coordinate (p2) at (+2.0, -0.8);
+    \coordinate (p3) at (-3.0, -1.6);
+    \coordinate (p4) at (-1.0, -1.6);
+    \coordinate (p5) at (+1.0, -1.6);
+    \coordinate (p6) at (+3.0, -1.6);
+    \coordinate (p7) at (-3.5, -2.4);
+    \coordinate (p8) at (-2.5, -2.4);
+    \coordinate (p9) at (-1.5, -2.4);
+
+    \draw[thick] (p0) -- (p1);
+    \draw[thick] (p0) -- (p2);
+    \draw[thick] (p1) -- (p3);
+    \draw[thick] (p1) -- (p4);
+    \draw[thick] (p2) -- (p5);
+    \draw[thick] (p2) -- (p6);
+    \draw[thick] (p3) -- (p7);
+    \draw[thick] (p3) -- (p8);
+    \draw[thick] (p4) -- (p9);
+
+    \fill[fill=white] (p0) circle (2ex);
+    \fill[fill=white] (p1) circle (2ex);
+    \fill[fill=white] (p2) circle (2ex);
+    \fill[fill=white] (p3) circle (2ex);
+    \fill[fill=white] (p4) circle (2ex);
+    \fill[fill=white] (p5) circle (2ex);
+    \fill[fill=white] (p6) circle (2ex);
+    \fill[fill=white] (p7) circle (2ex);
+    \fill[fill=white] (p8) circle (2ex);
+    \fill[fill=white] (p9) circle (2ex);
+
+    \node at (p0) {76};
+    \node at (p1) {72};
+    \node at (p2) {34};
+    \node at (p3) {59};
+    \node at (p4) {63};
+    \node at (p5) {17};
+    \node at (p6) {29};
+    \node at (p7) {37};
+    \node at (p8) {33};
+    \node at (p9) {28};
+\end{tikzpicture}
 \end{center}
 
 堆具有两条非常重要的性质. 第一条性质是, 如果有 \textit{n} 个结点, 那么所
