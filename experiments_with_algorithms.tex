@@ -763,3 +763,86 @@ $n \log n$ 程序性能之间的差距急剧加大.
     /{/   { printf("%5d", cnt[++j]) }
           { printf("\t%s\n", $0) }
 \end{awkcode}
+
+作为示例, 考虑为 \ref{sec:sorting} 节末尾的程序 \texttt{heapsort} 作剖析.
+为了构造这个程序的剖析版, 键入并执行命令
+\begin{shell}
+    awk -f makeprof heapsort > heapsort.p
+\end{shell}
+构造出的剖析版 \texttt{heapsort.p} 看起来就像:
+\begin{awkcode}
+    # heapsort
+
+        { _LBcnt[1]++;  A[NR] = $0 }
+
+    END { _LBcnt[2]++;  hsort(A, NR)
+          for (i = 1; i <= NR; i++)
+              { _LBcnt[3]++;  print A[i] }
+        }
+
+    function hsort(A,n,  i) { _LBcnt[4]++; 
+        for (i = int(n/2); i >= 1; i--)  # phase 1
+             { _LBcnt[5]++;  heapify(A, i, n) }
+        for (i = n; i > 1; i--) { _LBcnt[6]++;         # phase 2
+             { _LBcnt[7]++;  swap(A, 1, i) }
+             { _LBcnt[8]++;  heapify(A, 1, i-1) }
+        }
+    }
+    function heapify(A,left,right,   p,c) { _LBcnt[9]++; 
+        for (p = left; (c = 2*p) <= right; p = c) { _LBcnt[10]++; 
+            if (c < right && A[c+1] > A[c])
+                { _LBcnt[11]++;  c++ }
+            if (A[p] < A[c])
+                { _LBcnt[12]++;  swap(A, c, p) }
+        }
+    }
+    function swap(A,i,j,   t) { _LBcnt[13]++; 
+        t = A[i]; A[i] = A[j]; A[j] = t
+    }
+    END { for (i = 1; i <= 13; i++)
+                     print _LBcnt[i] > "prof.cnts"
+    }
+\end{awkcode}
+正如你所看到的那样, 原版程序中插入了 13 条计数语句, 还额外添加了一个
+\texttt{END} 动作, 该动作把计数结果输出到文件 \texttt{prof.cnts}. 多个
+\texttt{END} 动作等价于按照它们出现的顺序, 组合到一个单独的 \texttt{END}
+中.
+\marginpar{169}
+
+现在, 假设把 100 个随机数作为输入数据, 运行 \texttt{heapsort.p}, 程序运行 
+结束后, 键入并执行命令
+\begin{shell}
+    awk -f printprof heapsort
+\end{shell}
+就可以得到带有语句执行次数的原版程序 (每条语句的执行次数仅对本次运行有效).
+命令的执行结果是:
+\begin{awkcode}
+	# heapsort
+	
+  100	    { A[NR] = $0 }
+	
+    1	END { hsort(A, NR)
+	      for (i = 1; i <= NR; i++)
+  100	          { print A[i] }
+	    }
+	
+    1	function hsort(A,n,  i) {
+	    for (i = int(n/2); i >= 1; i--)  # phase 1
+   50	         { heapify(A, i, n) }
+   99	    for (i = n; i > 1; i--) {        # phase 2
+   99	         { swap(A, 1, i) }
+   99	         { heapify(A, 1, i-1) }
+	    }
+	}
+  149	function heapify(A,left,right,   p,c) {
+  526	    for (p = left; (c = 2*p) <= right; p = c) {
+	        if (c < right && A[c+1] > A[c])
+  228	            { c++ }
+	        if (A[p] < A[c])
+  473	            { swap(A, c, p) }
+	    }
+	}
+  572	function swap(A,i,j,   t) {
+	    t = A[i]; A[i] = A[j]; A[j] = t
+	}
+\end{awkcode}
