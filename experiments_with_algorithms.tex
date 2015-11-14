@@ -665,9 +665,47 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 我们可以把这个过程可视化: 让元素 \texttt{28} 沿着二叉树的路径, 从根结点
 开始, 朝着叶子结点方向, 逐渐向下渗透, 直到到达一个这样的结点: 它的孩子 
 小于或等于 \texttt{28}:
-% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
-    \includegraphics[scale=0.8]{images/heap_iter1.png}
+\begin{tikzpicture}
+    \coordinate (p0) at (0, 0);
+    \coordinate (p1) at (-2.0, -0.8);
+    \coordinate (p2) at (+2.0, -0.8);
+    \coordinate (p3) at (-3.0, -1.6);
+    \coordinate (p4) at (-1.0, -1.6);
+    \coordinate (p5) at (+1.0, -1.6);
+    \coordinate (p6) at (+3.0, -1.6);
+    \coordinate (p7) at (-3.5, -2.4);
+    \coordinate (p8) at (-2.5, -2.4);
+
+    \draw[thick] (p0) -- (p1);
+    \draw[thick] (p0) -- (p2);
+    \draw[thick] (p1) -- (p3);
+    \draw[thick] (p1) -- (p4);
+    \draw[thick] (p2) -- (p5);
+    \draw[thick] (p2) -- (p6);
+    \draw[thick] (p3) -- (p7);
+    \draw[thick] (p3) -- (p8);
+
+    \fill[fill=white] (p0) circle (2ex);
+    \fill[fill=white] (p1) circle (2ex);
+    \fill[fill=white] (p2) circle (2ex);
+    \fill[fill=white] (p3) circle (2ex);
+    \fill[fill=white] (p4) circle (2ex);
+    \fill[fill=white] (p5) circle (2ex);
+    \fill[fill=white] (p6) circle (2ex);
+    \fill[fill=white] (p7) circle (2ex);
+    \fill[fill=white] (p8) circle (2ex);
+
+    \node at (p0) {72};
+    \node at (p1) {63};
+    \node at (p2) {34};
+    \node at (p3) {59};
+    \node at (p4) {28};
+    \node at (p5) {17};
+    \node at (p6) {29};
+    \node at (p7) {37};
+    \node at (p8) {33};
+\end{tikzpicture}
 \end{center}
 
 在下一次迭代中, 第一个步骤交换元素 \texttt{72} 和 \texttt{33}:
