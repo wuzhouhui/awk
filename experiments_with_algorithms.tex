@@ -517,9 +517,51 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
     \item 树是部分有序的: 每个结点的值大于或等于它的孩子结点.
 \end{enumerate}
 这是带有 10 个元素的堆:
-% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
-    \includegraphics[scale=0.8]{images/heap_with_10_elem.png}
+\begin{tikzpicture}
+    \coordinate (p0) at (0, 0);
+    \coordinate (p1) at (-2.0, -0.8);
+    \coordinate (p2) at (+2.0, -0.8);
+    \coordinate (p3) at (-3.0, -1.6);
+    \coordinate (p4) at (-1.0, -1.6);
+    \coordinate (p5) at (+1.0, -1.6);
+    \coordinate (p6) at (+3.0, -1.6);
+    \coordinate (p7) at (-3.5, -2.4);
+    \coordinate (p8) at (-2.5, -2.4);
+    \coordinate (p9) at (-1.5, -2.4);
+
+    \draw[thick] (p0) -- (p1);
+    \draw[thick] (p0) -- (p2);
+    \draw[thick] (p1) -- (p3);
+    \draw[thick] (p1) -- (p4);
+    \draw[thick] (p2) -- (p5);
+    \draw[thick] (p2) -- (p6);
+    \draw[thick] (p3) -- (p7);
+    \draw[thick] (p3) -- (p8);
+    \draw[thick] (p4) -- (p9);
+
+    \fill[fill=white] (p0) circle (2ex);
+    \fill[fill=white] (p1) circle (2ex);
+    \fill[fill=white] (p2) circle (2ex);
+    \fill[fill=white] (p3) circle (2ex);
+    \fill[fill=white] (p4) circle (2ex);
+    \fill[fill=white] (p5) circle (2ex);
+    \fill[fill=white] (p6) circle (2ex);
+    \fill[fill=white] (p7) circle (2ex);
+    \fill[fill=white] (p8) circle (2ex);
+    \fill[fill=white] (p9) circle (2ex);
+
+    \node at (p0) {76};
+    \node at (p1) {72};
+    \node at (p2) {34};
+    \node at (p3) {59};
+    \node at (p4) {63};
+    \node at (p5) {17};
+    \node at (p6) {29};
+    \node at (p7) {37};
+    \node at (p8) {33};
+    \node at (p9) {28};
+\end{tikzpicture}
 \end{center}
 
 堆具有两条非常重要的性质. 第一条性质是, 如果有 \textit{n} 个结点, 那么所
@@ -594,15 +636,15 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 \begin{center}
     \begin{tikzpicture}
         \draw[thick] (0, 0) -- (0, 1) -- (8, 1) -- (8, 0) -- (0, 0);
-	\draw[thick] (4, 0) -- (4, 1);
-	\draw[->] (0.3, -0.8) -- (0.3, -0.1);
-	\draw[->] (3.7, -0.8) -- (3.7, -0.1);
-	\draw[->] (7.7, -0.8) -- (7.7, -0.1);
-	\node at (2, 0.5) {heap};
-	\node at (6, 0.5) {sorted};
-	\node at (0.3, -1.2) {1};
-	\node at (3.7, -1.2) {\textit{i}};
-	\node at (7.7, -1.2) {\textit{n}};
+        \draw[thick] (4, 0) -- (4, 1);
+        \draw[->] (0.3, -0.8) -- (0.3, -0.1);
+        \draw[->] (3.7, -0.8) -- (3.7, -0.1);
+        \draw[->] (7.7, -0.8) -- (7.7, -0.1);
+        \node at (2, 0.5) {heap};
+        \node at (6, 0.5) {sorted};
+        \node at (0.3, -1.2) {1};
+        \node at (3.7, -1.2) {\textit{i}};
+        \node at (7.7, -1.2) {\textit{n}};
     \end{tikzpicture}
 \end{center}
 数组中从 1 到 \textit{i} 的元素具有堆属性, 从 \textit{i}\texttt{+1} 到 
@@ -623,9 +665,47 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 我们可以把这个过程可视化: 让元素 \texttt{28} 沿着二叉树的路径, 从根结点
 开始, 朝着叶子结点方向, 逐渐向下渗透, 直到到达一个这样的结点: 它的孩子 
 小于或等于 \texttt{28}:
-% TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
-    \includegraphics[scale=0.8]{images/heap_iter1.png}
+\begin{tikzpicture}
+    \coordinate (p0) at (0, 0);
+    \coordinate (p1) at (-2.0, -0.8);
+    \coordinate (p2) at (+2.0, -0.8);
+    \coordinate (p3) at (-3.0, -1.6);
+    \coordinate (p4) at (-1.0, -1.6);
+    \coordinate (p5) at (+1.0, -1.6);
+    \coordinate (p6) at (+3.0, -1.6);
+    \coordinate (p7) at (-3.5, -2.4);
+    \coordinate (p8) at (-2.5, -2.4);
+
+    \draw[thick] (p0) -- (p1);
+    \draw[thick] (p0) -- (p2);
+    \draw[thick] (p1) -- (p3);
+    \draw[thick] (p1) -- (p4);
+    \draw[thick] (p2) -- (p5);
+    \draw[thick] (p2) -- (p6);
+    \draw[thick] (p3) -- (p7);
+    \draw[thick] (p3) -- (p8);
+
+    \fill[fill=white] (p0) circle (2ex);
+    \fill[fill=white] (p1) circle (2ex);
+    \fill[fill=white] (p2) circle (2ex);
+    \fill[fill=white] (p3) circle (2ex);
+    \fill[fill=white] (p4) circle (2ex);
+    \fill[fill=white] (p5) circle (2ex);
+    \fill[fill=white] (p6) circle (2ex);
+    \fill[fill=white] (p7) circle (2ex);
+    \fill[fill=white] (p8) circle (2ex);
+
+    \node at (p0) {72};
+    \node at (p1) {63};
+    \node at (p2) {34};
+    \node at (p3) {59};
+    \node at (p4) {28};
+    \node at (p5) {17};
+    \node at (p6) {29};
+    \node at (p7) {37};
+    \node at (p8) {33};
+\end{tikzpicture}
 \end{center}
 
 在下一次迭代中, 第一个步骤交换元素 \texttt{72} 和 \texttt{33}:
@@ -763,3 +843,106 @@ $n \log n$ 程序性能之间的差距急剧加大.
     /{/   { printf("%5d", cnt[++j]) }
           { printf("\t%s\n", $0) }
 \end{awkcode}
+
+作为示例, 考虑为 \ref{sec:sorting} 节末尾的程序 \texttt{heapsort} 作剖析.
+为了构造这个程序的剖析版, 键入并执行命令
+\begin{shell}
+    awk -f makeprof heapsort > heapsort.p
+\end{shell}
+构造出的剖析版 \texttt{heapsort.p} 看起来就像:
+\begin{awkcode}
+    # heapsort
+
+        { _LBcnt[1]++;  A[NR] = $0 }
+
+    END { _LBcnt[2]++;  hsort(A, NR)
+          for (i = 1; i <= NR; i++)
+              { _LBcnt[3]++;  print A[i] }
+        }
+
+    function hsort(A,n,  i) { _LBcnt[4]++; 
+        for (i = int(n/2); i >= 1; i--)  # phase 1
+             { _LBcnt[5]++;  heapify(A, i, n) }
+        for (i = n; i > 1; i--) { _LBcnt[6]++;         # phase 2
+             { _LBcnt[7]++;  swap(A, 1, i) }
+             { _LBcnt[8]++;  heapify(A, 1, i-1) }
+        }
+    }
+    function heapify(A,left,right,   p,c) { _LBcnt[9]++; 
+        for (p = left; (c = 2*p) <= right; p = c) { _LBcnt[10]++; 
+            if (c < right && A[c+1] > A[c])
+                { _LBcnt[11]++;  c++ }
+            if (A[p] < A[c])
+                { _LBcnt[12]++;  swap(A, c, p) }
+        }
+    }
+    function swap(A,i,j,   t) { _LBcnt[13]++; 
+        t = A[i]; A[i] = A[j]; A[j] = t
+    }
+    END { for (i = 1; i <= 13; i++)
+                     print _LBcnt[i] > "prof.cnts"
+    }
+\end{awkcode}
+正如你所看到的那样, 原版程序中插入了 13 条计数语句, 还额外添加了一个
+\texttt{END} 动作, 该动作把计数结果输出到文件 \texttt{prof.cnts}. 多个
+\texttt{END} 动作等价于按照它们出现的顺序, 组合到一个单独的 \texttt{END}
+中.
+\marginpar{169}
+
+现在, 假设把 100 个随机数作为输入数据, 运行 \texttt{heapsort.p}, 程序运行 
+结束后, 键入并执行命令
+\begin{shell}
+    awk -f printprof heapsort
+\end{shell}
+就可以得到带有语句执行次数的原版程序 (每条语句的执行次数仅对本次运行有效).
+命令的执行结果是:
+\begin{awkcode}
+        # heapsort
+        
+  100       { A[NR] = $0 }
+        
+    1   END { hsort(A, NR)
+              for (i = 1; i <= NR; i++)
+  100             { print A[i] }
+            }
+        
+    1   function hsort(A,n,  i) {
+            for (i = int(n/2); i >= 1; i--)  # phase 1
+   50            { heapify(A, i, n) }
+   99       for (i = n; i > 1; i--) {        # phase 2
+   99            { swap(A, 1, i) }
+   99            { heapify(A, 1, i-1) }
+            }
+        }
+  149   function heapify(A,left,right,   p,c) {
+  526       for (p = left; (c = 2*p) <= right; p = c) {
+                if (c < right && A[c+1] > A[c])
+  228               { c++ }
+                if (A[p] < A[c])
+  473               { swap(A, c, p) }
+            }
+        }
+  572   function swap(A,i,j,   t) {
+            t = A[i]; A[i] = A[j]; A[j] = t
+        }
+\end{awkcode}
+
+我们实现的剖析器最重要的特点是简单, 但这同时也是它最大的缺点. 程序 
+\texttt{makeprof} 盲目地在每一行的第一个左花括号的右边插入计数语句,
+一个更好的做法是忽略字符串常量, 正则表达式和注释中的左花括号. 除了语句的
+执行次数, 最好还要报告语句的执行时间, 但是这里介绍的方法还无法做到这
+一点.
+
+\begin{exercise}
+    修改剖析器, 使得程序不会在字符串常量, 正则表达式或者注释中插入计数
+    语句. 你实现的剖析器是否允许对自身进行剖析?
+\end{exercise}
+
+\begin{exercise}
+    如果 \texttt{END} 动作中包含 \texttt{exit} 语句, 那么剖析器就无法
+    正常地工作, 请问这是为什么 ? 修复这个问题.
+\end{exercise}
+
+\marginpar{170}
+\section{拓扑排序}
+\label{sec:topological_sorting}
