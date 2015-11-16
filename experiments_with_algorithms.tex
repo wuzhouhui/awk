@@ -772,4 +772,41 @@ $n \log n$ 程序性能之间的差距急剧加大.
 \texttt{lorder} 可以完成这个工作). 这些, 以及其他类似的问题都是
 \cterm{拓扑排序} (\term{topological sorting}) 问题的实例: 找到一个顺序,
 该顺序满足一个约束条件集合, 集合中的每个条件都具有形式 ``\texttt{x} 必须
-在 \texttt{y} 之前出现''. 在一个拓扑排序中, 任何一个线序, 只要它满足
+在 \texttt{y} 之前出现''. 由约束条件集合所表示的偏序得到该集合上的一个
+线序, 这个操作叫用拓扑排序.
+
+约束条件可以用一张图来表示, 图中的每个结点都用名字标记, 如果结点 \textit{x}
+必须先于 \textit{y} 出现, 那么就有一条边, 从 \textit{x} 指向 \textit{y}.
+下面这张图就是一个例子:\footnote{TODO}
+
+如果存在一条边, 从 \textit{x} 指向 \textit{y}, 那么 \textit{x} 就是
+\textit{y} 的 \cterm{前驱} (\term{predecessor}), \textit{y} 是 \textit{x}
+的 \cterm{后继} (\term{successor}). 假设约束条件用 前驱-后继 对来表示,
+其中每个输入行的 \textit{x} 和 \textt{y} 表示一条从结点 \textit{x} 指向 
+\textit{y} 的边, 上面那张图的文本表示形式是:
+\begin{file}
+    a   h
+    b   g
+    c   f
+    c   h
+    d   i
+    e   d
+    f   b
+    f   g
+    h   d
+    h   e
+    i   b
+\end{file}
+
+如果存在一条从 \textit{x} 指向 \textit{y} 的边, 那么在输出中 \textit{x}
+必须先于 \textit{y} 出现. 如果把上面的数据作为输出, 那么可能一个输出是:
+\begin{file}
+    a c f h e d i b g
+\end{file}
+除此之外, 还有其他线序关系也包含了上图所描绘的偏序, 另一个可能的线序是:
+\begin{file}
+    c a h e d i f b g
+\end{file}
+
+拓扑排序的目标是对图中的结点进行排序, 使得所有前驱都在它们的后继之前出现.
+\marginpar{171}
