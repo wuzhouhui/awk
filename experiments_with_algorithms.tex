@@ -961,7 +961,7 @@ $n \log n$ 程序性能之间的差距急剧加大.
 约束条件可以用一张图来表示, 图中的每个结点都用名字标记, 如果结点 \textit{x}
 必须先于 \textit{y} 出现, 那么就有一条边, 从 \textit{x} 指向 \textit{y}.
 下面这张图就是一个例子:
-% TODO 图片应该居中
+% FIXME 图片应该居中才对
 \begin{center}
 \xymatrix {
     *++=[o][F]{\texttt{a}}\ar"2,3"
@@ -1007,4 +1007,53 @@ $n \log n$ 程序性能之间的差距急剧加大.
 \end{file}
 
 拓扑排序的目标是对图中的结点进行排序, 使得所有前驱都在它们的后继之前出现.
-\marginpar{171}
+\marginpar{171} 当且仅当图中不含有 \cterm{环} (\term{cycle}, 是由多条边
+组成的序列, 当结点沿着这个序列前进时, 最终会回到结点的原来位置) 时, 
+这样的顺序才存在.
+
+\subsection{广度优先拓扑排序}
+\label{subsec:breadth_first_topological_sort}
+
+有多种算法可以用于图的拓扑排序, 其中最简单的算法可能是 --- 在每次迭代时,
+从图中移除没有前驱的结点. 如果所有的结点都按照这种方式从图中移除出来,
+那么图的拓扑排序结果就是结点按照移除顺序所组成的序列. 在上面的图中, 我们 
+可以从移除结点 \texttt{a} 及以它为起点的边开始, 然后移除结点 \texttt{c},
+再接着是结点 \texttt{f} 或 \texttt{h}, 依此类推.
+
+我们的实现使用了一种先进先出的数据结构 --- \cterm{队列} (\term{queue}) ---
+来确定不含有前驱的结点的处理顺序, 以一种 ``广度优先'' 的方式进行.
+当所有的结点都被读取完毕后, 一个循环体计算结点的数量, 并把所有的, 没有 
+前驱的结点插入到队列中. 第二个循环体移除队列的第一个结点, 打印该结点的
+名字, 然后递减它的每一个后继结点的前驱结点个数. 如果某一个后继结点的前驱
+结点个数变为 0, 那就把这个后继结点插入到队尾. 当队列变成空, 并且所有的结点
+都被访问过, 这时候拓扑排序就完成了. 但是, 如果有某些结点从未被插入到队
+列中, 那就说明这些结点在一个环中, 因此无法对该图进行拓扑排序. 如果图中
+不存在环, 那么被打印出来的结点序列就是一个拓扑排序.
+
+\texttt{tsort} 的前三条语句从输入中读取 \mbox{前驱}-后继 对, 并构造一个
+后继列表数据结构, 就像:
+\begin{center}
+\begin{tabular}{c|c|c|l}
+    \hline
+    \hline
+    \texttt{node}  & \texttt{pcnt} & \texttt{scnt} & \texttt{slist} \\
+    \hline
+    \texttt{a}  & 0 & 1 & \texttt{h} \\
+    \texttt{b}  & 2 & 1 & \texttt{g} \\
+    \texttt{c}  & 0 & 2 & \texttt{f, h} \\
+    \texttt{d}  & 2 & 1 & \texttt{i} \\
+    \texttt{e}  & 1 & 1 & \texttt{d} \\
+    \texttt{f}  & 1 & 2 & \texttt{b, g} \\
+    \texttt{g}  & 2 & 0 &  \\
+    \texttt{h}  & 2 & 2 & \texttt{d, e}  \\
+    \texttt{i}  & 1 & 1 & \texttt{b}  \\
+    \hline
+\end{tabular}
+\end{center}
+
+数组 \texttt{pcnt} 和 \texttt{scnt} 记录每个结点的前驱结点与后继结点个数,
+\texttt{slist[}\textit{x}\texttt{,}\textit{i}\texttt{]} 给出了结点 
+\textit{x} 的第 \textit{i} 个后继结点的名字. 如果 \texttt{pcnt} 中不含有
+元素, 那么程序的第一行就会创建它的第一个元素.\footnote{原文为 The first
+line creates an element of \texttt{pcnt} if it is not already present.}
+\marginpar{172}
