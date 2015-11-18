@@ -1101,12 +1101,12 @@ line creates an element of \texttt{pcnt} if it is not already present.}
 在最简单的形式中, 深度优先搜索只是一个递归过程:
 \begin{pattern}
     \indent dfs(\textit{node}): \par
-    \indent\indent mark \textit{node} visited
+    \indent\indent mark \textit{node} visited \par
     \indent\indent for all unvisited successors \textit{s} of \textit{node}
                 do \par
     \indent\indent\indent dfs(\textit{s})
 \end{pattern}
-之所以称为 ``深度优先'' 是因为搜索从一个结点开始, 然后访问该结点的某个
+之所以称为 ``深度优先'', 是因为搜索从一个结点开始, 然后访问该结点的某个
 未被访问过的后继结点, 再接着访问该后继结点的某个未被访问过的后继结点,
 依此类推, 基本原则是尽可能快地向图的纵向深入. 如果某个结点的所有后继
 结点都被访问过了, 搜索过程就回退到前驱结点, 然后再按照深度优先的方法,
