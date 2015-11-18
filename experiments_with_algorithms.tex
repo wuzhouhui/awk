@@ -1057,3 +1057,59 @@ $n \log n$ 程序性能之间的差距急剧加大.
 元素, 那么程序的第一行就会创建它的第一个元素.\footnote{原文为 The first
 line creates an element of \texttt{pcnt} if it is not already present.}
 \marginpar{172}
+\begin{awkcode}
+    # tsort - topological sort of a graph
+    #   input:  predecessor-successor pairs
+    #   output: linear order, predecessors first
+
+        { if (!($1 in pcnt))
+              pcnt[$1] = 0           # put $1 in pcnt
+          pcnt[$2]++                 # count predecessors of $2
+          slist[$1, ++scnt[$1]] = $2 # add $2 to successors of $1
+        }
+    END { for (node in pcnt) {
+              nodecnt++
+              if (pcnt[node] == 0)   # if it has no predecessors
+                  q[++back] = node   # queue node
+          }
+          for (front = 1; front <= back; front++) {
+              printf(" %s", node = q[front])
+              for (i = 1; i <= scnt[node]; i++)
+                  if (--pcnt[slist[node, i]] == 0)
+                      # queue s if it has no more predecessors
+                      q[++back] = slist[node, i]
+          }
+          if (back != nodecnt)
+              print "\nerror: input contains a cycle"
+          printf("\n")
+        }
+\end{awkcode}
+
+在 awk 中实现队列非常简单: 只需要一个拥有两个下标的数组, 一个指向队头, 
+一个指向队尾.
+
+\begin{exercise}
+    修改 \texttt{tsort}, 使得它可以处理图中孤立的结点.
+\end{exercise}
+
+\subsection{深度优先搜索}
+\label{subsec:depth_first_search}
+
+为了说明深度优先搜索技术, 我们将再构造一个拓扑排序程序. 深度优先搜索可以
+用来解决与图相关的许多问题, 包括 Unix 实用程序 \texttt{make} 中蕴含的图
+问题. 深度优先搜索是另一种遍历图结点的系统化方法, 即使是在含有环的图中.
+在最简单的形式中, 深度优先搜索只是一个递归过程:
+\begin{pattern}
+    \indent dfs(\textit{node}): \par
+    \indent\indent mark \textit{node} visited \par
+    \indent\indent for all unvisited successors \textit{s} of \textit{node}
+                do \par
+    \indent\indent\indent dfs(\textit{s})
+\end{pattern}
+之所以称为 ``深度优先'', 是因为搜索从一个结点开始, 然后访问该结点的某个
+未被访问过的后继结点, 再接着访问该后继结点的某个未被访问过的后继结点,
+依此类推, 基本原则是尽可能快地向图的纵向深入. 如果某个结点的所有后继
+结点都被访问过了, 搜索过程就回退到前驱结点, 然后再按照深度优先的方法,
+搜索前驱结点的另一个未被访问过的后继结点.
+
+\marginpar{173}
