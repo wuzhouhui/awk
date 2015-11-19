@@ -833,7 +833,7 @@ $n \log n$ 程序性能之间的差距急剧加大.
 不存在环, 那么被打印出来的结点序列就是一个拓扑排序.
 
 \texttt{tsort} 的前三条语句从输入中读取 \mbox{前驱}-后继 对, 并构造一个
-后继列表数据结构, 就像:
+后继结点列表, 就像:
 \begin{tabular}{c|c|c|l}
     \hline
     \hline
@@ -913,3 +913,48 @@ line creates an element of \texttt{pcnt} if it is not already present.}
 搜索前驱结点的另一个未被访问过的后继结点.
 
 \marginpar{173}
+考虑下面的这张图. 如果遍历从结点 1 开始, 那么深度优先搜索将会陆续访问
+结点 1, 2, 3 和 4. 这时候, 如果从另一个未访问过的结点开始, 比如 5, 那么 
+接下来将会访问结点 5, 6 和 7. 如果遍历从不同的结点开始, 那么将会得到不同
+的结点访问序列.\footnote{TODO}
+
+深度优先搜索可以用来判断图中是否含有环. 如果有一条边指向的是之前访问过
+的祖先结点, 比如 \texttt{(3, 1)}, 那么这条边就叫作\cterm{回边} (\term{back
+edge}). 因为存在回边等同于存在环, 所以为了判断图中是否含有环, 我们只 
+需要搜索回边就够了. 下面的函数判断某个图是否存在结点 \texttt{node} 
+可到达的环, 图用后继结点列表来表示, 这个数据结构我们已经在 \texttt{tsort}
+中见过.
+\begin{awkcode}
+    # dfs - depth-first search for cycles
+
+    function dfs(node,     i, s) {
+        visited[node] = 1
+        for (i = 1; i <= scnt[node]; i++)
+            if (visited[s = slist[node, i]] == 0)
+                dfs(s)
+            else if (visited[s] == 1)
+                print "cycle with back edge (" node ", " s ")" 
+        visited[node] = 2
+    }
+\end{awkcode}
+
+这个函数使用数组 \texttt{visited} 来判断某个结点是否被访问过. 开始时,
+\texttt{visited[}\textit{x}\texttt{]} 等于 0. 在第一次进入结点 \textit{x}
+时, \texttt{dfs} 把 \texttt{visited[}\textit{x}\texttt{]} 设置为 1,
+最后一次离开结点 \textit{x} 时, 把 \texttt{visited[}\textit{x}\texttt{]}
+设置为 2. 在遍历过程中, \texttt{dfs} 利用 \texttt{visited} 来判断结点
+\textit{y} 是否是当前结点的祖先 (以及它之前是否被访问过). 如果 \textit{y}
+是当前结点的祖先, 那么 \texttt{visited[}\textit{y}\texttt{]} 等于 1,
+如果 \textit{y} 之前被访问过, 那么 \texttt{visited[}\textit{y}\texttt{]} 
+的值就等于 1.\footnote{TODO 需要仔细检查这段话 --- 译者注}
+
+\subsection{深度优先拓扑排序}
+\label{subsec:depth_first_topological_sort}
+
+函数 \texttt{dfs} 很容易就可以修改为结点排序例程. 一旦从某结点开始的
+搜索过程结束, 如果在此时打印该结点的名字, 那么所打印出来的结点序列刚好就
+是逆序的拓扑排序, 前提是图中不含有环. 给定一个 \mbox{前驱}-后续\ 对序列
+作为输入数据, 程序 \texttt{rtsort} 输出图的逆序拓扑排序, 它对每一个
+没有前驱的结点应用深度优先搜索. 程序中使用的数据结构与 \texttt{tsort}
+中的相同.
+\marginpar{174}
