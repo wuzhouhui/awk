@@ -1201,14 +1201,18 @@ edge}). 因为存在回边等同于存在环, 所以为了判断图中是否含�
     }
 \end{awkcode}
 
-如果把本节开头给出的 \mbox{前驱}-后继 对作为输入数据, 这个程序将会输出:
+如果把本节开头给出的 \mbox{前驱}-后继\ 对作为输入数据, 这个程序将会输出:
 \begin{shell}
     g b i d e h a f c
 \end{shell}
 需要注意的是, 对图中的某些环来说, 这个程序可以通过查找回边来显式地探测,
 而对另一些环的探测则是隐式地, 对于后一种情况, 程序将无法打印出全部的结点,
-就像这幅图:\footnote{TODO}
-
+就像这幅图:
+\begin{center}
+\xymatrix {
+    *++=[o][F]{\texttt{x}}\ar@/^1pc/"1,2" & *++=[o][F]{\texttt{y}}\ar@/^1pc/"1,1" \\
+}
+\end{center}
 
 \begin{exercise}
     修改 \texttt{rtsort}, 按照通常的顺序打印结点, 也就是先打印前驱结点.
