@@ -958,3 +958,51 @@ edge}). 因为存在回边等同于存在环, 所以为了判断图中是否含�
 没有前驱的结点应用深度优先搜索. 程序中使用的数据结构与 \texttt{tsort}
 中的相同.
 \marginpar{174}
+\begin{awkcode}
+    # rtsort - reverse topological sort
+    #   input:  predecessor-successor pairs
+    #   output: linear order, successors first
+
+        { if (!($1 in pcnt))
+              pcnt[$1] = 0           # put $1 in pcnt
+          pcnt[$2]++                 # count predecessors of $2
+          slist[$1, ++scnt[$1]] = $2 # add $2 to successors of $1
+        }
+
+    END { for (node in pcnt) {
+              nodecnt++
+              if (pcnt[node] == 0)
+                  rtsort(node)
+          }
+          if (pncnt != nodecnt)
+              print "error: input contains a cycle"
+          printf("\n")
+        }
+
+    function rtsort(node,     i, s) {
+        visited[node] = 1
+        for (i = 1; i <= scnt[node]; i++)
+            if (visited[s = slist[node, i]] == 0)
+                rtsort(s)
+            else if (visited[s] == 1)
+                printf("error: nodes %s and %s are in a cycle\n",
+                    s, node)
+        visited[node] = 2
+        printf(" %s", node)
+        pncnt++    # count nodes printed
+    }
+\end{awkcode}
+
+如果把本节开头给出的 \mbox{前驱}-后继 对作为输入数据, 这个程序将会输出:
+\begin{shell}
+    g b i d e h a f c
+\end{shell}
+需要注意的是, 对图中的某些环来说, 这个程序可以通过查找回边来显式地探测,
+而对另一些环的探测则是隐式地, 对于后一种情况, 程序将无法打印出全部的结点,
+就像这幅图:\footnote{TODO}
+
+
+\begin{exercise}
+    修改 \texttt{rtsort}, 按照通常的顺序打印结点, 也就是先打印前驱结点.
+    你是否可以在不修改 \texttt{rtsort} 的前提下达到同样的效果?
+\end{exercise}
