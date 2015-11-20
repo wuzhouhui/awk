@@ -60,10 +60,8 @@ Awk 的一个最常用的功能是把数据从一种形式转换成另一种形�
 如果输入文件为空, 那么程序什么也不会打印出来.
 
 程序不需要知道一行有多少个字段, 这对我们写程序来说就非常方便, 但是它不检
-查所有的字段是否都是数字, 也不检查每行的字段数是否相同\footnote{原文为:
-    but it doesn't check that the entries are all numbers, nor that each 
-row has the same number of entries.}. 下面的程序做的是同样的事情, 但是 
-它会检查每行的字段数是否与第一行的相同:
+查参与运算的项是否都是数值, 也不检查每行的字段数是否相同. 下面的程序做的
+是同样的事情, 但是 它会检查每行的字段数是否与第一行的相同:
 \begin{awkcode}
      # sum2 - print column sums
      #     check that each line has the same number of fields
@@ -86,7 +84,7 @@ row has the same number of entries.}. 下面的程序做的是同样的事情, �
 \verb'numcol', 用于跟踪数值型字段, 函数 \verb'isnum' 用于检查某项是否是
 一个数值, 由于用到了函数, 所以测试只需要在一个地方完成, 这样做有助于将来%
 \marginpar{69}%
-对程序进行修改. 如果程序可以相信它的输入, 那么只需要查看第 1 行就够了,
+对程序进行修改. 如果程序足够相信它的输入, 那么只需要查看第 1 行就够了,
 我们仍然需要 \verb'nfld', 因为在 \END 中, \verb'NF' 的 值是零.
 \begin{awkcode}
      # sum3 - print sums of numeric columns
@@ -191,8 +189,7 @@ row has the same number of entries.}. 下面的程序做的是同样的事情, �
     ' |
     awk -f histogram
 \end{awkcode}
-它的输出是\footnote{这是在我系统上的运行结果, 因为成绩是随机生成的, 所以 
-与原文不太一样. --- 译者注}
+它的输出是
 \begin{shell}
       0 -  9:  20 ********************
      10 - 19:  18 ******************
@@ -498,8 +495,7 @@ the sum of one hundred twenty three dollars and 45 cents exactly
 
 \begin{exercise}
     函数 \verb'numtowords' 有时会在一行中连着打印两个空格, 还会打印出像 
-    ``one dollars''\footnote{应该用单数形式 --- 译者注}
-    这样有错误的句子, 你会如何消除这些瑕疵?
+    ``one dollars'' 这样有错误的句子, 你会如何消除这些瑕疵?
 \end{exercise}
 
 \begin{exercise}
@@ -821,8 +817,7 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
 \end{shell}
 
 如果大小合适, 结构也很规范, 那么创建并维护这些信息相对来说还是比较容易的,
-在效果上, 每一条记录都等价于一张索引卡片\footnote{原文为 In effect, each
-record is the equivalent of an index card.}. 与单行数据相比, 使用 awk 处理 
+在效果上, 每一条记录都等价于一张索引卡片. 与单行数据相比, 使用 awk 处理 
 多行数据所付出的工作量只是稍微多了一点. 我们将展示几种处理多行数据的方法.
 
 \subsection{由空行分隔的记录}
