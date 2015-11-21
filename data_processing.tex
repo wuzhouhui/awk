@@ -974,16 +974,15 @@ awk 程序, 就可以把原来的程序应用到多行记录上. 第 1 个程序
 \end{awkcode}
 这个程序使用了一个变量来控制行的打印, 如果当前输入行包含有期望的头部信息, 
 则 \verb'p' 被设置为 1, 随后的尾部信息将 \verb'p' 重置为 0 (也就是 \verb'p'
-的初始值). 因为仅当 \verb'p' 为 1 时才会把当前输入行打印出来, 所以只有
-记录的主体部分与尾部被打印出来. 如果想要选择其他组合, 也是相当容易的
-\footnote{原文为 other combinations are easily selected instead.}.
+的初始值). 因为仅当 \verb'p' 为 1 时才会把当前输入行打印出来, 所以程序只
+打印记录的主体部分与尾部, 而选择其他输出组合反而比较简单.
 
 \subsection{\mbox{名字}-值}
 \label{subsec:name_value_data}
 
 
 \marginpar{86}
-在某些应用中, 数据可能包含更多的结构\footnote{原文为 In some applications
+在某些应用中, 数据可能包含更复杂的结构\footnote{原文为 In some applications
     data may have more structure than can be captured by a sequence of
 unformatted lines.}, 例如, 地址可能含有国家名称, 也可能不包括街道地址.
 
@@ -1027,7 +1026,7 @@ unformatted lines.}, 例如, 地址可能含有国家名称, 也可能不包括�
 不一样.
 
 处理这种数据的方法之一是把它们都当作单行数据, 但是要注意空白行被当作
-分隔符. 每一行都指出了它所对应的值,
+分隔符. 每一行都指出了字段的名称及其所对应的值,
 但是它们之间并没有以其他方式相联系 \footnote{原文为 Each line identifies
 the value it corresponds to, but they are not otherwise connected.}.
 比如说, 如果我们想要计算存款与支票的总额, 只需要扫描存款项与支票项即可:
