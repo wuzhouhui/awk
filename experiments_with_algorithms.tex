@@ -1218,3 +1218,55 @@ edge}). 因为存在回边等同于存在环, 所以为了判断图中是否含�
     修改 \texttt{rtsort}, 按照通常的顺序打印结点, 也就是先打印前驱结点.
     你是否可以在不修改 \texttt{rtsort} 的前提下达到同样的效果?
 \end{exercise}
+
+\marginpar{175}
+\section{Make: 文件更新程序}
+\label{sec:make_a_file_updating_program}
+
+大型程序中包含的声明与子例程通常分布在多个文件中, 通过一系列复杂的处理
+步骤来生成最终的程序. 一篇复杂的文档 (比如本章) 可能由许多图表和程序组成,
+这些图表和程序代码存放在不同的文件中, 而且程序会被运行和测试, 最终将通过
+一系列互相依赖的操作来生成可打印的文档. 如果有一个自动更新工具能够在
+消耗最小的人力物力的前提下, 完成这些处理工作, 那么这个工具的价值将是无法
+衡量的. 本节将仿照 Unix 命令 \texttt{make}, 开发一个具备基本功能的
+更新程序, 基本算法是上节讨论过的深度优先搜索.
+
+为了使用更新程序, 用户必须显式地描述出系统的组成成分, 各个成分之间的依
+赖关系, 以及构造它们的命令. 我们假设依赖关系和构造命令存放在一个文件中, 
+文件名是 \texttt{makefile}, 里面包含了一系列规则, 每条规则都具有形式:
+\begin{pattern}
+    \indent\textit{name}:\texttt{    }$t_1$\ $t_2$\ ...\ $t_n$ \par 
+    \indent\indent\textit{command}
+\end{pattern}
+规则的第一行是依赖关系, 意思是程序或文件 \textit{name} 依赖于目标
+$t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
+依赖关系的下面是一行或多行 \textit{command}, 这些 \textit{command} 是
+用来生成 \textit{name} 的的命令. 下面显示的是某个小程序的
+\texttt{makefile} 文件, 程序由两个 C 文件和一个 \texttt{yacc} 语法文件
+组成 (\texttt{yacc} 是一个典型的用于程序开发的应用程序):
+\begin{file}
+    prog:       a.o b.o c.o
+                cc a.o b.o c.o -ly -o prog 
+    a.o:        prog.h a.c
+                cc -c prog.h a.c
+    b.o:        prog.h b.c
+                cc -c prog.h b.c
+    c.o:        c.c
+                cc -c c.c
+    c.c:        c.y
+                yacc c.y
+                mv y.tab.c c.c
+    print:
+                pr prog.h a.c b.c c.y
+\end{file}
+第1行表示 \texttt{prog} 依赖于目标文件 \texttt{a.o}, \texttt{b.o} 和
+\texttt{c.o}. 第2行是说使用 C 编译器 \texttt{cc} 链接 \texttt{a.o},
+\texttt{b.o}, \texttt{c.o} 和一个库文件来生成 \texttt{prog}. 下一条规则
+(第3行) 表示 \texttt{a.o} 依赖于目标 \texttt{prog.h} 和 \texttt{a.c},
+通过编译这 2 个文件来生成 \texttt{a.o}, \texttt{b.o} 是类似的. 文件 
+\texttt{c.o} 依赖于 \texttt{c.c}, 而后者依赖于 \texttt{c.y}, \texttt{c.y}
+将会被 \texttt{yacc} 处理. 最后, 名字 \texttt{print} 不依赖于任何目标,
+按照惯例, 对于没有目标的名字, \texttt{make} 总是会执行后面的命令,
+在这里是用命令 \texttt{pr} 打印所有的源代码文件.
+
+\marginpar{176}
