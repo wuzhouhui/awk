@@ -1263,7 +1263,7 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 \texttt{c.o}. 第2行是说使用 C 编译器 \texttt{cc} 链接 \texttt{a.o},
 \texttt{b.o}, \texttt{c.o} 和一个库文件来生成 \texttt{prog}. 下一条规则
 (第3行) 表示 \texttt{a.o} 依赖于目标 \texttt{prog.h} 和 \texttt{a.c},
-通过编译这 2 个文件来生成 \texttt{a.o}, \texttt{b.o} 是类似的. 文件 
+通过编译这 2 个文件来生成 \texttt{a.o}; \texttt{b.o} 是类似的. 文件 
 \texttt{c.o} 依赖于 \texttt{c.c}, 而后者依赖于 \texttt{c.y}, \texttt{c.y}
 将会被 \texttt{yacc} 处理. 最后, 名字 \texttt{print} 不依赖于任何目标,
 按照惯例, 对于没有目标的名字, \texttt{make} 总是会执行后面的命令,
