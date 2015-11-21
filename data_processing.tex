@@ -387,8 +387,8 @@ Awk 经常用于从其他程序的输出中提取信息, 有时候这些输出�
 支票编号, 金额, 帐款人, 字段之间用制表符分开, 输出是标准的支票格式: 8行高,
 第2行与第3行是支票编号与日期, 都向右缩进 45 个空格, 第4行是收款人, 占用
 45 个字符宽的区域, 紧跟在它后面的是 3 个空格, 再后面是金额, 第 5 行是金额
-的大写形式, 其他行都是空白. 支票看起来就像这样\footnote{TODO 原版中的支票
-是有边框的 --- 译者注}:
+的大写形式, 其他行都是空白. 支票看起来就像这样:
+\begin{mdframed}
 \begin{shell}
 
                                              1026
@@ -399,6 +399,7 @@ the sum of one hundred twenty three dollars and 45 cents exactly
 
 
 \end{shell}
+\end{mdframed}
 这是打印支票的 awk 程序:
 \marginpar{75}
 \begin{awkcode}
