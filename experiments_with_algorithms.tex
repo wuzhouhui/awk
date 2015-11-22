@@ -1273,8 +1273,18 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 \texttt{makefile} 中的依赖关系可以用一张图来表示, 如果依赖性规则左边的
 \textit{x} 依赖于右边的目标 \textit{y}, 那么在图中就有一条边从结点
 \textit{x} 指向 结点 \textit{y}. 如果某条规则没有目标, 就在图中创建一
-个没有后继的结点, 并用规则左边的名字来命令. 上文的 \texttt{makefile}
-对应的依赖图是:\footnote{TODO}
+个没有后继的结点, 并用规则左边的名字来命名. 上文的 \texttt{makefile}
+对应的依赖图是:
+\begin{center}
+\xymatrix {
+        &   &   & \texttt{prog}\ar"2,2"\ar"2,4"\ar"2,6"  &   &   &   &  \texttt{print} \\
+        &  \texttt{a.o}\ar"3,1"\ar"3,3" &   &  \texttt{b.o}\ar"3,3"\ar"3,5"
+        &   &  \texttt{c.o}\ar"3,7" &   &   \\
+      \texttt{a.c}  &   &  \texttt{prog.h} &   &  \texttt{b.c} &   &
+      \texttt{c.c}\ar"4,7" &   \\
+        &   &   &   &   &   &  \texttt{c.y} &   \\
+}
+\end{center}
 
 如果在 \textit{x} 的最后一次修改之后, \textit{y} 才会被修改, 那么, 我们 
 就认为 \textit{x} 比 \textit{y} \cterm{老} (\term{older}). 为了跟踪年龄,
@@ -1300,7 +1310,7 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 这是一条没有目标的规则, 对于这些规则, 我们总是执行和该规则相关的命令,
 并更新对象的年龄.
 
-程序 \texttt{make} 接收一个 \texttt{name} 作为输入参数, 并采用下面的
+程序 \texttt{make} 接收一个 \textit{name} 作为输入参数, 并采用下面的
 算法来更新 \textit{name}:
 \begin{enumerate}
     \item 
@@ -1309,7 +1319,7 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
         $t_i$ 不是一个名字, 或者文件 $t_i$ 不存在, 程序就会终止更新过程.
     \item 
         在更新完所有的 $t_i$ 之后, 如果当前的 \textit{name} 比某个
-        $t_i$ 老, 又或者是 \texttt{name} 没有目标, 程序就会执行依赖
+        $t_i$ 老, 又或者是 \textit{name} 没有目标, 程序就会执行依赖
         关系下面的命令.
 \end{enumerate}
 \marginpar{177}
