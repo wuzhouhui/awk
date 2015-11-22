@@ -1316,10 +1316,129 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
     \item 
         在 \texttt{makefile} 中搜索 \textit{name} 对应的规则, 并递归
         地更新依赖关系右边的目标 $t_1$, $t_2$, ..., $t_n$, 如果某个 
-        $t_i$ 不是一个名字, 或者文件 $t_i$ 不存在, 程序就会终止更新过程.
+        $t_i$ 不是一个名字, 或者文件 $t_i$ 不存在, 程序就会中止更新过程.
     \item 
         在更新完所有的 $t_i$ 之后, 如果当前的 \textit{name} 比某个
         $t_i$ 老, 又或者是 \textit{name} 没有目标, 程序就会执行依赖
         关系下面的命令.
 \end{enumerate}
 \marginpar{177}
+
+在本质上, 本节所使用的方法和上一节的方法是一样的, \texttt{make} 根据
+\texttt{makefile} 中的依赖关系来构造依赖图, 它使用 Unix 命令 
+\begin{shell}
+    ls -t
+\end{shell}
+对文件进行排序 (越新的文件越靠前), 排序的依据是文件最后的修改时间. 文件 
+名将作为数组 \texttt{age} 的索引, 而数组元素的值则是文件在排序序列中的
+名次, 最老的文件拥有最大值的名次. 如果规则中的名字不是当前目录中的文件
+名, \texttt{make} 就把它的时间设置成一个很大的值.
+
+最后, \texttt{make} 使用上一节讲过的深度优先搜索来遍历依赖图. 在节点
+\textit{n}, \texttt{make} 遍历 \textit{n} 的后继节点, 如果存在某个后继
+节点, 它的年龄比 \textit{n} 的年龄小, \texttt{make} 就执行规则中的命令,
+并计算出一套新的年龄. 如果 \texttt{make} 发现某个名字的依赖关系存在环,
+程序就会报错并中止更新过程.
+
+为了说明 \texttt{make} 如何工作, 假设我们现在是第一次键入并执行命令
+\begin{shell}
+    make prog
+\end{shell}
+\texttt{make} 将会执行以下命令序列:
+\begin{shell}
+    cc -c prog.h a.c
+    cc -c prog.h b.c
+    yacc c.y
+    mv y.tab.c c.c
+    cc -c c.c
+    cc a.o b.o c.o -ly -o prog
+\end{shell}
+如果我们对 \texttt{b.c} 作了修改, 然后再次键入
+\begin{shell}
+    make prog
+\end{shell}
+\texttt{make} 只会执行
+\begin{shell}
+    cc -c prog.h b.c
+    cc a.o b.o c.o -ly -o prog
+\end{shell}
+因为在上一次创建 \texttt{prog} 之后, 其他文件并没有被修改过, 所以 
+\texttt{make} 并不会对它们进行处理. 最后, 如果我们再次执行
+\begin{shell}
+    make prog
+\end{shell}
+\texttt{make} 将会输出
+\begin{shell}
+    prog is up to date
+\end{shell}
+因为文件没有发生变化, 所以什么也不需要做.
+\marginpar{178}
+\begin{awkcode}
+    # make - maintain dependencies
+
+    BEGIN {
+        while (getline <"makefile" > 0)
+            if ($0 ~ /^[A-Za-z]/) {  #  $1: $2 $3 ...
+                sub(/:/, "")
+                if (++names[nm = $1] > 1)
+                    error(nm " is multiply defined")
+                for (i = 2; i <= NF; i++) # remember targets
+                    slist[nm, ++scnt[nm]] = $i
+            } else if ($0 ~ /^\t/)        # remember cmd for
+                cmd[nm] = cmd[nm] $0 "\n" #   current name
+            else if (NF > 0)
+                error("illegal line in makefile: " $0)
+        ages()      # compute initial ages
+        if (ARGV[1] in names) {
+            if (update(ARGV[1]) == 0)
+                print ARGV[1] " is up to date"
+        } else
+            error(ARGV[1] " is not in makefile")
+    }
+
+    function ages(      f,n,t) {
+        for (t = 1; ("ls -t" | getline f) > 0; t++)
+            age[f] = t   # all existing files get an age
+        close("ls -t")
+        for (n in names)
+            if (!(n in age))   # if n has not been created
+                age[n] = 9999  # make n really old
+    }
+    function update(n,   changed,i,s) {
+        if (!(n in age)) error(n " does not exist")
+        if (!(n in names)) return 0
+        changed = 0
+        visited[n] = 1
+        for (i = 1; i <= scnt[n]; i++) {
+            if (visited[s = slist[n, i]] == 0) update(s)
+            else if (visited[s] == 1)
+                error(s " and " n " are circularly defined")
+            if (age[s] <= age[n]) changed++
+        }
+        visited[n] = 2
+        if (changed || scnt[n] == 0) {
+            printf("%s", cmd[n])
+            system(cmd[n])  # execute cmd associated with n
+            ages()          # recompute all ages
+            age[n] = 0      # make n very new
+            return 1
+        }
+        return 0
+    }
+    function error(s) { print "error: " s; exit }
+\end{awkcode}
+
+\marginpar{179}
+\begin{exercise}
+    在示例中, 函数 \texttt{ages} 会执行多少次?
+\end{exercise}
+
+\begin{exercise}
+    添加一些参数或宏替换功能, 使得我们可以很容易地对规则进行修改.
+\end{exercise}
+
+\begin{exercise}
+    为常见的更新操作添加隐式规则, 例如, 使用 \texttt{cc} 编译 
+    \texttt{.c} 文件来生成 \texttt{.o} 文件. 你将会用什么方法来表示
+    隐式规则, 使得用户可以对这些规则进行修改?
+\end{exercise}
