@@ -1270,3 +1270,56 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 在这里是用命令 \texttt{pr} 打印所有的源代码文件.
 
 \marginpar{176}
+\texttt{makefile} 中的依赖关系可以用一张图来表示, 如果依赖性规则左边的
+\textit{x} 依赖于右边的目标 \textit{y}, 那么在图中就有一条边从结点
+\textit{x} 指向 结点 \textit{y}. 如果某条规则没有目标, 就在图中创建一
+个没有后继的结点, 并用规则左边的名字来命名. 上文的 \texttt{makefile}
+对应的依赖图是:
+\begin{center}
+\xymatrix {
+        &   &   & \texttt{prog}\ar"2,2"\ar"2,4"\ar"2,6"  &   &   &   &  \texttt{print} \\
+        &  \texttt{a.o}\ar"3,1"\ar"3,3" &   &  \texttt{b.o}\ar"3,3"\ar"3,5"
+        &   &  \texttt{c.o}\ar"3,7" &   &   \\
+      \texttt{a.c}  &   &  \texttt{prog.h} &   &  \texttt{b.c} &   &
+      \texttt{c.c}\ar"4,7" &   \\
+        &   &   &   &   &   &  \texttt{c.y} &   \\
+}
+\end{center}
+
+如果在 \textit{x} 的最后一次修改之后, \textit{y} 才会被修改, 那么, 我们 
+就认为 \textit{x} 比 \textit{y} \cterm{老} (\term{older}). 为了跟踪年龄,
+对每一个 \textit{x} 都有一个对应的整数 \texttt{age[}\textit{x}\texttt{]},
+后者表示自从 \textit{x} 上一次被修改之后, 已经过了多长时间. 年龄值越大,
+说明文件越老: 如果 \texttt{age[}\textit{x}\texttt{]} $\geqslant$ 
+\texttt{age[}\textit{y}\texttt{]}, 则 \textit{x} 比 \textit{y} 老.
+
+如果存在一条依赖关系:
+\begin{shell}
+    n: a b c
+\end{shell}
+那么在更新 \texttt{n} 之前, 需要先更新 \texttt{a},\texttt{b} 和 \texttt{c},
+而在更新后面 3 个时, 也需要按照依赖关系来进行. 如果 \texttt{makefile}
+中的某个目标既不是一个名字, 也不是某个已存在的文件, 程序就报错并退出.
+否则的话, 检查目标的年龄, 如果至少有一个目标的年龄比 \texttt{n} 的年龄
+小 (也就是说, \texttt{n} 比某些依赖还老), 我们就执行依赖关系下面的命令.
+命令执行完毕后, 重新计算所有对象的年龄. 如果有一条规则是:
+\begin{shell}
+    print:
+                pr prog.h a.c b.c c.y
+\end{shell}
+这是一条没有目标的规则, 对于这些规则, 我们总是执行和该规则相关的命令,
+并更新对象的年龄.
+
+程序 \texttt{make} 接收一个 \textit{name} 作为输入参数, 并采用下面的
+算法来更新 \textit{name}:
+\begin{enumerate}
+    \item 
+        在 \texttt{makefile} 中搜索 \textit{name} 对应的规则, 并递归
+        地更新依赖关系右边的目标 $t_1$, $t_2$, ..., $t_n$, 如果某个 
+        $t_i$ 不是一个名字, 或者文件 $t_i$ 不存在, 程序就会终止更新过程.
+    \item 
+        在更新完所有的 $t_i$ 之后, 如果当前的 \textit{name} 比某个
+        $t_i$ 老, 又或者是 \textit{name} 没有目标, 程序就会执行依赖
+        关系下面的命令.
+\end{enumerate}
+\marginpar{177}
