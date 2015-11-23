@@ -1220,3 +1220,37 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
     \texttt{.c} 文件来生成 \texttt{.o} 文件. 你将会用什么方法来表示
     隐式规则, 使得用户可以对这些规则进行修改?
 \end{exercise}
+
+\section{小结}
+\label{sec:experiments_with_algorithms_summary}
+
+这一章更多地是在讨论基本的算法知识, 而不是 awk, 然而, 算法的确是一门非常
+有用的知识, 而且我们也希望读者能够学习到如何使用 awk 来支持其他程序
+的实验工作.
+
+脚手架程序就是其中之一. 通常来说, 和执行一个单独的测试比起来, 写一 
+个小程序来生成和控制测试 (或调试) 并不会多花很多时间, 但是脚 
+手架程序可以 被重复地使用, 因此可以把工作做得更加彻底.
+
+The other aspect is more conventional, thought it bears repeating. Awk 
+is often just right for extracting data from the output of some program and
+massaging it for another; for example, that is how we converted sorting
+measurements into \texttt{grap} input and how we folded statement counts
+into a profile.\footnote{TODO}
+
+\subsection*{参考资料}
+
+我们的快速排序, 堆排序和拓扑排序程序来自于 Jon Bentley, 他同时也是脚
+手架和剖析程序的灵感来源, 关于这些, 读者可以进一步阅读
+\textit{Communications of the ACM} 6 月和 7 月的 
+\textit{Programming Pearls} 专栏. 关于排序和搜索算法的扩展讨论和分析,
+请阅读 \textit{The Art of Computer Programming} 第 3 卷: 搜索和排序
+(D. E. Knuth 著, Addison-Wesley 1973 年出版), 或者是 \textit{The Design and
+Analysis of Computer Algorithms} (Aho, Hopcroft 和 Ullman 著, 
+Addison-Wesley 1974 年出版).
+
+Unix 程序 \texttt{make} 最早由 Stu Feldman 开发, 关于该程序的首篇文章
+载于 1979 年 4 月的 \textit{Software --- Practice and Experience}.
+更多的关于 \texttt{make} 的讨论, 请参考 W. Miller 和 E. Myers 撰写的
+``Side-effect in Automatic File Updating'', 载于 1986 年 9 月
+\textit{Software --- Practice and Experience}.
