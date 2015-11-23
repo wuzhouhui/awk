@@ -41,16 +41,17 @@
 
 % from package geometry
 % 为边注加边框
-% FIXME: 当文档设置为双面时, 偶数页无法显示边注
 \let\oldmarginpar=\marginpar
 \renewcommand\marginpar[1]{%
     \oldmarginpar{\framebox{#1}}%
 }
 \geometry{%
+    margin=1cm,
+    marginparsep = 0.5cm,
+    marginparwidth=1cm,
     bottom = 2cm,
     outer = 2.5cm,
-    inner = 2.5cm,
-    marginparsep = 0.5cm
+    inner = 2.5cm
 }
 
 % page style from package fancyhdr
