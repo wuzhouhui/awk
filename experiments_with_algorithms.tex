@@ -105,10 +105,8 @@ hand}
 要对排序例程的测试与运行结果评价过程进行自动化.
 
 主要有两种办法来实现测试与评价过程的自动化, 每一种都有它各自的优点. 第一 
-种称为 ``批处理模式'': 编写一个程序来运行事先计划好的测试集, 并运用前面提到
-的几种排序算法.\footnote{原文为 write a program to execute a pre-planned
-    set of tests, exercising the sort function as suggested
-above.}
+种称为 ``批处理模式'': 编写一个程序来运行事先计划好的测试集, 并运用
+上面提到排序算法.
 下面的程序可以生成测试数据并检查测试结果. 除了 \texttt{isort}, 还有其他
 几个函数, 它们用来生成不同类型的数组, 以及检查排序后的数组是否是有序的.
 \begin{awkcode}
@@ -183,9 +181,7 @@ above.}
 的微型编程语言, 因为语言并不需要做太多的工作, 也不必处理大量用户的情况,
 所以不用设计得多么复杂. 如果必要的话, 我们甚至可以丢掉写了一半的代码,
 重新开始. 我们的语言提供了自动生成数组的功能, 如果再继续往下看的话, 
-就会发现它还可以命名待运用的排序算法.\footnote{原文为 Our language provides
-    for automatic generation of an array, and, looking ahead to the rest of
-    this chapter, for naming the sort to be exercised.}
+就会发现它还可以指定待运用的排序算法.
 我们省略了排序和数据生成子程序, 它们和前一个示例相同.
 
 程序的基本组织是一系列的正则表达式, 它们负责扫描输入数据, 判断数据类型
@@ -254,8 +250,9 @@ above.}
 我们计算了比较
 和交换的次数, 对于一个排序过程来说, 这是两个很客观的指标. 正如你
 所看到的那样, 逆序序列拥有最差的性能, 随机序列居中, 而同一元素
-序列表现出了最佳的性能. 有序序列的性能表现和同一元素序列非常接近
-(在图中没有显示出来).
+序列表现出了最佳的性能. 有序序列的性能表现 (在图中没有显示出来). 
+和同一元素序列非常接近
+
 
 % TODO 应该用 LaTeX 画图, 而不是截图
 \begin{center}
@@ -267,7 +264,7 @@ above.}
 
 通过为每个排序函数添加两个计数器, 我们就可以为上面的图, 以及本章中的
 其他图生成所需要的数据. 其中一个计算比较的次数, 另一个计算交换的次数.
-这是带计数功能的 \texttt{isort} 函数:
+这是带有计数功能的 \texttt{isort} 函数:
 \begin{awkcode}
     function isort(A,n,     i,j,t) {  # insertion sort
         for (i = 2; i <= n; i++)      # with counters
@@ -325,10 +322,9 @@ above.}
     isort random 0 20 40 60 80 100 
     isort ident 0 20 40 60 80 100
 \end{shell}
-输出数据的每一行都包括名字, 类型, 大小, 以及每一种大小的数量.\footnote{
-    原文为 And the output consist of lines containing the name, type, size,
-and counts for each size.}  输出数据被输送给绘图程序 \texttt{grap}, 它
-是我们在第 \ref{chap:little_languages} 章讨论的绘图程序的原始版本.
+输出数据的每一行都包括排序算法名称, 测试集类型, 测试集大小, 以及操作执行
+的次数. 输出数据被输送给绘图程序 \texttt{grap}, 它 是我们在第
+\ref{chap:little_languages} 章讨论的绘图程序的原始版本.
 
 \begin{exercise}
     实际上, 函数 \texttt{check} 并不是一个很强大的测试, 什么样的错误会
@@ -650,7 +646,7 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 数组中从 1 到 \textit{i} 的元素具有堆属性, 从 \textit{i}\texttt{+1} 到 
 \textit{n} 是数组中最大的 \textit{n}\texttt{-}\textit{i} 个元素,
 按照升序排列.
-开始时, \textit{i}=\textit{n}, 因此数组中没有已排好序的部分.
+开始时, \textit{i}=\textit{n}, 因此数组中没有已排序的部分.
 
 考虑上面展示的元素所组成的数组, 该数组已经具有堆属性. 在第二个阶段的第
 一个步骤, 我们交换元素 \texttt{76} 和 \texttt{28}:
@@ -663,7 +659,7 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
     72 63 34 59 28 17 29 37 33 | 76
 \end{file}
 我们可以把这个过程可视化: 让元素 \texttt{28} 沿着二叉树的路径, 从根结点
-开始, 朝着叶子结点方向, 逐渐向下渗透, 直到到达一个这样的结点: 它的孩子 
+开始, 朝着叶子结点方向, 逐渐向下渗透, 直到到达这样一个的结点: 它的孩子 
 小于或等于 \texttt{28}:
 \begin{center}
 \begin{tikzpicture}
@@ -726,7 +722,7 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 
 下面的程序对输入数据按照升序进行排列, 使用的正是上面提到的过程. 我们把 
 大部分的, 由单独一条表达式组成的语句用花括号包围起来, 至于这样做的原因
-将会在下一节讨论刻画时说明.
+将会在下一节讨论剖析时说明.
 \begin{awkcode}
     # heapsort
 
@@ -1053,9 +1049,8 @@ $n \log n$ 程序性能之间的差距急剧加大.
 
 数组 \texttt{pcnt} 和 \texttt{scnt} 记录每个结点的前驱结点与后继结点个数,
 \texttt{slist[}\textit{x}\texttt{,}\textit{i}\texttt{]} 给出了结点 
-\textit{x} 的第 \textit{i} 个后继结点的名字. 如果 \texttt{pcnt} 中不含有
-元素, 那么程序的第一行就会创建它的第一个元素.\footnote{原文为 The first
-line creates an element of \texttt{pcnt} if it is not already present.}
+\textit{x} 的第 \textit{i} 个后继结点的名字. 如果某个元素原来不在数组
+\texttt{pcnt} 中, 那么程序的第一行就会为它创建一个元素.
 \marginpar{172}
 \begin{awkcode}
     # tsort - topological sort of a graph
@@ -1129,7 +1124,7 @@ line creates an element of \texttt{pcnt} if it is not already present.}
 深度优先搜索可以用来判断图中是否含有环. 如果有一条边指向的是之前访问过
 的祖先结点, 比如 \texttt{(3, 1)}, 那么这条边就叫作\cterm{回边} (\term{back
 edge}). 因为存在回边等同于存在环, 所以为了判断图中是否含有环, 我们只 
-需要搜索回边就够了. 下面的函数判断某个图是否存在结点 \texttt{node} 
+需要搜索回边就够了. 下面的函数判断某个图中是否存在结点 \texttt{node} 
 可到达的环, 图用后继结点列表来表示, 这个数据结构我们已经在 \texttt{tsort}
 中见过.
 \begin{awkcode}
@@ -1297,7 +1292,8 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 \begin{shell}
     n: a b c
 \end{shell}
-那么在更新 \texttt{n} 之前, 需要先更新 \texttt{a},\texttt{b} 和 \texttt{c},
+那么在更新 \texttt{n} 之前, 需要先更新 \texttt{a}, \texttt{b} 和
+\texttt{c},
 而在更新后面 3 个时, 也需要按照依赖关系来进行. 如果 \texttt{makefile}
 中的某个目标既不是一个名字, 也不是某个已存在的文件, 程序就报错并退出.
 否则的话, 检查目标的年龄, 如果至少有一个目标的年龄比 \texttt{n} 的年龄
