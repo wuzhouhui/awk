@@ -38,6 +38,7 @@
 % from package geometry
 % 为边注加边框
 % FIXME: 当文档设置为双面时, 偶数页无法显示边注
+% 这个 bug 是由 geometry 宏包造成的
 \let\oldmarginpar=\marginpar
 \renewcommand\marginpar[1]{%
     \oldmarginpar{\framebox{#1}}%
