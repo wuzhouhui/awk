@@ -1450,15 +1450,14 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 有用的知识, 而且我们也希望读者能够学习到如何使用 awk 来支持其他程序
 的实验工作.
 
-脚手架程序就是其中之一. 通常来说, 和执行一个单独的测试比起来, 写一 
+我们还讨论了脚手架程序. 通常来说, 和执行一个单独的测试比起来, 写一 
 个小程序来生成和控制测试 (或调试) 并不会多花很多时间, 但是脚 
 手架程序可以 被重复地使用, 因此可以把工作做得更加彻底.
 
-The other aspect is more conventional, thought it bears repeating. Awk 
-is often just right for extracting data from the output of some program and
-massaging it for another; for example, that is how we converted sorting
-measurements into \texttt{grap} input and how we folded statement counts
-into a profile.\footnote{TODO}
+最后一点则比较普通, 我们已经在前面说过很多遍了.
+Awk 经常用于从某个程序的输出中提取数据, 并转换成另一种格式, 例如, 读者 
+已经见识过我们如何把排序的测试结果转换成 \texttt{grap} 的输入, 以及如何
+把计数语句插入到原始程序中.
 
 \subsection*{参考资料}
 
@@ -1466,7 +1465,7 @@ into a profile.\footnote{TODO}
 手架和剖析程序的灵感来源, 关于这些, 读者可以进一步阅读
 \textit{Communications of the ACM} 6 月和 7 月的 
 \textit{Programming Pearls} 专栏. 关于排序和搜索算法的扩展讨论及分析,
-请阅读 \textit{The Art of Computer Programming} 第 3 卷: 搜索和排序
+请阅读 \textit{The Art of Computer Programming} 第 3 卷: 搜索与排序
 (D. E. Knuth 著, Addison-Wesley 1973 年出版), 或者是 \textit{The Design and
 Analysis of Computer Algorithms} (Aho, Hopcroft 和 Ullman 著, 
 Addison-Wesley 1974 年出版).
