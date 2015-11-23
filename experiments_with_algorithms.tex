@@ -1049,9 +1049,8 @@ $n \log n$ 程序性能之间的差距急剧加大.
 
 数组 \texttt{pcnt} 和 \texttt{scnt} 记录每个结点的前驱结点与后继结点个数,
 \texttt{slist[}\textit{x}\texttt{,}\textit{i}\texttt{]} 给出了结点 
-\textit{x} 的第 \textit{i} 个后继结点的名字. 如果 \texttt{pcnt} 中不含有
-元素, 那么程序的第一行就会创建它的第一个元素.\footnote{原文为 The first
-line creates an element of \texttt{pcnt} if it is not already present.}
+\textit{x} 的第 \textit{i} 个后继结点的名字. 如果某个元素原来不在数组
+\texttt{pcnt} 中, 那么程序的第一行就会为它创建一个元素.
 \marginpar{172}
 \begin{awkcode}
     # tsort - topological sort of a graph
@@ -1125,7 +1124,7 @@ line creates an element of \texttt{pcnt} if it is not already present.}
 深度优先搜索可以用来判断图中是否含有环. 如果有一条边指向的是之前访问过
 的祖先结点, 比如 \texttt{(3, 1)}, 那么这条边就叫作\cterm{回边} (\term{back
 edge}). 因为存在回边等同于存在环, 所以为了判断图中是否含有环, 我们只 
-需要搜索回边就够了. 下面的函数判断某个图是否存在结点 \texttt{node} 
+需要搜索回边就够了. 下面的函数判断某个图中是否存在结点 \texttt{node} 
 可到达的环, 图用后继结点列表来表示, 这个数据结构我们已经在 \texttt{tsort}
 中见过.
 \begin{awkcode}
@@ -1293,7 +1292,8 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 \begin{shell}
     n: a b c
 \end{shell}
-那么在更新 \texttt{n} 之前, 需要先更新 \texttt{a},\texttt{b} 和 \texttt{c},
+那么在更新 \texttt{n} 之前, 需要先更新 \texttt{a}, \texttt{b} 和
+\texttt{c},
 而在更新后面 3 个时, 也需要按照依赖关系来进行. 如果 \texttt{makefile}
 中的某个目标既不是一个名字, 也不是某个已存在的文件, 程序就报错并退出.
 否则的话, 检查目标的年龄, 如果至少有一个目标的年龄比 \texttt{n} 的年龄
