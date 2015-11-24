@@ -17,9 +17,9 @@
 
 关于 awk 的工作开始于 1977 年. 在那时候, 搜索文件的 Unix 程序
 (\texttt{grep} 和 \texttt{sed}) 只支持正则表达式模式, 并且唯一能做的动作
-只能替换和打印一整行数据, 还不存在字段和非数值操作. 我们当时的目标是
+只有替换和打印一整行数据, 还不存在字段和非数值操作. 我们当时的目标是
 开发一款模式识别语言, 该语言支持字段, 包括用模式来匹配字段, 以及用动作
-来操作字段. 最开始, 我们只能想它来转换数据, 验证程序的输入, 通过处理
+来操作字段. 最初, 我们只能想用它来转换数据, 验证程序的输入, 通过处理
 输出数据来生成报表, 或对它们重新编排, 来作为其他程序的输入.
 
 1977 年的 awk 只有很少的内建变量和预定义函数, 当时只是用它来写一些很简短
@@ -28,12 +28,14 @@
 来源于 \texttt{lex} 和 \texttt{egrep}, 其他的表达式和语句则来源于 C
 语言.
 
-Out model was that an invocation would be one or two lines long, typed in
-and used immediately. 默认操作都是为了满足这个要求, 具体来说, 使用空格
-作为默认的字段分隔符, 隐式地初始化, 变量的无类型声明, 等等, 这些都使得
-单行程序变成可能. 作为作者, 我们非常清楚地知道 awk 将会被如何地使用,
-所以我们只写单行程序.\footnote{原文是 We, being the authors, ``knew''
-    how the language was supposed to be used, and so we only wrote
-one-liners.}
+我们希望程序能够尽量得简洁, 最好只有一两行, 这样就能够快速地输入并执行,
+\footnote{ 原文是 Our model was that an invocation would be one or two
+    lines long, typed in and used immediately.}
+    默认操作都是为了向这个方向努力, 具体来说, 使用空格
+作为默认的字段分隔符, 隐式地初始化, 变量的无类型声明, 等等, 这些设计
+选择都使得 单行程序变成可能. 作为作者, 我们非常清楚地知道 awk
+将会被如何地使用, 所以我们只写单行程序.\footnote{原文是 We, being the
+    authors, ``knew'' how the language was supposed to be used, and so we
+    only wrote one-liners.}
 
 \marginpar{182}
