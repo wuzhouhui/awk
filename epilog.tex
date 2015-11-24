@@ -1,0 +1,41 @@
+% vim: ts=8 sts=8 sw=4 et tw=75
+\chapter{后记}
+\label{chap:epilog}
+\marginpar{181}
+
+能看到这里, 说明读者在某种程度上已经是一个熟练的 awk 用户了, 至少不再是
+一个笨拙的初学者. 当你在学习书中的示例程序时, 以及自己写程序的过程中, 
+可能想知道 awk 为什么会是现在这个样子, 是否还有需要改进的地方.
+
+本章的第一部分先讲一些历史故事, 然后讨论一下作为编程语言使用时, awk 有
+哪些优点和缺点. 第二部分探讨 awk 程序的性能, 另外, 如果某个问题过于庞大,
+以致于无法用一个单独的程序来解决时, 文章也提供了一些对问题进行重新规划
+的方法.
+
+\section{作为语言的 AWK}
+\label{sec:awk_as_a_language}
+
+关于 awk 的工作开始于 1977 年. 在那时候, 搜索文件的 Unix 程序
+(\texttt{grep} 和 \texttt{sed}) 只支持正则表达式模式, 并且唯一能做的动作
+只有替换和打印一整行数据, 还不存在字段和非数值操作. 我们当时的目标是
+开发一款模式识别语言, 该语言支持字段, 包括用模式来匹配字段, 以及用动作
+来操作字段. 最初, 我们只能想用它来转换数据, 验证程序的输入, 通过处理
+输出数据来生成报表, 或对它们重新编排, 来作为其他程序的输入.
+
+1977 年的 awk 只有很少的内建变量和预定义函数, 当时只是用它来写一些很简短
+的程序, 就像第 \ref{chap:an_awk_tutorial} 章中出现的那些小程序. 后来,
+我们写了一个小教程, 来指导新来的同事如何使用 awk. 正则表达式的表示法
+来源于 \texttt{lex} 和 \texttt{egrep}, 其他的表达式和语句则来源于 C
+语言.
+
+我们希望程序能够尽量得简洁, 最好只有一两行, 这样就能够快速地输入并执行,
+\footnote{ 原文是 Our model was that an invocation would be one or two
+    lines long, typed in and used immediately.}
+    默认操作都是为了向这个方向努力, 具体来说, 使用空格
+作为默认的字段分隔符, 隐式地初始化, 变量的无类型声明, 等等, 这些设计
+选择都使得 单行程序变成可能. 作为作者, 我们非常清楚地知道 awk
+将会被如何地使用, 所以我们只写单行程序.\footnote{原文是 We, being the
+    authors, ``knew'' how the language was supposed to be used, and so we
+    only wrote one-liners.}
+
+\marginpar{182}
