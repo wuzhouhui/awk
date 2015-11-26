@@ -117,16 +117,19 @@ Awk 的一个最常用的功能是把数据从一种形式转换成另一种形�
 一般的定义可以在 \ref{sec:patterns} 节的正则表达式那里找到.
 
 \begin{exercise}
-    修改程序 \verb'sum3': 忽略空行.
+    \label{exer:sum3}
+    修改程序 \verb'sum3', 使它忽略空行.
 \end{exercise}
 \begin{exercise}
     为数值添加更加一般的正则表达式. 它会如何影响运行时间?
 \end{exercise}
 \begin{exercise}
+    \label{exer:without_for_test}
     如果把第 2 个 \verb'for' 语句的 \verb'numcol' 测试拿掉, 会产生什
     么影响?
 \end{exercise}
 \begin{exercise}
+    \label{exer:accumulate}
     写一个程序, 这个程序读取一个\ \mbox{条目}--数额\ 对列表, 对列表中的
     每一个 条目, 累加它的数额; 在结束时, 打印条目以及它的总数额, 条目
     按照字母顺序排序.
@@ -206,10 +209,12 @@ Awk 的一个最常用的功能是把数据从一种形式转换成另一种形�
 
 \marginpar{71}
 \begin{exercise}
-    根据比例决定星号的个数: 当数据过多时, 一行的长度不会超过屏幕的宽度.
+    \label{exer:star_num}
+    根据比例决定星号的个数, 使得当数据过多时, 一行的长度不会超过屏幕的宽度.
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:bucket}
     修改 \verb'histogram', 把输入分拣到指定数量的桶中, 根据目前为止看到的
     数据调整每个桶的范围.
 \end{exercise}

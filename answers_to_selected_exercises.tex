@@ -1,0 +1,52 @@
+% vim: ts=4 sts=4 sw=4 et tw=75
+\chapter{部分习题答案}
+\label{chap:answers_to_selected_exercises}
+\marginpar{193}
+
+\exer\ref{exer:sum3} 一个比较简单的, 用来忽略空白行的方式是把 \texttt{sum3}
+的第1行替换成
+\begin{awkcode}
+        nfld == 0 && NF > 0 { nfld = NF
+\end{awkcode}
+
+\exer\ref{exer:without_for_test} 如果缺了这个条件判断, 非数值列的和仍然
+    会被累加, 但不会被打印出来. 当累加到某些无用的总和时, 可能会出现一些
+    错误(例如溢出), 而该条件判断可以避免这这种情况出现, 而且并不会对程序
+    的运行效率产生明显的影响.
+
+\exer\ref{exer:accumulate} 使用关联数组的话, 这道题就容易多了:
+\begin{awkcode}
+        { total[$1] += $2 }
+    END { for (x in total) print x, total[x] | "sort" }
+\end{awkcode}
+
+\exer\ref{exer:star_num} 假定一行内至多只能有 25 个星号. 把 \texttt{max} 
+设置为 25, 如果最长的行不会超过上限, 那么下面的程序就不会对数据进行更改,
+    否则的话, 就对每一行按照比例进行缩放, 使得最长的行不会超过 25 个星号.
+新数组 \texttt{y} 用来维护缩放后的长度, 这样的话, 数组 \texttt{x} 的元素
+的值仍然是有效的.
+\begin{awkcode}
+        { x[int($1/10)]++ }
+    END { max = MAXSTARS = 25
+          for (i = 0; i <= 10; i++)
+              if (x[i] > max)
+                  max = x[i]
+          for (i = 0; i <= 10; i++)
+              y[i] = x[i]/max * MAXSTARS
+          for (i = 0; i < 10; i++)
+              printf(" %2d - %2d: %3d %s\n",
+                  10*i, 10*i+9, x[i], rep(y[i],"*"))
+          printf("100:      %3d %s\n", x[10], rep(y[10],"*"))
+        }
+
+    function rep(n,s,   t) {  # return string of n s's
+        while (n-- > 0)
+            t = t s
+        return t
+    }
+\end{awkcode}
+
+\exer\ref{exer:bucket} 需要对数据遍历两遍, 其中 1 遍确定桶的范围, 另 1 
+    遍把条目分配到桶中.
+    
+\marginpar{194}
