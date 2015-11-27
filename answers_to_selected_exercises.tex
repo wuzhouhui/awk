@@ -113,3 +113,104 @@
 多余的空格, 即使原文本来就没错, 这两条语句也不会造成什么影响, 这比先
 判断再更改要容易得多.
 \marginpar{195}
+\exer\ref{exer:p12check} 为了简单起见, 假定配对的符号是 \texttt{aa} 和
+\texttt{bb}, \texttt{cc} 和 \texttt{dd}, \texttt{ee} 和 \texttt{ff}.
+在文本中, 这些符号对不能嵌套或重叠.
+\begin{awkcode}
+    BEGIN {
+        expects["aa"] = "bb"
+        expects["cc"] = "dd"
+        expects["ee"] = "ff"
+    }
+    /^(aa|cc|ee)/ {
+        if (p != "")
+            print "line", NR, ": expected " p
+        p = expects[substr($0, 1, 2)]
+    }
+    /^(bb|dd|ff)/ {
+        x = substr($0, 1, 2)
+        if (p != x) {
+            print "line", NR, ": saw " x
+            if (p)
+                print ", expected", p
+        }
+        p = ""
+    }
+    END {
+        if (p != "")
+            print "at end, missing", p
+    }
+\end{awkcode}
+变量 \texttt{p} 通过记录待匹配的定界符来为状态编码. 程序用到了一个小技巧:
+所有的开标签都具有相同的长度. 一个可能的选择方案是要求定界符总是 \verb'$1'.
+
+\exer\ref{exer:checkgen} 选择一些标记, 比如 \texttt{=}, 它们不能当作
+合法的模式来使用. 程序 
+\begin{awkcode}
+    BEGIN { FS = "\t" }
+    /^=/  { print substr($0, 2); next }
+    { printf("%s {\n\tprintf(\"line %%d, %s: %%s\\n\", NR, $0) }\n",
+            $1, $2)
+    }
+\end{awkcode}
+可以打印出那些以标记开始的行, 但不包括标记本身.
+
+\exer\ref{exer:form3_form4} 一个可能的解决办法在命令行中显式地给出日期参数:
+\begin{shell}
+    awk -f prep3 pass=1 countries pass=2 countries |
+        awk -f form3 date='January 1, 1988'
+\end{shell}
+变量 \texttt{date} 在命令行中赋值, 而且它的值可以一直保留到 \texttt{form3}
+的 \texttt{BEGIN} 动作之外. 如果参数中包含空格, 那么就必须用引号把它们
+包围起来. 另一个办法是把 \texttt{date} 命令的输出以管道的方式输送给 
+变量, ref{sec:data_transformation_and_reduction} 显示过这种方法.
+
+\exer\ref{exer:table_format} 在参考我们给出的答案之前, 考虑一下你会如何
+处理不带小数点的数值. 为了简单起见, 我们的解决方案只考虑一个单独的列.
+我们用两个变量 --- \texttt{lwid} 和 \texttt{rwid} --- 来替换 \texttt{nwid},
+\texttt{lwid} 累加小数点左边的数字的长度, \texttt{rwid} 记录小数点右边
+的数字的个数 (包括小数点本身). 它们根据模式 \texttt{left} 和 \texttt{right}
+来计算. 于是, 数值需要的空间长度就是 \texttt{lwid+rwid}, 计算结果可能会
+超过最长的数值的长度, 这时候就需要 \texttt{wid} 来记录最大值.
+\marginpar{196}
+\begin{awkcode}
+    # table1 - single column formatter
+    #   input:  one column of strings and decimal numbers
+    #   output: aligned column
+
+    BEGIN {
+        blanks = sprintf("%100s", " ")
+        number = "^[+-]?([0-9]+[.]?[0-9]*|[.][0-9]+)$"
+        left = "^[+-]?[0-9]*"
+        right = "[.][0-9]*"
+    }
+
+    {   row[NR] = $1
+        if ($1 ~ number) {
+            match($1, left) # matches the empty string, so RLENGTH>=0
+            lwid = max(lwid, RLENGTH)
+            if (!match($1, right))
+                RLENGTH = 0
+            rwid = max(rwid, RLENGTH)
+            wid = max(wid, lwid + rwid)
+        } else
+            wid = max(wid, length($1))
+    }
+
+    END {
+        for (r = 1; r <= NR; r++) {
+            if (row[r] ~ number)
+                printf("%" wid "s\n", numjust(row[r]))
+            else
+                printf("%-" wid "s\n", row[r])
+        }
+    }
+
+    function max(x, y) { return (x > y) ? x : y }
+
+    function numjust(s) {   # position s
+        if (!match(s, right))
+            RLENGTH = 0
+        return s substr(blanks, 1, int(rwid-RLENGTH+(wid-(lwid+rwid))/2))
+    }
+\end{awkcode}
