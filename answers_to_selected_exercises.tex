@@ -112,6 +112,7 @@
 函数 \texttt{sub} 可以修复 ``one dollars'' 问题, \texttt{gsub} 可以移除
 多余的空格, 即使原文本来就没错, 这两条语句也不会造成什么影响, 这比先
 判断再更改要容易得多.
+
 \marginpar{195}
 \exer\ref{exer:p12check} 为了简单起见, 假定配对的符号是 \texttt{aa} 和
 \texttt{bb}, \texttt{cc} 和 \texttt{dd}, \texttt{ee} 和 \texttt{ff}.
@@ -163,12 +164,12 @@
 变量 \texttt{date} 在命令行中赋值, 而且它的值可以一直保留到 \texttt{form3}
 的 \texttt{BEGIN} 动作之外. 如果参数中包含空格, 那么就必须用引号把它们
 包围起来. 另一个办法是把 \texttt{date} 命令的输出以管道的方式输送给 
-变量, ref{sec:data_transformation_and_reduction} 显示过这种方法.
+变量, \ref{sec:data_transformation_and_reduction} 节演示过这种方法.
 
 \exer\ref{exer:table_format} 在参考我们给出的答案之前, 考虑一下你会如何
 处理不带小数点的数值. 为了简单起见, 我们的解决方案只考虑一个单独的列.
 我们用两个变量 --- \texttt{lwid} 和 \texttt{rwid} --- 来替换 \texttt{nwid},
-\texttt{lwid} 累加小数点左边的数字的长度, \texttt{rwid} 记录小数点右边
+\texttt{lwid} 记录小数点左边的数字的长度, \texttt{rwid} 记录小数点右边
 的数字的个数 (包括小数点本身). 它们根据模式 \texttt{left} 和 \texttt{right}
 来计算. 于是, 数值需要的空间长度就是 \texttt{lwid+rwid}, 计算结果可能会
 超过最长的数值的长度, 这时候就需要 \texttt{wid} 来记录最大值.
