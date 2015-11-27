@@ -50,3 +50,66 @@
     遍把条目分配到桶中.
     
 \marginpar{194}
+\exer\ref{exer:sumcomma} 逗号在数字中如何放置 --- 对于这个问题并没有一个
+明确的定义, 如果不考虑软件工程的标准, 比较常见的情况是即使对问题不是非常
+清楚, 但也必须加以解决. 对这道题有两种可能的答案. 下面的程序对整数求和,
+而这些整数中的逗号都处在传统的位置上:
+\begin{awkcode}
+    /^[+-]?[0-9][0-9]?[0-9]?(,[0-9][0-9][0-9])*$/ {
+            gsub(/,/, "")
+            sum += $0
+            next
+    }
+          { print "bad format:", $0 }
+    END   { print sum }
+\end{awkcode}
+一般来说, 逗号不会出现在小数点之后, 程序 
+\begin{awkcode}
+    /^[+-]?[0-9][0-9]?[0-9]?(,[0-9][0-9][0-9])*([.][0-9]*)?$/ {
+            gsub(/,/, "")
+            sum += $0
+            next
+    }
+          { print "bad format:", $0}
+    END   { print sum }
+\end{awkcode}
+所求和的数值, 其在小数点之前含有逗号和至少一个数字.
+
+\exer\ref{exer:date} 函数 \texttt{daynum(y,m,d)} 返回某个日期自 1901 年 
+1 月 1 号以来经过的天数, 日期的格式是 \textit{year month day}, 比如 
+\texttt{2001 4 1}. 闰年的 二月有 29 天, 闰年的判断标准是年份可以被 4 整除,
+但不能被 100 整除, 或者能直接被 400 整除, 于是 1900 年和2100年都不是
+闰年 (它们能被 100 整除), 但 2000 年是闰年 (能直接被 400 整除).
+\begin{awkcode}
+    function daynum(y, m, d,    days, i, n) {   # 1 == Jan 1, 1901
+        split("31 28 31 30 31 30 31 31 30 31 30 31", days)
+        # 365 days a year, plus one for each leap year
+        n = (y-1901) * 365 + int((y-1901)/4)
+        if (y % 4 == 0) # leap year from 1901 to 2099
+            days[2]++
+        for (i = 1; i < m; i++)
+            n += days[i]
+        return n + d
+    }
+        { print daynum($1, $2, $3) }
+\end{awkcode}
+这个程序只对 1901 年到 2099 年之间的年份才是正确的, 而且它也不检查输入
+数据的有效性.
+
+\exer\ref{exer:numtowords} 修改 \texttt{numtowords} 的一种方式是:
+\begin{awkcode}
+    function numtowords(n,   cents, dols, s) { # n has 2 decimal places
+        cents = substr(n, length(n)-1, 2)
+        dols = substr(n, 1, length(n)-3)
+        if (dols ==  0)
+            s = "zero dollars and " cents " cents exactly"
+        else
+            s = intowords(dols) " dollars and " cents " cents exactly"
+        sub(/^one dollars/, "one dollar", s)
+        gsub(/  +/, " ", s)
+        return s
+\end{awkcode}
+函数 \texttt{sub} 可以修复 ``one dollars'' 问题, \texttt{gsub} 可以移除
+多余的空格, 即使原文本来就没错, 这两条语句也不会造成什么影响, 这比先
+判断再更改要容易得多.
+\marginpar{195}
