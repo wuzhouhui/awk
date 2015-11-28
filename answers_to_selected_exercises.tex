@@ -3,24 +3,24 @@
 \label{chap:answers_to_selected_exercises}
 \marginpar{193}
 
-\exer\ref{exer:sum3} 一个比较简单的, 用来忽略空白行的方式是把 \texttt{sum3}
+\myexer\ref{exer:sum3} 一个比较简单的, 用来忽略空白行的方式是把 \texttt{sum3}
 的第1行替换成
 \begin{awkcode}
         nfld == 0 && NF > 0 { nfld = NF
 \end{awkcode}
 
-\exer\ref{exer:without_for_test} 如果缺了这个条件判断, 非数值列的和仍然
+\myexer\ref{exer:without_for_test} 如果缺了这个条件判断, 非数值列的和仍然
     会被累加, 但不会被打印出来. 当累加到某些无用的总和时, 可能会出现一些
     错误(例如溢出), 而该条件判断可以避免这这种情况出现, 而且并不会对程序
     的运行效率产生明显的影响.
 
-\exer\ref{exer:accumulate} 使用关联数组的话, 这道题就容易多了:
+\myexer\ref{exer:accumulate} 使用关联数组的话, 这道题就容易多了:
 \begin{awkcode}
         { total[$1] += $2 }
     END { for (x in total) print x, total[x] | "sort" }
 \end{awkcode}
 
-\exer\ref{exer:star_num} 假定一行内至多只能有 25 个星号. 把 \texttt{max} 
+\myexer\ref{exer:star_num} 假定一行内至多只能有 25 个星号. 把 \texttt{max} 
 设置为 25, 如果最长的行不会超过上限, 那么下面的程序就不会对数据进行更改,
     否则的话, 就对每一行按照比例进行缩放, 使得最长的行不会超过 25 个星号.
 新数组 \texttt{y} 用来维护缩放后的长度, 这样的话, 数组 \texttt{x} 的元素
@@ -46,11 +46,11 @@
     }
 \end{awkcode}
 
-\exer\ref{exer:bucket} 需要对数据遍历两遍, 其中 1 遍确定桶的范围, 另 1 
+\myexer\ref{exer:bucket} 需要对数据遍历两遍, 其中 1 遍确定桶的范围, 另 1 
     遍把条目分配到桶中.
     
 \marginpar{194}
-\exer\ref{exer:sumcomma} 逗号在数字中如何放置 --- 对于这个问题并没有一个
+\myexer\ref{exer:sumcomma} 逗号在数字中如何放置 --- 对于这个问题并没有一个
 明确的定义, 如果不考虑软件工程的标准, 比较常见的情况是即使对问题不是非常
 清楚, 但也必须加以解决. 对这道题有两种可能的答案. 下面的程序对整数求和,
 而这些整数中的逗号都处在传统的位置上:
@@ -75,7 +75,7 @@
 \end{awkcode}
 所求和的数值, 其在小数点之前含有逗号和至少一个数字.
 
-\exer\ref{exer:date} 函数 \texttt{daynum(y,m,d)} 返回某个日期自 1901 年 
+\myexer\ref{exer:date} 函数 \texttt{daynum(y,m,d)} 返回某个日期自 1901 年 
 1 月 1 号以来经过的天数, 日期的格式是 \textit{year month day}, 比如 
 \texttt{2001 4 1}. 闰年的 二月有 29 天, 闰年的判断标准是年份可以被 4 整除,
 但不能被 100 整除, 或者能直接被 400 整除, 于是 1900 年和2100年都不是
@@ -96,7 +96,7 @@
 这个程序只对 1901 年到 2099 年之间的年份才是正确的, 而且它也不检查输入
 数据的有效性.
 
-\exer\ref{exer:numtowords} 修改 \texttt{numtowords} 的一种方式是:
+\myexer\ref{exer:numtowords} 修改 \texttt{numtowords} 的一种方式是:
 \begin{awkcode}
     function numtowords(n,   cents, dols, s) { # n has 2 decimal places
         cents = substr(n, length(n)-1, 2)
@@ -114,7 +114,7 @@
 判断再更改要容易得多.
 
 \marginpar{195}
-\exer\ref{exer:p12check} 为了简单起见, 假定配对的符号是 \texttt{aa} 和
+\myexer\ref{exer:p12check} 为了简单起见, 假定配对的符号是 \texttt{aa} 和
 \texttt{bb}, \texttt{cc} 和 \texttt{dd}, \texttt{ee} 和 \texttt{ff}.
 在文本中, 这些符号对不能嵌套或重叠.
 \begin{awkcode}
@@ -145,7 +145,7 @@
 变量 \texttt{p} 通过记录待匹配的定界符来为状态编码. 程序用到了一个小技巧:
 所有的开标签都具有相同的长度. 一个可能的选择方案是要求定界符总是 \verb'$1'.
 
-\exer\ref{exer:checkgen} 选择一些标记, 比如 \texttt{=}, 它们不能当作
+\myexer\ref{exer:checkgen} 选择一些标记, 比如 \texttt{=}, 它们不能当作
 合法的模式来使用. 程序 
 \begin{awkcode}
     BEGIN { FS = "\t" }
@@ -156,7 +156,7 @@
 \end{awkcode}
 可以打印出那些以标记开始的行, 但不包括标记本身.
 
-\exer\ref{exer:form3_form4} 一个可能的解决办法在命令行中显式地给出日期参数:
+\myexer\ref{exer:form3_form4} 一个可能的解决办法在命令行中显式地给出日期参数:
 \begin{shell}
     awk -f prep3 pass=1 countries pass=2 countries |
         awk -f form3 date='January 1, 1988'
@@ -166,7 +166,7 @@
 包围起来. 另一个办法是把 \texttt{date} 命令的输出以管道的方式输送给 
 变量, \ref{sec:data_transformation_and_reduction} 节演示过这种方法.
 
-\exer\ref{exer:table_format} 在参考我们给出的答案之前, 考虑一下你会如何
+\myexer\ref{exer:table_format} 在参考我们给出的答案之前, 考虑一下你会如何
 处理不带小数点的数值. 为了简单起见, 我们的解决方案只考虑一个单独的列.
 我们用两个变量 --- \texttt{lwid} 和 \texttt{rwid} --- 来替换 \texttt{nwid},
 \texttt{lwid} 记录小数点左边的数字的长度, \texttt{rwid} 记录小数点右边
