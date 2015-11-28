@@ -920,6 +920,7 @@ many inputs.}) 的方法之一.
 通过一对函数, 我们假定不会看到额外的输入.
 
 \begin{exercise}
+    \label{exer:join}
     本节实现的 \texttt{join} 不会进行错误检查, 也不会检查文件是否是有序的.
     修复这些问题, 在修复之后, 程序会变得多大?
 \end{exercise}
@@ -1162,6 +1163,7 @@ awk 程序.
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:system}
 	构造导出表的时候, \texttt{qawk} 为每一个命令调用一次
 	\texttt{system}, 修改 \texttt{qawk}, 修改后的 \texttt{qawk} 把
 	所有的构造表格的命令都收集到一个字符串中, 这样就可以只需要调用一次
@@ -1169,6 +1171,7 @@ awk 程序.
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:qawk}
 	修改 \texttt{qawk}, 使得它可以检查即将作为输入的导出表是否已经
 	存在. 如果导出表已经存在, 并且基表在导出表被构造出来之后未曾
 	修改过, 那我们就可以直接使用该导出表, 而不用重新构造. 可以参考
@@ -1176,6 +1179,7 @@ awk 程序.
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:multiline_query}
 	提供一种输入并编辑多行查询的方式. 只要对 \texttt{qawk} 作些许修改,
 	就可以把多行查询收集起来. 编辑的一种可选方案是调用你喜欢的编辑器,
 	另一种方式是用 awk 写一个简单的编辑器.\footnote{原文为 Provide a

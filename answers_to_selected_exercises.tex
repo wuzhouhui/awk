@@ -244,3 +244,62 @@
     }
     ' pat="$1" <countries
 \end{awkcode}
+
+\myexer\ref{exer:join} 为了检查文件是有序的, 需要了解从每一个输入中读取
+到的最后一条记录, 然后把它们与 \texttt{getone} 中的 \texttt{getline} 的
+调用结果作比较.
+
+\myexer\ref{exer:system} 修改 \texttt{doquery} 中调用 \texttt{system}
+的 \texttt{for} 循环: 把所有的命令拼接成一个单独的字符串 \texttt{x},
+比如:
+\begin{awkcode}
+    for (j = 1; j <= ncmd[i]; j++) x = x cmd[i, j] "\n"
+\end{awkcode}
+然后在 \texttt{system} 的调用中使用 \texttt{x}. 如果 \texttt{x} 是 
+\texttt{doquery} 的局部变量, 那么在每次调用 \texttt{doquery} 时, 
+\texttt{x} 都可以被正确地初始化.
+
+\myexer\ref{exer:qawk} 这里显示的是部分答案: 函数把 \texttt{qawk} 在
+一次执行中计算出的导出文件都记录下来, 这样就避免了重复计算:
+\begin{awkcode}
+    function doquery(s,   i,j,x) {
+        for (i in qattr)  # clean up for next query
+            delete qattr[i]
+        query = s    # put $names in query into qattr, without $
+        while (match(s, /\$[A-Za-z]+/)) {
+            qattr[substr(s, RSTART+1, RLENGTH-1)] = 1
+            s = substr(s, RSTART+RLENGTH+1)
+        }
+        for (i = 1; i <= nrel && !subset(qattr, attr, i); ) 
+            i++
+        if (i > nrel)     # didn't find a table with all attributes
+            missing(qattr)
+        else {            # table i contains attributes in query
+            for (j in qattr)   # create awk program
+                gsub("\\$" j, "$" attr[i,j], query)
+            if (!exists[i] && ncmd[i] > 0) {
+                for (j = 1; j <= ncmd[i]; j++)
+                    x = x cmd[i, j] "\n"
+                print "executing\n" x  # for debugging
+                if (system(x) != 0) { # create table i
+                        print "command failed, query skipped\n", x
+                        return
+                   }
+                exists[i]++
+            }
+            awkcmd = sprintf("awk -F'\t' '%s' %s", query, relname[i])
+            printf("query: %s\n", awkcmd)   # for debugging
+            system(awkcmd)
+        }
+    }
+\end{awkcode}
+数组 \texttt{exists} 把已经计算过的导出文件记录下来. 这个版本的
+\texttt{doquery} 还包含了最后一个问题的答案.
+
+\myexer\ref{exer:multiline_query} 最简单的做法是把 \texttt{qawk}的
+开头变成 
+\marginpar{198}
+\begin{awkcode}
+    BEGIN { readrel("relfile"); RS = "" }
+\end{awkcode}
+于是, 在碰到空白行之前, 所有的行都是一个查询的组成部分. 
