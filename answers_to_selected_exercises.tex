@@ -302,4 +302,48 @@
 \begin{awkcode}
     BEGIN { readrel("relfile"); RS = "" }
 \end{awkcode}
-于是, 在碰到空白行之前, 所有的行都是一个查询的组成部分. 
+于是, 在碰到空白行之前, 所有的行都是一个查询的组成部分. 如果不考虑实现
+机制, 查询最终都要转化成合法的 awk 程序.
+
+\myexer\ref{exer:rand} 这些 ``随机'' 数其实都是确定了的: 只要知道随机数
+种子和生成算法, 就可以确定随机数序列. 然而, 任意两个序列之间都会分享
+许多属性, 完整的讨论可以在 Knuth 的 \textit{The Art of Computer
+Programming} (第 2 卷) 中找到.
+
+\myexer\ref{exer:rand2}  下面的程序可以生成从 1 到 \textit{n} 的 \textit{k}
+个互不相同的整数, 算法来自 R. W. Floyd:
+\begin{awkcode}
+    # print k distinct random integers between 1 and n
+
+    { random($1, $2) }
+
+    function random(k, n,    A, i, r) {
+        for (i = n-k+1; i <= n; i++)
+            ((r = randint(i)) in A) ? A[i] : A[r]
+        for (i in A)
+            print i
+    }
+
+    function randint(n) { return int(n*rand())+1 }
+\end{awkcode}
+
+\myexer\ref{exer:bridge_hands} 问题是生成下面这种形式的随机桥牌手:
+\begin{file}
+                        NORTH
+                    S: 10 9 6 4
+                    H: 8 7
+                    D: J 10 6
+                    C: 10 8 5 3
+       WEST                                 EAST
+    S: K 8 7 3                           S: A J 5
+    H: K Q 4 3 2                         H: J
+    D: 8 7                               D: A K Q 9 2
+    C: A J                               C: K Q 6 2
+                        SOUTH
+                    S: Q 2
+                    H: A 10 9 6 5
+                    D: 5 4 3
+                    C: 9 7 4
+\end{file}
+下面的程序生成从 1 到 52 的整数的一个随机排列, 排列结果存放到数组
+\texttt{deck} 中. 
