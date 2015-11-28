@@ -215,3 +215,32 @@
         return s substr(blanks, 1, int(rwid-RLENGTH+(wid-(lwid+rwid))/2))
     }
 \end{awkcode}
+如果某个数字没有使用到 \texttt{lwid} 的全部空间, 那么就要把它向左移位,
+所以在 \texttt{numjust} 中会有一个比较复杂的计算.
+
+\myexer\ref{exer:info}
+\begin{awkcode}
+    awk '
+    BEGIN { FS = "\t"; pat = ARGV[1]; ARGV[1] = "-" }
+    $1 ~ pat {
+        printf("%s:\n", $1)
+        printf("\t%d million people\n", $3)
+        printf("\t%.3f million sq. mi.\n", $2/1000)
+        printf("\t%.1f people per sq. mi.\n", 1000*$3/$2)
+    }
+    ' "$1" <countries
+\end{awkcode}
+\marginpar{197}
+另一种解决办法是用 \textit{var}\texttt{=}\textit{text} 替换掉
+\texttt{ARGV}:
+\begin{awkcode}
+    awk '
+    BEGIN { FS = "\t" }
+    $1 ~ pat {
+        printf("%s:\n", $1)
+        printf("\t%d million people\n", $3)
+        printf("\t%.3f million sq. mi.\n", $2/1000)
+        printf("\t%.1f people per sq. mi.\n", 1000*$3/$2)
+    }
+    ' pat="$1" <countries
+\end{awkcode}
