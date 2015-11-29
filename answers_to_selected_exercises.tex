@@ -327,7 +327,7 @@ Programming} (第 2 卷) 中找到.
     function randint(n) { return int(n*rand())+1 }
 \end{awkcode}
 
-\myexer\ref{exer:bridge_hands} 问题是生成下面这种形式的随机桥牌:
+\myexer\ref{exer:bridge_hands} 问题是随机生成下面这种形式的桥牌:
 \begin{file}
                         NORTH
                     S: 10 9 6 4
@@ -347,13 +347,13 @@ Programming} (第 2 卷) 中找到.
 \end{file}
 下面的程序生成从 1 到 52 的整数的一个随机排列, 排列结果存放到数组
 \texttt{deck} 中. 数组被均分成四段, 分别对每段中的 13 个数排序, 每一段
-都表示一个桥牌手: 数字 52 对应黑桃 A, 51 对应黑桃 K, 1 对应梅花二.
+都表示一手牌: 数字 52 对应黑桃 A, 51 对应黑桃 K, 1 对应梅花二.
 
-函数 \texttt{permute(k,n)} 使用 Floyd 算法 (习题 \ref{exer:rand2}), 从
+函数 \texttt{permute(k,n)} 使用 Floyd 算法 (习题 \ref{exer:rand2}) 从
 \texttt{1} 到 \texttt{n} 的整数中随机生成一个长度为\texttt{k} 的排列.
-函数 \texttt{sort(x,y)} 使用插入排序 (见 \ref{subsec:insertion_sort} 节),
+函数 \texttt{sort(x,y)} 使用插入排序 (见 \ref{sec:sorting} 节),
 对 \texttt{deck[x..y]} 中的元素进行排序. 最后, 函数 \texttt{prhands} 
-按照上面的风格, 格式化并输出桥牌.
+按照上面的风格, 格式化并输出每一手牌.
 \marginpar{199}
 \begin{awkcode}
     # bridge - generate random bridge hands
