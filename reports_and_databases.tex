@@ -509,6 +509,7 @@ are, then do the positioning for you.}. 为打印程序写一个 awk 程序, 该
 
 \marginpar{99}
 \begin{exercise}
+    \label{exer:form3_form4}
     修改 \verb'form3' 与 \verb'form4': 从别处获取日期, 而
     不是将日期硬编码到代码中.
 \end{exercise}
@@ -519,6 +520,7 @@ are, then do the positioning for you.}. 为打印程序写一个 awk 程序, 该
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:table_format}
     表格格式化程序假定所有数字的小数部分的位数都是相同的, 修改它, 使得即使 
     这个假定不成立, 程序也可以正确地工作.
 \end{exercise}
@@ -600,6 +602,7 @@ are, then do the positioning for you.}. 为打印程序写一个 awk 程序, 该
 \end{awkcode}
 
 \begin{exercise}
+    \label{exer:info}
     修改 \texttt{info}: 参数通过 \texttt{ARGV} 传递进来, 而不是由 shell 
     进行替换.
 \end{exercise}
@@ -917,6 +920,7 @@ many inputs.}) 的方法之一.
 通过一对函数, 我们假定不会看到额外的输入.
 
 \begin{exercise}
+    \label{exer:join}
     本节实现的 \texttt{join} 不会进行错误检查, 也不会检查文件是否是有序的.
     修复这些问题, 在修复之后, 程序会变得多大?
 \end{exercise}
@@ -1159,6 +1163,7 @@ awk 程序.
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:system}
 	构造导出表的时候, \texttt{qawk} 为每一个命令调用一次
 	\texttt{system}, 修改 \texttt{qawk}, 修改后的 \texttt{qawk} 把
 	所有的构造表格的命令都收集到一个字符串中, 这样就可以只需要调用一次
@@ -1166,6 +1171,7 @@ awk 程序.
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:qawk}
 	修改 \texttt{qawk}, 使得它可以检查即将作为输入数据的导出文件是否已经
 	存在. 如果文件已经存在, 并且基文件在导出文件被导出之后未曾
 	修改过, 那么我们就可以直接使用该导出文件, 而不用重新计算. 可以参考
@@ -1173,6 +1179,7 @@ awk 程序.
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:multiline_query}
 	提供一种输入并编辑多行查询的方式. 只要对 \texttt{qawk} 作些许修改,
 	就可以把多行查询收集起来. 编辑的一种可选方案是调用你喜欢的编辑器,
 	另一种方式是用 awk 写一个简单的编辑器.\footnote{原文为 Provide a
