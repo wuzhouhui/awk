@@ -327,7 +327,7 @@ Programming} (第 2 卷) 中找到.
     function randint(n) { return int(n*rand())+1 }
 \end{awkcode}
 
-\myexer\ref{exer:bridge_hands} 问题是生成下面这种形式的随机桥牌手:
+\myexer\ref{exer:bridge_hands} 问题是生成下面这种形式的随机桥牌:
 \begin{file}
                         NORTH
                     S: 10 9 6 4
@@ -346,4 +346,72 @@ Programming} (第 2 卷) 中找到.
                     C: 9 7 4
 \end{file}
 下面的程序生成从 1 到 52 的整数的一个随机排列, 排列结果存放到数组
-\texttt{deck} 中. 
+\texttt{deck} 中. 数组被均分成四段, 分别对每段中的 13 个数排序, 每一段
+都表示一个桥牌手: 数字 52 对应黑桃 A, 51 对应黑桃 K, 1 对应梅花二.
+
+函数 \texttt{permute(k,n)} 使用 Floyd 算法 (习题 \ref{exer:rand2}), 从
+\texttt{1} 到 \texttt{n} 的整数中随机生成一个长度为\texttt{k} 的排列.
+函数 \texttt{sort(x,y)} 使用插入排序 (见 \ref{subsec:insertion_sort} 节),
+对 \texttt{deck[x..y]} 中的元素进行排序. 最后, 函数 \texttt{prhands} 
+按照上面的风格, 格式化并输出桥牌.
+\marginpar{199}
+\begin{awkcode}
+    # bridge - generate random bridge hands
+
+    BEGIN { split(permute(52,52), deck)           # generate a random deck
+            sort(1,13); sort(14,26); sort(27,39); sort(40,52) # sort hands
+            prhands()                    # format and print the four hands
+    }
+
+    function permute(k, n,    i, p, r) {   # generate a random permutation
+        srand(); p = " "                   # of k integers between 1 and n
+        for (i = n-k+1; i <= n; i++)
+            if (p ~ " " (r = int(i*rand())+1) " " )
+                sub(" " r " ", " " r " " i " ", p)    # put i after r in p
+            else p = " " r p                     # put r at beginning of p
+        return p
+    }
+
+    function sort(left,right,    i,j,t) { # sort hand in deck[left..right]
+        for (i = left+1; i <= right; i++)
+            for (j = i; j > left && deck[j-1] < deck[j]; j--) {
+                t = deck[j-1]; deck[j-1] = deck[j]; deck[j] = t
+            }
+    }
+
+    function prhands() {                            # print the four hands
+        b = sprintf("%20s", " "); b40 = sprintf("%40s", " ")
+        card = 1                                  # global index into deck
+        suits(13); print b "   NORTH"
+        print b spds; print b hrts; print b dnds; print b clbs
+        suits(26)  # create the west hand from deck[14..26]
+        ws = spds substr(b40, 1, 40 - length(spds))
+        wh = hrts substr(b40, 1, 40 - length(hrts))
+        wd = dnds substr(b40, 1, 40 - length(dnds))
+        wc = clbs substr(b40, 1, 40 - length(clbs))
+        suits(39); print "   WEST" sprintf("%36s", " ") "EAST"
+        print ws spds; print wh hrts; print wd dnds; print wc clbs
+        suits(52); print b "   SOUTH"
+        print b spds; print b hrts; print b dnds; print b clbs
+    }
+
+    function suits(j) {           # collect suits of hand in deck[j-12..j]
+        for (spds = "S:"; deck[card] > 39 && card <= j; card++)
+            spds = spds " " fvcard(deck[card])
+        for (hrts = "H:"; deck[card] > 26 && card <= j; card++)
+            hrts = hrts " " fvcard(deck[card])
+        for (dnds = "D:"; deck[card] > 13 && card <= j; card++)
+            dnds = dnds " " fvcard(deck[card])
+        for (clbs = "C:"; card <= j; card++)
+            clbs = clbs " " fvcard(deck[card])
+    }
+
+    function fvcard(i) {                    # compute face value of card i
+        if (i % 13 == 0) return "A"
+        else if (i % 13 == 12) return "K"
+        else if (i % 13 == 11) return "Q"
+        else if (i % 13 == 10) return "J"
+        else return (i % 13) + 1
+    }
+\end{awkcode}
+\marginpar{200}
