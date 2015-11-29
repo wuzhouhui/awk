@@ -513,3 +513,16 @@ TODO}这样做可以 让 \texttt{gen} 中的测试更简单一点, 否则的话,
 
     function pop() { return stack[stp--] }
 \end{awkcode}
+
+\myexer\ref{exer:quiz} 最简单的办法是在开始时, 随机生成一个从 \texttt{1}
+到 \texttt{nq} 的排列, 然后按照这个顺序来提问.
+
+\myexer\ref{exer:wordcount} 在 awk 中, 对大小写进行转换的最简洁的方式是
+创建一个数组, 数组包含了每个字母的大小写映射关系, 这种做法非常笨拙, 所以 
+如果可能的话, 可以利用某些 Unix 命令来完成, 比如 \texttt{tr}.
+
+\myexer\ref{exer:fmt_justify} 我们把单词存放在数组中, 如果要在一行内打印
+\texttt{cnt} 个单词, 那就有 \texttt{cnt-1} 个缝隙需要填充空格. 如果有
+\textit{n} 个空格, 那么每个缝隙占用 \textit{n}\texttt{/(cnt-1)} 个. 对
+每一个单词, 程序计算缝隙占用的空格数, 然后递减缝隙和空格的数量.
+
