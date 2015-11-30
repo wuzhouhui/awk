@@ -529,4 +529,77 @@ If the extra blanks do not distribute evenly, the surplus ones are spread
 alternately from the left and the right on successive lines, to avoid
 ``rivers'' of white space.\footnote{TODO}
 \marginpar{202}
+\begin{awkcode}
+    # fmt.just - formatter with right justification
 
+    BEGIN { blanks = sprintf("%60s", " ") }
+    /./   { for (i = 1; i <= NF; i++) addword($i) }
+    /^$/  { printline("no"); print "" }
+    END   { printline("no") }
+
+    function addword(w) {
+        if (cnt + size + length(w) > 60)
+            printline("yes")
+        line[++cnt] = w
+        size += length(w)
+    }
+
+    function printline(f,    i, nb, nsp, holes) {
+        if (f == "no" || cnt == 1) {
+            for (i = 1; i <= cnt; i++)
+                printf("%s%s", line[i], i < cnt ? " " : "\n")
+        } else if (cnt > 1) {
+            dir = 1 - dir        # alternate side for extra blanks
+            nb = 60 - size       # number of blanks needed
+            holes = cnt - 1      # holes
+            for (i = 1; holes > 0; i++) {
+                nsp = int((nb-dir) / holes) + dir
+                printf("%s%s", line[i], substr(blanks, 1, nsp))
+                nb -= nsp
+                holes--
+            }
+            print line[cnt]
+        }
+        size = cnt = 0
+    }
+\end{awkcode}
+给 \texttt{printline} 传递一个 ``no'' 参数可以避免对段落的最后一行进行
+右对齐.
+
+\myexer\ref{exer:lack_underscore} 这取决于遗漏了下划线的符号名是否在文档
+中的其他地方出现, 如果是, 那么这些内容就会被错误地替换掉.
+
+\myexer\ref{exer:xref} 
+\begin{awkcode}
+    /^\.#/ { printf("{ gsub(/%s/, \"%d\") }\n", $2, ++count[$1])
+             if (saw[$2])
+                 print NR ": redefinition of", $2, "from line", saw[$2]
+             saw[$2] = NR
+           }
+    END    { printf("!/^[.]#/\n") }
+\end{awkcode}
+
+\myexer\ref{exer:xref_once}
+\begin{awkcode}
+    /^\.#/ { s[$2] = ++count[$1]; next }
+           { for ( i in s)
+                 gsub(i, s[i])
+             print
+           }
+\end{awkcode}
+符号名必须在它被使用之前定义.
+
+\myexer\ref{exer:stop_list} 符合分而治之策略的最简单的解决办法是: 为管道
+添加一个过滤, 删除掉那些以停止列表中的单词作为开始的旋转行.
+\marginpar{203}
+% 从答案来看, 应该是
+% ...
+% awk '$1 !~ /^(a|an|and|by|for|if|in|is|of|on|the|to)/' |
+% sort -f |
+% ...
+\begin{awkcode}
+    ...
+    awk '$1 !~ /^(a|an|and|by|for|if|in|is|of|on|the|to)$/' |
+    sort -f |
+    ...
+\end{awkcode}
