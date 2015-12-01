@@ -598,3 +598,55 @@ alternately from the left and the right on successive lines, to avoid
     sort -f |
     ...
 \end{awkcode}
+
+\myexer\ref{exer:literal} 如何辨别字面上的 \verb'~' 与作为空格使用
+的 \verb'~' 是一个风格问题. 我们选择使用 awk 的转义序列约定: 当想要字
+面上的字符时, 我们就在字符前加一个反斜杆 \verb'\'. We'll consider only
+\verb'~'; the others are just elaborations in both \texttt{ix.genkey} and
+\texttt{ix.format}.\footnote{TODO} 对于 \verb'~', 我们把所有的 \verb'\~'
+实例替换成
+某个不可能出现的字符串, 这个字符串由一个制表符和一个 \verb'1' 组成,
+\verb'1' 排在制表符之后. 不会出现带有制表符的字符串, 因为制表符是字段
+分隔符. 剩下的波浪号被替换掉, 然后再把转义过的字符串放回原处, 最后把它
+们恢复成转义前的样子. 于是, \texttt{ix.genkey} 的第一个 \texttt{gsub} 
+被替换成:
+\begin{awkcode}
+    gsub(/\~/, "\t1", $1)   # protect quoted tildes
+    gsub(/~/, " ", $1)      # unprotected tildes now become blanks
+    gsub(/\t1/, "~", $1)    # restore protected tildes
+\end{awkcode}
+另外, 不能再在排序键中把波浪号删除掉.
+
+\myexer\ref{exer:asm} 只需要添加 4 行代码, 2 行添加在第 1 次遍历, 另外 
+2 行添加到第 2 次遍历中.
+\begin{awkcode}
+    ...
+    # ASSEMBLER PASS 1
+        nextmem = 0    # new
+        FS = "[ \t]+"
+        while (getline <srcfile > 0) {
+            input[nextmem] = $0    # new: remember source line
+            sub(/#.*/, "")         # strip comments
+            symtab[$1] = nextmem   # remember label location
+            if ($2 != "") {        # save op, addr if present
+                print $2 "\t" $3 >tempfile
+                nextmem++
+            }
+        }
+        close(tempfile)
+    
+    # ASSEMBLER PASS 2
+        nextmem = 0
+        while (getline <tempfile > 0) {
+            if ($2 !~ /^[0-9]*$/)  # if symbolic addr,
+                $2 = symtab[$2]    # replace by numeric value
+            mem[nextmem++] = 1000 * op[$1] + $2  # pack into word
+        }
+        for (i = 0; i < nextmem; i++)    # new: print memory
+            printf("%3d:  %05d   %s\n", i, mem[i], input[i])  # new
+    }
+    ...
+\end{awkcode}
+
+\myexer\ref{exer:zhuangzhi} 如果只想对 \texttt{graph} 进行一些很简单的
+修改, 就能完成这件工作 --- 实际上这是非常困难的, 因为 
