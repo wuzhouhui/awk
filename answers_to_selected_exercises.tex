@@ -592,11 +592,6 @@ alternately from the left and the right on successive lines, to avoid
 \myexer\ref{exer:stop_list} 符合分而治之策略的最简单的解决办法是: 为管道
 添加一个过滤, 删除掉那些以停止列表中的单词作为开始的旋转行.
 \marginpar{203}
-% 从答案来看, 应该是
-% ...
-% awk '$1 !~ /^(a|an|and|by|for|if|in|is|of|on|the|to)/' |
-% sort -f |
-% ...
 \begin{awkcode}
     ...
     awk '$1 !~ /^(a|an|and|by|for|if|in|is|of|on|the|to)$/' |
