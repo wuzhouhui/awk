@@ -327,6 +327,7 @@ hand}
 \ref{chap:little_languages} 章讨论的绘图程序的原始版本.
 
 \begin{exercise}
+    \label{exer:check}
     实际上, 函数 \texttt{check} 并不是一个很强大的测试, 什么样的错误会
     使它检测失败? 你会如何改进?
 \end{exercise}
@@ -337,6 +338,7 @@ hand}
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:time_used}
     我们默认每一种基本操作都需要相同的时间, 也就是说, 访问一个元素, 比较 
     两个元素的值, 加法, 赋值等操作所消耗的时间是相同的. 对于 awk 程序来说 
     这个假设是否合理? 写一个处理大量数据的程序, 来验证你的想法.
@@ -935,6 +937,7 @@ $n \log n$ 程序性能之间的差距急剧加大.
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:end_exit}
     如果 \texttt{END} 动作中包含 \texttt{exit} 语句, 那么剖析器就无法
     正常地工作, 请问这是为什么 ? 修复这个问题.
 \end{exercise}
@@ -1210,6 +1213,7 @@ edge}). 因为存在回边等同于存在环, 所以为了判断图中是否含�
 \end{center}
 
 \begin{exercise}
+    \label{exer:rtsort}
     修改 \texttt{rtsort}, 按照通常的顺序打印结点, 也就是先打印前驱结点.
     你是否可以在不修改 \texttt{rtsort} 的前提下达到同样的效果?
 \end{exercise}
