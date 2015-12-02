@@ -492,21 +492,21 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \textit{r} 匹配的子字符串, 那么模式 \verb'/'\textit{r}\verb'/'
 匹配成功.
 \begin{enumerate}
-\item[] \verb'^[0-9]+$/' \par
+\item[] \verb'/^[0-9]+$/' \par
     \qquad 匹配含有且只含有数字的输入行.
-\item[] \verb'^[0-9][0-9][0-9]$/' \par
+\item[] \verb'/^[0-9][0-9][0-9]$/' \par
     \qquad 输入行有且仅有3个数字.
-\item[] \verb'^(\+|-)?[0-9]+\.?[0-9]*$/' \par
+\item[] \verb'/^(\+|-)?[0-9]+\.?[0-9]*$/' \par
     \qquad 十进制小数, 符号与小数部分是可选的.
-\item[] \verb'^[+-]?[0-9]+[.]?[0-9]*$/' \par
+\item[] \verb'/^[+-]?[0-9]+[.]?[0-9]*$/' \par
     \qquad 也是匹配十进制小数, 带有可选的符号与小数部分.
-\item[] \verb'^[+-]?([0-9]+[.]?[0-9]*|[.][0-9]+)([eE][+-]?[0-9]+)?$/' \par
+\item[] \verb'/^[+-]?([0-9]+[.]?[0-9]*|[.][0-9]+)([eE][+-]?[0-9]+)?$/' \par
     \qquad 浮点数, 符号与指数部分是可选的.
-\item[] \verb'^[A-Za-z][A-Za-z0-9]*$/' \par
+\item[] \verb'/^[A-Za-z][A-Za-z0-9]*$/' \par
     \qquad 一个字母, 后面再跟着任意多个字母或数字 (比如 awk 的变量名).
-\item[] \verb'^[A-Za-z]$|^[A-Za-z][0-9]$/' \par
+\item[] \verb'/^[A-Za-z]$|^[A-Za-z][0-9]$/' \par
     \qquad 一个字母, 又或者是一个后面跟着一个数字的字母 (比如 Basic 的变量名).
-\item[] \verb'^[A-Za-z][0-9]?$/' \par
+\item[] \verb'/^[A-Za-z][0-9]?$/' \par
     \qquad 同样是一个字母, 又或者是一个后面跟着一个数字的字母.
 \end{enumerate}
 在第3个例子中, 为了匹配元字符\verb'+' 与 \verb'-' 的字面值, 必须在它们的
