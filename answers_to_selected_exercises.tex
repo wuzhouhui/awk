@@ -649,4 +649,9 @@ alternately from the left and the right on successive lines, to avoid
 \end{awkcode}
 
 \myexer\ref{exer:zhuangzhi} 如果只想对 \texttt{graph} 进行一些很简单的
-修改, 就能完成这件工作 --- 实际上这是非常困难的, 因为 
+修改, 就能完成这件工作 --- 实际上这是非常困难的, 因为 \texttt{x} 与
+\texttt{y} 所需要的信息嵌入在整个程序和许多变量中 (例如 \texttt{bticks}
+和 \texttt{lticks}). 或许更好的做法是定义一个对输入进行处理的过滤器
+\texttt{transpose}. 这里提供了过滤器的一个实现, 通过修改 \texttt{graph}
+来得到:
+\marginpar{204}
