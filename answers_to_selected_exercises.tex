@@ -601,10 +601,13 @@ alternately from the left and the right on successive lines, to avoid
 
 \myexer\ref{exer:literal} 如何辨别字面上的 \verb'~' 与作为空格使用
 的 \verb'~' 是一个风格问题. 我们选择使用 awk 的转义序列约定: 当想要字
-面上的字符时, 我们就在字符前加一个反斜杆 \verb'\'. We'll consider only
-\verb'~'; the others are just elaborations in both \texttt{ix.genkey} and
-\texttt{ix.format}.\footnote{TODO} 对于 \verb'~', 我们把所有的 \verb'\~'
-实例替换成
+面上的字符时, 我们就在字符前加一个反斜杆 \verb'\'. 我们将只考虑
+波浪号 \verb'~', 对于其他字符, \texttt{ix.genkey} 和
+\texttt{ix.format} 都作了详尽的阐述.
+% We'll consider only
+% \verb'~'; the others are just elaborations in both \texttt{ix.genkey} and
+% \texttt{ix.format}.\footnote{TODO} 对于 \verb'~',
+我们把所有的 \verb'\~' 实例替换成
 某个不可能出现的字符串, 这个字符串由一个制表符和一个 \verb'1' 组成,
 \verb'1' 排在制表符之后. 不会出现带有制表符的字符串, 因为制表符是字段
 分隔符. 剩下的波浪号被替换掉, 然后再把转义过的字符串放回原处, 最后把它
