@@ -527,9 +527,8 @@ or any previous production, rather than this production.}
 \texttt{cnt} 个单词, 那就有 \texttt{cnt-1} 个缝隙需要填充空格. 如果有
 \textit{n} 个空格, 那么每个缝隙占用 \textit{n}\texttt{/(cnt-1)} 个. 对
 每一个单词, 程序计算缝隙占用的空格数, 然后递减缝隙和空格的数量.
-If the extra blanks do not distribute evenly, the surplus ones are spread
-alternately from the left and the right on successive lines, to avoid
-``rivers'' of white space.\footnote{TODO}
+如果额外的空格分布地并不均匀, 那么多出来的空格就会轮流地从左边, 或从右边
+分散到后面的连续的行中.
 \marginpar{202}
 \begin{awkcode}
     # fmt.just - formatter with right justification
