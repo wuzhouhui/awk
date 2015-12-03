@@ -425,10 +425,12 @@ Programming} (第 2 卷) 中找到.
 短输出规则来推导. 这需要对语法进行大量的修改, 以及一些特殊的知识.
 
 \myexer\ref{exer:weight} 我们为产生式的每一个终止添加概率. 这些概率首
-先被读取到数组 \texttt{rhsprob} 中. After the grammar has been read,
+先被读取到数组 \texttt{rhsprob} 中. 语法规则读取完毕后, 修改
+\texttt{rhsprob}, 使得它不仅可以表示当前这条产生式的概率, 还可以表示
+前面任意一条产生式的概率.\footnote{After the grammar has been read,
 \texttt{rhsprob} is changed so that it represents the probability of this
-or any previous production, rather than this production.\footnote{
-TODO}这样做可以 让 \texttt{gen} 中的测试更简单一点, 否则的话, 概率就会
+or any previous production, rather than this production.}
+这样做可以 让 \texttt{gen} 中的测试更简单一点, 否则的话, 概率就会
 被重复累加.
 \begin{awkcode}
     # sentgen1 - random sentence generator with probabilities
@@ -525,9 +527,8 @@ TODO}这样做可以 让 \texttt{gen} 中的测试更简单一点, 否则的话,
 \texttt{cnt} 个单词, 那就有 \texttt{cnt-1} 个缝隙需要填充空格. 如果有
 \textit{n} 个空格, 那么每个缝隙占用 \textit{n}\texttt{/(cnt-1)} 个. 对
 每一个单词, 程序计算缝隙占用的空格数, 然后递减缝隙和空格的数量.
-If the extra blanks do not distribute evenly, the surplus ones are spread
-alternately from the left and the right on successive lines, to avoid
-``rivers'' of white space.\footnote{TODO}
+如果额外的空格分布地并不均匀, 那么多出来的空格就会轮流地从左边, 或从右边
+分散到后面的连续的行中.
 \marginpar{202}
 \begin{awkcode}
     # fmt.just - formatter with right justification
@@ -601,10 +602,13 @@ alternately from the left and the right on successive lines, to avoid
 
 \myexer\ref{exer:literal} 如何辨别字面上的 \verb'~' 与作为空格使用
 的 \verb'~' 是一个风格问题. 我们选择使用 awk 的转义序列约定: 当想要字
-面上的字符时, 我们就在字符前加一个反斜杆 \verb'\'. We'll consider only
-\verb'~'; the others are just elaborations in both \texttt{ix.genkey} and
-\texttt{ix.format}.\footnote{TODO} 对于 \verb'~', 我们把所有的 \verb'\~'
-实例替换成
+面上的字符时, 我们就在字符前加一个反斜杆 \verb'\'. 我们将只考虑
+波浪号 \verb'~', 对于其他字符, \texttt{ix.genkey} 和
+\texttt{ix.format} 都作了详尽的阐述.
+% We'll consider only
+% \verb'~'; the others are just elaborations in both \texttt{ix.genkey} and
+% \texttt{ix.format}.\footnote{TODO}
+为了显示\verb'~', 我们把所有的 \verb'\~' 实例替换成
 某个不可能出现的字符串, 这个字符串由一个制表符和一个 \verb'1' 组成,
 \verb'1' 排在制表符之后. 不会出现带有制表符的字符串, 因为制表符是字段
 分隔符. 剩下的波浪号被替换掉, 然后再把转义过的字符串放回原处, 最后把它
