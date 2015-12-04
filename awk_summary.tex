@@ -1,3 +1,63 @@
 % vim: ts=8 sts=8 sw=4 et tw=75
 \chapter{AWK 总结}
 \label{chap:awk_summary}
+
+\marginpar{187}
+这个附录包含了 awk 语言的一个总结. 在句法规则上, 如果某个成分被一对中括号
+\verb'['...\verb']' 包围, 则表示它们是可选的.
+
+\subsubsection{命令行}
+\begin{quote}
+    \texttt{awk [-F}\textit{s}\texttt{] '}
+    \textit{program}\texttt{'}\textit{optional list of filenames}
+
+    \texttt{awk [-F}\textit{s}\texttt{] ' -f}
+    \textit{progfile}\texttt{'}\textit{optional list of filenames}
+\end{quote}
+参数 \texttt{-F}\textit{s} 把字段分隔符 \texttt{FS} 设置成 \textit{s},
+如果没有提供文件名, awk 就从标准输入读取数据. 文件名的形式可以是 
+\textit{var}\texttt{=}\textit{text}, 在这种情况下, 相当于把 \textit{text}
+赋值给变量 \textit{var}, 当这个参数被当作一个文件而被访问时, 执行赋值
+语句. 
+
+\subsubsection{AWK 程序}
+一个 awk 程序由一系列的 \patact 语句和函数定义组成. 一个模式动作语句具有
+形式:
+\begin{quote}
+    \textit{pattern}\ \ \verb'{'\ \textit{action}\ \verb'}'
+\end{quote}
+如果某个动作省略了模式, 则默认匹配所有输入行; 如果某个模式省略了动作, 则
+默认打印匹配行.
+
+一个函数定义具有形式:
+\begin{quote}
+    \texttt{function}\ \
+    \textit{name}\verb'('\textit{parameter-list}\verb')
+    {'\textit{statement}\ \ \verb'}'
+\end{quote}
+\patact 语句和函数定义由换行符或分号分隔, 并且这两个字符可以混合使用.
+
+\subsubsection{模式}
+\begin{quote}
+    \texttt{BEGIN}
+
+    \texttt{END}
+
+    \textit{expression}
+
+    \verb'/'\textit{regular expression}\verb'/'
+
+    \textit{pattern}\ \verb'&&'\ \textit{pattern}
+
+    \textit{pattern}\ \verb'||'\ \textit{pattern}
+
+    \verb'!'\textit{pattern}
+
+    \verb'('\textit{pattern}\verb')'
+
+    \textit{pattern}\verb','\ \textit{pattern}
+\end{quote}
+
+最后一个模式是范围模式, 它不能作为其他模式的组成部分. 类似地,
+\texttt{BEGIN} 和 \texttt{END} 也不能和其他模式结合.
+\marginpar{187}
