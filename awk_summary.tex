@@ -156,3 +156,77 @@
 \texttt{getline} 在遇到文件末尾时返回 0, 出错时返回 -1.
 
 \marginpar{189}
+
+\subsubsection{\textbf{\texttt{printf}} 格式转换}
+\texttt{printf} 与 \texttt{sprintf} 识别以下格式转换命令:
+\begin{quote}
+    \begin{tabbing}
+        \verb'%c'       \= ASCII 字符 \\
+
+        \verb'%d'       \> 十进制数 \\
+
+        \verb'%e'       \> \texttt{[-]d.ddddddE[+-]dd}  \\
+
+        \verb'%f'       \> \texttt{[-]ddd.dddddd} \\
+
+        \verb'%g'       \> 效果等价于 \verb'%e' 或 \verb'%f', 选择转换
+                后长度较短的那个, 无意义的零会被删除    \\
+
+        \verb'%o'       \> 无符号八进制数 \\
+
+        \verb'%s'       \> 字符串       \\
+
+        \verb'%x'       \> 无符号十六进制数 \\
+
+        \verb'%%'       \> 打印一个百分号 \verb'%', 不会有参数被转换 \\
+    \end{tabbing}
+\end{quote}
+
+\verb'%' 与控制字符之间可以出现额外的参数:
+
+\begin{quote}
+    \begin{tabbing}
+        \texttt{-}      \= 表达式在它所处的域中左对齐   \\
+
+        \textit{width}  \> 当需要时把域的宽度填充到该值, 前导的
+        \texttt{0} 表示用 \texttt{0} 填充 \\
+
+        \texttt{.}\textit{prec} \> 字符串最大宽度, 或小数点后保留的位数 \\
+    \end{tabbing}
+\end{quote}
+
+\subsubsection{内建变量}
+下面列出的内建变量可以使用在任意一个表达式中:
+\begin{quote}
+    \begin{tabbing}
+        \texttt{ARGC}   \= 命令行参数的个数 \\
+        \texttt{ARGV}   \> 命令行参数组成的数组 (\texttt{ARGV[0..ARGC-1])\\
+        \texttt{FILENAME}\> 当前输入文件的文件名 \\
+        \texttt{FNR}    \> 当前输入文件已读取的记录个数 \\
+        \texttt{FS}     \> 输入数据的字段分隔符 (默认是空格) \\
+        \texttt{NF}     \> 当前输入记录的字段个数 \\
+        \texttt{NR}     \> 从程序开始到现在, 读取到的记录个数 \\
+        \texttt{OFMT}   \> 数字的输出格式 (默认是 \verb'"%.6g"') \\
+        \texttt{OFS}    \> 输出字段分隔符 (默认是空格)\\
+        \texttt{ORS}    \> 输出记录分隔符 (默认是换行符) \\
+        \texttt{RLENGTH}\> 被 \texttt{match} 中的正则表达式匹配的字符串
+        的长度 \\
+        \texttt{RS}     \> 输入数据的记录分隔符 (默认是换行符) \\
+        \texttt{RSTART} \> 被 \texttt{match} 匹配的字符串在原字符串中的
+        开始位置 \\
+        \texttt{SUBSEP} \> 具有形式
+        \texttt{[}\textit{i}\texttt{,}\textit{j}\texttt{,}...\texttt{]}
+        的数组下标的分隔符 (默认是 \verb'"\034"') \\
+    \end{tabbing}
+\end{quote}
+\texttt{ARGC} 和 \texttt{ARGV} 包含被执行的程序的程序 (通常是
+\texttt{awk}), 但是不包括出现在命令行中的 awk 程序或选项.
+\texttt{RLENGTH} 同时也是 \texttt{match} 的返回值.
+
+\subsubsection{内建字符串函数}
+在下面列出的字符串函数中, \textit{s} 和 \textit{t} 表示字符串, \textit{r}
+表示正则表达式, \textit{i} 和 \textit{n} 表示整数.
+
+\texttt{sub} 和 \texttt{gsub} 的替换字符串中的 \verb'&' 会被匹配的字符
+串替换掉, 而 \verb'\&' 表示一个字面上的 \verb'&'.
+\marginpar{190}
