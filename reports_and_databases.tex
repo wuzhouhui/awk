@@ -346,9 +346,8 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 完成, 但是为了打印出适当的行, 我们必须精心地计算字符并编写 \printf 语句,
 这种工作其实非常乏味, 尤其是其中的某些部分需要进行修改时.
 
-一种可选的方案是让某个程序去计算量的大小, 然后再根据你的需求进行调整 
-\footnote{原文为 An alternative is to let a program compute how big things
-are, then do the positioning for you.}. 为打印程序写一个 awk 程序, 该程序
+一种可选的方案是让某个程序去计算量的大小, 然后再根据你的需求对这些量
+的作用进行定位. 为打印程序写一个 awk 程序, 该程序
 对简单的表格进行格式化 --- 这是一种可行的做法, 我们待会儿再回来讨论.
 因为用的是 Unix 系统与排版程序, 所以我们可以用一些已经存在的工具 ---
 \texttt{tbl} 程序可以对表格进行格式化. 程序 \verb'form4' 非常类似于
