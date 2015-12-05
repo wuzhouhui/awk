@@ -113,7 +113,8 @@
 \subsubsection{输入输出}
 \begin{quote}
     \begin{tabbing}
-        \texttt{close(}\textit{expr}\texttt{)}  \= 关闭由 \textit{expr}
+        \texttt{close(}\textit{expr}\texttt{)}\hspace{8em} 
+        \= 关闭由 \textit{expr}
         指示的文件或管道 \\
         \texttt{getline} \> 把 \verb'$0' 设置成下一条记录; 同时设置
         \texttt{NF}, \texttt{NR}, \texttt{FNR} \\
@@ -151,7 +152,7 @@
 \textit{fmt}\texttt{,}\ \textit{expr-list} 可以用括号括起来. 在 
 \texttt{print} 和 \texttt{printf} 中, \texttt{>>}\textit{file} 表示把
 输出追加到文件 \textit{file} 的末尾, \texttt{|}\ \textit{command} 表示把
-输出写到一个管道中. 类似的, \textit{command}\ \texttt{| getline} 表示把
+输出写到一个管道中. 类似的, \textit{command}\texttt{ | getline} 表示把
 命令 \textit{command} 的输出以管道的方式输送给 \texttt{getline}. 函数
 \texttt{getline} 在遇到文件末尾时返回 0, 出错时返回 -1.
 
@@ -161,7 +162,7 @@
 \texttt{printf} 与 \texttt{sprintf} 识别以下格式转换命令:
 \begin{quote}
     \begin{tabbing}
-        \verb'%c'       \= ASCII 字符 \\
+        \verb'%c' \hspace{4em}      \= ASCII 字符 \\
 
         \verb'%d'       \> 十进制数 \\
 
@@ -186,9 +187,9 @@
 
 \begin{quote}
     \begin{tabbing}
-        \texttt{-}      \= 表达式在它所处的域中左对齐   \\
+        \texttt{-} \hspace{4em}     \= 表达式在它所处的域中左对齐   \\
 
-        \textit{width}  \> 当需要时把域的宽度填充到该值, 前导的
+        \textit{width}  \> 当需要时, 把域的宽度填充到该值, 前导的
         \texttt{0} 表示用 \texttt{0} 填充 \\
 
         \texttt{.}\textit{prec} \> 字符串最大宽度, 或小数点后保留的位数 \\
@@ -199,8 +200,8 @@
 下面列出的内建变量可以使用在任意一个表达式中:
 \begin{quote}
     \begin{tabbing}
-        \texttt{ARGC}   \= 命令行参数的个数 \\
-        \texttt{ARGV}   \> 命令行参数组成的数组 (\texttt{ARGV[0..ARGC-1])\\
+        \texttt{ARGC}\hspace{6em}   \= 命令行参数的个数 \\
+        \texttt{ARGV}   \> 命令行参数组成的数组 (\texttt{ARGV[0..ARGC-1]})\\
         \texttt{FILENAME}\> 当前输入文件的文件名 \\
         \texttt{FNR}    \> 当前输入文件已读取的记录个数 \\
         \texttt{FS}     \> 输入数据的字段分隔符 (默认是空格) \\
@@ -219,7 +220,7 @@
         的数组下标的分隔符 (默认是 \verb'"\034"') \\
     \end{tabbing}
 \end{quote}
-\texttt{ARGC} 和 \texttt{ARGV} 包含被执行的程序的程序 (通常是
+\texttt{ARGC} 和 \texttt{ARGV} 包含被执行的程序的名字 (通常是
 \texttt{awk}), 但是不包括出现在命令行中的 awk 程序或选项.
 \texttt{RLENGTH} 同时也是 \texttt{match} 的返回值.
 
