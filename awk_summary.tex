@@ -103,4 +103,56 @@
 或者用花括号包围起来.
 
 \subsubsection{程序格式}
+语句通过换行符或 (和) 分号隔开. 空行可以出现在任何语句, \patact 语句,
+或函数定义的前面或后面. 空格与制表符可以插入到运算符或操作数的周围. 一条
+长语句可以通过反斜杆延续到下一行. 另外, 如果一条语句在逗号, 左花括号,
+\verb'&&', \verb'||', \texttt{do}, \texttt{else}, \texttt{if} 或 
+\texttt{for} 的右括号后断行, 则不需要反斜杆. 由 \verb'#' 开始的注释可以
+出现在任意一行的末尾.
 
+\subsubsection{输入输出}
+\begin{quote}
+    \begin{tabbing}
+        \texttt{close(}\textit{expr}\texttt{)}  \= 关闭由 \textit{expr}
+        指示的文件或管道 \\
+        \texttt{getline} \> 把 \verb'$0' 设置成下一条记录; 同时设置
+        \texttt{NF}, \texttt{NR}, \texttt{FNR} \\
+
+        \texttt{getline <}\textit{file} \> 把 \verb'$0' 设置成文件
+        \textit{file} 的下一条记录; 同时设置 \texttt{NF} \\
+
+        \texttt{getline}\ \textit{var} \> 把 \textit{var} 设置成下一条记录;
+        同时设置 \texttt{NR}, \texttt{FNR} \\
+
+        \texttt{getline}\ \textit{var}\ \texttt{<}\textit{file} \>  把
+        \textit{var} 设置成文件  \textit{file} 的下一条记录. \\
+
+        \texttt{print}  \> 打印当前记录 \\
+
+        \texttt{print}\ \textit{expr-list} \> 打印 \textit{expr-list}
+        所表示的表达式 \\
+
+        \texttt{print}\ \textit{expr-list}\ \texttt{>}\textit{file} \>
+        把表达式输出到文件 \textit{file} 中 \\
+
+        \texttt{printf}\ \textit{fmt}\texttt{,} \textit{expr-list} \>
+        格式化并输出 \\
+
+        \texttt{printf}\ \textit{fmt}\texttt{,} \textit{expr-list}\ 
+        \texttt{>} \textit{file}        \> 格式化并输出到文件 \textit{file}
+        中 \\
+
+        \texttt{system(}\textit{cmd-line}\texttt{)}     \> 执行命令
+        \textit{cmd-line}, 返回命令的退出状态 \\
+    \end{tabbing}
+\end{quote}
+
+\texttt{print} 后面的 \textit{expr-list}, 以及 \texttt{printf} 后面的
+\textit{fmt}\texttt{,}\ \textit{expr-list} 可以用括号括起来. 在 
+\texttt{print} 和 \texttt{printf} 中, \texttt{>>}\textit{file} 表示把
+输出追加到文件 \textit{file} 的末尾, \texttt{|}\ \textit{command} 表示把
+输出写到一个管道中. 类似的, \textit{command}\ \texttt{| getline} 表示把
+命令 \textit{command} 的输出以管道的方式输送给 \texttt{getline}. 函数
+\texttt{getline} 在遇到文件末尾时返回 0, 出错时返回 -1.
+
+\marginpar{189}
