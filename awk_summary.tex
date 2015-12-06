@@ -231,3 +231,108 @@
 \texttt{sub} 和 \texttt{gsub} 的替换字符串中的 \verb'&' 会被匹配的字符
 串替换掉, 而 \verb'\&' 表示一个字面上的 \verb'&'.
 \marginpar{190}
+\begin{quote}
+    \begin{tabular}{ll}
+        \texttt{gsub(}\textit{r}\texttt{,} \textit{s}\texttt{,}
+        \textit{t}\texttt{)} &
+        \makecell[tl]{全局地替换 \textit{s} 中被 \textit{r} 匹配的 
+        子字符串 \textit{t}, 返回替换发生的次数; \\ 如果省略 \textit{t},
+        则默认使用 \texttt{\$0}} \\
+
+        \texttt{index(}\textit{s}\texttt{,} \textit{t}\texttt{)} &
+        返回 \textit{t} 在 \textit{s} 中的开始位置, 如果 \textit{s}
+        不包含 \textit{t}, 则返回 0 \\
+
+        \texttt{length(}\textit{s}\texttt{)} & 返回 \textit{s} 的长度 \\
+
+        \texttt{match(}\textit{s}\texttt{,} \textit{r}\texttt{)} &
+        \makecell[tl]{返回 \textit{s} 中匹配 \textit{r} 的子字符串的起始
+        位置, 如果 \\ 不存在可匹配的子字符串, 则返回 0,
+        调用该函数会同时设置 \\ \texttt{RSTART} 与 \texttt{RLENGTH}} \\
+
+        \texttt{split(}\textit{s}\texttt{,} \textit{a}\texttt{,}
+        \textit{fs}\texttt{)} & \makecell[tl]{按照 \textit{fs}, 把
+        \textit{s} 切分到数组 \textit{a} 中, 返回 
+        分割后的字段的个数;\\ 如果省略 \textit{fs}, 则默认使用
+        \texttt{FS}} \\
+
+        \texttt{sprintf(}\textit{fmt}\texttt{,} \textit{expr-list}
+        \texttt{)} & 返回格式化了的 \textit{expr-list} (
+        根据 \textit{fmt} 进行格式化) \\
+
+        \texttt{sub(}\textit{r}\texttt{,} \textit{s}\texttt{,}
+        \textit{t}\texttt{)}   & 类似于 \texttt{gsub}, 但是它只替换
+        第一个被匹配的子字符串 \\
+
+        \texttt{substr(}\textit{s}\texttt{,} \textit{i}\texttt{,}
+        \textit{n}\texttt{)} & \makecell[tl]{返回 \textit{s} 中, 从
+        \textit{i} 开始的, 长度为 \textit{n} 的子字符串, \\ 
+        如果省略 \textit{n}, 则返回
+        \textit{s} 中从 \textit{i} 开始的后缀} \\
+    \end{tabular}
+\end{quote}
+
+\subsubsection{内建算术函数}
+\begin{quote}
+    \begin{tabbing}
+        \texttt{atan2(}\textit{y}\texttt{,} \textit{x}\texttt{)}
+        \hspace{4em} \=
+        \textit{y}/\textit{x} 的反正切值, 弧度制,
+        定义域从 $-\pi$ 到 $\pi$ \\
+
+        \texttt{cos(}\textit{x}\texttt{)} \> 余弦 (弧度制) \\
+
+        \texttt{exp(}\textit{x}\texttt{)} \> 指数 $e^x$ \\
+
+        \texttt{int(}\textit{x}\texttt{)} \> 取整 \\
+
+        \texttt{log(}\textit{x}\texttt{)} \> 自然对数 \\
+
+        \texttt{rand(}\texttt{)} \> 返回一个伪随机数 \textit{r}
+        (0 $\leqslant$ \textit{r} $<$ 1 )\\
+
+        \texttt{sin(}\textit{x}\texttt{)} \> 正弦 (弧度制) \\
+
+        \texttt{sqrt(}\textit{x}\texttt{)} \> 方根 \\
+
+        \texttt{srand(}\textit{x}\texttt{)} \> 设置随机数种子, 如果省略
+        \textit{x}, 则默认使用
+        当天的时间 \footnote{原文是 uses time of day if no \textit{x} given}
+    \end{tabbing}
+\end{quote}
+\subsubsection{表示式运算符 (按优先级递增排列)}
+表达式可以通过下列运算符进行组合:
+\begin{quote}
+    \begin{tabbing}
+        \verb'= += -= *= /= %= ^=' \hspace{2em} \= 赋值 \\
+
+        \texttt{?:} \> 条件表达式 \\
+
+        \texttt{||} \> 逻辑或 \\
+
+        \verb'&&' \> 逻辑与 \\
+
+        \texttt{in} \> 数组成员运算符 \\
+
+        \verb'~  !~' \> 正则表达式匹配运算符, 与否定匹配运算符 \\
+
+        \texttt{< <= > >= != ==} \> 关系运算符 \\
+
+        \texttt{ }      \> 字符串拼接 (没有显式的运算符) \\
+
+        \texttt{+ -}    \> 加, 减 \\
+
+        \verb'* / %'  \> 乘, 除, 取模 \\
+
+        \texttt{+ - !}  \> 单目加, 单目减, 逻辑非 \\
+
+        \texttt{\^}      \> 指数运算符 \\
+
+        \texttt{++ --}  \> 自增, 自减 (包括前缀形式与后缀形式) \\
+
+        \texttt{\$}     \> 字段 \\
+    \end{tabbing}
+\end{quote}
+所有的运算符都是左结合的, 除了赋值运算符, \texttt{?:} 和 \texttt{\^},
+它们是右结合的. 任意一个表达式都可以用括号括起来.
+\marginpar{191}
