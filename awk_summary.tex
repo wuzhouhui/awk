@@ -336,26 +336,67 @@
 所有的运算符都是左结合的, 除了赋值运算符, \texttt{?:} 和 \texttt{\^},
 它们是右结合的. 任意一个表达式都可以用括号括起来.
 \marginpar{191}
+\subsubsection{正则表达式}
+正则表达式的元字符包括:
+\begin{awkcode}
+    \ ^ $ . [ ] | ( ) * + ?
+\end{awkcode}
+下面的表格总结了正则表达式及其所匹配的字符串:
 \begin{quote}
     \begin{tabbing}{ll}
-        c       & 匹配一个非元字符 c \\
-        \texttt{\backslash}c & 匹配一个转义序列, 或一个字面上的字符 c \\
+        \textit{c}       & 匹配一个非元字符 \textit{c} \\
+        \texttt{\backslash}\textit{c} & 匹配一个转义序列, 或一个字面上的字符 \textit{c} \\
         \texttt{\^}     & 匹配一个字符串的开始 \\
         \texttt{\$}     & 匹配一个字符串的结束 \\
         \texttt{.}      & 匹配任意一个字符 \\
-        \texttt{[\^}abc...\texttt{]} & 字符集合: 匹配 abc... 中的任意一
+        \texttt{[\^}\textit{abc...}\texttt{]} & 字符集合: 匹配
+        \textit{abc...} 中的任意一
         个字符 \\
-        r1\texttt{|}r2 & 选择: 匹配一个能被 r1 或 r2 匹配的字符串 \\
-        \texttt{(}r1\texttt{)}\texttt{(}r2\texttt{)} & 拼接: 匹配字符串
-        \textit{xy}, 其中 \textit{x} 被 r1 匹配, \textit{y} 被 r2 匹配 \\
-        \texttt{(}r\texttt{)*} & 匹配 0 个或多个连续出现的被 r 匹配 
+        \textit{$r_1$}\texttt{|}\textit{$r_2$} & 选择: 匹配一个能被 \textit{$r_1$} 或 \textit{$r_2$} 匹配的字符串 \\
+        \texttt{(}\textit{$r_1$}\texttt{)}\texttt{(}\textit{$r_2$}\texttt{)} & 拼接: 匹配字符串
+        \textit{xy}, 其中 \textit{x} 被 \textit{$r_2$} 匹配, \textit{y} 被 \textit{$r_2$} 匹配 \\
+        \texttt{(}\textit{r}\texttt{)*} & 匹配 0 个或多个连续出现的被 \textit{r} 匹配 
         的字符串 \\
-        \texttt{(}r\texttt{)+} & 匹配 1 个或多个连续出现的被 r 匹配 
+        \texttt{(}\textit{r}\texttt{)+} & 匹配 1 个或多个连续出现的被 \textit{r} 匹配 
         的字符串 \\
-        \texttt{(}r\texttt{)?} & 匹配 0 个或 1 个被 r 匹配的字符串 \\
-        \texttt{(}r\texttt{)}   & 组合: 匹配的字符串与 r 所匹配 
+        \texttt{(}\textit{r}\texttt{)?} & 匹配 0 个或 1 个被 \textit{r} 匹配的字符串 \\
+        \texttt{(}\textit{r}\texttt{)}   & 组合: 匹配的字符串与 \textit{r} 所匹配 
         的字符串相同 \\
 
     \end{tabbing}
 \end{quote}
-运算符按优先级升序排列.
+运算符按优先级升序排列. 只要没有违反优先级规则, 就可以省略多余的括号.
+
+\subsubsection{转义序列}
+在字符串与正则表达式中, 转义序列具有特殊的含义.
+\begin{quote}
+    \begin{tabbing}
+        \verb'\b' \hspace{4em} \= 退格 \\
+        \verb'\f' \> 换页 \\
+        \verb'\n' \> 换行 \\
+        \verb'\r' \> 回车 \\
+        \verb'\t' \> 制表 \\
+        \verb'\'\textit{ddd} \> 八进制数, \textit{ddd} 是 1 到 3 个数字,
+        每个数字的值在 0 到 7 之间 \\
+        \verb'\'\textit{c} \> 其他字面上的字符 \textit{c}, 比如 \verb'\"'
+        表示 \verb'"', \verb'\\' 表示 \verb'\' \\
+    \end{tabbing}
+\end{quote}
+
+\subsubsection{限制}
+任意一个特定的 awk 实现都会强加一些限制条件, 下面列出了一些典型值:
+\begin{quote}
+    100 个字段 \par
+    每条输入记录 3000 个字符 \par
+    每条输出记录 3000 个字符 \par
+    每个字段 1024 个字符 \par
+    每个 \texttt{printf} 字符串 3000 个字符 \par
+    字面字符串 400 个字符 \par
+    字符集合 400 具字符 \par
+    15 个打开文件 \par
+    1 个管道 \par
+    双精度浮点数
+\end{quote}
+数值的限制与本地系统所能表示的数值范围有关, 比如某个机器所能表示的数值 
+范围是 $10^{-38}$ 到  $10^{38}$, 超过这个范围的数值只拥有字符串形式.
+\marginpar{192}
