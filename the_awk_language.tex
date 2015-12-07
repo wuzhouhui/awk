@@ -381,7 +381,8 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
     闭包: \verb'A*' 匹配0个或多个 \verb'A'. \par
     正闭包: \verb'A+' 匹配一个或多个 \verb'A'. \par
     零或一: \verb'A?' 匹配空字符串或 \verb'A'. \par
-    括号: \verb'('\textit{r}\verb')' 匹配与 \textit{r} 相同的字符串.
+    括号: 被 \verb'('\textit{r}\verb')' 匹配的字符串, 与 \textit{r} 所匹配 
+    的字符串相同.
 \end{enumerate}
 \end{summary}
 
@@ -450,9 +451,9 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 表达式, 那么 \verb'('\textit{r}$_1$\verb')'\verb'('\textit{r}$_1$\verb')'
 (在 \verb'('\textit{r}$_1$\verb')' 与 \verb'('\textit{r}$_2$\verb')' 之
 间没有空格) 所匹配的字符串具有形式 \textit{xy}, 其中 \textit{x} 被
-\textit{r}$_1$ 匹配, \textit{y} 被 \textit{r}$_2$ 匹配. \textit{r}$_1$ 或
-\textit{r}$_2$ 两边的括号可以省略, 如果被括号包围的正则表达式不包含选择
-运算符的话. 正则表达式
+\textit{r}$_1$ 匹配, \textit{y} 被 \textit{r}$_2$ 匹配. 如果被括号包
+围的正则表达式不包含选择 运算符, 那么 \textit{r}$_1$ 或 \textit{r}$_2$
+两边的括号就可以省略. 正则表达式
 \begin{awkcode}
     (Asian|European|North American) (male|female) (black|blue)bird
 \end{awkcode}
