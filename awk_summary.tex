@@ -343,9 +343,10 @@
 \end{awkcode}
 下面的表格总结了正则表达式及其所匹配的字符串:
 \begin{quote}
-    \begin{tabbing}{ll}
+    \begin{tabular}{ll}
         \textit{c}       & 匹配一个非元字符 \textit{c} \\
-        \texttt{\backslash}\textit{c} & 匹配一个转义序列, 或一个字面上的字符 \textit{c} \\
+        \texttt{\textbackslash}\textit{c} & 匹配一个转义序列,
+        或一个字面上的字符 \textit{c} \\
         \texttt{\^}     & 匹配一个字符串的开始 \\
         \texttt{\$}     & 匹配一个字符串的结束 \\
         \texttt{.}      & 匹配任意一个字符 \\
@@ -354,7 +355,7 @@
         个字符 \\
         \textit{$r_1$}\texttt{|}\textit{$r_2$} & 选择: 匹配一个能被 \textit{$r_1$} 或 \textit{$r_2$} 匹配的字符串 \\
         \texttt{(}\textit{$r_1$}\texttt{)}\texttt{(}\textit{$r_2$}\texttt{)} & 拼接: 匹配字符串
-        \textit{xy}, 其中 \textit{x} 被 \textit{$r_2$} 匹配, \textit{y} 被 \textit{$r_2$} 匹配 \\
+        \textit{xy}, 其中 \textit{x} 被 \textit{$r_1$} 匹配, \textit{y} 被 \textit{$r_2$} 匹配 \\
         \texttt{(}\textit{r}\texttt{)*} & 匹配 0 个或多个连续出现的被 \textit{r} 匹配 
         的字符串 \\
         \texttt{(}\textit{r}\texttt{)+} & 匹配 1 个或多个连续出现的被 \textit{r} 匹配 
@@ -363,7 +364,7 @@
         \texttt{(}\textit{r}\texttt{)}   & 组合: 匹配的字符串与 \textit{r} 所匹配 
         的字符串相同 \\
 
-    \end{tabbing}
+    \end{tabular}
 \end{quote}
 运算符按优先级升序排列. 只要没有违反优先级规则, 就可以省略多余的括号.
 
@@ -392,7 +393,7 @@
     每个字段 1024 个字符 \par
     每个 \texttt{printf} 字符串 3000 个字符 \par
     字面字符串 400 个字符 \par
-    字符集合 400 具字符 \par
+    字符集合 400 个字符 \par
     15 个打开文件 \par
     1 个管道 \par
     双精度浮点数
