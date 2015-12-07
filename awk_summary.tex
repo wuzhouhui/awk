@@ -336,3 +336,26 @@
 所有的运算符都是左结合的, 除了赋值运算符, \texttt{?:} 和 \texttt{\^},
 它们是右结合的. 任意一个表达式都可以用括号括起来.
 \marginpar{191}
+\begin{quote}
+    \begin{tabbing}{ll}
+        c       & 匹配一个非元字符 c \\
+        \texttt{\backslash}c & 匹配一个转义序列, 或一个字面上的字符 c \\
+        \texttt{\^}     & 匹配一个字符串的开始 \\
+        \texttt{\$}     & 匹配一个字符串的结束 \\
+        \texttt{.}      & 匹配任意一个字符 \\
+        \texttt{[\^}abc...\texttt{]} & 字符集合: 匹配 abc... 中的任意一
+        个字符 \\
+        r1\texttt{|}r2 & 选择: 匹配一个能被 r1 或 r2 匹配的字符串 \\
+        \texttt{(}r1\texttt{)}\texttt{(}r2\texttt{)} & 拼接: 匹配字符串
+        \textit{xy}, 其中 \textit{x} 被 r1 匹配, \textit{y} 被 r2 匹配 \\
+        \texttt{(}r\texttt{)*} & 匹配 0 个或多个连续出现的被 r 匹配 
+        的字符串 \\
+        \texttt{(}r\texttt{)+} & 匹配 1 个或多个连续出现的被 r 匹配 
+        的字符串 \\
+        \texttt{(}r\texttt{)?} & 匹配 0 个或 1 个被 r 匹配的字符串 \\
+        \texttt{(}r\texttt{)}   & 组合: 匹配的字符串与 r 所匹配 
+        的字符串相同 \\
+
+    \end{tabbing}
+\end{quote}
+运算符按优先级升序排列.
