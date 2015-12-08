@@ -1,0 +1,478 @@
+% vim: ts=8 sts=8 sw=4 et tw=75
+\chapter{AWK 总结}
+\label{chap:awk_summary}
+
+\marginpar{187}
+这个附录包含了 awk 语言的一个总结. 在句法规则上, 如果某个成分被一对中括号
+\verb'['...\verb']' 包围, 则表示它们是可选的.
+
+\subsubsection{命令行}
+\begin{quote}
+    \texttt{awk [-F}\textit{s}\texttt{] '}%
+    \textit{program}\texttt{'}\ \ \textit{optional list of filenames}
+
+    \texttt{awk [-F}\textit{s}\texttt{] -f}
+    \textit{progfile}\ \ \textit{optional list of filenames}
+\end{quote}
+参数 \texttt{-F}\textit{s} 把字段分隔符 \texttt{FS} 设置成 \textit{s},
+如果没有提供文件名, awk 就从标准输入读取数据. 文件名的形式可以是 
+\textit{var}\texttt{=}\textit{text}, 在这种情况下, 相当于把 \textit{text}
+赋值给变量 \textit{var}, 当这个参数被当作一个文件而被访问时, 执行赋值
+操作.
+
+\subsubsection{AWK 程序}
+一个 awk 程序由一系列的 \patact 语句和函数定义组成. 一个 \patact 语句具有
+形式:
+\begin{quote}
+    \textit{pattern}\ \ \verb'{'\ \textit{action}\ \verb'}'
+\end{quote}
+如果某个动作省略了模式, 则默认匹配所有输入行; 如果某个模式省略了动作, 则
+默认打印匹配行.
+
+一个函数定义具有形式:
+\begin{quote}
+    \texttt{function}\ \
+    \textit{name}\verb'('\textit{parameter-list}\verb') {'
+        \textit{statement}\ \verb'}'
+\end{quote}
+\patact 语句和函数定义由换行符或分号分隔, 并且这两个字符可以混合使用.
+
+\subsubsection{模式}
+\begin{quote}
+    \texttt{BEGIN}
+
+    \texttt{END}
+
+    \textit{expression}
+
+    \verb'/'\textit{regular expression}\verb'/'
+
+    \textit{pattern}\ \verb'&&'\ \textit{pattern}
+
+    \textit{pattern}\ \verb'||'\ \textit{pattern}
+
+    \verb'!'\textit{pattern}
+
+    \verb'('\textit{pattern}\verb')'
+
+    \textit{pattern}\verb','\ \textit{pattern}
+\end{quote}
+
+最后一个模式是范围模式, 它不能作为其他模式的组成部分. 类似地,
+\texttt{BEGIN} 和 \texttt{END} 也不能和其他模式结合.
+\marginpar{188}
+\subsubsection{动作}
+一个动作由一系列的语句组成, 这些语句包括:
+\begin{quote}
+    \texttt{break}
+
+    \texttt{continue}
+
+    \texttt{delete}\ \textit{array-element}
+
+    \texttt{do}\ \textit{statement}\ \texttt{while}\
+    \texttt{(}\textit{expression}\texttt{)}
+
+    \texttt{exit[}\textit{expression}\texttt{]}
+
+    \textit{expression}
+
+    \texttt{if (}\textit{expression}\texttt{) }\textit{statement}
+    \ \texttt{[else}\ \textit{statement}\texttt{]}
+
+    \textit{input-output statement}
+
+    \texttt{for (}\textit{expression}\texttt{; }\textit{expression}
+    \texttt{; }\textit{expression}\texttt{) }\textit{statement}
+
+    \texttt{for (}\textit{variable}\texttt{ in }\textit{array}\texttt{) }
+    \textit{statement}
+
+    \texttt{next}
+
+    \texttt{return [}\textit{expression}\texttt{]}
+
+    \texttt{while (}\textit{expression}\texttt{) statement}
+
+    \verb'{' \textit{statement} \verb'}'
+\end{quote}
+一个单独的分号表示空语句. 在一个 \texttt{if-else} 语句中, 如果第一个 
+\textit{statement} 和 \texttt{else} 出现在同一行, 那么它必须以分号结尾, 
+或者用花括号包围起来. 类似地, 在 \texttt{do} 语句中, 如果
+\textit{statement} 和 \texttt{while} 出现在同一行, 那么它必须以分号结尾,
+或者用花括号包围起来.
+
+\subsubsection{程序格式}
+语句通过换行符或 (和) 分号隔开. 空行可以出现在任何语句, \patact 语句,
+或函数定义的前面或后面. 空格与制表符可以插入到运算符或操作数的周围. 一条
+长语句可以通过反斜杆延续到下一行. 另外, 如果一条语句在逗号, 左花括号,
+\verb'&&', \verb'||', \texttt{do}, \texttt{else}, \texttt{if} 或 
+\texttt{for} 的右括号后断行, 则不需要反斜杆. 由 \verb'#' 开始的注释可以
+出现在任意一行的末尾.
+
+\subsubsection{输入输出}
+\begin{quote}
+    \begin{tabbing}
+        \texttt{close(}\textit{expr}\texttt{)}\hspace{8em} 
+        \= 关闭由 \textit{expr}
+        指示的文件或管道 \\
+        \texttt{getline} \> 把 \verb'$0' 设置成下一条记录; 同时设置
+        \texttt{NF}, \texttt{NR}, \texttt{FNR} \\
+
+        \texttt{getline <}\textit{file} \> 把 \verb'$0' 设置成文件
+        \textit{file} 的下一条记录; 同时设置 \texttt{NF} \\
+
+        \texttt{getline}\ \textit{var} \> 把 \textit{var} 设置成下一条记录;
+        同时设置 \texttt{NR}, \texttt{FNR} \\
+
+        \texttt{getline}\ \textit{var}\ \texttt{<}\textit{file} \>  把
+        \textit{var} 设置成文件  \textit{file} 的下一条记录. \\
+
+        \texttt{print}  \> 打印当前记录 \\
+
+        \texttt{print}\ \textit{expr-list} \> 打印 \textit{expr-list}
+        所表示的表达式 \\
+
+        \texttt{print}\ \textit{expr-list}\ \texttt{>}\textit{file} \>
+        把表达式输出到文件 \textit{file} 中 \\
+
+        \texttt{printf}\ \textit{fmt}\texttt{,} \textit{expr-list} \>
+        格式化并输出 \\
+
+        \texttt{printf}\ \textit{fmt}\texttt{,} \textit{expr-list}\ 
+        \texttt{>} \textit{file}        \> 格式化并输出到文件 \textit{file}
+        中 \\
+
+        \texttt{system(}\textit{cmd-line}\texttt{)}     \> 执行命令
+        \textit{cmd-line}, 返回命令的退出状态 \\
+    \end{tabbing}
+\end{quote}
+
+\texttt{print} 后面的 \textit{expr-list}, 以及 \texttt{printf} 后面的
+\textit{fmt}\texttt{,}\ \textit{expr-list} 可以用括号括起来. 在 
+\texttt{print} 和 \texttt{printf} 中, \texttt{>>}\textit{file} 表示把
+输出追加到文件 \textit{file} 的末尾, \texttt{|}\ \textit{command} 表示把
+输出写到一个管道中. 类似的, \textit{command}\texttt{ | getline} 表示把
+命令 \textit{command} 的输出以管道的方式输送给 \texttt{getline}. 函数
+\texttt{getline} 在遇到文件末尾时返回 0, 出错时返回 -1.
+
+\marginpar{189}
+
+\subsubsection{\textbf{\texttt{printf}} 格式转换}
+\texttt{printf} 与 \texttt{sprintf} 识别以下格式转换命令:
+\begin{quote}
+    \begin{tabbing}
+        \verb'%c' \hspace{4em}      \= ASCII 字符 \\
+
+        \verb'%d'       \> 十进制数 \\
+
+        \verb'%e'       \> \texttt{[-]d.ddddddE[+-]dd}  \\
+
+        \verb'%f'       \> \texttt{[-]ddd.dddddd} \\
+
+        \verb'%g'       \> 效果等价于 \verb'%e' 或 \verb'%f', 选择转换
+                后长度较短的那个, 无意义的零会被删除    \\
+
+        \verb'%o'       \> 无符号八进制数 \\
+
+        \verb'%s'       \> 字符串       \\
+
+        \verb'%x'       \> 无符号十六进制数 \\
+
+        \verb'%%'       \> 打印一个百分号 \verb'%', 不会有参数被转换 \\
+    \end{tabbing}
+\end{quote}
+
+\verb'%' 与控制字符之间可以出现额外的参数:
+
+\begin{quote}
+    \begin{tabbing}
+        \texttt{-} \hspace{4em}     \= 表达式在它所处的域中左对齐   \\
+
+        \textit{width}  \> 当需要时, 把域的宽度填充到该值, 前导的
+        \texttt{0} 表示用 \texttt{0} 填充 \\
+
+        \texttt{.}\textit{prec} \> 字符串最大宽度, 或小数点后保留的位数 \\
+    \end{tabbing}
+\end{quote}
+
+\subsubsection{内建变量}
+下面列出的内建变量可以使用在任意一个表达式中:
+\begin{quote}
+    \begin{tabbing}
+        \texttt{ARGC}\hspace{6em}   \= 命令行参数的个数 \\
+        \texttt{ARGV}   \> 命令行参数组成的数组 (\texttt{ARGV[0..ARGC-1]})\\
+        \texttt{FILENAME}\> 当前输入文件的文件名 \\
+        \texttt{FNR}    \> 当前输入文件已读取的记录个数 \\
+        \texttt{FS}     \> 输入数据的字段分隔符 (默认是空格) \\
+        \texttt{NF}     \> 当前输入记录的字段个数 \\
+        \texttt{NR}     \> 从程序开始到现在, 读取到的记录个数 \\
+        \texttt{OFMT}   \> 数字的输出格式 (默认是 \verb'"%.6g"') \\
+        \texttt{OFS}    \> 输出字段分隔符 (默认是空格)\\
+        \texttt{ORS}    \> 输出记录分隔符 (默认是换行符) \\
+        \texttt{RLENGTH}\> 被 \texttt{match} 中的正则表达式匹配的字符串
+        的长度 \\
+        \texttt{RS}     \> 输入数据的记录分隔符 (默认是换行符) \\
+        \texttt{RSTART} \> 被 \texttt{match} 匹配的字符串在原字符串中的
+        开始位置 \\
+        \texttt{SUBSEP} \> 具有形式
+        \texttt{[}\textit{i}\texttt{,}\textit{j}\texttt{,}...\texttt{]}
+        的数组下标的分隔符 (默认是 \verb'"\034"') \\
+    \end{tabbing}
+\end{quote}
+\texttt{ARGC} 和 \texttt{ARGV} 包含被执行的程序的名字 (通常是
+\texttt{awk}), 但是不包括出现在命令行中的 awk 程序或选项.
+\texttt{RLENGTH} 同时也是 \texttt{match} 的返回值.
+
+\subsubsection{内建字符串函数}
+在下面列出的字符串函数中, \textit{s} 和 \textit{t} 表示字符串, \textit{r}
+表示正则表达式, \textit{i} 和 \textit{n} 表示整数.
+
+\texttt{sub} 和 \texttt{gsub} 的替换字符串中的 \verb'&' 会被匹配的字符
+串替换掉, 而 \verb'\&' 表示一个字面上的 \verb'&'.
+\marginpar{190}
+\begin{quote}
+    \begin{tabular}{ll}
+        \texttt{gsub(}\textit{r}\texttt{,} \textit{s}\texttt{,}
+        \textit{t}\texttt{)} &
+        \makecell[tl]{全局地替换 \textit{s} 中被 \textit{r} 匹配的 
+        子字符串 \textit{t}, 返回替换发生的次数; \\ 如果省略 \textit{t},
+        则默认使用 \texttt{\$0}} \\
+
+        \texttt{index(}\textit{s}\texttt{,} \textit{t}\texttt{)} &
+        返回 \textit{t} 在 \textit{s} 中的开始位置, 如果 \textit{s}
+        不包含 \textit{t}, 则返回 0 \\
+
+        \texttt{length(}\textit{s}\texttt{)} & 返回 \textit{s} 的长度 \\
+
+        \texttt{match(}\textit{s}\texttt{,} \textit{r}\texttt{)} &
+        \makecell[tl]{返回 \textit{s} 中匹配 \textit{r} 的子字符串的起始
+        位置, 如果 \\ 不存在可匹配的子字符串, 则返回 0,
+        调用该函数会同时设置 \\ \texttt{RSTART} 与 \texttt{RLENGTH}} \\
+
+        \texttt{split(}\textit{s}\texttt{,} \textit{a}\texttt{,}
+        \textit{fs}\texttt{)} & \makecell[tl]{按照 \textit{fs}, 把
+        \textit{s} 切分到数组 \textit{a} 中, 返回 
+        分割后的字段的个数;\\ 如果省略 \textit{fs}, 则默认使用
+        \texttt{FS}} \\
+
+        \texttt{sprintf(}\textit{fmt}\texttt{,} \textit{expr-list}
+        \texttt{)} & 返回格式化了的 \textit{expr-list} (
+        根据 \textit{fmt} 进行格式化) \\
+
+        \texttt{sub(}\textit{r}\texttt{,} \textit{s}\texttt{,}
+        \textit{t}\texttt{)}   & 类似于 \texttt{gsub}, 但是它只替换
+        第一个被匹配的子字符串 \\
+
+        \texttt{substr(}\textit{s}\texttt{,} \textit{i}\texttt{,}
+        \textit{n}\texttt{)} & \makecell[tl]{返回 \textit{s} 中, 从
+        \textit{i} 开始的, 长度为 \textit{n} 的子字符串, \\ 
+        如果省略 \textit{n}, 则返回
+        \textit{s} 中从 \textit{i} 开始的后缀} \\
+    \end{tabular}
+\end{quote}
+
+\subsubsection{内建算术函数}
+\begin{quote}
+    \begin{tabbing}
+        \texttt{atan2(}\textit{y}\texttt{,} \textit{x}\texttt{)}
+        \hspace{4em} \=
+        \textit{y}/\textit{x} 的反正切值, 弧度制,
+        定义域从 $-\pi$ 到 $\pi$ \\
+
+        \texttt{cos(}\textit{x}\texttt{)} \> 余弦 (弧度制) \\
+
+        \texttt{exp(}\textit{x}\texttt{)} \> 指数 $e^x$ \\
+
+        \texttt{int(}\textit{x}\texttt{)} \> 取整 \\
+
+        \texttt{log(}\textit{x}\texttt{)} \> 自然对数 \\
+
+        \texttt{rand(}\texttt{)} \> 返回一个伪随机数 \textit{r}
+        (0 $\leqslant$ \textit{r} $<$ 1 )\\
+
+        \texttt{sin(}\textit{x}\texttt{)} \> 正弦 (弧度制) \\
+
+        \texttt{sqrt(}\textit{x}\texttt{)} \> 方根 \\
+
+        \texttt{srand(}\textit{x}\texttt{)} \> 设置随机数种子, 如果省略
+        \textit{x}, 则默认使用
+        当天的时间 \footnote{原文是 uses time of day if no \textit{x} given}
+    \end{tabbing}
+\end{quote}
+\subsubsection{表示式运算符 (按优先级递增排列)}
+表达式可以通过下列运算符进行组合:
+\begin{quote}
+    \begin{tabbing}
+        \verb'= += -= *= /= %= ^=' \hspace{2em} \= 赋值 \\
+
+        \texttt{?:} \> 条件表达式 \\
+
+        \texttt{||} \> 逻辑或 \\
+
+        \verb'&&' \> 逻辑与 \\
+
+        \texttt{in} \> 数组成员运算符 \\
+
+        \verb'~  !~' \> 正则表达式匹配运算符, 与否定匹配运算符 \\
+
+        \texttt{< <= > >= != ==} \> 关系运算符 \\
+
+        \texttt{ }      \> 字符串拼接 (没有显式的运算符) \\
+
+        \texttt{+ -}    \> 加, 减 \\
+
+        \verb'* / %'  \> 乘, 除, 取模 \\
+
+        \texttt{+ - !}  \> 单目加, 单目减, 逻辑非 \\
+
+        \texttt{\^}      \> 指数运算符 \\
+
+        \texttt{++ --}  \> 自增, 自减 (包括前缀形式与后缀形式) \\
+
+        \texttt{\$}     \> 字段 \\
+    \end{tabbing}
+\end{quote}
+所有的运算符都是左结合的, 除了赋值运算符, \texttt{?:} 和 \texttt{\^},
+它们是右结合的. 任意一个表达式都可以用括号括起来.
+\marginpar{191}
+\subsubsection{正则表达式}
+正则表达式的元字符包括:
+\begin{awkcode}
+    \ ^ $ . [ ] | ( ) * + ?
+\end{awkcode}
+下面的表格总结了正则表达式及其所匹配的字符串:
+\begin{quote}
+    \begin{tabular}{ll}
+        \textit{c}       & 匹配一个非元字符 \textit{c} \\
+        \texttt{\textbackslash}\textit{c} & 匹配一个转义序列,
+        或一个字面上的字符 \textit{c} \\
+        \texttt{\^}     & 匹配一个字符串的开始 \\
+        \texttt{\$}     & 匹配一个字符串的结束 \\
+        \texttt{.}      & 匹配任意一个字符 \\
+        \texttt{[\^}\textit{abc...}\texttt{]} & 字符集合: 匹配
+        \textit{abc...} 中的任意一
+        个字符 \\
+        \textit{$r_1$}\texttt{|}\textit{$r_2$} & 选择: 匹配一个能被 \textit{$r_1$} 或 \textit{$r_2$} 匹配的字符串 \\
+        \texttt{(}\textit{$r_1$}\texttt{)}\texttt{(}\textit{$r_2$}\texttt{)} & 拼接: 匹配字符串
+        \textit{xy}, 其中 \textit{x} 被 \textit{$r_1$} 匹配, \textit{y} 被 \textit{$r_2$} 匹配 \\
+        \texttt{(}\textit{r}\texttt{)*} & 匹配 0 个或多个连续出现的被 \textit{r} 匹配 
+        的字符串 \\
+        \texttt{(}\textit{r}\texttt{)+} & 匹配 1 个或多个连续出现的被 \textit{r} 匹配 
+        的字符串 \\
+        \texttt{(}\textit{r}\texttt{)?} & 匹配 0 个或 1 个被 \textit{r} 匹配的字符串 \\
+        \texttt{(}\textit{r}\texttt{)}   & 组合: 匹配的字符串与 \textit{r} 所匹配 
+        的字符串相同 \\
+
+    \end{tabular}
+\end{quote}
+运算符按优先级升序排列. 只要没有违反优先级规则, 就可以省略多余的括号.
+
+\subsubsection{转义序列}
+在字符串与正则表达式中, 转义序列具有特殊的含义.
+\begin{quote}
+    \begin{tabbing}
+        \verb'\b' \hspace{4em} \= 退格 \\
+        \verb'\f' \> 换页 \\
+        \verb'\n' \> 换行 \\
+        \verb'\r' \> 回车 \\
+        \verb'\t' \> 制表 \\
+        \verb'\'\textit{ddd} \> 八进制数, \textit{ddd} 是 1 到 3 个数字,
+        每个数字的值在 0 到 7 之间 \\
+        \verb'\'\textit{c} \> 其他字面上的字符 \textit{c}, 比如 \verb'\"'
+        表示 \verb'"', \verb'\\' 表示 \verb'\' \\
+    \end{tabbing}
+\end{quote}
+
+\subsubsection{限制}
+任意一个特定的 awk 实现都会强加一些限制条件, 下面列出了一些典型值:
+\begin{quote}
+    100 个字段 \par
+    每条输入记录 3000 个字符 \par
+    每条输出记录 3000 个字符 \par
+    每个字段 1024 个字符 \par
+    每个 \texttt{printf} 字符串 3000 个字符 \par
+    字面字符串 400 个字符 \par
+    字符集合 400 个字符 \par
+    15 个打开文件 \par
+    1 个管道 \par
+    双精度浮点数
+\end{quote}
+数值的限制与本地系统所能表示的数值范围有关, 比如某个机器所能表示的数值 
+范围是 $10^{-38}$ 到  $10^{38}$, 超过这个范围的数值只拥有字符串形式.
+\marginpar{192}
+\subsubsection{初始化, 比较和强制类型转换}
+每一个变量或字段, 在任意时刻都可能是字符串, 或数值, 或两者都是. 当变量
+通过赋值语句来获取一个值时:
+\begin{awkcode}
+    var = expr
+\end{awkcode}
+它的类型也会被设置成表达式的类型 (``赋值'' 包括 \texttt{+=}, \texttt{-=},
+等等). 算术表达式的类型是数值, 拼接是字符串, 以此类推. 如果赋值语句 
+只是一个简单的复制, 比如 \texttt{v1 = v2}, 那么 \texttt{v1} 就会被
+设置成 \texttt{v2} 的类型.
+
+比较时, 如果两个操作数的类型都是数值, 那么比较操作就会按照数值比较来进行.
+否则的话, 操作数被强制转换成字符串 (如果原来不是字符串), 此时比较操作
+就按照字符串比较来进行. 通过某些手段, 可以把任意一个表达式强制转换成数
+值类型, 比如 
+\begin{awkcode}
+    expr + 0
+\end{awkcode}
+转换成字符串可以这样做 (也就是和空字符作拼接操作):
+\begin{awkcode}
+    expr ""
+\end{awkcode}
+字符串的数值形式的值, 指的是该字符串的数值前缀转换成数值后所得到的值.
+
+未初始化的变量的值是 数值0 或空字符串 \verb'""'. 因此, 如果 \texttt{x}
+没有被初始化过, 则条件判断
+\begin{awkcode}
+    if (x) ...
+\end{awkcode}
+就会失败, 同样, 下面这些条件判断:
+\begin{awkcode}
+    if (!x) ...
+    if (x == 0) ...
+    if (x == "") ...
+\end{awkcode}
+都会成功, 但是注意:
+\begin{awkcode}
+    if (x == "0") ...
+\end{awkcode}
+的比较结果为假.
+
+如果可能的话, 字段的类型可以通过上下文环境来判断, 比如,
+\begin{awkcode}
+    $1++
+\end{awkcode}
+该表达式意味着: 如果有必要, 就把 \texttt{\$1} 强制转换成数值类型, 而
+\begin{awkcode}
+    $1 = $1 "," $2
+\end{awkcode}
+意味着: 如果有必要, 就把 \texttt{\$1} 和 \texttt{\$2} 的类型强制转换成
+字符串.
+
+如果无法根据上下文来判断变量的类型, 比如,
+\begin{awkcode}
+    if ($1 == $2) ...
+\end{awkcode}
+这时候就得根据输入数据来决定变量的类型. 所有字段的类型都是字符串, 但是,
+如果字段包含了一个机器可识别的数, 那么它也会被当作数值类型.
+
+显式为空的字段具有字符串值 \verb'""', 它们不是数值类型. 该结论也适用于
+不存在的字段 (也就是超出 \texttt{NF} 的部分) 和 空白行的 \texttt{\$0}.
+
+对字段成立的结论, 同样适用于由 \texttt{split} 创建的数组元素.
+
+当在表达式中提到一个不存在的变量时, 就会创建该变量, 其初始值是 0 和
+\texttt{""}. 因此, 如果元素 \texttt{arr[i]} 当前不存在, 语句:
+\begin{awkcode}
+    if (arr[i] == "") ...
+\end{awkcode}
+就会导致元素 \texttt{arr[i]} 被创建, 且初始值 为 \texttt{""}, 这就使得
+\texttt{if} 的条件判断结果为真. 测试语句
+\begin{awkcode}
+    if (i in arr) ...
+\end{awkcode}
+判断元素 \texttt{arr[i]} 是否存在, 但是不会带来创建新元素的副作用.
