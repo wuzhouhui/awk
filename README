@@ -1,20 +1,25 @@
-The AWK Programming Language, by Aho, Kernighan, and Weinberger, published
-by Addison-Wesley in 1988. This project aim to translate this book into
-Chinese, and typesetted by LaTeX.
+The AWK Programming Language (Aho, Kernighan, Weinberger 著, 中文名: AWK
+程序设计语言) 的中文翻译 项目, 使用 LaTeX 排版, 有任何想说的话都可以给我
+发邮件: wuzhouhui250@gmail.com
 
-The AWK Programming Language 的中文翻译项目, 使用 LaTeX 排版, 光凭我一个人
-的力量不知道会翻译到何年何月, 我需要志同道合的网友加入进来, 加快项目的完成.
-有任何想说的话都可以给我发邮件: wuzhouhui250@gmail.com
+翻译进度:
+        除了前言和结语, 剩下的部分都已经翻译完了, 当然错误是难免的, 如
+        果你在阅读的过程中发现了它们, 一定要记得告诉我 (Issue 或 Pull
+        Request).
 
-The_AWK_Programming_Language.djvu:              英文原版
-AWK程序设计语言.pdf:				中文版
+文件清单:
+        The_AWK_Programming_Language.djvu:      英文原版
+        AWK程序设计语言.pdf:                    中文版
+        awkcode.txt                             书中出现的 awk 程序源代码
+        latex_src                               LaTeX 源代码
 
-目前翻译还未结束, 所以仓库中的 PDF 文件可能不是最新的, 如果你想要最新的中
-文版, 但是却没有 LaTeX 编译环境, 请给我发邮件, 我把编译好的 PDF 发送给你.
+NOTES:
+        分支 twoside 中的 PDF 在内容上与 master 分支是一样的, 但是排版
+        稍有不同: 双面排版, 字体也更加细腻, 适合于打印.
 
-TODO/ISSUES
+TODO/ISSUES:
         egrep -i 'todo|fixme' *.tex
 
-TO GET PDF
-        xelatex awk.tex && xelatex awk.tex
+TO GET PDF:
+        cd latex_src; xelatex awk.tex && xelatex awk.tex
 
