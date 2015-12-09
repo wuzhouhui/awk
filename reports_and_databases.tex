@@ -8,10 +8,11 @@
 其他程序配合使用的程序. 我们将会看到大量的工作中会经常遇到的数据处理问题,
 这些问题很难一步解决, 但是如果多次遍历数据, 就相对比较容易一些.
 
-本章的第一部分讨论如何扫描单个文件来生成报表, 虽然报表的最终格式的确需要花点
+本章的第一部分讨论如何扫描单个文件来生成报表, 虽然控制报表的最终格式的
+确需要花点
 心思, 但是其实扫描步骤也是挺复杂的. 第二部分讨论如何从多个相关的文件中
-收集数据, 我们考虑用一种比较一般的方法来解决这个问题, 通过把文件组当成
-关系数据库, 这样做的好外是字段可以用名字来标识, 而不是数字.
+收集数据, 我们考虑用一种比较一般的方法来解决这个问题, 基本思想是把文件组
+看成是关系数据库, 这样做的好外是字段可以用名字来标识, 而不是数字.
 
 \section{报表生成}
 \label{sec:generating_reports}
@@ -28,7 +29,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 \label{subsec:a_simple_report}
 
 假设我们想要一张报表, 这张表包含了每个国家的人口, 面积, 及人口密度. 
-我们还希望国家按照所在的大洲进行分组, 大洲按照字母顺序排列, 在每个大洲里,
+我们还希望国家按照所在的大洲进行分组, 大洲按照字母顺序排列, 大洲相同的
 国家按照人口密度的降序排列, 就像这样:
 \marginpar{90}
 \begin{shell}
@@ -106,10 +107,10 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
  \verb'sort' 不再需要任何参数, 然后再让格式化程序对行重新格式化即可.
 默认情况下, \verb'sort' 对输入数据按照字母顺序进行排列, 但是在最终的报表
 中, 输出首先按照大洲的字母顺序排列, 然后再按人口密度的逆序排列. 为了避免
-让  \verb'sort' 带上参数, 准备程序可以预先在每一行的开始处放置一个数,
-数的大小依赖于大洲的字母顺序与人口密度, 使得按照这个数进行排序时, 排序结果
-是正确的. 数的一种可能的表示方法是大洲的名字, 后面再跟着人口密度的倒数,
-见程序 \verb'prep2':
+让  \verb'sort' 带上参数, 准备程序可以预先在每一行的开始处放置一个分量,
+分量的大小依赖于大洲的字母顺序与人口密度, 使得按照这个量进行排序时,
+排序结果 是正确的. 分量的一种可取的表示方法是大洲的名字, 后面再跟着人
+口密度的倒数, 见程序 \verb'prep2':
 \begin{awkcode}
     # prep2 - prepare countries by continent, inverse pop. den.
 
@@ -135,7 +136,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 \end{shell}
 格式 \verb'%-15s' 对大洲名来说已经足够宽了, \verb'%12.8f' 对人口密度的倒数
 来说, 覆盖范围也已足够. 最终的格式化程序类似于 \verb'form1', 但是忽略了第
-2 个字段. 为了简化排序程序的选项, 而特地制造一个排序键, 这种技巧非常常见,
+2 个字段. 为了简化排序程序的选项而特意制造一个排序键, 这种技巧非常常见,
 我们会在第 \ref{chap:processing_words} 章的索引程序中再次用到.
 \marginpar{92}
 
@@ -186,13 +187,14 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 跟踪大洲的名字, 只有当大洲名字变化时才会打印出来. 在下一节, 我们将会看到 
 更复杂的 ``control-break'' 程序.
 
-\subsection{更加复杂的报表}
+\subsection{更复杂的报表}
 \label{subsec:a_more_complex_report}
 
 典型的商业报表比我们现在看到的具有更多的内容 (至少在形式上), 为了详细说明,
 假设我们需要为每一个大洲作一个汇总, 以及计算每一个国家占总人口与总面积的
 比重, 我们需要新增一个标题, 以及更多的列表头:
 \marginpar{93}
+{\small
 \begin{shell}
 Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 
@@ -227,6 +229,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
  GRAND TOTAL                 2819      100.0      25681     100.0
                             =====     ======      =====    ======
 \end{shell}
+}
 
 我们仍然可以使用
 \mbox{准备}-\mbox{排序}-\mbox{格式化}
@@ -321,7 +324,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
         printf(tfmt, "=====", "======", "=====", "======")
     }
 
-    function totalprint() {	# print totals for previous continent
+    function totalprint() {     # print totals for previous continent
         printf(tfmt, "----", "-----", "-----", "-----")
         printf(TOTfmt, prev, poptot, poppct, areatot, areapct)
         printf(tfmt, "====", "=====", "=====", "=====")
@@ -331,8 +334,8 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 除了格式化, \verb'form3' 累加并打印每个大洲的汇总信息. 除此之外, 它还会
 累加总人口, 总人口比重, 总面积, 总面积比重, 这些信息在 \END 中被打印出来.
 
-\verb'form3' 在打印完每个大洲的汇总信息之后, 再打印总计信息, 但是一般情况
-下, 除非读取到一个新的大洲, 否则它不会知道是否已经处理完所有的项目, 
+\verb'form3' 在打印完每个大洲的汇总信息之后, 再打印合计信息, 但是一般情况
+下, 除非读取到一个新的大洲, 否则它不会知道是否已经处理完所有的条目, 
 解决这种 ``我们已经走得太远了 (We've gone too far)'' 问题是 control-break
 编程的经典例子. 解决办法是在打印之前检查每一个输入行, 判断是否需要为
 前一个数据组生成合计信息, 同样的检查也出现在了 \END 中, 所以计算工作最好
@@ -343,15 +346,14 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 完成, 但是为了打印出适当的行, 我们必须精心地计算字符并编写 \printf 语句,
 这种工作其实非常乏味, 尤其是其中的某些部分需要进行修改时.
 
-一种可选的方案是让某个程序去计算量的大小, 然后再根据你的需求进行调整 
-\footnote{原文为 An alternative is to let a program compute how big things
-are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程序
-对简单的表格进行格式化 ---- 这是一种可行的做法, 我们待会儿再回来讨论.
-因为用的是 Unix 系统与排版程序, 所以我们可以用一些已经存在的工具 ----
-\texttt}{tbl} 程序可以对表格进行格式化. 程序 \verb'form4' 非常类似于
+一种可选的方案是让某个程序去计算量的大小, 然后再根据你的需求对这些量
+的作用进行定位. 为打印程序写一个 awk 程序, 该程序
+对简单的表格进行格式化 --- 这是一种可行的做法, 我们待会儿再回来讨论.
+因为用的是 Unix 系统与排版程序, 所以我们可以用一些已经存在的工具 ---
+\texttt{tbl} 程序可以对表格进行格式化. 程序 \verb'form4' 非常类似于
 \verb'form3', 但是它没有用于控制列宽度的魔数, 相反, 它生成了一些 
 \texttt{tbl} 命令与表格数据, 不同列的数据之间用制表符分隔, 剩下的工作
-由 \texttt{tbl} 完成. (如果你对 \texttt{tbl} 不太熟悉, 那么你可以忽略
+由 \texttt{tbl} 完成. (如果你对 \texttt{tbl} 不太熟悉, 大可不必理会
 这些细节)
 \marginpar{96}
 \begin{awkcode}
@@ -409,27 +411,31 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 \end{awkcode}
 \marginpar{97}
 如果把 \verb'form4' 的输出输送给 \verb'tbl', 输出的表格是:
-% TODO
-\begin{shell}
-\end{shell}
+% TODO 应该用 LaTeX 来生成下面这张报表
+\begin{center}
+    \includegraphics[scale=0.7]{./images/report3.png}
+\end{center}
 
 如果可能的话, 我们建议构造一个程序来格式化表格, 实现一个像 \verb'tbl' 这样 
 复杂的程序的确很有野心, 但不妨让我们从一个小程序开始: 这个程序以左对齐的
-方式在列中打印项目, 如果是数值, 则右对齐, 并且在同一列中, 每一行的列宽度
+方式在列中打印条目, 如果是数值, 则右对齐, 并且在同一列中, 每一行的列宽度
+% FIXME 这段翻译有问题
 都是相同的 (都等于该列宽度的最大值). 如果给定头部与输入文件
-\filename{countries}, 程序的输出是:
+\filename{countries}, 程序的输出是\footnote{\filename{countries} 原来没有
+头部, 需要手工加上 --- 译者注}:
 \begin{shell}
-    USSR      8649    275   Asia         
-    Canada    3852     25   North America
-    China     3705   1032   Asia         
-    USA       3615    237   North America
-    Brazil    3286    134   South America
-    India     1267    746   Asia         
-    Mexico     762     78   North America
-    France     211     55   Europe       
-    Japan      144    120   Asia         
-    Germany     96     61   Europe       
-    England     94     56   Europe       
+    COUNTRY   AREA   POPULATION   CONTINENT    
+    USSR      8649       275      Asia         
+    Canada    3852        25      North America
+    China     3705      1032      Asia         
+    USA       3615       237      North America
+    Brazil    3286       134      South America
+    India     1267       746      Asia         
+    Mexico     762        78      North America
+    France     211        55      Europe       
+    Japan      144       120      Asia         
+    Germany     96        61      Europe       
+    England     94        56      Europe       
 \end{shell}
 
 程序的实现代码非常紧凑:
@@ -470,21 +476,42 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
     }
 \end{awkcode}
 第一次遍历记录数据与每列的最大宽度, 第二次遍历 (位于 \END) 在适当的位置打印
-每一项. 对字母项进行左对齐操作起来比较容易: 我们使用 \verb'wid[i]' (第 
-\verb'i' 列的最大宽度) 为 \printf 构造格式字符串, 比如列的最大宽度是 10,
-则第 \verb'i' 列的格式字符串就是 \verb'%-10s' (假设该列是字母项).
+每一项. 对字母项进行左对齐比较容易: 我们使用 \verb'wid[i]' (第 
+\verb'i' 列的最大宽度) 为 \printf 构造格式字符串, 比如说, 如果列的最大宽度
+是 10, 则第 \verb'i' 列的格式字符串就是 \verb'%-10s' (假设该列是字母项).
 
-如果是数字项, 则要多做点工作: 第 \verb'i' 列的项目 \verb'v' 需要右对齐,
-就像这样 
-%TODO
+如果是数字项, 则要多做点工作: 第 \verb'i' 列的条目 \verb'v' 需要右对齐,
+就像这样:
+\begin{center}
+\begin{tikzpicture}
+\draw[thick, dashed]
+    (0.0, 0.0) -- (0.0, 1.0);
+\draw[thick, dashed]
+    (4.0, 0.0) -- (4.0, 1.0);
+
+\draw[thick]
+    (0.0, 1.0) -- (4.0, 1.0) -- (4.0, 1.5) -- (0.0, 1.5) -- (0.0, 1.0);
+
+\draw[thick]
+    (0.7, 0.5) -- (0.7, 1.0) -- (3.3, 1.0) -- (3.3, 0.5) -- (0.7, 0.5);
+
+\draw[thick]
+    (1.7, 0.0) -- (1.7, 0.5) -- (3.3, 0.5) -- (3.3, 0.0) -- (1.7, 0.0);
+
+\node at (2.0, 1.25) {\texttt{wid[i]}};
+\node at (2.0, 0.75) {\texttt{nwid[i]}};
+\node at (2.5, 0.25) {\texttt{v}};
+\end{tikzpicture}
+\end{center}
 \verb'v' 左边的空格数是 \verb'(wid[i]-nwid[i])/2', 所以 \verb'numjust' 会
 在 \verb'v' 的末尾拼接这么多的空格, 然后再按照 \verb'%10s' 的格式输出 (假设 
 该列的最大宽度是 10).
 
 \marginpar{99}
 \begin{exercise}
-	修改 \verb'form3' 与 \verb'form4', 使得程序可以从别处获取日期, 而
-	不是将日期硬编码到代码中.
+    \label{exer:form3_form4}
+    修改 \verb'form3' 与 \verb'form4': 从别处获取日期, 而
+    不是将日期硬编码到代码中.
 \end{exercise}
 
 \begin{exercise}
@@ -493,6 +520,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:table_format}
     表格格式化程序假定所有数字的小数部分的位数都是相同的, 修改它, 使得即使 
     这个假定不成立, 程序也可以正确地工作.
 \end{exercise}
@@ -510,7 +538,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 \label{sec:packaged_queries_and_reports}
 
 如果某个查询经常被访问, 比较方便的做法是把它打包到一个命令中, 这样在下次
-执行的时候, 就可以少打点字. 假设我们想要判断某个国家的人口, 面积, 以及人口 
+执行的时候, 就可以少打点字. 假设我们想要查询某个国家的人口, 面积, 以及人口 
 密度, 比如说 Canada, 则可以键入 (假定用的是类Unix的 shell):
 \begin{awkcode}
     awk '
@@ -530,7 +558,7 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
         3.852 million sq. mi.
         6.5 people per sq. mi.
 \end{shell}
-现在, 如果我们想要查询其他国家的信息, 在执行每次查询前都需要国家的名字,
+现在, 如果我们想要查询其他国家的信息, 在执行每次查询前都需要修改国家的名称,
 但是更方便的做法是把程序放入一个可执行文件中, 比如就叫 \verb'info',
 查询时只要输入
 \begin{awkcode}
@@ -538,8 +566,10 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
     info USA
     ...
 \end{awkcode}
-我们可以利用 \ref{sec:interaction_with_other_programs} 节的技术, 把一个国家
-的名字传递给程序, 或者, 我们也可以利用 shell, 把国家的名字放到正确的位置上:
+我们可以利用 
+\ref{sec:interaction_with_other_programs}
+ 节的技术, 把一个国家
+的名称传递给程序, 或者, 我们也可以利用 shell, 把国家的名称放到适当的位置上:
 \marginpar{100}
 \begin{awkcode}
     awk '
@@ -562,26 +592,44 @@ are, then do the positioning for you.}. 为打印机写一个 awk 程序, 该程
 第一个 \verb'$1' 指的是当前输入行的第一个字段, 而第二个 \verb'$1' (被单引号
 包围着的)指的是国家名称参数, 也就是执行 shell 命令 \verb'info' 时的第一个参
 数. 第二个 \verb'$1' 只对shell可见, 当命令被执行时, 它被 \verb'info' 后面 
-的字符串所替代. 具体过程是 shell 通过拼接三个字符串来组合成 awk程序, 这三 
+的字符串所替代. 具体过程是: shell 通过拼接三个字符串来组合成 awk程序, 这三 
 个字符串其中两个是被一对单引号包围起来的多行文本, 另外一个是 \verb'$1',
 即 \texttt{info} 的参数. 需要注意的是, 可以把任意一个正则表达式传递给
 \texttt{info}, 尤其是, 我们可以只给出国家名称的一部分, 或者一次指定多个国家
-名, 也可以查询到相关的国家信息, 比如 
+, 也可以查询到相关的国家信息, 比如 
 \begin{awkcode}
     info 'Can|USA'
 \end{awkcode}
 
 \begin{exercise}
-    修改 \texttt{info}, 使得参数通过 \texttt{ARGV} 传递进来, 而不是由 shell 
+    \label{exer:info}
+    修改 \texttt{info}: 参数通过 \texttt{ARGV} 传递进来, 而不是由 shell 
     进行替换.
 \end{exercise}
 
 \subsection{套用信函}
 \label{subsec:form_letters}
 
-Awk 也可以用于生成套用信函,
-只需要用参数替换套用信函中的文本即可\footnote{TODO}:
-% TODO
+Awk 也可以用于生成套用信函, 生成时
+只需要用参数替换掉套用信函中的文本即可:
+\begin{center}
+\begin{tikzpicture}
+\draw[thick, ->]
+    (0.0, 0.5) -- (1.0, 0.5);
+\draw[thick, ->]
+    (3.0, 0.5) -- (4.0, 0.5);
+\draw[thick, ->]
+    (2.0, 2.0) -- (2.0, 1.0);
+
+\draw[thick]
+    (1.0, 0.0) -- (1.0, 1.0) -- (3.0, 1.0) -- (3.0, 0.0) -- (1.0, 0.0);
+
+\node at (2.0, 2.3) {\texttt{letter.text}};
+\node at (-0.7, 0.5) {参数值};
+\node at (4.8, 0.5) {套用信函};
+\node at (2.0, 0.5) {\texttt{form.gen}};
+\end{tikzpicture}
+\end{center}
 套用信函的文本内容存放在文件 \filename{letter.text} 中,文本中包含了许多参
 数, 只需要通过参数替换, 就可以生成不同内容的信函\footnote{原文为 The text
     contains parameters that will be replaced by a set of parameter values
@@ -601,47 +649,47 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 
 如果输入参数是
 \begin{shell}
-	Canada:25:3.852:6.5
+    Canada:25:3.852:6.5
 \end{shell}
 输出的的套用信函是:
 \begin{shell}
-	Subject: Demographic Information About Canada
-	From: AWK Demographics, Inc.
+    Subject: Demographic Information About Canada
+    From: AWK Demographics, Inc.
 
-	In response to your request for information about Canada,
-	our latest research has revealed that its population is 25
-	million people and its area is 3.852 million square miles.
-	This gives Canada a population density of 6.5 people per
-	square mile.
+    In response to your request for information about Canada,
+    our latest research has revealed that its population is 25
+    million people and its area is 3.852 million square miles.
+    This gives Canada a population density of 6.5 people per
+    square mile.
 \end{shell}
 
 程序 \verb'form.gen' 是套用信函生成器:
 \begin{awkcode}
-	# form.gen - generate form letters
-	#   input:  prototype file letter.text; data lines
-	#   output: one form letter per data line
+    # form.gen - generate form letters
+    #   input:  prototype file letter.text; data lines
+    #   output: one form letter per data line
 
-	BEGIN {
-	    FS = ":"
-	    while (getline <"letter.text" > 0) # read form letter
-		form[++n] = $0
-	}
+    BEGIN {
+        FS = ":"
+        while (getline <"letter.text" > 0) # read form letter
+        form[++n] = $0
+    }
 
-	{   for (i = 1; i <= n; i++) { # read data lines
-		temp = form[i]         # each line generates a letter
-		for (j = 1; j <= NF; j++)
-		    gsub("#" j, $j, temp)
-		print temp
-	    }
-	}
+    {   for (i = 1; i <= n; i++) { # read data lines
+            temp = form[i]         # each line generates a letter
+            for (j = 1; j <= NF; j++)
+                gsub("#" j, $j, temp)
+            print temp
+        }
+    }
 \end{awkcode}
 
 \verb'form.gen' 的 \BEGIN 从文件 \filename{letter.text} 中读取套用信函的
 文本, 并存放到数组 \verb'form' 中, 剩下的工作是读取输入参数, 调用 
 \verb'gsub' 将文本中的 \verb'#'\textit{n} 替换成对应的参数, 被修改的只 
 是存储在数组 \verb'form' 中的信函副本, 文件 \filename{letter.text} 的内容
-并没有发生改变. 需要注意的是如何通过字符串拼接来生成 \verb'gsub' 的第一个
-参数.
+并没有发生改变. 注意程序是如何通过字符串拼接来生成 \verb'gsub' 的第一个
+参数的.
 \marginpar{102}
 
 \section{关系数据库系统}
@@ -654,16 +702,16 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 
 这个系统通过以下三种方式将 awk 扩展成一个数据库语言:
 \begin{itemize}
-	\item 字段通过名字来引用, 而不是数字.
-	\item 数据库可以分散在多个文件中, 而不是限定在一个文件上.
+    \item 字段通过名字来引用, 而不是数字.
+    \item 数据库可以分散在多个文件中, 而不是限定在一个文件上.
     \item 可以交互性地生成一个查询序列.
 \end{itemize}
-使用名字 (而非数字) 引用字段的优势是显而易见的 ---- \verb'$area' 看起来
+使用名字 (而非数字) 引用字段的优势是显而易见的 --- \verb'$area' 看起来
 比 \verb'$2' 更加自然, 但是, 把一个数据库分散存储在若干个文件中的优点
 就没那么容易看出来. 多个文件组成的数据库维护起来更容易, 这主要是因为编辑
 一个只含有少量字段的文件, 要比编辑一个包含全部字段的文件容易得多. 另外,
 利用本节开发的数据库系统, 我们就有可能在不改变数据库访问程序的情况下,
-重构数据库. 最后, 对于小查询来说, 访问一个小文件要比访问一个大文件高效
+重构数据库. 最后, 对于简单的查询来说, 访问一个小文件要比访问一个大文件高效
 得多. 另一方面, 当我们往数据库添加数据时, 必须小心修改所有的相关文件, 
 否则会带来一致性问题.
 
@@ -671,19 +719,19 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 的文件 \filename{countries} 组成, 文件的每一行都包括四个字段, 字段的名字
 分别是 \verb'country', \verb'area', \verb'population', 以及
 \verb'continent'. 现在我们打算在数据库中新增一个文件 \filename{capitals},
-文件的每一行都由两个字段组成, 国家及其首都:
+文件的每一行都由两个字段组成 --- 国家及其首都:
 \begin{shell}
-    USSR	Moscow
-    Canada	Ottawa
-    China	Beijing
-    USA	Washington
-    Brazil	Brasilia
-    India	New Delhi
-    Mexico	Mexico City
-    France	Paris
-    Japan	Tokyo
-    Germany	Bonn
-    England	London
+    USSR    Moscow
+    Canada  Ottawa
+    China   Beijing
+    USA     Washington
+    Brazil  Brasilia
+    India   New Delhi
+    Mexico  Mexico City
+    France  Paris
+    Japan   Tokyo
+    Germany Bonn
+    England London
 \end{shell}
 与 \verb'countries' 一样, 字段之间用制表符分开.
 
@@ -713,12 +761,12 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 \subsection{自然连接}
 \label{subsec:natural_joins}
 
-现在是时候讨论一些术语了. 在关系型数据库中, 一个文件被称为一张 \term{表} 
-(\term{table}) 或一个 \term{关系} (\term{relation}), 把列叫作 \term{属性}
+现在是时候讨论一些术语了. 在关系型数据库中, 一个文件被称为一张 \cterm{表} 
+(\term{table}) 或一个 \cterm{关系} (\term{relation}), 把列叫作 \cterm{属性}
 (\term{attribute}), 所以我们可以认为表格 \verb'capitals' 具有属性
 \verb'country' 与 \verb'capital'.
 
-一个 \term{自然连接} (\term(natural join}), 或简称为 \term{连接}, 指的是 
+一个 \cterm{自然连接} (\term{natural join}) (或简称为 \cterm{连接}) 指的是 
 一个运算, 它将两张表以公共属性为基础组合成一张表, 这张表包含了两张表所有
 的属性, 但是重复的属性会被移除. 如果我们把 \verb'countries' 与
 \verb'capitals' 这两张表作自然连接, 我们就会得到一张新表 (姑且称为
@@ -727,10 +775,20 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     country, area, population, continent, capital
 \end{file}
 对于每一个同时出现在两张表中的国家来说, 我们都可以在 \verb'cc' 中找到一行
-记录, 它包含了国家的名称, 后面跟着面积, 所在大洲,
-以及国家的首都\footnote{TODO}:
-% TODO
+记录, 它包含了国家的名称, 后面跟着面积, 人口, 所在大洲,
+以及国家的首都:
 \begin{file}
+    Brazil  3286    134     South America	Brasilia
+    Canada  3852    25      North America	Ottawa
+    China   3705    1032    Asia                Beijing
+    England 94      56      Europe              London
+    France  211     55      Europe              Paris
+    Germany 96      61      Europe              Bonn
+    India   1267    746     Asia                New Delhi
+    Japan   144     120     Asia                Tokyo
+    Mexico  762     78      North America	Mexico City
+    USA     3615    237     North America	Washington
+    USSR    8649    275     Asia                Moscow
 \end{file}
 
 我们实现连接运算的方法是根据它们的公共属性进行排序, 如果两张表的某一行的
@@ -743,40 +801,55 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     $continent ~ /Asia/ { print $country, $population, $capital }
 \end{awkcode}
 我们将 表 \verb'countries' 与 表 \verb'capitals'  作连接, 再将查询应用到
-连接结果上, 通常来说, 最关键的地方在于将哪些表作连接.
+连接结果上, 通常来说, 完成这些操作最关键的地方在于将哪些表作连接.
 
 实际的连接操作可以通过 Unix 命令 \texttt{join} 来完成, 但是如果你的系统上
 没有该命令, 可以用这里提供的一个 用 awk 实现的简易版本. 它将两个文件按照
 各自的第一个字段进行连接, 比如下面两张表
+
+\begin{center}
 \begin{tabular}{c|c|c}
     \hline
     \hline
     ATT1    & ATT2 & ATT3 \\
+    \hline
     \texttt{A}       & \texttt{w}    & \texttt{p}    \\
     \texttt{B}       & \texttt{x}    & \texttt{q}   \\
     \texttt{B}      & \texttt{y}    & \texttt{r}    \\
     \texttt{C}      & \texttt{z}    & \texttt{s}    \\
     \hline
 \end{tabular}
-\begin{tabular}{c|c|c}
+\hspace{2em}
+\begin{tabular}{c|c}
     \hline
     \hline
-    ATT1    & ATT2 & ATT3 \\
+    ATT1    & ATT4 \\
+    \hline
     \texttt{A}       & \texttt{1}   \\  
     \texttt{A}       & \texttt{2}   \\
     \texttt{B}      & \texttt{3}    \\
     \hline
 \end{tabular}
+\end{center}
+
+\vspace{1em}
 作连接后得到
+\vspace{1em}
+
+\begin{center}
 \begin{tabular}{c|c|c|c}
     \hline
     \hline
     ATT1        & ATT2  & ATT3   &   ATT4   \\
-    \texttt{A}  & \texttt{w}    & \texttt{p}    \texttt{1}  \\
-    \texttt{A}  & \texttt{w}    & \texttt{p}    \texttt{2}  \\
-    \texttt{B}  & \texttt{x}    & \texttt{q}    \texttt{3}  \\
-    \texttt{B}  & \texttt{y}    & \texttt{r}    \texttt{3}  \\
+    \hline
+    \texttt{A}  & \texttt{w}    & \texttt{p} &  \texttt{1}  \\
+    \texttt{A}  & \texttt{w}    & \texttt{p} &  \texttt{2}  \\
+    \texttt{B}  & \texttt{x}    & \texttt{q} &  \texttt{3}  \\
+    \texttt{B}  & \texttt{y}    & \texttt{r} &  \texttt{3}  \\
 \end{tabular}
+\end{center}
+\vspace{1em}
+
 \texttt{join} 不假定输入表格是等长的, 但是它会认为表格是有序的, 互相匹配的
 输入字段的每一种组合都会在输出中占据一行.
 \begin{awkcode}
@@ -829,10 +902,9 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 \end{awkcode}
 \marginpar{105}
 执行 \verb'join' 时, 需要向它传递两个参数, 它们都表示输入文件名.
-Groups of lines with a common first attribute value are read from the
-second file. If the prefix of the line read from the first file matches the
-common attribute value of some group, each line of the group gives rise to
-a joined output line\footnote{待译}.
+第一个属性值相同的行组成一个行组, 它们从第二个文件中读出, 如果第一个文件
+的某一行的前缀与某些行组的公共属性值相同, 那么行组中的每一行都会出现在
+输出中.
 
 函数 \texttt{getgroup} 把下一组前缀相同的行放入数组 \texttt{gp} 中, 它调用
 \texttt{getone} 来获取每一行, 如果发现获取到的行不属于本组, 就调用
@@ -842,11 +914,13 @@ a joined output line\footnote{待译}.
 你应该注意一下函数 \texttt{getone} 与 \texttt{unget} 如何撤回一个输入行.
 在读取新行之前, \texttt{getone} 检查是否已经有一行被读取并由
 \texttt{unget} 存放在某个变量中, 如果是, 则返回该行. 撤回是解决过早遭遇
-问题的方法之一, reading one too many inputs\footnote{待译}.
-在本章早些时候出现 的 control-break 程序中, 我们把处理延迟了, 而在这里,
-通过一对函数, 我们假装不会看到额外的输入.
+问题 (在一次操作中, 读取了过多的输入\footnote{原文为 reading one too 
+many inputs.}) 的方法之一.
+在本章早些时候出现 的 control-break 程序中, 我们把处理操作延迟了, 而在这里,
+通过一对函数, 我们假定不会看到额外的输入.
 
 \begin{exercise}
+    \label{exer:join}
     本节实现的 \texttt{join} 不会进行错误检查, 也不会检查文件是否是有序的.
     修复这些问题, 在修复之后, 程序会变得多大?
 \end{exercise}
@@ -857,14 +931,14 @@ a joined output line\footnote{待译}.
 \end{exercise}
 
 \begin{exercise}
-    修改 \texttt{join}, 使得它可以按照输入文件的任意一个字段或字段组来
+    修改 \texttt{join}: 它可以按照输入文件的任意一个字段或字段组来
     进行连接, 并可以按照任意的顺序, 有选择地输出某些字段.
 \end{exercise}
 
 \subsection{\texttt{relfile}}
 \marginpar{106}
-为了回答分散在多张表中的数据库的问题, 我们必须知道每张表中包含什么内容,
-我们把这种信息存储在名为 \texttt{relfile} 的文件中 (``rel'' 指的是
+为了回答关于分散在多张表中的数据库的问题, 我们必须知道每张表中包含什么内容,
+我们把这些信息存储在名为 \texttt{relfile} 的文件中 (``rel'' 指的是
 ``relation''). 文件 \texttt{relfile} 包含了数据库中每张表的名字, 属性,
 如果表格不存在, 那么文件还包含了构造表格的规则. 文件 \texttt{relfile} 的
 内容是一系列的表格描述符, 表格描述符具有形式:
@@ -872,18 +946,18 @@ a joined output line\footnote{待译}.
     \indent\textit{tablename} \par 
     \indent\indent\textit{attribute} \par 
     \indent\indent\textit{attribute} \par 
-    \indent\indent\indent\cdots     \par
-    \indent\indent\texttt{!}\texttt{command} \par
-    \indent\indent\indent\cdots
+    \indent\indent\indent ...   \par
+    \indent\indent\texttt{!}\textit{command} \par
+    \indent\indent\indent ...
 \end{pattern}
 \textit{tablename} 与 \textit{attribute} 都是字符串, 在 \textit{tablename} 
 之后是该表包含的属性名列表, 每一个属性名前面都有一个空格或制表符, 属性名
 之后是可选 的命令序列, 命令以感叹号开始, 它说明了如何构造这张表格.
 如果一张表不含构造命令, 则说明已经有一个文件以该表的名字命名, 且包含了
-该表的数据, 这样的表叫做 \cterm{基表} (\term{base table}), 数据可以插入
-到基表中, 也可以在表中更新数据, 在文件 \filename{relfile} 中, 如果某张表
+该表的数据, 这样的表叫做 \cterm{基表} (\term{base table}), 数据被插入
+到基表中, 并在基表中更新. 在文件 \filename{relfile} 中, 如果某张表
 在属性名之后出现了构造命令, 则称这张表是 \cterm{导出表} (\term{derived
-table}), 只有在必要时才会构造导出表.
+table}), 只有在必要的时候才会构造导出表.
 
 我们使用下面的 \filename{relfile} 来表示扩展了的国家数据库:
 \begin{file}
@@ -905,7 +979,7 @@ table}), 只有在必要时才会构造导出表.
         !sort capitals >temp.capitals
         !join temp.countries temp.capitals >cc
 \end{file}
-这个文件说明数据库中有两张基表 ---- \filename{countries} 与
+这个文件说明数据库中有两张基表 --- \filename{countries} 与
 \filename{capitals}, 一张导出表 \filename{cc}, 导出表 \filename{cc} 通过 
 把基表排序并存放在临时文件中, 再对临时文件执行连接操作来生成, 也就是说, 
 \filename{cc} 通过执行
@@ -917,23 +991,24 @@ table}), 只有在必要时才会构造导出表.
 \end{shell}
 来生成.
 
-一个 \texttt{relfile} 经常包含一个 \cterm{通用关系表} (\term{universal
+一个 \texttt{relfile} 经常包含一张 \cterm{通用关系表} (\term{universal
 relation}), 它是一张包含了所有属性的表, 是 \texttt{relfile} 的最后一张表,
-这种做法保证有一张表包含了属性的所有可能的组合, 表格 \texttt{cc} 就是 
-数据库 countries-capitals 的通用关系表.
+这种做法保证至少有一张表包含了属性的所有可能的组合, 表格 \texttt{cc}
+就是 数据库 countries-capitals 的通用关系表.
 
 一个复杂数据库的优秀设计必须考虑到该数据库可能收到的查询种类, 属性间存在的
 依赖关系, 但是对于一个小数据库来说, \textit{q} 已经足够快了. 因为数据库
-的表比较少, 所以很难展现出 \texttt{relfile} 的设计的精妙之外.
+的表比较少, 所以很难展现出 \texttt{relfile} 设计的精妙之外.
 
-\subsection{\textit{q}---类 awk 查询语言}
+\subsection{\textit{q}, 类 awk 查询语言}
 \label{subsec:q_an_awk_like_query_language}
 
 我们的数据库查询语言 \textit{q} 由单独一行的 awk 程序组成, 但字段名被属性名
-替代. 查询处理程序 \texttt{qawk} 按照下面的程序来响应一个查询:
+替代. 查询处理程序 \texttt{qawk} 按照下面的步骤来响应一个查询:
 \begin{enumerate}
-	\item 判断查询所包含的属性集;
-	\item 从 \texttt{relfile} 第一行开始, 搜索第一张包含查询中全部属性
+	\item 判断该查询所包含的属性集;
+	\item 从 \texttt{relfile} 的第一行开始, 搜索第一张包含了查询
+	中全部属性
 	的表, 如果该表是基表, 则用它作为查询的输入, 如果是导出表, 则构造
 	出该表, 再用它作为查询的输入. (这意味着查询中可能出现的属性组合
 	一定也出现在 \texttt{relfile} 的基表或导出表中);
@@ -944,25 +1019,25 @@ relation}), 它是一张包含了所有属性的表, 是 \texttt{relfile} 的最
 
 \textit{q} 查询:
 \begin{shell}
-	$continent ~ /Asia/ { print $country, $population }
+    $continent ~ /Asia/ { print $country, $population }
 \end{shell}
 提到了属性 \texttt{continent}, \texttt{country} 与 \texttt{population},
 它们都是第一张表 \texttt{countries} 的属性子集. 查询处理程序把该查询转换
 成程序 
 \begin{awkcode}
-	$4 ~ /Asia/ { print $1, $3 }
+    $4 ~ /Asia/ { print $1, $3 }
 \end{awkcode}
 并把文件 \filename{countries} 作为输入数据.
 
 \textit{q} 查询 
 \begin{shell}
-	{ print $country, $population, $capital }
+    { print $country, $population, $capital }
 \end{shell}
 包含属性 \texttt{country}, \texttt{population} 与 \texttt{capital}, 它们 
 都是导出表 \texttt{cc} 的属性子集. 于是查询处理程序利用 \filename{relfile}
 列出的构造命令构造出表格 \texttt{cc}, 并将该查询转换成程序
 \begin{awkcode}
-	{ print $1, $3, $5 }
+    { print $1, $3, $5 }
 \end{awkcode}
 \marginpar{108}
 程序把刚构造而成的 \texttt{cc} 作为输入数据.
@@ -981,8 +1056,9 @@ awk 程序.
 
 首先, \texttt{qawk} 读取文件 \filename{relfile}, 将表名收集到数组 
 \texttt{relname} 中. 为了构造第 \textit{i} 张表, 程序把必要的构造命令
-收集到数组 \texttt{array} 中, 从 \texttt{cmd[}\textit{i}\texttt{1]} 开始
-存放. 它还把每张表的属性收集到2维数组 \texttt{attr}, 元素 \texttt{attr[}
+收集到数组 \texttt{array} 中, 从 \texttt{cmd[}\textit{i}\texttt{,}
+\texttt{1]} 开始
+存放. 它还把每张表的属性收集到2维数组 \texttt{attr} 中, 元素 \texttt{attr[}
 \textit{i}\texttt{,}\texttt{a}\texttt{]} 存放的是第 \textit{i} 张表中,
 名为 \textit{a} 的属性的索引.
 
@@ -990,11 +1066,36 @@ awk 程序.
 是形式为 \verb'$'\textit{name} 的字符串. 利用函数 \texttt{subset}, 就可以 
 找到第一张包含了查询中全部属性的表 $T_i$. 程序通过把属性的索引替换成
 原始形式来生成 awk 程序, 并执行必要的命令来生成表格 $T_i$, 再执行 新生成
-的awk程序, 并把表格 $T_i$ 作为输入数据.
+的awk程序, 把表格 $T_i$ 作为输入数据.
 
 对每一个查询, 第二个步骤都要重复一次, 下面这个流程图展示了 \texttt{qawk} 
-的轮廓\footnote{TODO}:
-% TODO
+的框架:
+\begin{center}
+\begin{tikzpicture}
+    \draw[thick] (0.0, 0.0) -- (2.0, 0.0) -- (2.0, 1.0) -- (0.0, 1.0)
+    -- (0.0, 0.0);
+    \draw[thick] (0.0, 3.0) -- (2.0, 3.0) -- (2.0, 4.0) -- (0.0, 4.0)
+    -- (0.0, 3.0);
+
+    \node at (1.0, 0.5) {awk};
+    \node at (1.0, 3.5) {\texttt{qawk}};
+    \node at (1.0, 2.0) {awk program};
+    \node at (4.0, 2.0) {input $T_i$};
+    \node at (1.0, -1.2) {answer};
+    \node at (1.0, 5.2) {\textit{q} query};
+    \node at (-1.8, 3.5) {\texttt{relfile}};
+
+    \draw[thick,->] (-1.0, 3.5) -- (0.0, 3.5);
+    \draw[thick,->] (1.0, 5.0) -- (1.0, 4.0);
+    \draw[thick,->] (1.0, 3.0) -- (1.0, 2.2);
+    \draw[thick,->] (1.0, 1.8) -- (1.0, 1.0);
+    \draw[thick,->] (1.0, 0.0) -- (1.0, -1.0);
+    \draw[thick] (2.0, 3.5) -- (4.0, 3.5);
+    \draw[thick,->] (4.0, 3.5) -- (4.0, 2.2);
+    \draw[thick] (4.0, 1.8) -- (4.0, 0.5);
+    \draw[thick,->] (4.0, 0.5) -- (2.0, 0.5);
+\end{tikzpicture}
+\end{center}
 
 \marginpar{109}
 这是 \texttt{qawk} 的源代码:
@@ -1062,6 +1163,7 @@ awk 程序.
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:system}
 	构造导出表的时候, \texttt{qawk} 为每一个命令调用一次
 	\texttt{system}, 修改 \texttt{qawk}, 修改后的 \texttt{qawk} 把
 	所有的构造表格的命令都收集到一个字符串中, 这样就可以只需要调用一次
@@ -1069,13 +1171,15 @@ awk 程序.
 \end{exercise}
 
 \begin{exercise}
-	修改 \texttt{qawk}, 使得它可以检查即将作为输入的导出表是否已经
-	存在. 如果导出表已经存在, 并且基表在导出表被构造出来之后未曾
-	修改过, 那我们就可以直接使用该导出表, 而不用重新构造. 可以参考
-	第 \ref{chap:experiments_with_algorighms} 章的程序 \texttt{make}.
+    \label{exer:qawk}
+	修改 \texttt{qawk}, 使得它可以检查即将作为输入数据的导出文件是否已经
+	存在. 如果文件已经存在, 并且基文件在导出文件被导出之后未曾
+	修改过, 那么我们就可以直接使用该导出文件, 而不用重新计算. 可以参考
+	第 \ref{chap:experiments_with_algorithms} 章的程序 \texttt{make}.
 \end{exercise}
 
 \begin{exercise}
+    \label{exer:multiline_query}
 	提供一种输入并编辑多行查询的方式. 只要对 \texttt{qawk} 作些许修改,
 	就可以把多行查询收集起来. 编辑的一种可选方案是调用你喜欢的编辑器,
 	另一种方式是用 awk 写一个简单的编辑器.\footnote{原文为 Provide a

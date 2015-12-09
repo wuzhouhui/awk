@@ -1,0 +1,719 @@
+% vim: ts=4 sts=4 sw=4 et tw=75
+\chapter{部分习题答案}
+\label{chap:answers_to_selected_exercises}
+\marginpar{193}
+
+\myexer\ref{exer:sum3} 一个比较简单的, 用来忽略空白行的方式是把 \texttt{sum3}
+的第1行替换成
+\begin{awkcode}
+        nfld == 0 && NF > 0 { nfld = NF
+\end{awkcode}
+
+\myexer\ref{exer:without_for_test} 如果缺了这个条件判断, 非数值列的和仍然
+    会被累加, 但不会被打印出来. 当累加到某些无用的总和时, 可能会出现一些
+    错误(例如溢出), 而该条件判断可以避免这这种情况出现, 而且并不会对程序
+    的运行效率产生明显的影响.
+
+\myexer\ref{exer:accumulate} 使用关联数组的话, 这道题就容易多了:
+\begin{awkcode}
+        { total[$1] += $2 }
+    END { for (x in total) print x, total[x] | "sort" }
+\end{awkcode}
+
+\myexer\ref{exer:star_num} 假定一行内至多只能有 25 个星号. 把 \texttt{max} 
+设置为 25, 如果最长的行不会超过上限, 那么下面的程序就不会对数据进行更改,
+    否则的话, 就对每一行按照比例进行缩放, 使得最长的行不会超过 25 个星号.
+新数组 \texttt{y} 用来维护缩放后的长度, 这样的话, 数组 \texttt{x} 的元素
+仍然是有效的.
+\begin{awkcode}
+        { x[int($1/10)]++ }
+    END { max = MAXSTARS = 25
+          for (i = 0; i <= 10; i++)
+              if (x[i] > max)
+                  max = x[i]
+          for (i = 0; i <= 10; i++)
+              y[i] = x[i]/max * MAXSTARS
+          for (i = 0; i < 10; i++)
+              printf(" %2d - %2d: %3d %s\n",
+                  10*i, 10*i+9, x[i], rep(y[i],"*"))
+          printf("100:      %3d %s\n", x[10], rep(y[10],"*"))
+        }
+
+    function rep(n,s,   t) {  # return string of n s's
+        while (n-- > 0)
+            t = t s
+        return t
+    }
+\end{awkcode}
+
+\myexer\ref{exer:bucket} 需要对数据遍历两遍, 其中 1 遍确定桶的范围, 另 1 
+    遍把条目分配到桶中.
+    
+\marginpar{194}
+\myexer\ref{exer:sumcomma} 逗号在数字中如何放置 --- 对于这个问题并没有一个
+明确的定义, 如果不考虑软件工程的标准, 比较常见的情况是即使对问题不是非常
+清楚, 但也必须加以解决. 对这道题有两种可能的答案. 下面的程序对整数求和,
+而这些整数中的逗号都处在传统的位置上:
+\begin{awkcode}
+    /^[+-]?[0-9][0-9]?[0-9]?(,[0-9][0-9][0-9])*$/ {
+            gsub(/,/, "")
+            sum += $0
+            next
+    }
+          { print "bad format:", $0 }
+    END   { print sum }
+\end{awkcode}
+一般来说, 逗号不会出现在小数点之后, 程序 
+\begin{awkcode}
+    /^[+-]?[0-9][0-9]?[0-9]?(,[0-9][0-9][0-9])*([.][0-9]*)?$/ {
+            gsub(/,/, "")
+            sum += $0
+            next
+    }
+          { print "bad format:", $0}
+    END   { print sum }
+\end{awkcode}
+所求和的数值, 其在小数点之前含有逗号和至少一个数字.
+
+\myexer\ref{exer:date} 函数 \texttt{daynum(y,m,d)} 返回某个日期自 1901 年 
+1 月 1 号以来经过的天数, 日期的格式是 \textit{year month day}, 比如 
+\texttt{2001 4 1}. 闰年的 二月有 29 天, 闰年的判断标准是年份可以被 4 整除,
+但不能被 100 整除, 或者能直接被 400 整除, 于是 1900 年和2100年都不是
+闰年 (它们能被 100 整除), 但 2000 年是闰年 (能直接被 400 整除).
+\begin{awkcode}
+    function daynum(y, m, d,    days, i, n) {   # 1 == Jan 1, 1901
+        split("31 28 31 30 31 30 31 31 30 31 30 31", days)
+        # 365 days a year, plus one for each leap year
+        n = (y-1901) * 365 + int((y-1901)/4)
+        if (y % 4 == 0) # leap year from 1901 to 2099
+            days[2]++
+        for (i = 1; i < m; i++)
+            n += days[i]
+        return n + d
+    }
+        { print daynum($1, $2, $3) }
+\end{awkcode}
+这个程序只对 1901 年到 2099 年之间的年份才是正确的, 而且它也不检查输入
+数据的有效性.
+
+\myexer\ref{exer:numtowords} 修改 \texttt{numtowords} 的一种方式是:
+\begin{awkcode}
+    function numtowords(n,   cents, dols, s) { # n has 2 decimal places
+        cents = substr(n, length(n)-1, 2)
+        dols = substr(n, 1, length(n)-3)
+        if (dols ==  0)
+            s = "zero dollars and " cents " cents exactly"
+        else
+            s = intowords(dols) " dollars and " cents " cents exactly"
+        sub(/^one dollars/, "one dollar", s)
+        gsub(/  +/, " ", s)
+        return s
+\end{awkcode}
+函数 \texttt{sub} 可以修复 ``one dollars'' 问题, \texttt{gsub} 可以移除
+多余的空格, 即使原文本来就没错, 这两条语句也不会造成什么影响, 这比先
+判断再更改要容易得多.
+
+\marginpar{195}
+\myexer\ref{exer:p12check} 为了简单起见, 假定配对的符号是 \texttt{aa} 和
+\texttt{bb}, \texttt{cc} 和 \texttt{dd}, \texttt{ee} 和 \texttt{ff}.
+在文本中, 这些符号对不能嵌套或重叠.
+\begin{awkcode}
+    BEGIN {
+        expects["aa"] = "bb"
+        expects["cc"] = "dd"
+        expects["ee"] = "ff"
+    }
+    /^(aa|cc|ee)/ {
+        if (p != "")
+            print "line", NR, ": expected " p
+        p = expects[substr($0, 1, 2)]
+    }
+    /^(bb|dd|ff)/ {
+        x = substr($0, 1, 2)
+        if (p != x) {
+            print "line", NR, ": saw " x
+            if (p)
+                print ", expected", p
+        }
+        p = ""
+    }
+    END {
+        if (p != "")
+            print "at end, missing", p
+    }
+\end{awkcode}
+变量 \texttt{p} 通过记录待匹配的定界符来为状态编码. 程序用到了一个小技巧:
+所有的开标签都具有相同的长度. 一个可能的选择方案是要求定界符总是 \verb'$1'.
+
+\myexer\ref{exer:checkgen} 选择一些标记, 比如 \texttt{=}, 它们不能当作
+合法的模式来使用. 程序 
+\begin{awkcode}
+    BEGIN { FS = "\t" }
+    /^=/  { print substr($0, 2); next }
+    { printf("%s {\n\tprintf(\"line %%d, %s: %%s\\n\", NR, $0) }\n",
+            $1, $2)
+    }
+\end{awkcode}
+可以打印出那些以标记开始的行, 但不包括标记本身.
+
+\myexer\ref{exer:form3_form4} 一个可能的解决办法在命令行中显式地给出日期参数:
+\begin{shell}
+    awk -f prep3 pass=1 countries pass=2 countries |
+        awk -f form3 date='January 1, 1988'
+\end{shell}
+变量 \texttt{date} 在命令行中赋值, 而且它的值可以一直保留到 \texttt{form3}
+的 \texttt{BEGIN} 动作之外. 如果参数中包含空格, 那么就必须用引号把它们
+包围起来. 另一个办法是把 \texttt{date} 命令的输出以管道的方式输送给 
+变量, \ref{sec:data_transformation_and_reduction} 节演示过这种方法.
+
+\myexer\ref{exer:table_format} 在参考我们给出的答案之前, 考虑一下你会如何
+处理不带小数点的数值. 为了简单起见, 我们的解决方案只考虑一个单独的列.
+我们用两个变量 --- \texttt{lwid} 和 \texttt{rwid} --- 来替换 \texttt{nwid},
+\texttt{lwid} 记录小数点左边的数字的长度, \texttt{rwid} 记录小数点右边
+的数字的个数 (包括小数点本身). 它们根据模式 \texttt{left} 和 \texttt{right}
+来计算. 于是, 数值需要的空间长度就是 \texttt{lwid+rwid}, 计算结果可能会
+超过最长的数值的长度, 这时候就需要 \texttt{wid} 来记录最大值.
+\marginpar{196}
+\begin{awkcode}
+    # table1 - single column formatter
+    #   input:  one column of strings and decimal numbers
+    #   output: aligned column
+
+    BEGIN {
+        blanks = sprintf("%100s", " ")
+        number = "^[+-]?([0-9]+[.]?[0-9]*|[.][0-9]+)$"
+        left = "^[+-]?[0-9]*"
+        right = "[.][0-9]*"
+    }
+
+    {   row[NR] = $1
+        if ($1 ~ number) {
+            match($1, left) # matches the empty string, so RLENGTH>=0
+            lwid = max(lwid, RLENGTH)
+            if (!match($1, right))
+                RLENGTH = 0
+            rwid = max(rwid, RLENGTH)
+            wid = max(wid, lwid + rwid)
+        } else
+            wid = max(wid, length($1))
+    }
+
+    END {
+        for (r = 1; r <= NR; r++) {
+            if (row[r] ~ number)
+                printf("%" wid "s\n", numjust(row[r]))
+            else
+                printf("%-" wid "s\n", row[r])
+        }
+    }
+
+    function max(x, y) { return (x > y) ? x : y }
+
+    function numjust(s) {   # position s
+        if (!match(s, right))
+            RLENGTH = 0
+        return s substr(blanks, 1, int(rwid-RLENGTH+(wid-(lwid+rwid))/2))
+    }
+\end{awkcode}
+如果某个数字没有使用到 \texttt{lwid} 的全部空间, 那么就要把它向左移位,
+所以在 \texttt{numjust} 中会有一个比较复杂的计算.
+
+\myexer\ref{exer:info}
+\begin{awkcode}
+    awk '
+    BEGIN { FS = "\t"; pat = ARGV[1]; ARGV[1] = "-" }
+    $1 ~ pat {
+        printf("%s:\n", $1)
+        printf("\t%d million people\n", $3)
+        printf("\t%.3f million sq. mi.\n", $2/1000)
+        printf("\t%.1f people per sq. mi.\n", 1000*$3/$2)
+    }
+    ' "$1" <countries
+\end{awkcode}
+\marginpar{197}
+另一种解决办法是用 \textit{var}\texttt{=}\textit{text} 替换掉
+\texttt{ARGV}:
+\begin{awkcode}
+    awk '
+    BEGIN { FS = "\t" }
+    $1 ~ pat {
+        printf("%s:\n", $1)
+        printf("\t%d million people\n", $3)
+        printf("\t%.3f million sq. mi.\n", $2/1000)
+        printf("\t%.1f people per sq. mi.\n", 1000*$3/$2)
+    }
+    ' pat="$1" <countries
+\end{awkcode}
+
+\myexer\ref{exer:join} 为了检查文件是有序的, 需要了解从每一个输入中读取
+到的最后一条记录, 然后把它们与 \texttt{getone} 中的 \texttt{getline} 的
+调用结果作比较.
+
+\myexer\ref{exer:system} 修改 \texttt{doquery} 中调用 \texttt{system}
+的 \texttt{for} 循环: 把所有的命令拼接成一个单独的字符串 \texttt{x},
+比如:
+\begin{awkcode}
+    for (j = 1; j <= ncmd[i]; j++) x = x cmd[i, j] "\n"
+\end{awkcode}
+然后在 \texttt{system} 的调用中使用 \texttt{x}. 如果 \texttt{x} 是 
+\texttt{doquery} 的局部变量, 那么在每次调用 \texttt{doquery} 时, 
+\texttt{x} 都可以被正确地初始化.
+
+\myexer\ref{exer:qawk} 这里显示的是部分答案: 函数把 \texttt{qawk} 在
+一次执行中计算出的导出文件都记录下来, 这样就避免了重复计算:
+\begin{awkcode}
+    function doquery(s,   i,j,x) {
+        for (i in qattr)  # clean up for next query
+            delete qattr[i]
+        query = s    # put $names in query into qattr, without $
+        while (match(s, /\$[A-Za-z]+/)) {
+            qattr[substr(s, RSTART+1, RLENGTH-1)] = 1
+            s = substr(s, RSTART+RLENGTH+1)
+        }
+        for (i = 1; i <= nrel && !subset(qattr, attr, i); ) 
+            i++
+        if (i > nrel)     # didn't find a table with all attributes
+            missing(qattr)
+        else {            # table i contains attributes in query
+            for (j in qattr)   # create awk program
+                gsub("\\$" j, "$" attr[i,j], query)
+            if (!exists[i] && ncmd[i] > 0) {
+                for (j = 1; j <= ncmd[i]; j++)
+                    x = x cmd[i, j] "\n"
+                print "executing\n" x  # for debugging
+                if (system(x) != 0) { # create table i
+                        print "command failed, query skipped\n", x
+                        return
+                   }
+                exists[i]++
+            }
+            awkcmd = sprintf("awk -F'\t' '%s' %s", query, relname[i])
+            printf("query: %s\n", awkcmd)   # for debugging
+            system(awkcmd)
+        }
+    }
+\end{awkcode}
+数组 \texttt{exists} 把已经计算过的导出文件记录下来. 这个版本的
+\texttt{doquery} 还包含了最后一个问题的答案.
+
+\myexer\ref{exer:multiline_query} 最简单的做法是把 \texttt{qawk}的
+开头变成 
+\marginpar{198}
+\begin{awkcode}
+    BEGIN { readrel("relfile"); RS = "" }
+\end{awkcode}
+于是, 在碰到空白行之前, 所有的行都是一个查询的组成部分. 如果不考虑实现
+机制, 查询最终都要转化成合法的 awk 程序.
+
+\myexer\ref{exer:rand} 这些 ``随机'' 数其实都是确定了的: 只要知道随机数
+种子和生成算法, 就可以确定随机数序列. 然而, 任意两个序列之间都会分享
+许多属性, 完整的讨论可以在 Knuth 的 \textit{The Art of Computer
+Programming} (第 2 卷) 中找到.
+
+\myexer\ref{exer:rand2}  下面的程序可以生成从 1 到 \textit{n} 的 \textit{k}
+个互不相同的整数, 算法来自 R. W. Floyd:
+\begin{awkcode}
+    # print k distinct random integers between 1 and n
+
+    { random($1, $2) }
+
+    function random(k, n,    A, i, r) {
+        for (i = n-k+1; i <= n; i++)
+            ((r = randint(i)) in A) ? A[i] : A[r]
+        for (i in A)
+            print i
+    }
+
+    function randint(n) { return int(n*rand())+1 }
+\end{awkcode}
+
+\myexer\ref{exer:bridge_hands} 问题是随机生成下面这种形式的桥牌:
+\begin{file}
+                        NORTH
+                    S: 10 9 6 4
+                    H: 8 7
+                    D: J 10 6
+                    C: 10 8 5 3
+       WEST                                 EAST
+    S: K 8 7 3                           S: A J 5
+    H: K Q 4 3 2                         H: J
+    D: 8 7                               D: A K Q 9 2
+    C: A J                               C: K Q 6 2
+                        SOUTH
+                    S: Q 2
+                    H: A 10 9 6 5
+                    D: 5 4 3
+                    C: 9 7 4
+\end{file}
+下面的程序生成从 1 到 52 的整数的一个随机排列, 排列结果存放到数组
+\texttt{deck} 中. 数组被均分成四段, 分别对每段中的 13 个数排序, 每一段
+都表示一手牌: 数字 52 对应黑桃 A, 51 对应黑桃 K, 1 对应梅花二.
+
+函数 \texttt{permute(k,n)} 使用 Floyd 算法 (习题 \ref{exer:rand2}) 从
+\texttt{1} 到 \texttt{n} 的整数中随机生成一个长度为\texttt{k} 的排列.
+函数 \texttt{sort(x,y)} 使用插入排序 (见 \ref{sec:sorting} 节),
+对 \texttt{deck[x..y]} 中的元素进行排序. 最后, 函数 \texttt{prhands} 
+按照上面的风格, 格式化并输出每一手牌.
+\marginpar{199}
+\begin{awkcode}
+    # bridge - generate random bridge hands
+
+    BEGIN { split(permute(52,52), deck)           # generate a random deck
+            sort(1,13); sort(14,26); sort(27,39); sort(40,52) # sort hands
+            prhands()                    # format and print the four hands
+    }
+
+    function permute(k, n,    i, p, r) {   # generate a random permutation
+        srand(); p = " "                   # of k integers between 1 and n
+        for (i = n-k+1; i <= n; i++)
+            if (p ~ " " (r = int(i*rand())+1) " " )
+                sub(" " r " ", " " r " " i " ", p)    # put i after r in p
+            else p = " " r p                     # put r at beginning of p
+        return p
+    }
+
+    function sort(left,right,    i,j,t) { # sort hand in deck[left..right]
+        for (i = left+1; i <= right; i++)
+            for (j = i; j > left && deck[j-1] < deck[j]; j--) {
+                t = deck[j-1]; deck[j-1] = deck[j]; deck[j] = t
+            }
+    }
+
+    function prhands() {                            # print the four hands
+        b = sprintf("%20s", " "); b40 = sprintf("%40s", " ")
+        card = 1                                  # global index into deck
+        suits(13); print b "   NORTH"
+        print b spds; print b hrts; print b dnds; print b clbs
+        suits(26)  # create the west hand from deck[14..26]
+        ws = spds substr(b40, 1, 40 - length(spds))
+        wh = hrts substr(b40, 1, 40 - length(hrts))
+        wd = dnds substr(b40, 1, 40 - length(dnds))
+        wc = clbs substr(b40, 1, 40 - length(clbs))
+        suits(39); print "   WEST" sprintf("%36s", " ") "EAST"
+        print ws spds; print wh hrts; print wd dnds; print wc clbs
+        suits(52); print b "   SOUTH"
+        print b spds; print b hrts; print b dnds; print b clbs
+    }
+
+    function suits(j) {           # collect suits of hand in deck[j-12..j]
+        for (spds = "S:"; deck[card] > 39 && card <= j; card++)
+            spds = spds " " fvcard(deck[card])
+        for (hrts = "H:"; deck[card] > 26 && card <= j; card++)
+            hrts = hrts " " fvcard(deck[card])
+        for (dnds = "D:"; deck[card] > 13 && card <= j; card++)
+            dnds = dnds " " fvcard(deck[card])
+        for (clbs = "C:"; card <= j; card++)
+            clbs = clbs " " fvcard(deck[card])
+    }
+
+    function fvcard(i) {                    # compute face value of card i
+        if (i % 13 == 0) return "A"
+        else if (i % 13 == 12) return "K"
+        else if (i % 13 == 11) return "Q"
+        else if (i % 13 == 10) return "J"
+        else return (i % 13) + 1
+    }
+\end{awkcode}
+\marginpar{200}
+
+\myexer\ref{exer:length_limit} 如果想要聪明地解决这个问题, 其实是比较
+困难的. 最简单的办法是跟踪到目前为止已经输出的字符数, 如果发现输出得太
+多了, 就打印一条错误消息并停止. 更复杂一点的做法是, 在函数 \texttt{gen}
+中, 如果发现推导过程已经变得太长了, 就在下一次推导时, 只选择空字符串或
+终结符. 不幸的是, 这种做法并非每次都奏效. 一种比较保险的做法要求事先
+知道每个非终结符可以产生的最短输出, 当推导过程变得过长时, 就强制按照最
+短输出规则来推导. 这需要对语法进行大量的修改, 以及一些特殊的知识.
+
+\myexer\ref{exer:weight} 我们为产生式的每一个终止添加概率. 这些概率首
+先被读取到数组 \texttt{rhsprob} 中. 语法规则读取完毕后, 修改
+\texttt{rhsprob}, 使得它不仅可以表示当前这条产生式的概率, 还可以表示
+前面任意一条产生式的概率.\footnote{After the grammar has been read,
+\texttt{rhsprob} is changed so that it represents the probability of this
+or any previous production, rather than this production.}
+这样做可以 让 \texttt{gen} 中的测试更简单一点, 否则的话, 概率就会
+被重复累加.
+\begin{awkcode}
+    # sentgen1 - random sentence generator with probabilities
+    #   input:  grammar file; sequence of nonterminals
+    #   output: random sentences generated by the grammar
+
+    BEGIN {  # read rules from grammar file
+        while (getline < "test-gram" > 0)
+            if ($2 == "->") {
+                i = ++lhs[$1]              # count lhs
+                rhsprob[$1, i] = $NF       # 0 <= probability <= 1
+                rhscnt[$1, i] = NF-3       # how many in rhs
+                for (j = 3; j < NF; j++)   # record them
+                   rhslist[$1, i, j-2] = $j
+            } else
+                print "illegal production: " $0
+        for (sym in lhs)
+            for (i = 2; i <= lhs[sym]; i++)
+                rhsprob[sym, i] += rhsprob[sym, i-1]
+    }
+
+    {   if ($1 in lhs) {  # nonterminal to expand
+            gen($1)
+            printf("\n")
+        } else 
+            print "unknown nonterminal: " $0   
+    }
+
+    function gen(sym,    i, j) {
+        if (sym in lhs) {       # a nonterminal
+            j = rand()          # random production
+            for (i = 1; i <= lhs[sym] && j > rhsprob[sym, i]; i++)
+                ;
+            for (j = 1; j <= rhscnt[sym, i]; j++) # expand rhs's
+                gen(rhslist[sym, i, j])
+        } else
+            printf("%s ", sym)
+    }
+\end{awkcode}
+
+\myexer\ref{exer:nonrecursive} 标准做法是用一个由用户管理的栈替换掉
+递归. 在对产生式的右部进行展开时, 程序按照相反的顺序把右部压入到栈中,
+这样就可以按照正确的顺序产生输出.
+\marginpar{201}
+\begin{awkcode}
+    # sentgen2 - random sentence generator (nonrecursive)
+    #   input:  grammar file; sequence of nonterminals
+    #   output: random sentences generated by the grammar
+
+    BEGIN {  # read rules from grammar file
+        while (getline < "grammar" > 0)
+            if ($2 == "->") {
+                i = ++lhs[$1]              # count lhs
+                rhscnt[$1, i] = NF-2       # how many in rhs
+                for (j = 3; j <= NF; j++)  # record them
+                   rhslist[$1, i, j-2] = $j
+            } else
+                print "illegal production: " $0
+    }
+
+    {   if ($1 in lhs) {  # nonterminal to expand
+            push($1)
+            gen()
+            printf("\n")
+        } else 
+            print "unknown nonterminal: " $0   
+    }
+
+    function gen(    i, j) {
+        while (stp >= 1) {
+            sym = pop()
+            if (sym in lhs) {       # a nonterminal
+                i = int(lhs[sym] * rand()) + 1   # random production
+                for (j = rhscnt[sym, i]; j >= 1; j--) # expand rhs's
+                    push(rhslist[sym, i, j])
+            } else
+                printf("%s ", sym)
+        }
+    }
+
+    function push(s) { stack[++stp] = s }
+
+    function pop() { return stack[stp--] }
+\end{awkcode}
+
+\myexer\ref{exer:quiz} 最简单的办法是在开始时, 随机生成一个从 \texttt{1}
+到 \texttt{nq} 的排列, 然后按照这个顺序来提问.
+
+\myexer\ref{exer:wordcount} 在 awk 中, 对大小写进行转换的最简洁的方式是
+创建一个数组, 数组包含了每个字母的大小写映射关系, 这种做法非常笨拙, 所以 
+如果可能的话, 可以利用某些 Unix 命令来完成, 比如 \texttt{tr}.
+
+\myexer\ref{exer:fmt_justify} 我们把单词存放在数组中, 如果要在一行内打印
+\texttt{cnt} 个单词, 那就有 \texttt{cnt-1} 个缝隙需要填充空格. 如果有
+\textit{n} 个空格, 那么每个缝隙占用 \textit{n}\texttt{/(cnt-1)} 个. 对
+每一个单词, 程序计算缝隙占用的空格数, 然后递减缝隙和空格的数量.
+如果额外的空格分布地并不均匀, 那么多出来的空格就会轮流地从左边, 或从右边
+分散到后面的连续的行中.
+\marginpar{202}
+\begin{awkcode}
+    # fmt.just - formatter with right justification
+
+    BEGIN { blanks = sprintf("%60s", " ") }
+    /./   { for (i = 1; i <= NF; i++) addword($i) }
+    /^$/  { printline("no"); print "" }
+    END   { printline("no") }
+
+    function addword(w) {
+        if (cnt + size + length(w) > 60)
+            printline("yes")
+        line[++cnt] = w
+        size += length(w)
+    }
+
+    function printline(f,    i, nb, nsp, holes) {
+        if (f == "no" || cnt == 1) {
+            for (i = 1; i <= cnt; i++)
+                printf("%s%s", line[i], i < cnt ? " " : "\n")
+        } else if (cnt > 1) {
+            dir = 1 - dir        # alternate side for extra blanks
+            nb = 60 - size       # number of blanks needed
+            holes = cnt - 1      # holes
+            for (i = 1; holes > 0; i++) {
+                nsp = int((nb-dir) / holes) + dir
+                printf("%s%s", line[i], substr(blanks, 1, nsp))
+                nb -= nsp
+                holes--
+            }
+            print line[cnt]
+        }
+        size = cnt = 0
+    }
+\end{awkcode}
+给 \texttt{printline} 传递一个 ``no'' 参数可以避免对段落的最后一行进行
+右对齐.
+
+\myexer\ref{exer:lack_underscore} 这取决于遗漏了下划线的符号名是否在文档
+中的其他地方出现, 如果是, 那么这些内容就会被错误地替换掉.
+
+\myexer\ref{exer:xref} 
+\begin{awkcode}
+    /^\.#/ { printf("{ gsub(/%s/, \"%d\") }\n", $2, ++count[$1])
+             if (saw[$2])
+                 print NR ": redefinition of", $2, "from line", saw[$2]
+             saw[$2] = NR
+           }
+    END    { printf("!/^[.]#/\n") }
+\end{awkcode}
+
+\myexer\ref{exer:xref_once}
+\begin{awkcode}
+    /^\.#/ { s[$2] = ++count[$1]; next }
+           { for ( i in s)
+                 gsub(i, s[i])
+             print
+           }
+\end{awkcode}
+符号名必须在它被使用之前定义.
+
+\myexer\ref{exer:stop_list} 符合分而治之策略的最简单的解决办法是: 为管道
+添加一个过滤, 删除掉那些以停止列表中的单词作为开始的旋转行.
+\marginpar{203}
+\begin{awkcode}
+    ...
+    awk '$1 !~ /^(a|an|and|by|for|if|in|is|of|on|the|to)$/' |
+    sort -f |
+    ...
+\end{awkcode}
+
+\myexer\ref{exer:literal} 如何辨别字面上的 \verb'~' 与作为空格使用
+的 \verb'~' 是一个风格问题. 我们选择使用 awk 的转义序列约定: 当想要字
+面上的字符时, 我们就在字符前加一个反斜杆 \verb'\'. 我们将只考虑
+波浪号 \verb'~', 对于其他字符, \texttt{ix.genkey} 和
+\texttt{ix.format} 都作了详尽的阐述.
+为了显示\verb'~', 我们把所有的 \verb'\~' 实例替换成
+某个不可能出现的字符串, 这个字符串由一个制表符和一个 \verb'1' 组成,
+\verb'1' 排在制表符之后. 不会出现带有制表符的字符串, 因为制表符是字段
+分隔符. 剩下的波浪号被替换掉, 然后再把转义过的字符串放回原处, 最后把它
+们恢复成转义前的样子. 于是, \texttt{ix.genkey} 的第一个 \texttt{gsub} 
+被替换成:
+\begin{awkcode}
+    gsub(/\~/, "\t1", $1)   # protect quoted tildes
+    gsub(/~/, " ", $1)      # unprotected tildes now become blanks
+    gsub(/\t1/, "~", $1)    # restore protected tildes
+\end{awkcode}
+另外, 不能再在排序键中把波浪号删除掉.
+
+\myexer\ref{exer:asm} 只需要添加 4 行代码, 2 行添加在第 1 次遍历, 另外 
+2 行添加到第 2 次遍历中.
+\begin{awkcode}
+    ...
+    # ASSEMBLER PASS 1
+        nextmem = 0    # new
+        FS = "[ \t]+"
+        while (getline <srcfile > 0) {
+            input[nextmem] = $0    # new: remember source line
+            sub(/#.*/, "")         # strip comments
+            symtab[$1] = nextmem   # remember label location
+            if ($2 != "") {        # save op, addr if present
+                print $2 "\t" $3 >tempfile
+                nextmem++
+            }
+        }
+        close(tempfile)
+    
+    # ASSEMBLER PASS 2
+        nextmem = 0
+        while (getline <tempfile > 0) {
+            if ($2 !~ /^[0-9]*$/)  # if symbolic addr,
+                $2 = symtab[$2]    # replace by numeric value
+            mem[nextmem++] = 1000 * op[$1] + $2  # pack into word
+        }
+        for (i = 0; i < nextmem; i++)    # new: print memory
+            printf("%3d:  %05d   %s\n", i, mem[i], input[i])  # new
+    }
+    ...
+\end{awkcode}
+
+\myexer\ref{exer:zhuangzhi} 如果只想对 \texttt{graph} 进行一些很简单的
+修改, 就能完成这件工作 --- 实际上这是非常困难的, 因为 \texttt{x} 与
+\texttt{y} 所需要的信息嵌入在整个程序和许多变量中 (例如 \texttt{bticks}
+和 \texttt{lticks}). 或许更好的做法是定义一个对输入进行处理的过滤器
+\texttt{transpose}. 这里提供了过滤器的一个实现, 通过修改 \texttt{graph}
+来得到:
+\marginpar{204}
+\begin{awkcode}
+    # transpose - input and output suitable for graph
+    #   input:  data and specification of a graph
+    #   output: data and specification for the transposed graph
+
+    BEGIN {
+        number = "^[-+]?([0-9]+[.]?[0-9]*|[.][0-9]+)" \
+                                "([eE][-+]?[0-9]+)?$"
+    }
+    $1 == "bottom" && $2 == "ticks" {     # ticks for x-axis
+        $1 = "left"
+        print
+        next
+    }
+    $1 == "left" && $2 == "ticks" {       # ticks for y-axis
+        $1 = "bottom"
+        print
+        next
+    }
+    $1 == "range" {                       # xmin ymin xmax ymax
+        print $1, $3, $2, $5, $4
+        next
+    }
+    $1 == "height" { $1 = "width"; print; next }
+    $1 == "width"  { $1 = "height"; print; next }
+    $1 ~ number && $2 ~ number  { nd++; print $2, $1, $3; next }
+    $1 ~ number && $2 !~ number { # single number:
+        nd++                      #   count data points
+        print $1, nd, $2          #   fill in both x and y
+        next
+    }
+    { print }
+\end{awkcode}
+对数坐标轴的一个简单版本也可以用同样的方法来实现.
+
+\myexer\ref{exer:calc2} 只需要在 \texttt{if} 语句中多增加几种判断情形即可,
+例如:
+\begin{awkcode}
+    else if ($i == "pi")
+        stack[++top] = 3.1415926535879
+\end{awkcode}
+
+\myexer\ref{exer:check} 条件 \texttt{A[i] > A[i+1]} 在本质上是不变的, 
+% XXX 原文应该有误
+因为这是由算法保证的, 所以它应该总是为真. 真正的问题是 \texttt{check} 并
+不检查输出是否是输入的一个排列: 如果元素被移到了数组边界之外, 它也不会
+发现.
+
+\myexer\ref{exer:time_used} 第 \ref{chap:epilog} 章曾经简单地描述过:
+awk 使用哈稀表来存放数组. 在小数组中查找元素时, 哈稀表只需要常量的时间,
+但是当数组变大时, 查找时间也会增加.
+
+\myexer\ref{exer:end_exit} 由 \texttt{makeprof} 插入的 \texttt{END} 动
+作, 是在所有其他的 \texttt{END} 执行完之后才会轮到它们执行. 所以, 如果 
+前面先执行的 \texttt{END} 中含有 \texttt{exit} 语句, 就会提前终止程序.
+部分的解决方案是把 \texttt{END} 插入到所有其他 \texttt{END} 的前面.
+
+\myexer\ref{exer:rtsort} 把节点压入到栈中, 而不是把它们打印出来. 当输入
+结束时, 从栈底开始打印结点. 另一种解决办法是交换 \verb'$1' 与 \verb'$2'
+的功能, 这既可以在  \texttt{rtsort} 中完成, 也可以通过一个单独的程序来
+实现.

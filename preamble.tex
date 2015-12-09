@@ -6,6 +6,9 @@
 \usepackage{geometry}
 \usepackage{fontspec}
 \usepackage{xeCJK}
+\usepackage{amssymb}
+% for tikz
+\usepackage{tikz}
 \usepackage{hyperref}
 %\usepackage{fancyhdr}
 \usepackage{verbatim}
@@ -13,21 +16,42 @@
 \usepackage{caption}
 % for exercise 
 \usepackage{theorem}
-% for graphics
+% for varwidth
+\usepackage{varwidth}
+\usepackage{tikz}
+% for format of contents
+\usepackage{tocloft}
+% for number of footnote 
+\usepackage{pifont}
+% 一页结束时, 脚注编号清零
+\usepackage[perpage]{footmisc}
+% 插图所需的宏包
 \usepackage{graphicx}
+% 
+\usepackage[all, pdf]{xy}
+% 边框
+\usepackage{mdframed}
+% 双栏排版
+\usepackage{multicol}
+% 表格单元格内换行
+\usepackage{makecell}
+
+% 脚注编号带圈
+\renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
 
 % from package geometry
 % 为边注加边框
-% FIXME: 当文档设置为双面时, 偶数页无法显示边注
 \let\oldmarginpar=\marginpar
 \renewcommand\marginpar[1]{%
     \oldmarginpar{\framebox{#1}}%
 }
 \geometry{%
+    margin=1cm,
+    marginparsep = 0.5cm,
+    marginparwidth=1cm,
     bottom = 2cm,
     outer = 2.5cm,
-    inner = 2.5cm,
-    marginparsep = 0.5cm
+    inner = 2.5cm
 }
 
 % page style from package fancyhdr
@@ -40,13 +64,18 @@
 
 % from package hyperref
 \hypersetup{
-    bookmarksnumbered = true
+    bookmarksnumbered = true,
+    pdftitle = {The AWK Programming Language},
+    pdfcreator = {wuzhouhui250@gmail.com},
+    pdfauthor = {Alfred V. Aho, Brian W. Kernighan, Peter J. Weinberger},
+    pdfsubject = {awk programming},
+    pdfkeywords = {awk, pattern scanning, text processing}
 }
 
 % from package fontspec and xeCJK
 \setCJKmainfont{AR PL KaitiM GB}
 \setCJKsansfont{WenQuanYi Zen Hei}
-\setCJKmonofont[Scale=0.9]{AR PLBaosong2GBK Light}
+\setCJKmonofont[Scale=0.9]{WenQuanYi Zen Hei}
 \setmainfont{Century Schoolbook L}
 \setsansfont{FreeSans}
 % "Mapping={}" make quote symbol straight
@@ -120,7 +149,6 @@
 \newcommand\pat{\textit{pattern}}
 \newcommand\fs{\texttt{FS}}
 \newcommand\OFS{\texttt{OFS}}
-\renewcommand\break{\texttt{break}}
 \newcommand\ctn{\texttt{continue}}
 \newcommand\fmt{\textit{format}}
 
@@ -128,6 +156,14 @@
 \theoremheaderfont{\bfseries}
 \theorembodyfont{\normalfont}
 \newtheorem{exercise}{Exercise}[chapter]
+\newcommand\myexer{\textbf{Exercise\ }}
+
+% 设置目录中 subsection 的缩进
+\settowidth\cftsubsecindent{2}
+% 设置目录中 chapter 章节编号的宽度 (ctex 章节编号为中文, 需要特别注意).
+% 参考 <<LaTeX 入门>>, 刘海洋 编著, 电子工业出版社, 2013.6
+\settowidth\cftchapnumwidth{第十章} % 最宽的可能编号
+\renewcommand\cftchapaftersnumb{\hspace{0.5em}} % 额外间距
 
 \title{AWK 程序设计语言}
 \author{Alfred V.Aho \and Brian W.Kernighan \and Peter J.Weinberger \and

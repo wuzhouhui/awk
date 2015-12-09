@@ -1298,7 +1298,7 @@ qawk1.ans             print "bad line in relfile:", $0
 qawk1.ans }
 qawk1.ans function doquery(s,   i,j,x) {
 qawk1.ans     for (i in qattr)  # clean up for next query
-qawk1.ans         delete qattr[i]
+qawk1.ans         deletie qattr[i]
 qawk1.ans     query = s    # put $names in query into qattr, without $
 qawk1.ans     while (match(s, /\$[A-Za-z]+/)) {
 qawk1.ans         qattr[substr(s, RSTART+1, RLENGTH-1)] = 1
@@ -2029,6 +2029,55 @@ asm.print     }
 asm.print     for (i = 0; i < nextmem; i++)    # new: print memory
 asm.print         printf("%3d:  %05d   %s\n", i, mem[i], input[i])  # new
 asm.print }
+graph.data label Annual Traffic Deaths, USA, 1925-1984
+graph.data range 1920 5000 1990 60000
+graph.data left ticks 10000 30000 50000
+graph.data bottom ticks 1930 1940 1950 1960 1970 1980
+graph.data 
+graph.data 1925 20771
+graph.data 1930 31204
+graph.data 1935 34494
+graph.data 1940 32914
+graph.data 1945 26785
+graph.data 1946 31874
+graph.data 1947 31193
+graph.data 1948 30775
+graph.data 1949 30246
+graph.data 1950 33186
+graph.data 1951 35309
+graph.data 1952 36088
+graph.data 1953 36190
+graph.data 1954 33890
+graph.data 1955 36688
+graph.data 1956 37965
+graph.data 1957 36932
+graph.data 1958 35331
+graph.data 1959 36223
+graph.data 1960 36399
+graph.data 1961 36285
+graph.data 1962 38980
+graph.data 1963 41723
+graph.data 1964 45645
+graph.data 1965 47089
+graph.data 1966 50894
+graph.data 1967 50724
+graph.data 1968 52725
+graph.data 1969 53543
+graph.data 1970 52627
+graph.data 1971 52542
+graph.data 1972 54589
+graph.data 1973 54052
+graph.data 1974 45196
+graph.data 1975 44525
+graph.data 1976 45523
+graph.data 1977 47878
+graph.data 1978 50331
+graph.data 1979 51093
+graph.data 1980 51091
+graph.data 1981 49301
+graph.data 1982 43945
+graph.data 1983 42589
+graph.data 1984 44257
 graph # graph - processor for a graph-drawing language
 graph #   input:  data and specification of a graph
 graph #   output: data plotted in specified area
