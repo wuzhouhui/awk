@@ -1298,7 +1298,7 @@ qawk1.ans             print "bad line in relfile:", $0
 qawk1.ans }
 qawk1.ans function doquery(s,   i,j,x) {
 qawk1.ans     for (i in qattr)  # clean up for next query
-qawk1.ans         deletie qattr[i]
+qawk1.ans         delete qattr[i]
 qawk1.ans     query = s    # put $names in query into qattr, without $
 qawk1.ans     while (match(s, /\$[A-Za-z]+/)) {
 qawk1.ans         qattr[substr(s, RSTART+1, RLENGTH-1)] = 1
