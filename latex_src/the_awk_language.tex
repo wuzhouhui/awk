@@ -746,7 +746,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 这些表达式可以分成 5 种类别: 算术, 比较, 逻辑, 条件, 与赋值. 运算符之后,
 讨论的是内建算术运算函数与字符串函数, 最后是数组.
 
-\emph{常量} (\emph{Constants}). Awk 中只有两种类型的常量: 字符串与数值.
+\textbf{常量} (\emph{Constants}). Awk 中只有两种类型的常量: 字符串与数值.
 将一个
 字符序列用一对双引号包围起来就创建了一个字符串常量, 正如 \verb'"Asia"',
 \marginpar{35}
@@ -759,7 +759,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \verb'1000000' 都表示同一个数. 所有的数都用浮点格式存储, 浮点数的精度依赖
 于机器.
 
-\emph{变量} (\emph{Variables}). 表达式可以包含若干种类型的变量: 用户定义的,
+\textbf{变量} (\emph{Variables}). 表达式可以包含若干种类型的变量: 用户定义的,
 内建的, 或字段. 用户定义的变量名字由数字, 字母与下划线构成, 但是名字不能
 以数字开始. 所有的内建变量的名字都是大写字母.
 
@@ -775,7 +775,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 
 一个未初始化的变量的值是 \verb'""' (空字符串) 与 0.
 
-\emph{内建变量} (\emph{Built-In Variables}). 表 \ref{tbl:built_in_variables}
+\textbf{内建变量} (\emph{Built-In Variables}). 表 \ref{tbl:built_in_variables}
 列出了所有的内建变量. 其中一些我们已经见过了, 另一些会在本节或后面的章节里
 用到. 这些变量可以用在所有的表达式中, 而且可以被用户重置. 每当有一个新的文件
 被读取, \verb'FILENAME' 就会被重新赋值. 每当有一个新的记录被读进来,
@@ -813,7 +813,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \end{center}
 \end{figure}
 
-\emph{字段变量} (\emph{Field Variables}). 当前输入行的字段从 \verb'$1',
+\textbf{字段变量} (\emph{Field Variables}). 当前输入行的字段从 \verb'$1',
 \verb'$2', 一直到 \verb'$NF'; \verb'$0' 表示整行. 字段变量与其他变量相比
 没什么不同 --- 它们也可以用在算术或字符串运算中, 也可以被赋值. 于是, 人们
 可以将 \filename{countries} 的每一行的第 2 个字段除以 1000, 从而可以用
@@ -850,13 +850,13 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 
 每一行的字段数都可以不同, 但是 awk 的具体实现通常将字段数上限设置为 100.
 
-\emph{算术运算符} (\emph{Arithmetic Operators}). Awk 提供了通常的 \verb'+',
+\textbf{算术运算符} (\emph{Arithmetic Operators}). Awk 提供了通常的 \verb'+',
 \verb'-', \verb'*', \verb'/', \verb'%', \verb'^' 运算符. 运算符 \verb'%'
 计算余数: \verb'x%y' 的值是 \verb'x' 被 \verb'y' 除的余数; 当 \verb'x' 或
 \verb'y' 是负数时, \verb'x%y' 的结果依赖于机器. \verb'^' 是指数运算符:
 \verb'x^y' 表示 \verb'x'$^\texttt{y}$. 所有的算术运算都用的是浮点数.
 
-\emph{比较运算符} (\emph{Comparison Operators}). 比较表达式指的是那些含有
+\textbf{比较运算符} (\emph{Comparison Operators}). 比较表达式指的是那些含有
 关系运算符, 或含有正则表达式匹配运算符的表达式. 关系运算符包括 \verb'<',
 \verb'<=', \verb'==' (相等), \verb'!=' (不相等), \verb'>=' 与 \verb'>'.
 \marginpar{37}
@@ -885,7 +885,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 的值是 1, 如果当前输入行的第 4 个字段包含 \verb'Asia'的话; 反之, 如果不
 包含, 那么它的值就是 0.
 
-\emph{逻辑运算符} (\emph{Logical Operators}). 逻辑运算符将多个表达式组合
+\textbf{逻辑运算符} (\emph{Logical Operators}). 逻辑运算符将多个表达式组合
 成为逻辑表达式. 如果逻辑表达式的真值为真, 那么它的值就为 1; 如果为假, 值
 就为 0. 在对逻辑表达式求值时, 具有非零值或非空值的操作数被当作真; 相应的,
 值为零或空的操作数被当作假. 操作数之间被 \AND  或 \OR 分开, 求值是从左至
@@ -902,7 +902,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 
 在 \AND  与 \OR 之后可以插入换行符.
 
-\emph{条件表达式} (\emph{Conditional Expressions}). 一个条件表达式具有形式:
+\textbf{条件表达式} (\emph{Conditional Expressions}). 一个条件表达式具有形式:
 \begin{pattern}
     \textit{expr}$_1$ \verb'?' \textit{expr}$_2$ \verb':' \textit{expr}$_3$
 \end{pattern}
@@ -918,7 +918,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     { print ($1 != 0 ? 1/$1 : "$1 is zero, line " NR) }
 \end{awkcode}
 
-\emph{赋值运算符} (\emph{Assignment Operators}). 在赋值表达式中可以使用 7
+\textbf{赋值运算符} (\emph{Assignment Operators}). 在赋值表达式中可以使用 7
 种赋值运算符. 最简单的赋值表达式是
 \begin{pattern}
     \textit{var} \verb'=' \textit{expr}
@@ -981,7 +981,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     if ((n = length($0)) > 0) ...
 \end{awkcode}
 
-\emph{自增与自减} (\emph{Increment and Decrement Operators}). 赋值语句:
+\textbf{自增与自减} (\emph{Increment and Decrement Operators}). 赋值语句:
 \begin{awkcode}
     n = n + 1
 \end{awkcode}
@@ -994,7 +994,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 如果仅仅是给 \verb'n' 加 1, 那么 \verb'n++' 与 \verb'++n' 没什么区别.
 前缀与后缀自减运算符 \verb'--' 给变量减 1, 除此之外与 \verb'++' 相同.
 
-\emph{内建算术函数} (\emph{Built-In Arithmetic Functions}). 内建算术函数在
+\textbf{内建算术函数} (\emph{Built-In Arithmetic Functions}). 内建算术函数在
 表 \ref{tbl:built_in_arithmetic_functions} 中列出. 这些函数都可以作为主要
 表达式使用. 在表格中, \textit{x} 与 \textit{y} 都是任意的表达式.
 
@@ -1051,7 +1051,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \end{awkcode}
 将正数 \verb'x' 四舍五入为最接近它的整数.
 
-\emph{字符串运算符} (\emph{String Operators}). Awk 中只有一种字符运算符 ---
+\textbf{字符串运算符} (\emph{String Operators}). Awk 中只有一种字符运算符 ---
 拼接. 拼接并没有显式的运算符, 通过陆续写出字符串常量, 变量, 数组元素,
 函数返回值, 与其他表达式, 就可以创建一个字符串. 程序
 \begin{awkcode}
@@ -1061,7 +1061,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 行之间没有空格. 数值 \nr 会被自动转换成字符串 (如果必要的话, \verb'$0' 也
 会做相同的转换); 然后三个字符串拼接在一起并打印出来.
 
-\emph{作为正则表达式的字符串} (\emph{Strings as Regular Expressions}).
+\textbf{作为正则表达式的字符串} (\emph{Strings as Regular Expressions}).
 到目前为止, 在所有的匹配表达式中, \verb'~' 与 \verb'!~' 右边的操作数都是
 都是一个被斜杆包围起来的正则表达式. 实际上, 任意一个表达式都可以用作匹配
 运算符的右操作数. Awk 对这些表达式求值, 如果必要的话将这些值转换成字符串,
@@ -1116,7 +1116,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 可以让你输入一个字符串与一个正则表达式; 如果字符串匹配正则表达式的话, 它
 就会回射该行.
 
-\emph{内建字符串函数} (\emph{Built-In String Functions}). 表
+\textbf{内建字符串函数} (\emph{Built-In String Functions}). 表
 \ref{tbl:built_in_string_functions} 列出了 awk 的内建字符串函数. 在这张表
 中, \textit{r} 表示一个正则表达式 (或者是一个字符串, 或者是被一对斜杆包围
 了的). \textit{s} 与 \textit{t} 是字符串表达式, \textit{n} 与 \textit{p}
@@ -1293,7 +1293,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \end{awkcode}
 替换 \verb'print s')
 
-\emph{数值还是字符串} (\emph{Number or String}). 表达式的值可以自动从
+\textbf{数值还是字符串} (\emph{Number or String}). 表达式的值可以自动从
 数值转换为字符串, 或反之, 具体取决于该值将用于什么运算. 算术表达式, 例如
 \begin{awkcode}
     pop + $3
@@ -1367,7 +1367,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \begin{awkcode}
     $1 + 0 == $2
 \end{awkcode}
-为了让比较强制按照数值类型来进行, 我们需要将\emph{两个}字段都转换成数值:
+为了让比较强制按照数值类型来进行, 我们需要将\textbf{两个}字段都转换成数值:
 \begin{awkcode}
     $1 + 0 == $2 + 0
 \end{awkcode}
@@ -1434,7 +1434,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     \end{center}
 \end{figure}
 
-\emph{运算符的总结} (\emph{Summary of Operators}). 可以出现在表达式中的运算
+\textbf{运算符的总结} (\emph{Summary of Operators}). 可以出现在表达式中的运算
 符全部列在了表 \ref{tbl:expression_operators} 中. 将这些运算符应用到常量,
 变量, 字段, 数组元素, 函数, 和其他表达式中, 就可以构造出一个表达式.
 
@@ -1645,7 +1645,7 @@ Awk 提供了一维数组, 用于存放字符串与数值. 数组与数组元素
 
 Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下标是字符串. 这个特性
 使得 awk 具有了一种能力, 这种能力类似于 SNOBOL4 表格的关联内存, 也由于这个
-原因, awk 的数组称为 \emph{关联数组} (\emph{associative arrays}).
+原因, awk 的数组称为 \textbf{关联数组} (\emph{associative arrays}).
 
 下面这个程序将 \verb'Asia' 与 \verb'Europe' 的人口数量累加到数组 \verb'pop'
 中. \END 动作打印这两个洲的总人口.
@@ -1719,7 +1719,8 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \begin{awkcode}
     if (pop["Africa"] != "") ...
 \end{awkcode}
-\emph{\texttt{delete} 语句} (\emph{The \texttt{delete} Statement}).
+
+\textbf{\texttt{delete} 语句} (\emph{The \texttt{delete} Statement}).
 一个数组元素可以通过
 \begin{pattern}
     \verb'delete' \textit{array}\verb'['\textit{subscript}\verb']'
@@ -1730,7 +1731,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
         delete pop[i]
 \end{awkcode}
 
-\emph{\texttt{split} 函数} (\emph{The \texttt{split} Function}). 函数
+\textbf{\texttt{split} 函数} (\emph{The \texttt{split} Function}). 函数
 \verb'split('\textit{str}\verb','\textit{arr}\verb','\textit{fs}\verb')'
 将字符串 \textit{str} 切割成一个个字段, 并存储到数组 \textit{arr} 中.
 字段的个数作为函数的返回值返回. 第3个参数 \textit{fs} 的字符串值作为字段
@@ -1749,7 +1750,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \verb'01' 的字符串值与 \verb'1' 的字符串值并不相同, 并且字符串 \verb'10'
 排在字符串 \verb'2' 之前.
 
-\emph{多维数组} (\emph{Multidimensional Arrays}). Awk 不直接支持多维数组,
+\textbf{多维数组} (\emph{Multidimensional Arrays}). Awk 不直接支持多维数组,
 但是它利用一维数组来近似模拟多维数组. 虽然你可以写出像 \verb'i, j' 或
 \verb's, p, q, r' 这样的多维数组下标, 实际上 awk 会将它们都拼接起来 (下标
 之间用一个分隔符分开), 合成一个单独的下标. 举例来说,
@@ -1813,9 +1814,9 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \marginpar{54}
 
 用户定义的函数可以在任何 \patact 语句的任何表达式中使用, 也可以在出现在
-任何函数体内. 每一个对函数的使用都叫做一个 \emph{调用} (\emph{call}).
+任何函数体内. 每一个对函数的使用都叫做一个 \textbf{调用} (\emph{call}).
 如果一个用户定义的函数在函数体内调用了它自身, 
-我们就说这个函数是 \emph{递归}
+我们就说这个函数是 \textbf{递归}
 (\emph{recursive}) 的.
 
 举例来说, \verb'max' 函数可以像这样调用:
@@ -1835,7 +1836,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 的值 (这叫作 ``按引用传递''). 函数名不能当作参数使用.
 
 重申一遍, 在函数体内部, 参数是局部变量 --- 它们只在函数执行时才存在, 而且 
-它们与程序中其他同名的变量没有任何关联. 但是, \emph{其他所有的变量都是全
+它们与程序中其他同名的变量没有任何关联. 但是, \textbf{其他所有的变量都是全
 局的} (\emph{all other variables are global}); 如果函数体内的某个变量没有
 出现在参数列表中, 那么整个程序范围内都可以访问该变量.
 
@@ -2164,7 +2165,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
       field1
         field1      field2
 \end{awkcode}
-然而, 当 \verb'FS' 是其他值时, 前导的空格与制表符\emph{不会}被丢弃.
+然而, 当 \verb'FS' 是其他值时, 前导的空格与制表符\textbf{不会}被丢弃.
 
 把一个字符串赋值给内建变量 \verb'FS' 就可以改变字段分隔符. 如果字符串的长
 度多于一个字符, 那么它会被当成一个正则表达式. 当前输入行中, 与该正则表达
