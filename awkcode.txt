@@ -993,7 +993,7 @@ form4
 form4 END {
 form4     totalprint()
 form4     print ".T&\nl s n n n n n."
-form4     printf("GRAND TOTAL\t%d\t%.1f\t%d\t%.1f\n",
+form4     printf("GRAND TOTAL\t\t%d\t%.1f\t%d\t%.1f\n",
 form4         gpop, gpoppct, garea, gareapct)
 form4     print "", "=", "=", "=", "=", "="
 form4     print ".TE"
