@@ -394,7 +394,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
     END {
         totalprint()
         print ".T&\nl s n n n n n."
-        printf("GRAND TOTAL\t%d\t%.1f\t%d\t%.1f\n",
+        printf("GRAND TOTAL\t\t%d\t%.1f\t%d\t%.1f\n",
             gpop, gpoppct, garea, gareapct)
         print "", "=", "=", "=", "=", "="
         print ".TE"
@@ -411,9 +411,10 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 \end{awkcode}
 \marginpar{97}
 如果把 \verb'form4' 的输出输送给 \verb'tbl', 输出的表格是:
-% TODO 应该用 LaTeX 来生成下面这张报表
+% awk -f prep3 pass=1 countries pass=2 countries | awk -f form4 |
+% tbl | troff | grops > out.ps
 \begin{center}
-    \includegraphics[scale=0.7]{./images/report3.png}
+    \includegraphics[scale=0.72]{./images/report3.png}
 \end{center}
 
 如果可能的话, 我们建议构造一个程序来格式化表格, 实现一个像 \verb'tbl' 这样 
