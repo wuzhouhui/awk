@@ -189,3 +189,28 @@ Awk 并没有内建的计时工具, 因此在本地环境中, 哪些操作属于
 
 \section{结论}
 \label{sec:conclusion}
+虽然 awk 不能解决所有的编程问题, 但它却是程序员的必备工具之一, 尤其是
+在 Unix (在 Unix 中要经常用到各种工具). 也许书中的大程序给你留下了些
+不同的印象, 但是大多数 awk 程序其实非常简短, 而且所执行的任务本来就是
+当初开发 awk 的目标: 计数, 数据格式转换, 计算, 以及从报表中提取信息.
+
+对于上一段中提到的任务, 程序的开发时间比运行时间更加重要, 在这一方面
+awk 难逢敌手. 隐式输入循环和 \patact 范式简化了 (而且经常是完全消除了)
+流程控制语句. 字段分割操作处理最常见的输入数据形式, 而数值和字符串, 以
+及它们之间的类型转换处理最常见的数据类型. 关联数组同时提供了传统的数组
+存储功能和灵活的下标. 正则表达式提供了描述文本的统一表示法. 默认的初
+始化操作和声明的缺少缩减了程序的规模.
+
+我们没有预料到的是,  在许多不太常见的应用中也用到了 awk. 比如, ``非编程
+工作'' 到 ``编程工作'' 的转换是一个渐变的过程: 由于缺少传统语言 (比如 
+C 和 Pascal) 所具有的语法包袱, 所以 awk 学习起来非常简单, 它甚至是相
+当一部分人的第一门编程语言.\footnote{原文是 What we did not anticipate were
+    the less conventional applications. For example, the transition from
+    ``not programming'' to ``programming'' is quite gradual: the absence of
+    the syntatic baggage of conventional languages like C or Pascal makes
+    awk easy enough to learn that it has been the first language for a
+surprising number of people.}
+
+在 1985 年加入的特性, 尤其是自定义函数的支持, 催生出了许多未曾预料到的
+应用, 比如小型数据库系统和小型语言编译器. 在许多种情况下, awk 用来构造
+原型,
