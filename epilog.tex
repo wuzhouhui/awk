@@ -224,3 +224,26 @@ surprising number of people.}
 
 \marginpar{186}
 \subsection*{参考资料}
+
+本书作者写的 ``AWK --- a pattern scanning and processing language'' 描述
+了 awk 的原始版本, 载于 \textit{Software --- Practice and Experience},
+1979 年 4 月. 这篇文章还包括了和语言设计有关的技术性讨论.
+
+Awk 的大部分语法来源于 C 语言, \textit{The C Programming Language} 
+(B. W. Kernighan 和 D. M. Ritchie 著, Prentice-Hall 1978 年出版)
+对 C 语言进行了完整的讨论. \texttt{egrep}, \texttt{lex} 和 \texttt{sed}
+使用的正则表达式在 \textit{The Unix Programmer's Manual} 的第 2 部分中
+讨论. \textit{Compilers: Principles, Techniques, and Tools} (Aho, Seti, 
+和 Ullman 著, Addision-Wesley 1986 年出版) 的第 3 章包含了一个关于正
+则表达式模式匹配的讨论, 新版本的 awk 就用到了该技术.
+
+也许你会觉得把 awk 和其他类似的语言作对比会比较有趣, 这些语言的元老当然
+是 SNOBOL4, \textit{The SNOBOL4 Programming Language} (R. Griswold, J.
+Poage, 和 I. Polonsky 著, Prentice-Hall 1971 年版) 对该语言进行了详细
+的讨论. 虽然 SNOBOL4 苦于应付非结构化的输入语言, 但它仍然是一门非常
+强大, 灵活的编程语言. ICON (详情见 R. Griswold 和 M. Griswold 所著的
+\textit{The ICON Programming Language}, Prentice-Hall 1983 年出版) 是
+SNOBOL4 的直系后代, 它有着更友好的语法规则, 也集成了更多的模式设施.
+IBM 系统的解释语言 REXX 是另一个例子, 虽然它更想把自己当作
+一个 shell 或命令解释器, 详情请参考 \textit{The REXX Language} (M. F.
+Cowlishaw 著, Prentice-Hall 1985 年出版).
