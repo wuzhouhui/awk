@@ -118,3 +118,41 @@ Awk 最早由本书作者在 1977 年设计并实现, 当时是作为实验的�
 
 增加版增加的一个主要特性是允许用户定义自己的函数.
 \marginpar{vi}
+其他的增强功能包括动态正则表达式 --- 带有文本替换和模式匹配功能; 更丰富
+的内建函数与变量; 新增的运算符和语句; 从多个文件中读取输入数据; 命令行 
+参数的支持. 出错时的消息提示也得到了加强. 第 \ref{chap:an_awk_tutorial}
+章的例子只使用了原版 awk 的功能, 而后面的例子则用到了许多新增的特性.
+
+本书的 awk 版本是 Unix System V Release 3.1 的一部分, 其源代码可以
+通过 AT\&T 的 Unix System Toolchest 软件发行系统得到, 请拨打 
+1-201-522-6900, 并以访客身份登录; 如果是欧洲地区, 请联系位于伦敦的 AT\&T
+Unix Europe (44-1-567-7711); 如果是远东地区, 请联系位于东京的
+AT\&T Unix Pacific (81-3-431-3670).
+
+因为 awk 在 Unix 系统中开发而成, 所以它的某些功能只能在 Unix 系统使用,
+有几个例子使用了这些和操作系统相关的功能.
+另外, 我们还假设系统中提供了某些 Unix 实用工具, 尤其是  \texttt{sort}.
+\footnote{原文是 Furthermore, we have assumed the existence of some Unix
+    utilities, particularly \texttt{sort}, for which exact equivalents may
+not exist elsewhere.}
+除了这些限制条件, awk 应该能在多种平台中使用, 尤其是它也能在 MS-DOS 中
+运行. 更多的信息请咨询 Addison-Wesley.
+
+Awk 并不完美, 它也有一些例外, 遗漏, 或者仅仅是一些不好的设计导致的, 有时
+候它还会很慢. 但它同时也是一门功能丰富的语言, 可以解决许多编程问题,
+希望读者能像我们一样, 从 awk 中得到巨大的帮助.
+
+\section*{致谢}
+本书的写作过程得到了许多人的帮助, 我们由衷地感谢他们, 尤其是 Jon Bentley,
+他的热情始终鼓舞着我们. Jon 为本书的创作提供了许多想法和程序, 这些都来源
+于他长期使用和教授 awk 积累下来的经验, 他还认真地阅读了本书的部分草稿.
+另外, 我们还要感谢 Doug McIlroy, 作为一名出色的读者, 他帮助我们改善了
+整本书的结构和内容. 其他的人还包括 Susan Aho, Jaap Akkerhuis, Lorinda
+Cherry, Chris Fraser, Eric Grosse, Riccardo Gusella, Bob Herbst, Mark
+Kernighan, John Linderman, Bob Martin, Howard Moscovitz, Gerard Schmitt,
+Don Swartwout, Howard Trickey, Peter van Eijk, Chris Van Wyk, and Mihalis
+Yannakakis, 谢谢他们的帮助.
+
+Alfred V. Aho \par
+Brian W. Kernighan \par
+Peter J. Weinberger
