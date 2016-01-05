@@ -991,12 +991,12 @@ table}), 只有在必要的时候才会构造导出表.
 \end{shell}
 生成.
 
-一个 \texttt{relfile} 经常包含一张 \cterm{全局关系表} (\term{universal
+一个 \texttt{relfile} 常常包含一张 \cterm{全局关系表} (\term{universal
 relation}), 它是一张包含了所有属性的表, 是 \texttt{relfile} 的最后一张表,
 这种做法保证至少有一张表包含了属性的所有可能的组合, 表格 \texttt{cc}
-就是 数据库 countries-capitals 的通用关系表.
+就是 数据库 countries-capitals 的全局关系表.
 
-一个复杂数据库的优秀设计必须考虑到该数据库可能收到的查询种类, 属性间存在的
+一个优秀的数据库设计必须考虑到该数据库可能收到的查询种类, 属性间存在的
 依赖关系, 但是对于一个小数据库来说, \textit{q} 已经足够快了. 因为数据库
 的表比较少, 所以很难展现出 \texttt{relfile} 设计的精妙之外.
 
@@ -1010,7 +1010,7 @@ relation}), 它是一张包含了所有属性的表, 是 \texttt{relfile} 的最
 	\item 从 \texttt{relfile} 的第一行开始, 搜索第一张包含了查询
 	中全部属性
 	的表, 如果该表是基表, 则用它作为查询的输入, 如果是导出表, 则构造
-	出该表, 再用它作为查询的输入. (这意味着查询中可能出现的属性组合
+	该表, 再用它作为查询的输入. (这意味着查询中可能出现的属性组合
 	一定也出现在 \texttt{relfile} 的基表或导出表中);
 	\item 通过把符号型的字段引用替换成对应 的数值型字段引用, 将
 	\textit{q} 查询转换成等价的 awk 程序, 这个程序接下来会把步骤 2 决定
@@ -1068,7 +1068,7 @@ awk 程序.
 原始形式来生成 awk 程序, 并执行必要的命令来生成表格 $T_i$, 再执行 新生成
 的awk程序, 把表格 $T_i$ 作为输入数据.
 
-对每一个查询, 第二个步骤都要重复一次, 下面这个流程图展示了 \texttt{qawk} 
+对每一个后来的查询, 第二个步骤都要重复一次, 下面这个流程图展示了 \texttt{qawk} 
 的框架:
 \begin{center}
 \begin{tikzpicture}
@@ -1181,8 +1181,8 @@ awk 程序.
 \begin{exercise}
     \label{exer:multiline_query}
 	提供一种输入并编辑多行查询的方式. 只要对 \texttt{qawk} 作些许修改,
-	就可以把多行查询收集起来. 编辑的一种可选方案是调用你喜欢的编辑器,
-	另一种方式是用 awk 写一个简单的编辑器.\footnote{原文为 Provide a
+	就可以把多行查询收集起来. 一种可选的方案是调用你喜欢的编辑器,
+	另一种方式是用 awk 实现一个简单的编辑器.\footnote{原文为 Provide a
 		way to enter and edit multiline queries. Multiline queries
 		can be collected with minimal changes to \texttt{qawk}. One
 		possibility for editing is a way to invoke your favorite
@@ -1203,7 +1203,7 @@ Chapter 3}
 通过管道来完成这些工作, 虽然我们在这章没有用到.) 为了处理格式的细节, 相对
 于手工计算字符个数, 一种更好的替代方案是用某些程序来完成机械化的部分.
 
-虽然 awk 并不是生产数据库的工具, 但是对于小型的个人数据库来说, 它是一个
+虽然 awk 并不是数据库产品的工具, 但是对于小型的个人数据库来说, 它是一个
 非常合理的选择, 而且在阐述某些数据库的基本概念方面, 它表现得也非常优秀,
 为了论证这两点, 我们开发了 \texttt{qawk}.
 
