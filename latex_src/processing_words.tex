@@ -323,14 +323,9 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 就是全局变量, 此时程序就无法正确地工作.
 
 我们把右部个数及其组成成分分别存放在两个数组中, 实际上, 不使用下标
-来编码字段也是可以的, 但并非通过其他语言中的记录或结构体来实现. 
+来编码字段也是可以的, 有点类似于其他语言中的记录或结构体. 
 举例来说, 数组 \texttt{rhscnt[i,j]} 可以是 \texttt{rhslist} 的元素,
-表示成 \texttt{rhslist[i,j,"cnt"]}.\footnote{原文为 We chose to use
-    separate arrays for the right-hand-side counts and components, but it
-    is possible instead to use subscripts to encode different fields,
-    rather like records or structures in other languages. For example, the
-    array \texttt{rhscnt[i,j]} could be part of \texttt{rhslist}, as
-    \texttt{rhslist[i,j,"cnt"]}.}
+表示成 \texttt{rhslist[i,j,"cnt"]}.
 
 \begin{exercise}
     写一套语法规则, 该规则能够生成关于某学科的, 听起来貌似合理的文本 ---
