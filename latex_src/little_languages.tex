@@ -229,7 +229,7 @@
 符组成的序列. 比较特殊的是, 前导空格也被当作字段分隔符, 所以 \verb'$1'
 总是标号, 而 \verb'$2' 总是操作符.
 
-因为伪操作符 \texttt{const} 的操作码是 0, 所以在第二次遍历时, 语句
+因为伪操作符 \texttt{const} 的 ``操作码'' 是 0, 所以在第二次遍历时, 语句
 \begin{awkcode}
     mem[nextmem++] = 1000 * op[$1] + $2  # pack into word
 \end{awkcode}
@@ -917,7 +917,7 @@ writing a full-fledged parser, as one would in any language}.
 其中处理算术表达式的部分和我们在上一节里展示的程序, 在本质上是一样的.
 为了增加真实性, 翻译器将会生成 C 程序, 原来代码中的 awk 运算符用函数
 调用来替换. 这个程序在一定程度上说明了语法制导翻译的原理, 以及生成
-C 版本 awk 程序的一种方式, C 程序运行起来更快, 也更容易扩展.
+C 版本 awk 程序的一种方式, C 程序运行起来更快, 也很容易扩展.
 基本思路是用函数调用替换掉每一个算术运算符, 比如, \texttt{x=y} 变成
 \texttt{assign(x,y)}, \texttt{x+y} 变成 \texttt{eval("+",x,y)}. 主输入
 循环用 \texttt{while} 来表示, 每次循环都会调用 \texttt{getrec} 来读取
