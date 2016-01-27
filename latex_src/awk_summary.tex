@@ -170,7 +170,7 @@
 
         \verb'%f'       \> \texttt{[-]ddd.dddddd} \\
 
-        \verb'%g'       \> 效果等价于 \verb'%e' 或 \verb'%f', 选择转换
+        \verb'%g'       \> 等效于 \verb'%e' 或 \verb'%f', 选择转换
                 后长度较短的那个, 无意义的零会被删除    \\
 
         \verb'%o'       \> 无符号八进制数 \\
@@ -210,10 +210,10 @@
         \texttt{OFMT}   \> 数字的输出格式 (默认是 \verb'"%.6g"') \\
         \texttt{OFS}    \> 输出字段分隔符 (默认是空格)\\
         \texttt{ORS}    \> 输出记录分隔符 (默认是换行符) \\
-        \texttt{RLENGTH}\> 被 \texttt{match} 中的正则表达式匹配的字符串
+        \texttt{RLENGTH}\> 被函数 \texttt{match} 中的正则表达式匹配的字符串
         的长度 \\
         \texttt{RS}     \> 输入数据的记录分隔符 (默认是换行符) \\
-        \texttt{RSTART} \> 被 \texttt{match} 匹配的字符串在原字符串中的
+        \texttt{RSTART} \> 被函数 \texttt{match} 匹配的字符串在原字符串中的
         开始位置 \\
         \texttt{SUBSEP} \> 具有形式
         \texttt{[}\textit{i}\texttt{,}\textit{j}\texttt{,}...\texttt{]}
@@ -229,7 +229,7 @@
 表示正则表达式, \textit{i} 和 \textit{n} 表示整数.
 
 \texttt{sub} 和 \texttt{gsub} 的替换字符串中的 \verb'&' 会被匹配的字符
-串替换掉, 而 \verb'\&' 表示一个字面上的 \verb'&'.
+串替换掉, 而 \verb'\&' 表示一个字面意义上的 \verb'&'.
 \marginpar{190}
 \begin{quote}
     \begin{tabular}{ll}
@@ -414,7 +414,7 @@
 设置成 \texttt{v2} 的类型.
 
 比较时, 如果两个操作数的类型都是数值, 那么比较操作就会按照数值比较来进行.
-否则的话, 操作数被强制转换成字符串 (如果原来不是字符串), 此时比较操作
+否则的话, 操作数被强制转换成字符串 (如果原来不是字符串的话), 此时比较操作
 就按照字符串比较来进行. 通过某些手段, 可以把任意一个表达式强制转换成数
 值类型, 比如 
 \begin{awkcode}
