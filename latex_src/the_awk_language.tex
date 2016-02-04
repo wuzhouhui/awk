@@ -364,7 +364,7 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 \begin{enumerate}
 \item 正则表达式的元字符包括: \par
     \verb'\ ^ $ . [ ] | ( ) * + ?'
-\item 一个基本的表达式包括下面几种: \par
+\item 一个基本的正则表达式包括下面几种: \par
     一个不是元字符的字符, 例如 \verb'A', 这个正则表达式匹配的就是它本身. \par
     一个匹配特殊符号的转义字符: \verb'\t' 匹配一个制表符 (见表
     \ref{tbl:escape_sequences}). \par
@@ -738,8 +738,8 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \label{subsec:expressions}
 
 我们从表达式开始讨论, 因为表达式是最简单的语句, 大多数其他语句都是由不同类
-型的表达式组合而成. 主表达式与其他表达式通过运算符组合在一起, 形成一个新的
-表达式. 主表达式是最原始的构造块: 它们包括常量, 变量, 数组引用, 函数调用,
+型的表达式组合而成. 初等表达式与其他表达式通过运算符组合在一起, 形成一个新的
+表达式. 初等表达式是最原始的构造块: 它们包括常量, 变量, 数组引用, 函数调用,
 以及各种内建变量, 例如字段的名字.
 
 我们从常量与变量开始对表达式的讨论, 然后是运算符, 它们可以用来组合表达式.
@@ -862,7 +862,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \marginpar{37}
 \begin{summary}{表达式}
     \begin{enumerate}
-        \item 最基本的表达式包括: \par
+        \item 初等表达式包括: \par
             数值与字符串常量, 变量, 字段, 函数调用, 数组元素.
         \item 可以把表达式组合起来的运算符包括: \par
             赋值运算符 \verb'=  +=  -=  *=  /=  %=  ^='
@@ -995,7 +995,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 前缀与后缀自减运算符 \verb'--' 给变量减 1, 除此之外与 \verb'++' 相同.
 
 \textbf{内建算术函数} (\emph{Built-In Arithmetic Functions}). 内建算术函数在
-表 \ref{tbl:built_in_arithmetic_functions} 中列出. 这些函数都可以作为主要
+表 \ref{tbl:built_in_arithmetic_functions} 中列出. 这些函数都可以作为初等
 表达式使用. 在表格中, \textit{x} 与 \textit{y} 都是任意的表达式.
 
 \begin{figure}[ht]
