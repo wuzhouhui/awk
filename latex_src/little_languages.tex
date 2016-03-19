@@ -961,25 +961,36 @@ C 版本 awk 程序的一种方式, C 程序运行起来更快, 也很容易扩�
 我们可以这样描述 awk 子集的语法规则:
 \marginpar{148}
 \begin{tabbing}
+    \hspace{4em}
     \textit{program}\hspace{2em}\=$\to$\hspace{2em}\=\textit{opt-begin pa-stats
     opt-end}\\
+    \hspace{4em}
     \textit{opt-begin}\>$\to$\>\texttt{BEGIN}\ \textit{statlist}\ |\ 
     \texttt{""}\\
+    \hspace{4em}
     \textit{opt-end}\>$\to$\>\texttt{END}\ \textit{statlist}\ |\ 
     \texttt{""}\\
+    \hspace{4em}
     \textit{pa-stats}\>$\to$\>\textit{statlist}\ |\ \textit{pattern}\ |\ 
     \textit{pattern statlist} \\
+    \hspace{4em}
     \textit{pattern}\>$\to$\>\textit{expr}\\
+    \hspace{4em}
     \textit{statlist}\>$\to$\>\verb'{'\ \textit{stats}\ \verb'}'\\
+    \hspace{4em}
     \textit{stats}\>$\to$\>\textit{stat stats}\ |\ \texttt{""}\\
+    \hspace{4em}
     \textit{stat}\>$\to$\>\texttt{print}\ \textit{exprlist}\ |\ \\
     \>\>\texttt{if (}\ \textit{expr}\ \texttt{)}\ \textit{stat opt-else}\ |\\
     \>\>\texttt{while (}\ \textit{expr}\ \texttt{)}\ \textit{stat}\ |\\
     \>\>\textit{statlist} \ | \\
     \>\>\textit{ident}\ \texttt{=}\ \textit{expr} \\
+    \hspace{4em}
     \textit{opt-else}\>$\to$\>\texttt{else}\ \textit{stat}\ |\texttt{""} \\
+    \hspace{4em}
     \textit{exprlist}\>$\to$\>\textit{expr}\ |\ \textit{expr}\texttt{,}
     \textit{exprlist}\\
+    \hspace{4em}
     \textit{expr}\>$\to$\>\textit{number}\ |\ \textit{ident}\ |\ \texttt{\$}
     \textit{expr}\ |\ \texttt{(}\ \textit{expr}\ \texttt{)}\ | \\
     \>\>\textit{expr}\texttt{ < }\textit{expr}\ |\ \textit{expr}\texttt{ <= }
@@ -988,6 +999,7 @@ C 版本 awk 程序的一种方式, C 程序运行起来更快, 也很容易扩�
     \textit{expr}\ |\\
     \>\>\textit{expr}\texttt{ * }\textit{expr}\ |\ \textit{expr}\texttt{ / }
     \textit{expr}\ |\ \textit{expr}\verb' % '\textit{expr}\\
+    \hspace{4em}
     \textit{ident}\>$\to$\>\textit{name}\ |\ \textit{name}\texttt{[}\textit{expr}%
     \texttt{]}\ |\ \textit{name}\texttt{( }\textit{exprlist}\texttt{ )}
 \end{tabbing}
