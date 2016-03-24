@@ -12,13 +12,13 @@ The AWK Programming Language (Aho, Kernighan, Weinberger 著, 中文名: AWK
         awkcode.txt                             书中出现的 awk 程序源代码
         latex_src                               LaTeX 源代码
 
-NOTES:
+注意事项:
         分支 twoside 中的 PDF 在内容上与 master 分支是一样的, 但是排版
         稍有不同: 双面排版, 字体也更加细腻, 适合于打印.
 
-TODO/ISSUES:
+待办事宜:
         egrep -i 'todo|fixme' *.tex
 
-TO GET PDF:
-        cd latex_src; xelatex awk.tex && xelatex awk.tex
+编译:
+	make -C latex_src/
 
