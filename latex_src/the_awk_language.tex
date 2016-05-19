@@ -1414,8 +1414,10 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
         真, 则为 1, 否则为 0 \\
         逻辑 与 & \verb'&&' & \verb'x && y' & 若 \verb'x' 与 \verb'y' 都为
         真, 则为 1, 否则为 0 \\
-        数组成员匹配 & \verb'in' & \verb' i in a' & 如果 \verb'a[i]' 存在,
+        数组成员 & \verb'in' & \verb' i in a' & 如果 \verb'a[i]' 存在,
         则为 1, 否则为 0 \\
+        匹配 & \verb'~'\ \ \verb'!~' & \verb'$1 ~ /x/' & 如果第一个字段包含
+        \verb'x', 则为 1, 否则为 0 \\
         关系运算 & \verb'< <= == !=' \verb'>= >' & \verb'x == y' &
         如果 \verb'x' 等于 \verb'y', 则为 1, 否则为 0 \\
         拼接 & & \verb'"a" "bc"' & \verb'"abc"'; 不存在显式的拼接运算符 \\
@@ -1426,6 +1428,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
         单目加, 单目减 & \verb'+ -' & \verb'-x' & \verb'x' 的相反数 \\
         逻辑 非 & \verb'!' & \verb'!$1' & 若 \verb'$1' 为空或为 0, 则为 1,
         否则为 0 \\
+        指数运算 & \verb'^' & \verb'x ^ y' & $\texttt{x}^\texttt{y}$ \\
         自增, 自减 & \verb'++ --' & \verb'++x, x++' & 为 \verb'x' 加 1 \\
         字段 & \verb'$' & \verb'$i+1' & 1 加上第 \verb'i' 个字段的值 \\
         组合 & \verb'( )' & \verb'($i)++' & 给第 \verb'i' 个字段的值加 1 \\
