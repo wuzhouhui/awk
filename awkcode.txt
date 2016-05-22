@@ -2422,7 +2422,7 @@ awk.parser function gen(s) {     # print s with nt leading tabs
 awk.parser     printf("%s%s\n", substr("\t\t\t\t\t\t\t\t\t", 1, nt), s)
 awk.parser }
 awk.parser function eat(s) {     # read next token if s == tok
-awk.parser     if (tok != s) error("line " NF ": saw " tok ", expected " s)
+awk.parser     if (tok != s) error("line " NR ": saw " tok ", expected " s)
 awk.parser     advance()
 awk.parser }
 awk.parser function nl() {       # absorb newlines and semicolons

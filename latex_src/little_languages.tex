@@ -1053,7 +1053,7 @@ C 版本 awk 程序的一种方式, C 程序运行起来更快, 也很容易扩�
         printf("%s%s\n", substr("\t\t\t\t\t\t\t\t\t", 1, nt), s)
     }
     function eat(s) {     # read next token if s == tok
-        if (tok != s) error("line " NF ": saw " tok ", expected " s)
+        if (tok != s) error("line " NR ": saw " tok ", expected " s)
         advance()
     }
     function nl() {       # absorb newlines and semicolons
