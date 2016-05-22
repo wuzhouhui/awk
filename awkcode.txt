@@ -2776,8 +2776,7 @@ frame.awk     else if (sort ~ /h.*sort/)
 frame.awk         hsort(A, n)
 frame.awk     else if (sort ~ /i.*sort/)
 frame.awk         isort(A, n)
-frame.awk     else print
-frame.awk         "illegal type of sort in", $0
+frame.awk     else print "illegal type of sort in", $0
 frame.awk     print sort, data, n, comp, exch, comp+exch
 frame.awk }
 frame.awk 
