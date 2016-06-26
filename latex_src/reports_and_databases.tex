@@ -607,11 +607,11 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
     进行替换.
 \end{exercise}
 
-\subsection{套用信函}
+\subsection{格式信函}
 \label{subsec:form_letters}
 
-Awk 也可以用于生成套用信函, 生成时
-只需要用参数替换掉套用信函中的文本即可:
+Awk 也可以用于生成格式信函, 生成时
+只需要用参数替换掉格式信函中的文本即可:
 \begin{center}
 \begin{tikzpicture}
 \draw[thick, ->]
@@ -626,11 +626,11 @@ Awk 也可以用于生成套用信函, 生成时
 
 \node at (2.0, 2.3) {\texttt{letter.text}};
 \node at (-0.7, 0.5) {参数值};
-\node at (4.8, 0.5) {套用信函};
+\node at (4.8, 0.5) {格式信函};
 \node at (2.0, 0.5) {\texttt{form.gen}};
 \end{tikzpicture}
 \end{center}
-套用信函的文本内容存放在文件 \filename{letter.text} 中,文本中包含了许多参
+格式信函的文本内容存放在文件 \filename{letter.text} 中,文本中包含了许多参
 数, 只需要通过参数替换, 就可以生成不同内容的信函\footnote{原文为 The text
     contains parameters that will be replaced by a set of parameter values
 for each form letter that is generated.}. 例如, 下面的文本使用了参数 
@@ -651,7 +651,7 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 \begin{shell}
     Canada:25:3.852:6.5
 \end{shell}
-输出的的套用信函是:
+输出的的格式信函是:
 \begin{shell}
     Subject: Demographic Information About Canada
     From: AWK Demographics, Inc.
@@ -663,7 +663,7 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     square mile.
 \end{shell}
 
-程序 \verb'form.gen' 是套用信函生成器:
+程序 \verb'form.gen' 是格式信函生成程序:
 \begin{awkcode}
     # form.gen - generate form letters
     #   input:  prototype file letter.text; data lines
@@ -684,7 +684,7 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     }
 \end{awkcode}
 
-\verb'form.gen' 的 \BEGIN 从文件 \filename{letter.text} 中读取套用信函的
+\verb'form.gen' 的 \BEGIN 从文件 \filename{letter.text} 中读取格式信函的
 文本, 并存放到数组 \verb'form' 中, 剩下的工作是读取输入参数, 调用 
 \verb'gsub' 将文本中的 \verb'#'\textit{n} 替换成对应的参数, 被修改的只 
 是存储在数组 \verb'form' 中的信函副本, 文件 \filename{letter.text} 的内容
