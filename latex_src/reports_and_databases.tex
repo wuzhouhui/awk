@@ -78,7 +78,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 排序. (在 \ref{sec:a_sort_generator} 节, 我们将展示一个生成排序的程序,
 这个程序可以从单词描述中生成排序所需的参数列表)
 
-如果你的系统不支持管道, 那就把 \verb'sort' 命令删除, 使用 \verb'print >'
+如果用户的系统不支持管道, 那就把 \verb'sort' 命令删除, 使用 \verb'print >'
 \textit{file} 直接输出到文件中, 然后再利用单独的步骤对文件排序,
 这个方法适用于本章的所有例子.
 
@@ -353,7 +353,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 \texttt{tbl} 程序可以对表格进行格式化. 程序 \verb'form4' 非常类似于
 \verb'form3', 但是它没有用于控制列宽度的魔数, 相反, 它生成了一些 
 \texttt{tbl} 命令与表格数据, 不同列的数据之间用制表符分隔, 剩下的工作
-由 \texttt{tbl} 完成. (如果你对 \texttt{tbl} 不太熟悉, 大可不必理会
+由 \texttt{tbl} 完成. (如果读者对 \texttt{tbl} 不太熟悉, 大可不必理会
 这些细节)
 \marginpar{96}
 \begin{awkcode}
@@ -803,7 +803,7 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 我们将 表 \verb'countries' 与 表 \verb'capitals'  作连接, 再将查询应用到
 连接结果上, 通常来说, 完成这些操作最关键的地方在于将哪些表作连接.
 
-实际的连接操作可以通过 Unix 命令 \texttt{join} 来完成, 但是如果你的系统上
+实际的连接操作可以通过 Unix 命令 \texttt{join} 来完成, 但是如果系统上
 没有该命令, 可以用这里提供的一个 用 awk 实现的简易版本. 它将两个文件按照
 各自的第一个字段进行连接, 比如下面两张表
 
@@ -911,7 +911,7 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 \texttt{unget} 将它放回. 我们把提取第一个属性值的代码局限在函数
 \texttt{prefix} 中, 这样以后改起来也比较方便.
 
-你应该注意一下函数 \texttt{getone} 与 \texttt{unget} 如何撤回一个输入行.
+读者应该注意一下函数 \texttt{getone} 与 \texttt{unget} 如何撤回一个输入行.
 在读取新行之前, \texttt{getone} 检查是否已经有一行被读取并由
 \texttt{unget} 存放在某个变量中, 如果是, 则返回该行. 撤回是解决过早遭遇
 问题 (在一次操作中, 读取了过多的输入\footnote{原文为 reading one too 
@@ -1208,6 +1208,6 @@ Chapter 3}
 为了论证这两点, 我们开发了 \texttt{qawk}.
 
 \subsection*{参考资料}
-关于数据库有着非常丰富的优秀书籍, 你可以试一下 J. D. Ullman 的
+关于数据库有着非常丰富的优秀书籍, 读者可以看一下 J. D. Ullman 的
 \textit{Principles of Database Systems} (Computer Science Press, 1986).
 

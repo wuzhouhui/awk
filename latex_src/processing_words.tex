@@ -644,7 +644,7 @@ symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不�
 \end{file}
 这样的定义可以出现在文档中的任何地方, 只要作者愿意, 他可以定义多种不同的
 \texttt{Category}. 在整篇文档中, 某一条目总是通过它的符号名来引用. 我们 
-规定符号名以下划线开始并结尾, 不过你也可以使用其他任意的名字, 前提是
+规定符号名以下划线开始并结尾, 不过也可以使用其他任意的名字, 前提是
 你可以从文本中把它们分离出来 (条目的名字不可以相同, 即使它们在不同的
 类别中). 名字 \texttt{.\#Fig} 与 \texttt{.\#Big} 以句点开始, 这样的话即使
 交叉引用未被解析, 格式化程序 \texttt{troff} 也可以忽略它们 (对于不同的
@@ -904,7 +904,7 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
 顺序对这些程序进行分析.
 
 第一个排序命令把 \mbox{索引字}-页码\ 对当作输入数据, 把相同的术语放在一起,
-并按照页码排序:\footnote{ 在Linux中你可以写成
+并按照页码排序:\footnote{ 在Linux中可以写成
     \texttt{sort -t \$'{\textbackslash}t' +0 -1 +1n -2 -u} --- 译者注}
 \marginpar{126}
 \begin{awkcode}
@@ -917,7 +917,7 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
 表示使用制表符作为字段分隔符; \texttt{+0 -1} 表示第一个排序键是第一个字段,
 结果是按照字母排序; \texttt{+1n -2} 表示第二个排序键是第二个字段, 结果 
 是按照数值排序; \texttt{-u} 表示丢弃重复条目. (在第
-\ref{chap:little_languages} 章我们将展示一个排序生成程序, 它可以根据你
+\ref{chap:little_languages} 章我们将展示一个排序生成程序, 它可以根据用户
 的需要构建排序命令的参数) 如果以上面的数据作为输入, 则 \texttt{ix.sort1}
 的输出是:
 \begin{file}
@@ -1074,7 +1074,7 @@ actual data.}
 最后一步是用程序 \texttt{ix.format} 移除排序键, 把 \texttt{[...]} 扩展
 成\texttt{troff} 的字体设置命令, 并在每个术语之前加上一个格式化命令
 \texttt{.XX}, 格式化程序可以利用这个命令控制文本的大小, 位置等. (实际 
-产生的命令只对 \texttt{troff} 有意义, 你大可忽略这些细节)
+产生的命令只对 \texttt{troff} 有意义, 读者大可忽略这些细节)
 \begin{awkcode}
     # ix.format - remove key, restore size and font commands
     #   input:  sort key tab string tab num num ...
