@@ -91,7 +91,7 @@
 
 我们的下一个例子是废话生成器 (cliche generator),
 它根据已有的废话重新创建一个新的出来. 输入是一个句子集合:
-\begin{file}
+\begin{awkcode}
     A rolling stone:gathers no moss.
     History:repeats itself.
     He who lives by the sword:shall die by the sword.
@@ -99,17 +99,17 @@
     Nature:abhors a vacuum.
     Every man:has a price.
     All's well that:ends well.
-\end{file}
+\end{awkcode}
 冒号将主语和谓语分开. 废话生成器随机选择一个主语与另一个谓语作组合,
 \marginpar{113}
 如果运气好的话, 可能会产生很有意思的格言警句:
-\begin{file}
+\begin{awkcode}
     A rolling stone repeats itself.
     History abhors a vacuum.
     nature repeats itself.
     All's well that gathers no moss.
     He who lives by the sword has a price.
-\end{file}
+\end{awkcode}
 实现代码非常简单:
 \begin{awkcode}
     # cliche - generate an endless stream of cliches
@@ -144,7 +144,7 @@
 该规则开发一个语法分析器, 用来分析 awk 程序. 然而在这一章, 我们感兴趣的是
 规则的生成, 而不是分析. 举例来说, 类似 ``the boy walks slowly'' 和 ``the
 girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
-\begin{file}
+\begin{awkcode}
     Sentence -> Nounphrase Verbphrase
     Nounphrase -> the boy
     Nounphrase -> the girl
@@ -154,29 +154,29 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
     Modlist -> very Modlist
     Adverb -> quickly
     Adverb -> slowly
-\end{file}
+\end{awkcode}
 
 \marginpar{114}
 如下所示, 产生式为非终结符生成语句. 假设 \texttt{Sentence} 是起始非终结符,
 那么选择一条以该符号作为左部的产生式:
-\begin{file}
+\begin{awkcode}
     Sentence -> Nounphrase Verbphrase
-\end{file}
+\end{awkcode}
 接下来, 从右部选择一个非终结符, 比如说 \texttt{Nounphrase}, 然后用以
 \texttt{Nounphrase} 作为左部的产生式替换掉 \texttt{Nounphrase}:
-\begin{file}
+\begin{awkcode}
     Sentence -> Nounphrase Verbphrase
              -> the boy Verbphrase
-\end{file}
+\end{awkcode}
 不断进行下去, 直到所有的非终结符都被替换掉为止:
-\begin{file}
+\begin{awkcode}
     Sentence -> Nounphrase Verbphrase
              -> the boy Verbphrase
              -> the bov Verb Modlist Adverb
              -> the boy walks very Modlist Adverb
              -> the boy walks very Adverb
              -> the boy walks very quickly
-\end{file}
+\end{awkcode}
 \texttt{Sentence} 的最终展开结果是一个句子. 非终结符的推导过程与我们在初
 级学校所学到的语句图 (sentence-diagram) 刚好相反: 我们现在是把动词短语拆
 分成动词与副词, 而不是把动词与副词组合成动词短语.
@@ -362,9 +362,9 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 \label{subsec:skills_testing_arithmetic}
 
 下面的程序 \texttt{arith} (最适用于幼儿) 显示一系列加法运算问题, 比如 
-\begin{file}
+\begin{awkcode}
     7 + 9 = ?
-\end{file}
+\end{awkcode}
 在每个问题之后, 用户输入问题的答案. 如果回答是正确的, 用户就会收到一句
 赞美, 然后显示下一个问题; 如果回答是错误的, 那么程序会再次请求输入答案;
 如果用户没有输入答案, 那么在显示下一个问题之前, 程序输出正确答案.
@@ -420,7 +420,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 假设化学元素的题库文件是 \texttt{quiz.elems}, 文件包含了化学元素的符号, 
 原子序数, 以及元素的全称, 字段之间用冒号分开. 文件的第一行比较特殊, 它
 标明了各个字段的意义:
-\begin{file}
+\begin{awkcode}
     symbol:number:name|element
     H:1:Hydrogen
     He:2:Helium
@@ -434,22 +434,22 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
     Ne:10:Neon
     Na:11:Sodium|Natrium
     ...
-\end{file}
+\end{awkcode}
 程序根据第一行来判断哪个字段是问题, 哪个字段是正确答案, 然后把文件剩下的
 \marginpar{118}
 部分读取到一个数组中, 通过该数组, 程序就可以随机地选择问题并检查回答的
 正确性. 输入命令行
-\begin{shell}
+\begin{awkcode}
     awk -f quiz quiz.elems name symbol
-\end{shell}
+\end{awkcode}
 之后, 我们将会得到类似下面的对话:
-\begin{shell}
+\begin{awkcode}
     Beryllium? B
     wrong, try again: Be
     Right!
     Fluorine?
     ...
-\end{shell}
+\end{awkcode}
 注意, 我们可以通过正则表达式来处理备选答案 (例如 sodium 或 natrium).
 \begin{awkcode}
     # quiz - present a quiz
@@ -536,10 +536,10 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
         }
 \end{awkcode}
 本章草稿出现最多的十个单词是:
-\begin{file}
+\begin{awkcode}
     312 the     152 a       126 of      121 is      110 to
     92 and      72 in       71 The      59 at       54 that
-\end{file}
+\end{awkcode}
 
 \begin{exercise}
     \label{exer:wordcount}
@@ -618,7 +618,7 @@ symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不�
 过渡就直接提到 ``Two programs ...''}.
 这里有一个示例文档, 文档中包含了两个文献引用和一张图的符号名:
 \marginpar{121}
-\begin{file}
+\begin{awkcode}
     .#Fig _quotes_
     Figure _quotes_ gives two brief quotations from famous books.
 
@@ -637,11 +637,11 @@ symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不�
         Macmillan, 1865.
     [_huck_] Twain, M., Adventures of Huckleberry Finn,
         Webster & Co., 1885.
-\end{file}
+\end{awkcode}
 每一个定义符号名的行都具有形式:
-\begin{file}
+\begin{awkcode}
     .#Category _SymbolicName_
-\end{file}
+\end{awkcode}
 这样的定义可以出现在文档中的任何地方, 只要作者愿意, 他可以定义多种不同的
 \texttt{Category}. 在整篇文档中, 某一条目总是通过它的符号名来引用. 我们 
 规定符号名以下划线开始并结尾, 不过也可以使用其他任意的名字, 前提是
@@ -659,15 +659,15 @@ symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不�
 第二个程序完成剩下的部分. 在这个案例中, 第一个程序 \texttt{xref} 扫描原始
 文档并创建第二个程序 \texttt{xref.temp}, 实际的转换过程将由
 \texttt{xref.temp} 完成. 假设手稿的原版是 \texttt{document}, 只需要键入
-\begin{shell}
+\begin{awkcode}
     awk -f xref document > xref.temp
     awk -f xref.temp document
-\end{shell}
+\end{awkcode}
 就可以得到带有数字形式引用的文档. 第二个程序的输出可以被重定向到打印机
 或文本格式化程序.
 \marginpar{122}
 上面所提到的示例文档的转换结果是:
-\begin{file}
+\begin{awkcode}
     Figure 1 gives two brief quotations from famous books.
 
                             Figure 1:
@@ -683,7 +683,7 @@ symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不�
         Macmillan, 1865.
     [2] Twain, M., Adventures of Huckleberry Finn,
         Webster & Co., 1885.
-\end{file}
+\end{awkcode}
 
 程序 \texttt{xref} 在文档中搜索以 \texttt{.\#} 开始的行, 对该行的每一次
 出现, 程序都会递增数组 \texttt{count} 中与该类别对应的元素的值, 然后打印
@@ -738,15 +738,15 @@ index that shows each word in the context of the line it is found in.}.
 在本质上, 它所提供的信息等价于重要语汇索引 (concordance), 虽然形式上有点
 \marginpar{123}
 不同. 考虑下面三个句子:
-\begin{file}
+\begin{awkcode}
     All's well that ends well.
     Nature abhors a vacuum.
     Every man has a price.
-\end{file}
+\end{awkcode}
 这三个句子的 KWIC 索引是\footnote{这个索引是在我的系统上运行
     \texttt{kwic} 得到的, 某几行的出现顺序与英文原版不太一致,
 我也不知道是什么原因 (我甚至没搞懂 KWIC 究竟是什么) --- 译者注}:
-\begin{file}
+\begin{awkcode}
                         Nature  abhors a vacuum.
                                 All's well that ends well.
                  Every man has  a price.
@@ -761,7 +761,7 @@ index that shows each word in the context of the line it is found in.}.
                Nature abhors a  vacuum.
           All's well that ends  well.
                          All's  well that ends well.
-\end{file}
+\end{awkcode}
 
 在软件工程领域, 关于如何构造 KWIC 索引有一段很有趣的历史. 该问题由 Parnas 
 在 1972 年提出, 当时是把它当作一个设计习题, 他提供了一个基于单个程序的
@@ -777,7 +777,7 @@ Unix 管道提供了一个三步骤的解决方案: 第一个程序生成每一�
 
 使用 awk 的话会更加方便, 只需要两个简短的 awk 程序, 程序之间再放置一个
 \texttt{sort} 命令即可:
-\begin{shell}
+\begin{awkcode}
     awk '
     # kwic - generate kwic index
 
@@ -793,7 +793,7 @@ Unix 管道提供了一个三步骤的解决方案: 第一个程序生成每一�
           { printf("%" WID "s  %s\n", substr($2,length($2)-WID+1),
                 substr($1,1,WID))
     } '
-\end{shell}
+\end{awkcode}
 第一个程序首先打印每个输入行的副本, 然后, 为输入行内的每一个空格打印一
 行输出, 输出行由三部分构成: 当前输入行空格后的内容, 制表符, 当前输入行%
 \marginpar{124}%
@@ -848,7 +848,7 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
 的文本, 这些文本是索引准备程序进一步加工处理的原材料
 (索引字与页码之间用一个制表符分开):
 \marginpar{125}%
-\begin{file}
+\begin{awkcode}
     [FS] variable       35
     [FS] variable       36
     arithmetic operators        36
@@ -862,30 +862,30 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
     control-flow statements     48
     [FS] variable       52
     ...
-\end{file}
+\end{awkcode}
 我们的目标是对于索引字, 比如 
-\begin{file}
+\begin{awkcode}
     string comparison       44
-\end{file}
+\end{awkcode}
 在最终的索引中会以两种形式呈现:
-\begin{file}
+\begin{awkcode}
     string comparison 44
     comparison, string 44
-\end{file}
+\end{awkcode}
 索引字通常按照术语中出现的每一个空格进行分割并旋转, 波浪号 \verb'~'
 用于阻止分割:
-\begin{file}
+\begin{awkcode}
     coercion~to number      45
-\end{file}
+\end{awkcode}
 将不会对 ``to'' 进行索引.
 
 有几个细节需要注意. 由于我们用的是 \texttt{troff}, 它有一些字号与字体
 设置命令, 所以在排序时需要识别并忽略它们. 另外, 由于字体需要经常改变,
 所以我们用命令 \texttt{[...]} 表示在索引中用等宽字体显示
 被方括号包围的文本, 例如 
-\begin{file}
+\begin{awkcode}
     [if]-[else] statement
-\end{file}
+\end{awkcode}
 将会被打印成
 \begin{pattern}
     \texttt{if}-\texttt{else} statement
@@ -920,7 +920,7 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
 \ref{chap:little_languages} 章我们将展示一个排序生成程序, 它可以根据用户
 的需要构建排序命令的参数) 如果以上面的数据作为输入, 则 \texttt{ix.sort1}
 的输出是:
-\begin{file}
+\begin{awkcode}
     arithmetic operators        36
     arithmetic operators        44
     coercion rules      44
@@ -933,7 +933,7 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
     [if]-[else] statement       47
     numeric comparison  44
     string comparison   44
-\end{file}
+\end{awkcode}
 
 这个输出成为下一个程序 \texttt{ix.collapse} 的输入, 它把同一个术语的页码
 都放在同一行, 该程序是通常的 control-break 程序的变形.
@@ -956,7 +956,7 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
 \end{awkcode}
 \texttt{ix.collapse} 的输出是 
 \marginpar{127}
-\begin{file}
+\begin{awkcode}
     arithmetic operators        36 44
     coercion rules      44
     coercion~to number  45
@@ -966,7 +966,7 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
     [if]-[else] statement       47
     numeric comparison  44
     string comparison   44
-\end{file}
+\end{awkcode}
 
 下一个程序 \texttt{ix.rotate} 为索引字生成旋转, 例如根据 ``\texttt{string
 comparison}'' 生成 ``\texttt{comparison, string}''. 旋转操作与 KWIC
@@ -987,7 +987,7 @@ comparison}'' 生成 ``\texttt{comparison, string}''. 旋转操作与 KWIC
     }
 \end{awkcode}
 \texttt{ix.rotate} 的部分输出内容是
-\begin{file}
+\begin{awkcode}
     arithmetic operators        36 44
     operators, arithmetic       36 44
     coercion rules      44
@@ -999,7 +999,7 @@ comparison}'' 生成 ``\texttt{comparison, string}''. 旋转操作与 KWIC
     control-flow statements     48
     statements, control-flow    48
     ...
-\end{file}
+\end{awkcode}
 
 下一个步骤是对旋转后的索引字排序. 如果直接对它们进行排序, 由于文本内
 仍然嵌入有格式化命令 (比如 \texttt{[...]}), 这些命令会对排序结果造成
@@ -1031,7 +1031,7 @@ comparison}'' 生成 ``\texttt{comparison, string}''. 旋转操作与 KWIC
     } 
 \end{awkcode}
 输出是
-\begin{file}
+\begin{awkcode}
     arithmetic operators        arithmetic operators    36 44
     operators arithmetic        operators, arithmetic   36 44
     coercion rules      coercion rules  44
@@ -1042,7 +1042,7 @@ comparison}'' 生成 ``\texttt{comparison, string}''. 旋转操作与 KWIC
     string coercion to  string, coercion to     45
     controlflow statements      control-flow statements 48
     ...
-\end{file}
+\end{awkcode}
 前面几行应该能够阐明排序键与实际数据之间的区别.\footnote{原文为 The first
     few lines should clarify the distinction between the sort key and the
 actual data.}
@@ -1056,7 +1056,7 @@ actual data.}
     sort -f -d
 \end{awkcode}
 程序的输出是索引最终的排列顺序:
-\begin{file}
+\begin{awkcode}
     arithmetic operators        arithmetic operators    36 44
     coercion rules      coercion rules  44
     coercion to number  coercion to number      45
@@ -1068,7 +1068,7 @@ actual data.}
     ifelse statement    [if]-[else] statement   47
     number coercion to  number, coercion to     45
     ...
-\end{file}
+\end{awkcode}
 
 \marginpar{129}
 最后一步是用程序 \texttt{ix.format} 移除排序键, 把 \texttt{[...]} 扩展
@@ -1090,7 +1090,7 @@ actual data.}
     }
 \end{awkcode}
 输出的部分内容是
-\begin{file}
+\begin{awkcode}
     .XX
     arithmetic operators  36, 44
     .XX
@@ -1098,17 +1098,17 @@ actual data.}
     .XX
     coercion to number  45
     ...
-\end{file}
+\end{awkcode}
 
 概括起来, 索引构造过程由六个命令的流水线组成
-\begin{shell}
+\begin{awkcode}
     sh ix.sort1 |
     awk -f ix.collapse |
     awk -f ix.rotate |
     awk -f ix.genkey |
     sh ix.sort2 |
     awk -f ix.format
-\end{shell}
+\end{awkcode}
 如果把本节开头所展示的 \mbox{索引字}-页码\ 对集合作为输入数据, 再对输出
 进行格式化, 则最终的排版结果是
 \begin{pattern}
