@@ -17,7 +17,7 @@ The AWK Programming Language (Aho, Kernighan, Weinberger 著, 中文名: AWK
         稍有不同: 双面排版, 字体也更加细腻, 适合打印.
 
 待办事宜:
-        egrep -i 'todo|fixme' *.tex
+        grep -i todo *.tex
 
 编译:
 	make -C latex_src/
