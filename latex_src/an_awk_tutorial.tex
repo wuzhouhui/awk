@@ -391,8 +391,7 @@ Awk 提供了另一个内建变量 \nr, 这个变量计算到目前为止, 读�
 
 设想一下你想要为每一位雇员打印所有的数据, 包括他的报酬, 报酬按照升序排列.
 最简单的办法是使用 awk 在每一位雇员的记录前加上报酬, 然后再通过一个排序
-程序进行排序, 在 Unix 中, 命令行\footnote{原文中 \texttt{sort} 命令没有
-带上选项 \texttt{-n}. --- 译者注}
+程序进行排序, 在 Unix 中, 命令行
 \begin{awkcode}
     awk '{ printf("%6.2f %s\n", $2 * $3, $0) }' emp.data | sort -n
 \end{awkcode}
