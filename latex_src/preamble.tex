@@ -1,7 +1,7 @@
 % vim: ts=4 sts=4 sw=4 et tw=75
 % preamble here.
 
-\documentclass[nofonts, oneside]{ctexbook}
+\documentclass[nofonts, oneside, fancyhdr]{ctexbook}
 
 \usepackage{geometry}
 \usepackage{fontspec}
@@ -12,7 +12,7 @@
 % for varwidth
 \usepackage{varwidth}
 \usepackage{hyperref}
-%\usepackage{fancyhdr}
+\usepackage{fancyhdr}
 \usepackage{verbatim}
 % for float's caption
 \usepackage{caption}
@@ -59,13 +59,10 @@
     inner = 2.5cm
 }
 
-% page style from package fancyhdr
-%\pagestyle{fancy}
-%\fancyhf{}
-%\fancyhead[EL]{\thepage}
-%\fancyhead[ER]{\nouppercase{\leftmark}}
-%\fancyhead[OR]{\thepage}
-%\fancyhead[OL]{\nouppercase{\rightmark}}
+\pagestyle{fancy}
+\fancyhead[LE,RO]{\rightmark}
+\fancyhead[LO,RE]{\leftmark}
+\fancyfoot[C]{\thepage}
 
 % from package hyperref
 \hypersetup{
