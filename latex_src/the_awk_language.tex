@@ -40,7 +40,7 @@
 
 文件 \filename{countries} 包含下面几行:
 \marginpar{22}
-\begin{file}
+\begin{awkcode}
     USSR        8649    275     Asia
     Canada      3852    25      North America
     China       3705    1032    Asia
@@ -52,7 +52,7 @@
     Japan       144     120     Asia
     Germany     96      61      Europe
     England     94      56      Europe
-\end{file}
+\end{awkcode}
 
 在这一章的剩下部分里, 如果没有显式给出输入数据, 默认将 \filename{countries}
 作为输入.
@@ -158,7 +158,7 @@
     END   { printf("\n%10s %6d %5d\n", "TOTAL", area, pop) }
 \end{awkcode}
 如果将 \filename{countries} 作为输入, 将出将是
-\begin{file}
+\begin{awkcode}
    COUNTRY   AREA   POP   CONTINENT
 
       USSR   8649   275   Asia
@@ -174,7 +174,7 @@
    England     94    56   Europe
 
      TOTAL  25681  2819
-\end{file}
+\end{awkcode}
 
 \subsection{将表达式用作模式}
 \label{subsec:expressions_as_patterns}
@@ -248,11 +248,11 @@
 \end{awkcode}
 \marginpar{26}
 选择那些以字母 \verb'M', \verb'N', \verb'O' 等开头的输入行:
-\begin{file}
+\begin{awkcode}
     USSR        8649    275     Asia
     USA         3615    237     North America
     Mexico      762     78      North America
-\end{file}
+\end{awkcode}
 
 有时候一个比较运算符的类型不能单单靠表达式表现出来的语法形式来判断. 程序
 \begin{awkcode}
@@ -262,12 +262,12 @@
 比较的类型取决于字段的值, 并且有可能每一行都有不同的情况出现. 文件
 \filename{countries} 的第1个与第4个字段总是字符串, 所以比较总是以字符串的形
 式进行; 输出是
-\begin{file}
+\begin{awkcode}
     Canada      3852    25      North America
     Brazil      3286    134     South America
     Mexico      762     78      North America
     England     94      56      Europe
-\end{file}
+\end{awkcode}
 只有当两个字段都是数值时, 比较才会以数值的形式进行; 这种情况可以是
 \begin{awkcode}
     $2 < $3
@@ -387,9 +387,9 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 \end{summary}
 
 基本的正则表达式在上面的表格中列出. 字符
-\begin{file}
+\begin{awkcode}
     \ ^ $ . [ ] | ( ) * + ?
-\end{file}
+\end{awkcode}
 叫作 \cterm{元字符} (\term{metacharacter}), 之所以这样称呼是因为它们具有
 特殊的意义. 一个由单个非元字符构成的正则表达式匹配它自身. 于是, 一个字母
 或一个数字都算作是一个基本的正则表达式, 与自身相匹配.  为了在正则表达式中
@@ -458,14 +458,14 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     (Asian|European|North American) (male|female) (black|blue)bird
 \end{awkcode}
 一共匹配12种字符串, 从
-\begin{file}
+\begin{awkcode}
     Asian male blackbird
-\end{file}
+\end{awkcode}
 到
 \marginpar{30}
-\begin{file}
+\begin{awkcode}
     North American female bluebird
-\end{file}
+\end{awkcode}
 
 符号 \verb'*', \verb'+' 与 \verb'?' 是一元运算符, 用来指定正则表达式的
 重复次数. 如果 \textit{r} 是一个正则表达式, 那么
@@ -662,12 +662,12 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     /Europe/, /Africa/
 \end{awkcode}
 输出
-\begin{file}
+\begin{awkcode}
     France  211     55      Europe
     Japan   144     120     Asia
     Germany 96      61      Europe
     England 94      56      Europe
-\end{file}
+\end{awkcode}
 
 在下一个例子里, 变量 \verb'FNR' 表示从当前输入文件中, 到目前为止读取到的
 行数, 变量 \verb'FILENAME' 表示当前输入文件名; 它们两个都是内建变量. 于是,
@@ -931,9 +931,9 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
                     }
 \end{awkcode}
 将 \filename{countries} 作为输入数据, 输出将是
-\begin{file}
+\begin{awkcode}
     Total population of the 4 Asian countries is 2173 million.
-\end{file}
+\end{awkcode}
 第一个动作含有两个赋值语句, 第一个累积人口, 第二个计算国家的数量. 变量没有
 被显式地初始化, 但程序仍然按照期望得那样运行, 这是因为每个变量都会默认
 初始化为空字符串 \verb'""' 或数值 0.
@@ -1328,18 +1328,18 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 
 例如, 比较 \verb'$1 == $2' 将会按照数值进行, 并且比较结果为真, 如果
 \verb'$1' 与 \verb'$2' 的值是下面任意一种的话,
-\begin{file}
+\begin{awkcode}
     1   1.0    +1   1e0    0.1e+1   10E-1    001
-\end{file}
+\end{awkcode}
 \marginpar{45}
 这些值都是数值 1 的不同表示方法. 然而, 这个表达式也可以是字符串比较, 于是,
 该表达式对下面每对值都会比较失败:
-\begin{file}
+\begin{awkcode}
     0           (null)
     0.0         (null)
     0           0a
     1e500       1.0e500
-\end{file}
+\end{awkcode}
 在前三对值中, 第二个字段都不是一个有效的数值.
 最后一对值也会按照字符串来比较,
 这是因为如果将它们转换成数值的话, 其值大得无法在机器上表示.
@@ -1376,9 +1376,9 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     BEGIN { print "1E2"+0, "12E"+0, "E12"+0, "1X2Y3"+0 }
 \end{awkcode}
 输出
-\begin{file}
+\begin{awkcode}
     100 12 0 1
-\end{file}
+\end{awkcode}
 
 数值的字符串形式需要根据 \verb'OFMT' 转换后才会输出. 为了拼接, 比较, 与
 创建数组下标而需要把数值转换成字符串时, \verb'OFMT' 也会影响转换的过程.
@@ -1387,9 +1387,9 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     BEGIN { print 1E2 "", 12E-2 "", E12 "", 1.23456789 "" }
 \end{awkcode}
 输出
-\begin{file}
+\begin{awkcode}
     100 0.12  1.23457
-\end{file}
+\end{awkcode}
 \marginpar{46}
 向 \verb'OFMT' 赋予新值就可以修改它的默认值. 比如将 \verb'OFMT' 改为
 \verb'"%.2f"', 那么在打印数值, 以及通过强制转换而得到的数值之间进行比较时, 
@@ -1661,10 +1661,10 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \end{awkcode}
 \marginpar{51}
 \verb'countries' 作为输入, 输出是
-\begin{file}
+\begin{awkcode}
     Asian population is 2173 million.
     European population is 172 million.
-\end{file}
+\end{awkcode}
 应该注意的是, 数组下标是字符串常量 \verb'"Asia"' 与 \verb'"Europe"'. 如果
 我们将 \verb'pop["Asia"]' 写成 \verb'pop[Asia]', 后者使用变量 \verb'Asia'
 的值作为下标, 又因为变量是未初始化过的, 于是人口数量将会累加到
@@ -1688,12 +1688,12 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 数组 \verb'pop' 的下标是大洲的名字; 每一个元素的值是大洲的总人口. 无论大
 洲的数目有多少个, 这个程序都可以正常地工作; 文件 \filename{countries}
 的输出是
-\begin{file}
+\begin{awkcode}
     Europe 172
     Asia 2173
     South America 134
     North America 340
-\end{file}
+\end{awkcode}
 上面的程序使用 \verb'for' 语句的另一种形式来遍历数组下标:
 \begin{pattern}
     \verb'for ('\textit{variable} \verb'in' \textit{array}\verb')' \par
@@ -2434,9 +2434,9 @@ Awk 用到了许多 Shell 也同样会用到的字符, 例如 \verb'$' 与 \verb
 \end{awkcode}
 写到一个文件 \verb'field1' 中, 为了让它成为一个可执行文件, 我们必须执行
 Unix 命令:
-\begin{shell}
+\begin{awkcode}
     chmod +x field1
-\end{shell}
+\end{awkcode}
 现在, 如果我们想要打印某些文件的每行的第 1 个字段, 只要键入
 \begin{pattern}
     \indent\texttt{field1 } \textit{filenames} ...

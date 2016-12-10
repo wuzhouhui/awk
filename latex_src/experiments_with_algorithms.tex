@@ -69,11 +69,11 @@ hand}
 串时, 就要小心一点 --- 由于强制类型转换, 比较结果可能会让读者感到惊讶.
 
 如果数组 \texttt{A} 含有以下 8 个整数:
-\begin{file}
+\begin{awkcode}
     8 1 6 3 5 2 4 7
-\end{file}
+\end{awkcode}
 那么排序的过程如下所示:
-\begin{file}
+\begin{awkcode}
     8|1 6 3 5 2 4 7
     1 8|6 3 5 2 4 7
     1 6 8|3 5 2 4 7
@@ -82,7 +82,7 @@ hand}
     1 2 3 5 6 8|4 7
     1 2 3 4 5 6 8|7
     1 2 3 4 5 6 7 8|
-\end{file}
+\end{awkcode}
 竖线符把数组的已排序部分和未排序部分分开.
 
 \cterm{测试}. 应该如何测试 \texttt{isort}? 我们可以每次输入一点数据,
@@ -222,7 +222,7 @@ hand}
 稍微有点接近, 就选择快速排序算法. 我们也可以直接手工输入数据, 
 而不是自动生成, 这个功能允许我们既可以基于文本, 也可以基于数字对算法
 进行测试. 为了说明, 上面程序的一个输出是:
-\begin{shell}
+\begin{awkcode}
     10 random 
      9 8 4 6 7 2 4 0 4 0
     isort 
@@ -234,7 +234,7 @@ hand}
     data now is the time for all good men
     hsort
      all for good is men now the time
-\end{shell}
+\end{awkcode}
 
 \cterm{性能}. \texttt{isort} 所执行的操作次数取决于 \textit{n} 的值,
 即待排序的元素个数, 以及它们原来的排列顺序. 插入排序是 \cterm{平方级}
@@ -318,10 +318,10 @@ hand}
 
 \end{awkcode}
 输入数据是由多行组成的序列, 类似于
-\begin{shell}
+\begin{awkcode}
     isort random 0 20 40 60 80 100 
     isort ident 0 20 40 60 80 100
-\end{shell}
+\end{awkcode}
 输出数据的每一行都包括排序算法名称, 测试集类型, 测试集大小, 以及操作执行
 的次数. 输出数据被输送给绘图程序 \texttt{grap}, 它 是我们在第
 \ref{chap:little_languages} 章讨论的绘图程序的原始版本.
@@ -426,13 +426,13 @@ hand}
 现在, 我们对左边的子数组与右边的子组执行同样的操作.
 
 假设我们对下列8个元素进行快速排序:
-\begin{file}
+\begin{awkcode}
     8 1 6 3 5 2 4 7
-\end{file}
+\end{awkcode}
 第一步我们可能选择 4 作为划分元素, 接下来, 划分操作会把数组重新排列成
-\begin{file}
+\begin{awkcode}
     2 1 3|4|5 6 8 7
-\end{file}
+\end{awkcode}
 然后再递归地对子数组 \texttt{2 1 3} 与 \texttt{5 6 8 7} 进行快速排序,
 当子数组的元素个数少于 2 时, 递归过程就会停止.
 
@@ -652,14 +652,14 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 
 考虑上面展示的元素所组成的数组, 该数组已经具有堆属性. 在第二个阶段的第
 一个步骤, 我们交换元素 \texttt{76} 和 \texttt{28}:
-\begin{file}
+\begin{awkcode}
     28 72 34 59 63 17 29 37 33 | 76
-\end{file}
+\end{awkcode}
 在第 2 个步骤, 我们把堆的大小递减到 9. 然后在第 3 个步骤中, 通过一系列的
 交换操作, 把 \texttt{28} 移动到合适的位置, 从而维持住前 9 个元素的堆属性:
-\begin{file}
+\begin{awkcode}
     72 63 34 59 28 17 29 37 33 | 76
-\end{file}
+\end{awkcode}
 我们可以把这个过程可视化: 让元素 \texttt{28} 沿着二叉树的路径, 从根结点
 开始, 朝着叶子结点方向, 逐渐向下渗透, 直到到达这样一个的结点: 它的孩子 
 小于或等于 \texttt{28}:
@@ -707,19 +707,19 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 \end{center}
 
 在下一次迭代中, 第一个步骤交换元素 \texttt{72} 和 \texttt{33}:
-\begin{file}
+\begin{awkcode}
     33 63 34 59 28 17 29 37 | 72 76
-\end{file}
+\end{awkcode}
 第二个步骤把 \textit{i} 递减到 8, 第三次迭代把 \texttt{33} 移动到合适的 
 位置:
 \marginpar{165}
-\begin{file}
+\begin{awkcode}
     63 59 34 37 28 17 29 33 | 72 76
-\end{file}
+\end{awkcode}
 下一次迭代以交换 \verb'63' 与 \verb'33' 作为开始, 迭代结束时, 序列变成:
-\begin{file}
+\begin{awkcode}
     59 37 34 33 28 17 29 | 63 72 76
-\end{file}
+\end{awkcode}
 当数组处于有序状态时, 迭代过程结束.
 
 下面的程序对输入数据按照升序进行排列, 使用的正是上面提到的过程. 我们把 
@@ -844,9 +844,9 @@ $n \log n$ 程序性能之间的差距急剧加大.
 
 作为示例, 考虑为 \ref{sec:sorting} 节末尾的程序 \texttt{heapsort} 作剖析.
 为了构造这个程序的剖析版, 键入并执行命令
-\begin{shell}
+\begin{awkcode}
     awk -f makeprof heapsort > heapsort.p
-\end{shell}
+\end{awkcode}
 构造出的剖析版 \texttt{heapsort.p} 看起来就像:
 \begin{awkcode}
     # heapsort
@@ -889,9 +889,9 @@ $n \log n$ 程序性能之间的差距急剧加大.
 
 现在, 假设把 100 个随机数作为输入数据, 运行 \texttt{heapsort.p}, 程序运行 
 结束后, 键入并执行命令
-\begin{shell}
+\begin{awkcode}
     awk -f printprof heapsort
-\end{shell}
+\end{awkcode}
 就可以得到带有语句执行次数的原版程序 (每条语句的执行次数仅对本次运行有效).
 命令的执行结果是:
 \begin{awkcode}
@@ -982,7 +982,7 @@ $n \log n$ 程序性能之间的差距急剧加大.
 对来表示,
 其中每个输入行的 \textit{x} 和 \textit{y} 表示一条从结点 \textit{x} 指向 
 \textit{y} 的边, 上面那张图的文本表示形式是:
-\begin{file}
+\begin{awkcode}
     a   h
     b   g
     c   f
@@ -994,17 +994,17 @@ $n \log n$ 程序性能之间的差距急剧加大.
     h   d
     h   e
     i   b
-\end{file}
+\end{awkcode}
 
 如果存在一条从 \textit{x} 指向 \textit{y} 的边, 那么在输出中 \textit{x}
 必须先于 \textit{y} 出现. 如果把上面的数据作为输入, 那么可能的一个输出是:
-\begin{file}
+\begin{awkcode}
     a c f h e d i b g
-\end{file}
+\end{awkcode}
 除此之外, 还有其他线序关系也包含了上图所描述的偏序, 另一个可能的线序是:
-\begin{file}
+\begin{awkcode}
     c a h e d i f b g
-\end{file}
+\end{awkcode}
 
 拓扑排序的目标是对图中的结点进行排序, 使得所有前驱都在它们的后继之前出现.
 \marginpar{171} 当且仅当图中不含有 \cterm{环} (\term{cycle}, 是由多条边
@@ -1202,9 +1202,9 @@ edge}). 因为存在回边等同于存在环, 所以为了判断图中是否含�
 \end{awkcode}
 
 如果把本节开头给出的 \mbox{前驱}-后继\ 对作为输入数据, 这个程序将会输出:
-\begin{shell}
+\begin{awkcode}
     g b i d e h a f c
-\end{shell}
+\end{awkcode}
 需要注意的是, 对图中的某些环来说, 这个程序可以通过查找回边来显式地探测,
 而对另一些环的探测则是隐式地, 对于后一种情况, 程序将无法打印出全部的结点,
 就像这幅图:
@@ -1245,7 +1245,7 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 用来生成 \textit{name} 的的命令. 下面显示的是某个小程序的
 \texttt{makefile} 文件, 程序由两个 C 文件和一个 \texttt{yacc} 语法文件
 组成 (\texttt{yacc} 是一个典型的用于程序开发的应用程序):
-\begin{file}
+\begin{awkcode}
     prog:       a.o b.o c.o
                 cc a.o b.o c.o -ly -o prog 
     a.o:        prog.h a.c
@@ -1259,7 +1259,7 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
                 mv y.tab.c c.c
     print:
                 pr prog.h a.c b.c c.y
-\end{file}
+\end{awkcode}
 第1行表示 \texttt{prog} 依赖于目标文件 \texttt{a.o}, \texttt{b.o} 和
 \texttt{c.o}. 第2行是说使用 C 编译器 \texttt{cc} 链接 \texttt{a.o},
 \texttt{b.o}, \texttt{c.o} 和一个库文件来生成 \texttt{prog}. 下一条规则
@@ -1295,9 +1295,9 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 \texttt{age[}\textit{y}\texttt{]}, 则 \textit{x} 比 \textit{y} 老.
 
 如果存在一条依赖关系:
-\begin{shell}
+\begin{awkcode}
     n: a b c
-\end{shell}
+\end{awkcode}
 那么在更新 \texttt{n} 之前, 需要先更新 \texttt{a}, \texttt{b} 和
 \texttt{c},
 而在更新后面 3 个时, 也需要按照依赖关系来进行. 如果 \texttt{makefile}
@@ -1305,10 +1305,10 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 否则的话, 检查目标的年龄, 如果至少有一个目标的年龄比 \texttt{n} 的年龄
 小 (也就是说, \texttt{n} 比某些依赖还老), 我们就执行依赖关系下面的命令.
 命令执行完毕后, 重新计算所有对象的年龄. 如果有一条规则是:
-\begin{shell}
+\begin{awkcode}
     print:
                 pr prog.h a.c b.c c.y
-\end{shell}
+\end{awkcode}
 这是一条没有目标的规则, 对于这些规则, 我们总是执行和该规则相关的命令,
 并更新对象的年龄.
 
@@ -1328,9 +1328,9 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 
 在本质上, 本节所使用的方法和上一节的方法是一样的, \texttt{make} 根据
 \texttt{makefile} 中的依赖关系来构造依赖图, 它使用 Unix 命令 
-\begin{shell}
+\begin{awkcode}
     ls -t
-\end{shell}
+\end{awkcode}
 对文件进行排序 (越新的文件越靠前), 排序的依据是文件最后的修改时间. 文件 
 名将作为数组 \texttt{age} 的索引, 而数组元素的值则是文件在排序序列中的
 名次, 最老的文件拥有最大值的名次. 如果规则中的名字不是当前目录中的文件
@@ -1343,36 +1343,36 @@ $t_1$, $t_2$, ..., $t_n$, 其中 $t_i$ 是文件名或另一个 \textit{name}.
 程序就会报错并中止更新过程.
 
 为了说明 \texttt{make} 如何工作, 假设我们现在是第一次键入并执行命令
-\begin{shell}
+\begin{awkcode}
     make prog
-\end{shell}
+\end{awkcode}
 \texttt{make} 将会执行以下命令序列:
-\begin{shell}
+\begin{awkcode}
     cc -c prog.h a.c
     cc -c prog.h b.c
     yacc c.y
     mv y.tab.c c.c
     cc -c c.c
     cc a.o b.o c.o -ly -o prog
-\end{shell}
+\end{awkcode}
 如果我们对 \texttt{b.c} 作了修改, 然后再次键入
-\begin{shell}
+\begin{awkcode}
     make prog
-\end{shell}
+\end{awkcode}
 \texttt{make} 只会执行
-\begin{shell}
+\begin{awkcode}
     cc -c prog.h b.c
     cc a.o b.o c.o -ly -o prog
-\end{shell}
+\end{awkcode}
 因为在上一次创建 \texttt{prog} 之后, 其他文件并没有被修改过, 所以 
 \texttt{make} 并不会对它们进行处理. 最后, 如果我们再次执行
-\begin{shell}
+\begin{awkcode}
     make prog
-\end{shell}
+\end{awkcode}
 \texttt{make} 将会输出
-\begin{shell}
+\begin{awkcode}
     prog is up to date
-\end{shell}
+\end{awkcode}
 因为文件没有发生变化, 所以什么也不需要做.
 \marginpar{178}
 \begin{awkcode}

@@ -193,7 +193,7 @@ Awk 的一个最常用的功能是把数据从一种形式转换成另一种形�
     awk -f histogram
 \end{awkcode}
 它的输出是
-\begin{shell}
+\begin{awkcode}
       0 -  9:  20 ********************
      10 - 19:  18 ******************
      20 - 29:  20 ********************
@@ -205,7 +205,7 @@ Awk 的一个最常用的功能是把数据从一种形式转换成另一种形�
      80 - 89:  20 ********************
      90 - 99:  22 **********************
     100:        2 **
-\end{shell}
+\end{awkcode}
 
 \marginpar{71}
 \begin{exercise}
@@ -266,7 +266,7 @@ Awk 的一个最常用的功能是把数据从一种形式转换成另一种形�
 逗号.
 
 这是某些测试数据的输出:
-\begin{shell}
+\begin{awkcode}
     0                            0.00
     -1                          -1.00
     -12.34                     -12.34
@@ -274,7 +274,7 @@ Awk 的一个最常用的功能是把数据从一种形式转换成另一种形�
     -1234567.89         -1,234,567.89
     -123.                     -123.00
     -123456               -123,456.00
-\end{shell}
+\end{awkcode}
 
 \begin{exercise}
     \label{exer:sumcomma}
@@ -298,21 +298,21 @@ Awk 的一个最常用的功能是把数据从一种形式转换成另一种形�
     { $1 = substr($1,5,2) substr($1,1,2) substr($1,3,2); print }
 \end{awkcode}
 如果输入是按照月份排序的, 就像这样
-\begin{shell}
+\begin{awkcode}
     013042 mary's birthday
     032772 mark's birthday
     052470 anniversary
     061209 mother's birthday
     110175 elizabeth's birthday
-\end{shell}
+\end{awkcode}
 那么程序的输出是
-\begin{shell}
+\begin{awkcode}
     420130 mary's birthday
     720327 mark's birthday
     700524 anniversary
     090612 mother's birthday
     751101 elizabeth's birthday
-\end{shell}
+\end{awkcode}
 \marginpar{73}
 现在数据已经准备好, 可以按照年, 月, 日来排序了.
 
@@ -337,7 +337,7 @@ Awk 经常用于从其他程序的输出中提取信息, 有时候这些输出�
 任务, Unix 提供了命令 \verb'nm', \verb'nm' 从一个目标文件集合中提取信息,
 并打印一张精心格式化过的列表, 这张表包含了名字, 定义, 以及名字在哪里被使用
 到, \verb'nm' 的典型输出是
-\begin{shell}
+\begin{awkcode}
     file.o:
     00000c80 T _addroot
     00000b30 T _checkdev
@@ -348,7 +348,7 @@ Awk 经常用于从其他程序的输出中提取信息, 有时候这些输出�
     funmount.o:
     00000000 T _funmount
              U cerror
-\end{shell}
+\end{awkcode}
 只有一个字段的行 (比如 \verb'file.o') 是文件名, 有两个字段的行 (比如 
 \verb'U _close') 表示的是名字被使用到的地方, 有三个字段的行表示的是名字
 被定义的地方. \verb'T' 表示这个定义是一个文本符号 (函数), \verb'U' 表示 
@@ -395,7 +395,7 @@ Awk 经常用于从其他程序的输出中提取信息, 有时候这些输出�
 45 个字符宽的区域, 紧跟在它后面的是 3 个空格, 再后面是金额, 第 5 行是金额
 的大写形式, 其他行都是空白. 支票看起来就像这样:
 \begin{mdframed}
-\begin{shell}
+\begin{awkcode}
 
                                              1026
                                              Aug 31, 2015
@@ -404,7 +404,7 @@ the sum of one hundred twenty three dollars and 45 cents exactly
 
 
 
-\end{shell}
+\end{awkcode}
 \end{mdframed}
 这是打印支票的 awk 程序:
 \marginpar{75}
@@ -474,13 +474,13 @@ the sum of one hundred twenty three dollars and 45 cents exactly
     "data" | getline data   # get today's date
 \end{awkcode}
 从系统获取, 该行执行 \verb'date', 再把它的输出输送给 \verb'getline'. 为了把
-\begin{shell}
+\begin{awkcode}
     Wed Jun 17 13:39:36 EDT 1987
-\end{shell}
+\end{awkcode}
 转换成 
-\begin{shell}
+\begin{awkcode}
     Jun 17, 1987
-\end{shell}
+\end{awkcode}
 我们需要自己做一些处理工作.
 (在不支持管道的非Unix平台上, 该程序需要做些修改才能正确运行)
 
@@ -552,9 +552,9 @@ Awk 的另一个常用功能是数据验证: 确保数据是合法的, 或至少
 这些特殊行叫作 ``文本格式化'' 命令, 有了这些命令的帮助, 在排版书籍的时候,
 程序可以以一种容易识别的字体显示出来. 因为程序之间不能互相嵌套, 所以这些 
 文本格式化命令必须按照交替序列, 轮流出现:
-\begin{shell}
+\begin{awkcode}
     .P1 .P2 .P1 .P2 ... .P1 .P2
-\end{shell}
+\end{awkcode}
 如果其中一个被漏掉了, 那么排版软件的输出将会是完全混乱的. 为了确保书籍被
 正确得排版, 我们写了这个小程序, 它可以用于检查分隔符是否按照正确的顺序出现,
 程序虽小, 但却是检查程序的典型代表:
@@ -631,11 +631,11 @@ Unix 系统中的密码文件含有授权用户的用户名及其相关信息, �
 自动转化成检查程序. 下面这个集合含有几个错误条件及其对应的提示信息, 
 这些错误条件取自上一个程序. 如果某个输入行满足错误条件, 对应的提示信息
 就会被打印出来.
-\begin{shell}
+\begin{awkcode}
     NF != 7                 does not have 7 fields
     $1 ~ /[^A-Za-z0-9]/     nonalphanumeric user id
     $2 == ""                no password
-\end{shell}
+\end{awkcode}
 下面这个程序把\ \mbox{条件}\mbox{-}消息\ 对转化成检查程序:
 \begin{awkcode}
     # checkgen - generate data-checking program
@@ -735,7 +735,7 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
 符串内的单词, 然后就可以测试新来的单词是否在数组内.
 
 如果把文件 \filename{compat} 作为输入, 输出是:
-\begin{shell}
+\begin{awkcode}
     file tmp.awk, line 12: gsub is now a built-in function
         /\//  { gsub(/\/([^\/]|\\\/)+\//, "", line) } # reg exprs,
     file tmp.awk, line 13: sub is now a built-in function
@@ -750,7 +750,7 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
         sub(/^[ \t]*/, "")
     file tmp.awk, line 35: FNR is now a built-in variable
         printf("file %s, line %d: %s\n\t%s\n", FILENAME, FNR, s, $0)
-\end{shell}
+\end{awkcode}
 
 \begin{exercise}
     重写 \verb'compat', 不用 \verb'asplit', 而是用正则表达式来识别关键词,
@@ -806,25 +806,25 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
 
 到目前为止遇到的记录都是由单行组成的, 然而, 还有大量的数据, 其每一条记录
 都由多行组成, 比如地址薄
-\begin{shell}
+\begin{awkcode}
     Adam Smith
     1234 Wall St., Apt. 5C
     New York, NY 10021
     212 555-4321
-\end{shell}
+\end{awkcode}
 或参考文献
-\begin{shell}
+\begin{awkcode}
     Donald E. Knuth
     The Art of Computer Programming
     Volume 2: Seminumerical Algorithms, Second Edition
     Addison-Wesley, Reading, Mass.
     1981
-\end{shell}
+\end{awkcode}
 或个人笔记
-\begin{shell}
+\begin{awkcode}
     Chateau Lafite Rothschild 1947
     12 bottles @ 12.95
-\end{shell}
+\end{awkcode}
 
 如果大小合适, 结构也很规范, 那么创建并维护这些信息相对来说还是比较容易的,
 在效果上, 每一条记录都等价于一张索引卡片. 与单行数据相比, 使用 awk 处理 
@@ -836,7 +836,7 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
 假设我们有一本地址薄, 其每一条记录的前面 4 行分别是名字, 街道地址, 城市
 和州, 在这 4 行之后, 可能包含一行额外的信息, 记录之间由一行空白行分开:
 \marginpar{83}
-\begin{shell}
+\begin{awkcode}
     Adam Smith
     1234 Wall St., Apt. 5C
     New York, NY 10021
@@ -853,7 +853,7 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
     555 Fifth Ave
     New York, NY
     212 586-2400
-\end{shell}
+\end{awkcode}
 
 如果记录是由空白行分隔的, 那么它们可以被直接处理: 若记录分隔符 \verb'RS'
 被设置成空值 (\verb'RS=""'), 则每一个行块都被当成一个记录, 于是 
@@ -862,7 +862,7 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
     /New York/
 \end{awkcode}
 打印所有的, 含有 \verb'New York' 的记录, 而不管这个记录有多少行:
-\begin{shell}
+\begin{awkcode}
     Adam Smith
     1234 Wall St., Apt. 5C
     New York, NY 10021
@@ -871,7 +871,7 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
     555 Fifth Ave
     New York, NY
     212 586-2400
-\end{shell}
+\end{awkcode}
 如果记录按照这种方式打印出来, 则输出记录之间是不会有空白行的, 输入格式并
 不会被保留下来. 为了解决这个问题, 最简单的办法是把输出记录分隔符 \verb'ORS'
 设置成 \verb'\n\n':
@@ -889,9 +889,9 @@ Awk 的新版可能包含更多的内建变量与内建函数, 而老程序有�
     $1 ~ /Smith$/   { print $1, $4 } # name, phone
 \end{awkcode}
 程序的输出是 
-\begin{shell}
+\begin{awkcode}
     Adam Smith 212 555-4321
-\end{shell}
+\end{awkcode}
 前面提过, 不管 \verb'FS' 的值是什么, 换行符总是多行记录的字段分隔符之一.
 如果 \verb'RS' 被设置成 \verb'""', 则默认的字段分隔符就是空格符, 制表符,
 以及换行符; 如果 \verb'FS' 是 \verb'\n', 则换行符就是唯一的字段分隔符.
@@ -948,7 +948,7 @@ awk 程序, 就可以把原来的程序应用到多行记录上. 第 1 个程序
 一个简单的例子, 仍然是地址薄, 不过每个记录都带有一个头部信息, 该信息
 指出了记录的某些特征 (比如职业), 跟在头部后面的是名字, 每条记录 (除了最
 后一条) 都由一个尾部结束, 尾部由一个空白行组成:
-\begin{shell}
+\begin{awkcode}
     accountant
     Adam Smith
     1234 Wall St., Apt. 5C
@@ -968,7 +968,7 @@ awk 程序, 就可以把原来的程序应用到多行记录上. 第 1 个程序
     Dr. Susan Mark
     600 Mountain Avenue
     Murray Hill, NJ 07974
-\end{shell}
+\end{awkcode}
 为了打印所有医生的记录, 范围模式是最简单的办法:
 \begin{awkcode}
     /^doctor/, /^$/
@@ -998,7 +998,7 @@ unformatted lines.}, 例如, 地址可能含有国家名称, 也可能不包括�
 
 处理结构化数据的一种方法是为记录的每一个字段加上一个名字或关键词, 例如,
 我们有可能如此组织一本支票薄:
-\begin{shell}
+\begin{awkcode}
     check	1021
     to	Champagne Unlimited
     amount	123.10
@@ -1029,7 +1029,7 @@ unformatted lines.}, 例如, 地址可能含有国家名称, 也可能不包括�
     check	1025
     amount	75.75
     date	1/5/87
-\end{shell}
+\end{awkcode}
 我们仍然使用多行记录, 记录之间用一个空白行分隔, 但是在记录内部, 每一个 
 数据都是自描述的: 每一个字段都由一个条目名称, 一个制表符, 及信息组成.
 这意味着不同的记录可以包含不同的字段, 即使是类似的字段, 其排列顺序也可以
@@ -1063,9 +1063,9 @@ the value it corresponds to, but they are not otherwise connected.}.
     }
 \end{awkcode}
 输出是 
-\begin{shell}
+\begin{awkcode}
     deposits $500.00, checks $418.95
-\end{shell}
+\end{awkcode}
 
 程序非常简单, 只要输入数据格式正确, 不管记录中的条目以何种顺序出现, 程序 
 都能正确得工作. 但是程序也很脆弱, 它需要非常认真地初始化, 以及对文件结束
@@ -1097,13 +1097,13 @@ the value it corresponds to, but they are not otherwise connected.}.
 第 3 种方案是把记录的每一个字段都分割到一个关联数组中, 然后再对值进行访问.
 下面将要介绍的程序以一种更加紧凑的方式打印支票信息:
 \marginpar{88}
-\begin{shell}
+\begin{awkcode}
       1/1/87  1021  $123.10  Champagne Unlimited
       1/2/87  1022   $45.10  Getwell Drug Store
       1/3/87  1023  $125.00  International Travel
       1/3/87  1024   $50.00  Carnegie Hall
       1/5/87  1025   $75.75  American Express
-\end{shell}
+\end{awkcode}
 程序的代码是
 \begin{awkcode}
     # check3 - print check information

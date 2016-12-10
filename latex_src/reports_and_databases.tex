@@ -32,7 +32,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 我们还希望国家按照所在的大洲进行分组, 大洲按照字母顺序排列, 大洲相同的
 国家按照人口密度的降序排列, 就像这样:
 \marginpar{90}
-\begin{shell}
+\begin{awkcode}
     CONTINENT       COUNTRY    POPULATION    AREA    POP. DEN.
     Asia            Japan          120        144      833.3
     Asia            India          746       1267      588.8
@@ -45,7 +45,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
     North America   USA            237       3615       65.6
     North America   Canada          25       3852        6.5
     South America   Brazil         134       3286       40.8
-\end{shell}
+\end{awkcode}
 
 生成报表的前两个阶段由程序 \verb'prep1' 完成, 当文件 \filename{countries}
 作为输入时, \verb'prep1' 提取并计算相关的信息, 并对其进行排序:
@@ -59,7 +59,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 \end{awkcode}
 输出是一系列的行, 每行都包括 5 个字段, 用冒号分隔, 从左至右, 字段依次表示
 大洲, 国家, 人口, 面积, 以及人口密度:
-\begin{shell}
+\begin{awkcode}
     Asia:Japan:120:144:833.3
     Asia:India:746:1267:588.8
     Asia:China:1032:3705:278.5
@@ -71,7 +71,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
     North America:USA:237:3615:65.6
     North America:Canada:25:3852:6.5
     South America:Brazil:134:3286:40.8
-\end{shell}
+\end{awkcode}
 程序 \verb'prep1' 把输出直接输送给 \verb'sort' 命令, 参数 \verb'-t' 告诉 
 \verb'sort' 把冒号作为字段分隔符, \verb'+0 -1' 表示把第1个字段作为排序的
 主键, 参数 \verb'+4rn' 表示把第 5 个字段作为次要主键, 按照数值的逆序进行
@@ -98,9 +98,9 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
           }
 \end{awkcode}
 期望中的报表可以通过键入
-\begin{shell}
+\begin{awkcode}
     awk -f prep1 countries | awk -f form1
-\end{shell}
+\end{awkcode}
 得到.
 
 \verb'prep1' 中 \verb'sort' 的参数非常古怪, 我们可以通过格式化输出, 使得
@@ -121,7 +121,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
           }
 \end{awkcode}
 当 \filename{countries} 作为输入时, \verb'prep2' 的输出是:
-\begin{shell}
+\begin{awkcode}
     Asia           :  0.00120000:Japan:120:144:833.3
     Asia           :  0.00169839:India:746:1267:588.8
     Asia           :  0.00359012:China:1032:3705:278.5
@@ -133,7 +133,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
     North America  :  0.01525316:USA:237:3615:65.6
     North America  :  0.15408000:Canada:25:3852:6.5
     South America  :  0.02452239:Brazil:134:3286:40.8
-\end{shell}
+\end{awkcode}
 格式 \verb'%-15s' 对大洲名来说已经足够宽了, \verb'%12.8f' 对人口密度的倒数
 来说, 覆盖范围也已足够. 最终的格式化程序类似于 \verb'form1', 但是忽略了第
 2 个字段. 为了简化排序程序的选项而特意制造一个排序键 --- 这种技巧非常常见,
@@ -195,7 +195,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 比重, 我们需要新增一个标题, 以及更多的列表头:
 \marginpar{93}
 {\small
-\begin{shell}
+\begin{awkcode}
 Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 
  CONTINENT      COUNTRY        POPULATION              AREA           POP. DEN.  
@@ -228,14 +228,14 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
                              ====      =====      =====     =====
  GRAND TOTAL                 2819      100.0      25681     100.0
                             =====     ======      =====    ======
-\end{shell}
+\end{awkcode}
 }
 
 我们仍然可以使用
 \mbox{准备}-\mbox{排序}-\mbox{格式化}
 三步骤策略来生成这张报表, \verb'prep3'
 从文件 \filename{countries} 中准备并排序必要的信息:
-\begin{shell}
+\begin{awkcode}
     # prep3 - prepare countries data for form3
 
     BEGIN  { FS = "\t" }
@@ -251,7 +251,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
             $4, $1, $3, 100*$3/poptot, $2, 100*$2/areatot,
             den, pop[$4], area[$4]) | "sort -t: +0 -1 +6rn"
     }
-\end{shell}
+\end{awkcode}
 这个程序需要遍历输入数据两次, 第一次遍历累加每个大洲的面积与人口数, 并分别
 保存到数组 \verb'area' 与 \verb'pop' 中, 同时计算总面积与总人口数, 分别
 保存在变量 \verb'areatot' 与 \verb'poptot' 中. 第二次遍历对每个国家的统计
@@ -263,7 +263,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 \end{awkcode}
 \verb'prep3' 产生的输出, 其每一行都由 9 个字段组成, 字段之间用冒号分隔,
 这些 字段包括:
-\begin{shell}
+\begin{awkcode}
     大洲 
     国家
     国家人口 
@@ -273,7 +273,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
     人口密度
     该国所在的大洲的总人口
     该国所在的大洲的面积
-\end{shell}
+\end{awkcode}
 注意 \verb'sort' 的命令行参数, 该命令行参数使得排序后的记录先按照第 1 个字 
 段的字母顺序排列, 再按第 7 个字段的数值形式的逆序排列. 
 
@@ -423,7 +423,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 数值所占的域相对于本列最宽的项居中. 如果给定头部与输入文件
 \filename{countries}, 程序的输出是\footnote{\filename{countries} 原来没有
 头部, 需事先加上 --- 译者注}:
-\begin{shell}
+\begin{awkcode}
     COUNTRY   AREA   POPULATION   CONTINENT    
     USSR      8649       275      Asia         
     Canada    3852        25      North America
@@ -436,7 +436,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
     Japan      144       120      Asia         
     Germany     96        61      Europe       
     England     94        56      Europe       
-\end{shell}
+\end{awkcode}
 
 程序的实现代码非常紧凑:
 \marginpar{98}
@@ -552,12 +552,12 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
     ' countries
 \end{awkcode}
 输出是 
-\begin{shell}
+\begin{awkcode}
     Canada:
         25 million people
         3.852 million sq. mi.
         6.5 people per sq. mi.
-\end{shell}
+\end{awkcode}
 现在, 如果我们想要查询其他国家的信息, 在执行每次查询前都需要修改国家的名称,
 但是更方便的做法是把程序放入一个可执行文件中, 比如就叫 \verb'info',
 查询时只要输入
@@ -636,7 +636,7 @@ Awk 也可以用于生成格式信函, 生成时
 for each form letter that is generated.}. 例如, 下面的文本使用了参数 
 \verb'#1' 到 \verb'#4', 这些参数分别表示国家名称, 人口, 面积, 以及人口密度:
 \marginpar{101}
-\begin{shell}
+\begin{awkcode}
     Subject: Demographic Information About #1
     From: AWK Demographics, Inc.
 
@@ -645,14 +645,14 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     million people and its area is #3 million square miles.
     This gives #1 a population density of #4 people per
     square mile.
-\end{shell}
+\end{awkcode}
 
 如果输入参数是
-\begin{shell}
+\begin{awkcode}
     Canada:25:3.852:6.5
-\end{shell}
+\end{awkcode}
 输出的的格式信函是:
-\begin{shell}
+\begin{awkcode}
     Subject: Demographic Information About Canada
     From: AWK Demographics, Inc.
 
@@ -661,7 +661,7 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     million people and its area is 3.852 million square miles.
     This gives Canada a population density of 6.5 people per
     square mile.
-\end{shell}
+\end{awkcode}
 
 程序 \verb'form.gen' 是格式信函生成程序:
 \begin{awkcode}
@@ -720,7 +720,7 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 分别是 \verb'country', \verb'area', \verb'population', 以及
 \verb'continent'. 现在我们打算在数据库中新增一个文件 \filename{capitals},
 文件的每一行都由两个字段组成 --- 国家及其首都:
-\begin{shell}
+\begin{awkcode}
     USSR    Moscow
     Canada  Ottawa
     China   Beijing
@@ -732,7 +732,7 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     Japan   Tokyo
     Germany Bonn
     England London
-\end{shell}
+\end{awkcode}
 与 \verb'countries' 一样, 字段之间用制表符分开.
 
 从这两个文件出发, 如果我们想要打印位于亚洲的国家, 及其人口与首都, 那就必须
@@ -771,13 +771,13 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 的属性, 但是重复的属性会被移除. 如果我们把 \verb'countries' 与
 \verb'capitals' 这两张表作自然连接, 我们就会得到一张新表 (姑且称为
 \verb'cc'), 它的属性包括:
-\begin{file}
+\begin{awkcode}
     country, area, population, continent, capital
-\end{file}
+\end{awkcode}
 对于每一个同时出现在两张表中的国家来说, 我们都可以在 \verb'cc' 中找到一行
 记录, 它包含了国家的名称, 后面跟着面积, 人口, 所在大洲,
 以及国家的首都:
-\begin{file}
+\begin{awkcode}
     Brazil  3286    134     South America	Brasilia
     Canada  3852    25      North America	Ottawa
     China   3705    1032    Asia                Beijing
@@ -789,7 +789,7 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
     Mexico  762     78      North America	Mexico City
     USA     3615    237     North America	Washington
     USSR    8649    275     Asia                Moscow
-\end{file}
+\end{awkcode}
 
 我们实现连接运算的方法是根据它们的公共属性进行排序, 如果两张表的某一行的
 公共属性值相同, 那就把它们合并起来, 就像上面这张表显示的那样. 为了处理
@@ -960,7 +960,7 @@ many inputs.}) 的方法之一.
 table}), 只有在必要的时候才会构造导出表.
 
 我们使用下面的 \filename{relfile} 来表示扩展了的国家数据库:
-\begin{file}
+\begin{awkcode}
     countries:
         country
         area
@@ -978,17 +978,17 @@ table}), 只有在必要的时候才会构造导出表.
         !sort countries >temp.countries
         !sort capitals >temp.capitals
         !join temp.countries temp.capitals >cc
-\end{file}
+\end{awkcode}
 这个文件说明数据库中有两张基表 --- \filename{countries} 与
 \filename{capitals}, 一张导出表 \filename{cc}, 导出表 \filename{cc} 通过 
 把基表排序并存放在临时文件中, 再对临时文件执行连接操作来生成, 也就是说, 
 \filename{cc} 通过执行
 \marginpar{107}
-\begin{shell}
+\begin{awkcode}
     sort countries >temp.countries
     sort capitals >temp.capitals
     join temp.countries temp.capitals >cc
-\end{shell}
+\end{awkcode}
 生成.
 
 一个 \texttt{relfile} 常常包含一张 \cterm{全局关系表} (\term{universal
@@ -1018,9 +1018,9 @@ relation}), 它是一张包含了所有属性的表, 是 \texttt{relfile} 的最
 \end{enumerate}
 
 \textit{q} 查询:
-\begin{shell}
+\begin{awkcode}
     $continent ~ /Asia/ { print $country, $population }
-\end{shell}
+\end{awkcode}
 提到了属性 \texttt{continent}, \texttt{country} 与 \texttt{population},
 它们都是第一张表 \texttt{countries} 的属性子集. 查询处理程序把该查询转换
 成程序 
@@ -1030,9 +1030,9 @@ relation}), 它是一张包含了所有属性的表, 是 \texttt{relfile} 的最
 并把文件 \filename{countries} 作为输入数据.
 
 \textit{q} 查询 
-\begin{shell}
+\begin{awkcode}
     { print $country, $population, $capital }
-\end{shell}
+\end{awkcode}
 包含属性 \texttt{country}, \texttt{population} 与 \texttt{capital}, 它们 
 都是导出表 \texttt{cc} 的属性子集. 于是查询处理程序利用 \filename{relfile}
 列出的构造命令构造出表格 \texttt{cc}, 并将该查询转换成程序

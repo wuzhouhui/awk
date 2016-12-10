@@ -157,10 +157,10 @@
 可以打印出那些以标记开始的行, 但不包括标记本身.
 
 \myexer\ref{exer:form3_form4} 一个可能的解决办法在命令行中显式地给出日期参数:
-\begin{shell}
+\begin{awkcode}
     awk -f prep3 pass=1 countries pass=2 countries |
         awk -f form3 date='January 1, 1988'
-\end{shell}
+\end{awkcode}
 变量 \texttt{date} 在命令行中赋值, 而且它的值可以一直保留到 \texttt{form3}
 的 \texttt{BEGIN} 动作之外. 如果参数中包含空格, 那么就必须用引号把它们
 包围起来. 另一个办法是把 \texttt{date} 命令的输出以管道的方式输送给 
@@ -328,7 +328,7 @@ Programming} (第 2 卷) 中找到.
 \end{awkcode}
 
 \myexer\ref{exer:bridge_hands} 问题是随机生成下面这种形式的桥牌:
-\begin{file}
+\begin{awkcode}
                         NORTH
                     S: 10 9 6 4
                     H: 8 7
@@ -344,7 +344,7 @@ Programming} (第 2 卷) 中找到.
                     H: A 10 9 6 5
                     D: 5 4 3
                     C: 9 7 4
-\end{file}
+\end{awkcode}
 下面的程序生成从 1 到 52 的整数的一个随机排列, 排列结果存放到数组
 \texttt{deck} 中. 数组被均分成四段, 分别对每段中的 13 个数排序, 每一段
 都表示一手牌: 数字 52 对应黑桃 A, 51 对应黑桃 K, 1 对应梅花二.
