@@ -2218,7 +2218,7 @@ sortgen #   output: Unix sort command with appropriate arguments
 sortgen 
 sortgen BEGIN { key = 0 }
 sortgen 
-sortgen /no |not |n't / { print "error: can't do negatives:", $0; ok = 1 }
+sortgen /no |not |n't / { print "error: can't do negatives:", $0; ok = 0 }
 sortgen 
 sortgen # rules for global options
 sortgen         { ok = 0 }

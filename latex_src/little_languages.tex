@@ -552,7 +552,7 @@ matrices), 点阵图 (dotchart, 直方图的一种), 箱线图 (boxplot, 显示�
 
     BEGIN { key = 0 }
 
-    /no |not |n't / { print "error: can't do negatives:", $0; ok = 1 }
+    /no |not |n't / { print "error: can't do negatives:", $0; ok = 0 }
 
     # rules for global options
             { ok = 0 }
