@@ -1138,7 +1138,7 @@ form.gen }
 form.gen 
 form.gen {   for (i = 1; i <= n; i++) { # read data lines
 form.gen         temp = form[i]         # each line generates a letter
-form.gen         for (j = 1; j <= NF; j++)
+form.gen         for (j = NF; j >= 1; j--)
 form.gen             gsub("#" j, $j, temp)
 form.gen         print temp
 form.gen     }
@@ -2218,7 +2218,7 @@ sortgen #   output: Unix sort command with appropriate arguments
 sortgen 
 sortgen BEGIN { key = 0 }
 sortgen 
-sortgen /no |not |n't / { print "error: can't do negatives:", $0; ok = 1 }
+sortgen /no |not |n't / { print "error: can't do negatives:", $0; ok = 0 }
 sortgen 
 sortgen # rules for global options
 sortgen         { ok = 0 }
