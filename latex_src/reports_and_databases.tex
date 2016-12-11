@@ -677,7 +677,7 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 
     {   for (i = 1; i <= n; i++) { # read data lines
             temp = form[i]         # each line generates a letter
-            for (j = 1; j <= NF; j++)
+            for (j = NF; j >= 1; j--)
                 gsub("#" j, $j, temp)
             print temp
         }
