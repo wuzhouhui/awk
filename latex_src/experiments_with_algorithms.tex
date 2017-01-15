@@ -379,7 +379,7 @@ hand}
     \node at (0.5, 0.5) {\texttt{p}};
     \node at (2.5, 0.5) {\texttt{<p}};
     \node at (5.5, 0.5) {\texttt{$\geqslant$p}};
-    \node at (8.5, 0.5) {unprocessed};
+    \node at (8.5, 0.5) {未处理的元素};
 
     \draw[->] (0.5, -0.8) -- (0.5, -0.2);
     \draw[->] (3.7, -0.8) -- (3.7, -0.2);
@@ -638,8 +638,8 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
         \draw[->] (0.3, -0.8) -- (0.3, -0.1);
         \draw[->] (3.7, -0.8) -- (3.7, -0.1);
         \draw[->] (7.7, -0.8) -- (7.7, -0.1);
-        \node at (2, 0.5) {heap};
-        \node at (6, 0.5) {sorted};
+        \node at (2, 0.5) {堆};
+        \node at (6, 0.5) {有序序列};
         \node at (0.3, -1.2) {1};
         \node at (3.7, -1.2) {\textit{i}};
         \node at (7.7, -1.2) {\textit{n}};
@@ -789,7 +789,7 @@ $n \log n$ 程序性能之间的差距急剧加大.
 
 在上一节中, 为了评价排序程序的性能, 我们计算了特定操作的执行次数. 评价
 程序性能的另一个有效方法是对程序进行剖析\footnote{``profiling'' 这个词 
-很难翻译, 我就把它译作 ``剖析'' 得了. --- 译者注},
+不好翻译, 暂且译作 ``剖析''.},
 也就是计算每条语句的执行次数.
 许多编程环境都会提供一个称为 \cterm{剖析器} (\term{profiler}) 的工具
 程序, 剖析器可以打印某个程序中每条语句的执行次数.
@@ -1116,14 +1116,16 @@ $n \log n$ 程序性能之间的差距急剧加大.
 结点 1, 2, 3 和 4. 这时候, 如果从另一个未访问过的结点开始, 比如 5, 那么 
 接下来将会访问结点 5, 6 和 7. 如果遍历从不同的结点开始, 就会得到不同
 的结点访问序列.
-\begin{center}
+
+\centerline{
 \xymatrix {
     & *++=[o][F]{1}\ar"2,2"     &   & *++=[o][F]{5}\ar"2,4"\ar@/^2pc/"3,4" \\
         & *++=[o][F]{2}\ar"3,1"\ar"3,3"     &   & *++=[o][F]{6}\ar"3,4"\ar"2,2" \\
             *++=[o][F]{3}\ar@/^2pc/"1,2"   &       & *++=[o][F]{4}\ar"3,1"
             & *++=[o][F]{7} \\
 }
-\end{center}
+}
+\medskip
 
 深度优先搜索可以用来判断图中是否含有环. 如果有一条边指向的是之前访问过
 的祖先结点, 比如 \texttt{(3, 1)}, 那么这条边就叫作\cterm{回边} (\term{back
@@ -1147,8 +1149,8 @@ edge}). 因为存在回边等同于存在环, 所以为了判断图中是否含�
 
 这个函数使用数组 \texttt{visited} 来判断某个结点是否被访问过. 开始时,
 \texttt{visited[}\textit{x}\texttt{]} 等于 0. 在第一次进入结点 \textit{x}
-时, \texttt{dfs} 把 \texttt{visited[}\textit{x}\texttt{]} 设置为 1,
-最后一次离开结点 \textit{x} 时, 把 \texttt{visited[}\textit{x}\texttt{]}
+时 \texttt{dfs} 把 \texttt{visited[}\textit{x}\texttt{]} 设置为 1,
+最后一次离开结点 \textit{x} 时把 \texttt{visited[}\textit{x}\texttt{]}
 设置为 2. 在遍历过程中, \texttt{dfs} 利用 \texttt{visited} 来判断结点
 \textit{y} 是否是当前结点的祖先 (如果是的话, 说明它之前被访问过),
 以及判断 \textit{y} 之前是否被访问过. 如果 \textit{y}
@@ -1208,11 +1210,12 @@ edge}). 因为存在回边等同于存在环, 所以为了判断图中是否含�
 需要注意的是, 对图中的某些环来说, 这个程序可以通过查找回边来显式地探测,
 而对另一些环的探测则是隐式地, 对于后一种情况, 程序将无法打印出全部的结点,
 就像这幅图:
-\begin{center}
+
+\centerline{
 \xymatrix {
     *++=[o][F]{\texttt{x}}\ar@/^1pc/"1,2" & *++=[o][F]{\texttt{y}}\ar@/^1pc/"1,1" \\
 }
-\end{center}
+}
 
 \begin{exercise}
     \label{exer:rtsort}
