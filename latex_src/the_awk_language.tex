@@ -1229,7 +1229,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \end{awkcode}
 将输入行中的每一个 ``USA'' 替换为 ``United States'' (在这样的例子里,
 当 \verb'$0' 发生改变时, 字段与 \nf 也会跟着发生改变). 程序
-\footnote{在 mawk-1.3.3 中, \texttt{sub} 与 \texttt{gsub}
+\footnote{在我的系统中 (mawk-1.3.3), \texttt{sub} 与 \texttt{gsub}
 的第 3 个参数必须是变量. --- 译者}
 \begin{awkcode}
     gsub(/ana/, "anda", "banana")
