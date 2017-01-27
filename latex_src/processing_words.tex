@@ -168,11 +168,12 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
     Sentence -> Nounphrase Verbphrase
              -> the boy Verbphrase
 \end{awkcode}
-不断进行下去, 直到所有的非终结符都被替换掉为止:
+不断进行下去, 直到所有的非终结符都被替换掉为止\footnote{第 3 行到第 4
+行实际上经历了 2 次展开. --- 译者注}:
 \begin{awkcode}
     Sentence -> Nounphrase Verbphrase
              -> the boy Verbphrase
-             -> the bov Verb Modlist Adverb
+             -> the boy Verb Modlist Adverb
              -> the boy walks very Modlist Adverb
              -> the boy walks very Adverb
              -> the boy walks very quickly
