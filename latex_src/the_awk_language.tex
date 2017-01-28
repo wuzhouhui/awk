@@ -1060,7 +1060,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 行之间没有空格. 数值 \nr 会被自动转换成字符串 (如果必要的话, \verb'$0' 也
 会做相同的转换); 然后三个字符串拼接在一起并打印出来.
 
-\textbf{作为正则表达式的字符串} (\emph{Strings as Regular Expressions}).
+\textbf{用作正则表达式的字符串} (\emph{Strings as Regular Expressions}).
 到目前为止, 在所有的匹配表达式中, \verb'~' 与 \verb'!~' 右边的操作数都是
 都是一个被斜杠包围起来的正则表达式. 实际上, 任意一个表达式都可以用作匹配
 运算符的右操作数. Awk 对这些表达式求值, 如果必要的话将这些值转换成字符串,
@@ -1291,7 +1291,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 \end{awkcode}
 替换 \verb'print s')
 
-\textbf{数值还是字符串} (\emph{Number or String}). 表达式的值可以自动从
+\textbf{数值或字符串} (\emph{Number or String}). 表达式的值可以自动从
 数值转换为字符串, 或反之, 具体取决于该值将用于什么运算. 算术表达式, 例如
 \begin{awkcode}
     pop + $3
@@ -1435,7 +1435,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     \end{center}
 \end{figure}
 
-\textbf{运算符的总结} (\emph{Summary of Operators}). 可以出现在表达式中的运算
+\textbf{运算符总结} (\emph{Summary of Operators}). 可以出现在表达式中的运算
 符全部列在了表 \ref{tbl:expression_operators} 中. 将这些运算符应用到常量,
 变量, 字段, 数组元素, 函数, 和其他表达式中, 就可以构造出一个表达式.
 
