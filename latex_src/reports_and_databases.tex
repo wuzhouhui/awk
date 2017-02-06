@@ -412,9 +412,9 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 \marginpar{97}
 如果把 \verb'form4' 的输出输送给 \verb'tbl', 就可以得到下面这张表格:
 % awk -f prep3 pass=1 countries pass=2 countries | awk -f form4 |
-% tbl | troff | grops > out.ps
+% tbl | troff | grops | ps2eps > report3.eps
 \begin{center}
-    \includegraphics[scale=0.7]{./images/report3.png}
+    \includegraphics{./images/report3.eps}
 \end{center}
 
 如果可能的话, 我们建议构造一个程序来格式化表格, 实现一个像 \verb'tbl' 这样 
