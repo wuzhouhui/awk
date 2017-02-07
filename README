@@ -16,9 +16,6 @@ The AWK Programming Language (Aho, Kernighan, Weinberger 著, 中文名: AWK
         分支 twoside 中的 PDF 在内容上与 master 分支是一样的, 但是排版
         稍有不同: 双面排版, 字体也更加细腻, 适合打印.
 
-待办事宜:
-        grep -i todo *.tex
-
 编译:
 	make -C latex_src/
 
