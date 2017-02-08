@@ -254,6 +254,54 @@ hand}
 序列表现出了最佳的性能. 有序序列的性能表现 (在图中没有显示出来)
 和同一元素序列非常接近
 
+% grap -u insertion_sort.grap | pic | troff | grops | ps2eps > insertion_sort.eps
+% .G1
+% coord x 0,100 y 0,10000
+% label left "Comparisons" "+ Exchanges" left 0.4
+% label bottom "Number of elements"
+% ticks left in 0.08 left 0.04 from 0 to 10000 by 2000
+% ticks bot out 0.08 from 0 to 100 by 20
+% "INSERTION SORT" at 30,8000
+% "reverse-sorted" size -2 at 70,7000
+% "random" size -2 at 75,4000
+% "equal-element" size -2 at 80,500
+% draw solid
+% 0 0
+% 10 53
+% 20 196
+% 30 538
+% 40 721
+% 50 1121
+% 60 1764
+% 70 2313
+% 80 3502
+% 90 4034
+% 100 5178
+% draw dashed
+% 0 0
+% 10 9
+% 20 19
+% 30 29
+% 40 39
+% 50 49
+% 60 59
+% 70 69
+% 80 79
+% 90 89
+% 100 99
+% draw dotted
+% 0 0
+% 10 90
+% 20 380
+% 30 870
+% 40 1560
+% 50 2450
+% 60 3540
+% 70 4830
+% 80 6320
+% 90 8010
+% 100 9900
+% .G2
 \begin{center}
     \includegraphics{./images/insertion_sort.eps}
 \end{center}
@@ -479,6 +527,54 @@ hand}
 排序时, 也用到了这三种类型的数据). 正如你所看到的那样, 随着元素个数的增加,
 同元素序列的操作次数比另外两种序列的操作次数增长得快.
 
+% grap -u quicksort.grap | pic | troff | grops | ps2eps > quicksort.eps
+% .G1
+% coord x 0,100 y 0,6000
+% label left "Comparisons" "+ Exchanges" left 0.4
+% label bottom "Number of elements"
+% ticks left in 0.08 left 0.04 from 0 to 6000 by 2000
+% ticks bot out 0.08 from 0 to 100 by 20
+% "QUICKSORT" at 25,5000
+% "reverse-sorted" size -2 at 80,300
+% "random" size -2 at 80,1300
+% "equal-element" size -2 at 60,3000
+% draw solid
+% 0 0
+% 10 44
+% 20 108
+% 30 212
+% 40 289
+% 50 405
+% 60 523
+% 70 724
+% 80 772
+% 90 996
+% 100 1184
+% draw dashed
+% 0 0
+% 10 63
+% 20 228
+% 30 493
+% 40 858
+% 50 1323
+% 60 1888
+% 70 2553
+% 80 3318
+% 90 4183
+% 100 5148
+% draw dotted
+% 0 0
+% 10 59
+% 20 141
+% 30 256
+% 40 360
+% 50 397
+% 60 511
+% 70 770
+% 80 763
+% 90 1050
+% 100 1107
+% .G2
 \begin{center}
     \includegraphics{images/quicksort.eps}
 \end{center}
@@ -759,6 +855,54 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 时, 性能优于快速排序.
 \marginpar{166}
 
+% grap -u heap_sort.grap | pic | troff | grops | ps2eps > heap_sort.eps
+% .G1
+% coord x 0,100 y 0,2000
+% label left "Comparisons" "+ Exchanges" left 0.4
+% label bottom "Number of elements"
+% ticks left in 0.08 left 0.04 from 0 to 2000 by 500
+% ticks bot out 0.08 from 0 to 100 by 20
+% "HEAPSORT" at 20,1500
+% "reverse-sorted" size -2 at 70,1300
+% "random" size -2 at 80,1500
+% "equal-element" size -2 at 80,700
+% draw solid
+% 0 0
+% 10 65
+% 20 178
+% 30 331
+% 40 484
+% 50 674
+% 60 840
+% 70 1021
+% 80 1221
+% 90 1416
+% 100 1620
+% draw dashed
+% 0 0
+% 10 53
+% 20 149
+% 30 256
+% 40 383
+% 50 513
+% 60 640
+% 70 784
+% 80 933
+% 90 1082
+% 100 1233
+% draw dotted
+% 0 0
+% 10 62
+% 20 182
+% 30 317
+% 40 466
+% 50 632
+% 60 801
+% 70 983
+% 80 1171
+% 90 1364
+% 100 1559
+% .G2
 \begin{center}
     \includegraphics{images/heap_sort.eps}
 \end{center}
@@ -766,6 +910,54 @@ J. W. J. Williams 和 R. W. Floyd 在 60 年代早期提出.
 接下来的这张图显示了本节所讨论的三种排序算法, 在面对随机输入数据时的性能
 表现.
 
+% grap -u sort_cmp.grap | pic | troff | grops | ps2eps > sort_cmp.eps
+% .G1
+% coord x 0,100 y 0,5000
+% label left "Comparisons" "+ Exchanges" left 0.4
+% label bottom "Number of elements"
+% ticks left in 0.08 left 0.04 from 0 to 5000 by 1000
+% ticks bot out 0.08 from 0 to 100 by 20
+% "COMPARISON OF" "SORTING METHODS" "(RANDOM DATA)" at 30,3800
+% "isort" size -2 at 70,3000
+% "hsort" size -2 at 80,1500
+% "qsort" size -2 at 80,500
+% draw solid
+% 0 0
+% 10 65
+% 20 178
+% 30 331
+% 40 484
+% 50 674
+% 60 840
+% 70 1021
+% 80 1221
+% 90 1416
+% 100 1620
+% draw dashed
+% 0 0
+% 10 44
+% 20 108
+% 30 212
+% 40 289
+% 50 405
+% 60 523
+% 70 724
+% 80 772
+% 90 996
+% 100 1184
+% draw dotted
+% 0 0
+% 10 53
+% 20 196
+% 30 538
+% 40 721
+% 50 1121
+% 60 1764
+% 70 2313
+% 80 3502
+% 90 4034
+% 100 5178
+% .G2
 \begin{center}
     \includegraphics{images/sort_cmp.eps}
 \end{center}

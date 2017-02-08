@@ -454,6 +454,20 @@ Awk 很适合处理面向模式的 \texttt{graph} 语言, 之所以这样说是�
 是绘图语言 \texttt{pic} 的预处理器. 
 \marginpar{139} 当同时使用 \texttt{grap}, \texttt{pic} 与 \texttt{troff}
 时, 同样的数据与几乎相同的描述可以生成下面这张图片:
+% 生成 traffic_deaths.eps 的 grap 代码是 (未显示的数据用 ... 表示):
+%.G1
+%label bottom "Annual Traffic Deaths, USA, 1925-1984"
+%coord x 1920,1990 y 5000, 60000
+%ticks left out 0.08 from 10000 to 50000 by 20000
+%ticks bot out 0.08 from 1930 to 1980 by 10
+%
+%1925 20771
+%1930 31204
+%1935 34494
+%...
+%1983 42589
+%1984 44257
+%.G2
 \begin{center}
     \includegraphics{./images/traffic_deaths.eps}
 \end{center}
