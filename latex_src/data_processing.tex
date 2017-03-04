@@ -1035,10 +1035,8 @@ awk 程序, 就可以把原来的程序应用到多行记录上. 第 1 个程序
 不一样.
 
 处理这种数据的方法之一是把它们都当作单行数据, 但是要注意空白行被当作
-分隔符. 每一行都指出了字段的名称及其所对应的值,
-但是它们之间并没有以其他方式相联系 \footnote{原文为 Each line identifies
-the value it corresponds to, but they are not otherwise connected.}.
-比如说, 如果我们想要计算存款与支票的总额, 只需要扫描存款项与支票项即可:
+分隔符. 每一行都指出了字段的名称及其所对应的值, 行与行之间没有其他过多的联
+系, 比如说, 如果我们想要计算存款与支票的总额, 只需要扫描存款项与支票项即可:
 \marginpar{87}
 \begin{awkcode}
     # check1 - print total deposits and checks
