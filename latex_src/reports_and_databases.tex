@@ -913,10 +913,9 @@ for each form letter that is generated.}. 例如, 下面的文本使用了参数
 
 读者应该注意一下函数 \texttt{getone} 与 \texttt{unget} 如何推回一个输入行.
 在读取新行之前, \texttt{getone} 检查是否已经有一行被读取并由
-\texttt{unget} 存放在某个变量中, 如果是, 则返回该行. 推回是解决过早遭遇
-问题 (在一次操作中, 读取了过多的输入\footnote{原文为 reading one too 
-many inputs.}) 的方法之一.
-在本章早些时候出现 的 control-break 程序中, 我们把处理操作延迟了, 而在这里,
+\texttt{unget} 存放在某个变量中, 如果是, 则返回该行. 我们之前遇到过这类问
+题: 在一次操作中, 读取了过多的输入. 推回是解决此类问题的另一种办法.
+在本章早些时候出现的 control-break 程序中, 我们把处理操作延迟了, 而在这里,
 通过一对函数, 我们假定不会看到额外的输入.
 
 \begin{exercise}
