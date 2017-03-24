@@ -1,7 +1,7 @@
 % vim: ts=4 sts=4 sw=4 et tw=75
 % preamble here.
 
-\documentclass[nofonts, oneside, fancyhdr]{ctexbook}
+\documentclass[nofonts, twoside, fancyhdr]{ctexbook}
 
 \usepackage{geometry}
 \usepackage{fontspec}
@@ -9,6 +9,8 @@
 \usepackage{amssymb}
 % for tikz
 \usepackage{tikz}
+% for varwidth
+\usepackage{varwidth}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage{verbatim}
@@ -25,6 +27,8 @@
 \usepackage{pifont}
 % 一页结束时, 脚注编号清零
 \usepackage[perpage]{footmisc}
+% 边框
+\usepackage[framemethod=default]{mdframed}
 % 插图所需的宏包
 \usepackage{graphicx}
 % 
@@ -35,6 +39,8 @@
 \usepackage{multicol}
 % 表格单元格内换行
 \usepackage{makecell}
+% 有时候, 浮动的边注在双面模式下会出现在错误的一侧, mparhack 可以修正该问题
+\usepackage{mparhack}
 \usepackage{listings}
 
 % 脚注编号带圈
@@ -53,16 +59,19 @@
     top = 2cm,
     bottom = 2cm,
     outer = 2.5cm,
-    inner = 2.5cm
+    inner = 3.0cm
 }
 
 \pagestyle{fancy}
+\fancyhf{}
 \fancyhead[LE,RO]{\rightmark}
 \fancyhead[LO,RE]{\leftmark}
-\fancyfoot[C]{\thepage}
+\fancyfoot[LE,RO]{\thepage}
 
 % from package hyperref
 \hypersetup{
+    colorlinks = false,
+    pdfborder = 0 0 0,
     bookmarksnumbered = true,
     pdftitle = {The AWK Programming Language},
     pdfcreator = {wuzhouhui250@gmail.com},
@@ -72,50 +81,56 @@
 }
 
 % from package fontspec and xeCJK
-\setCJKmainfont{AR PL KaitiM GB}
-\setCJKsansfont{WenQuanYi Zen Hei}
-\setCJKmonofont[Scale=0.9]{WenQuanYi Zen Hei}
-\setmainfont{Century Schoolbook L}
+\setCJKmainfont[Scale=0.95]{FandolSong}
+\setCJKsansfont[Scale=0.95]{FandolSong}
+\setCJKmonofont{FandolFang}
+\setmainfont{Nimbus Roman No9 L}
 \setsansfont{FreeSans}
 % "Mapping={}" make quote symbol straight
-\setmonofont[Mapping={}]{Courier 10 Pitch}
+\setmonofont[Mapping={}]{Ubuntu Mono}
 
 % the name of file or directory
 \newcommand\filename[1]{\texttt{#1}}
 
-% awk program, from package verbatim
 \newenvironment{awkcode}%
-{\verbatim}%
-{\endverbatim}
+{
+    \vspace{-1.0em}
+    \verbatim
+}%
+{
+    \endverbatim
+    \vspace{-1.0em}
+}
 
 % pattern for many situations
 \newenvironment{pattern}%
-{\begin{quotation}}%
-{\end{quotation}}
+{\vspace{-1.0em}\begin{quotation}}%
+{\end{quotation}\vspace{-1.0em}}
 
 % environment for summary
 \newenvironment{summary}[1]
 {
-    \begin{center}
-        \rule{\textwidth}{2.0pt}
-    \end{center}
-    \vspace{-2.0em}
+    \begin{mdframed}
     \begin{center} \Large{#1} \end{center}%
 }
 {
-    \vspace{-1.2em}
-    \begin{center}
-        \rule{\textwidth}{2.0pt}
-    \end{center}
+\end{mdframed}
 }
 
 % term in English
 \newcommand\term[1]{\textit{#1}}
 % term in Chinese
-\newcommand\cterm[1]{\textbf{#1}}
+\setCJKfamilyfont{kai}{FandolKai}
+\newcommand\cterm[1]{{\CJKfamily{kai}{#1}}}
 
 % subsection unnumbered
-\CTEXsetup[number={}]{subsection}
+%\CTEXsetup[number={}]{subsection}
+% 设置 subsection 和 section 的字体为 FandolHei
+\setCJKfamilyfont{heiti}{FandolHei}
+\CTEXsetup[format={\CJKfamily{heiti}}]{subsection}
+\CTEXsetup[format={\CJKfamily{heiti}}]{subsubsection}
+\CTEXsetup[format+={\CJKfamily{heiti}}]{section}
+\CTEXsetup[format+={\textmd}]{section}
 
 % word that shows frequently
 \newcommand\awk{\texttt{awk}}
@@ -142,17 +157,23 @@
 \newcommand\fmt{\textit{format}}
 
 \theoremstyle{plain}
-\theoremheaderfont{\bfseries}
+\theoremheaderfont{\CJKfamily{heiti}}
 \theorembodyfont{\normalfont}
-\newtheorem{exercise}{习题}[chapter]
-\newcommand\myexer{\textbf{习题\ }}
+\newtheorem{exercise}{\raisebox{0.05em}{习题}}[chapter]
+\newcommand\myexer{{\CJKfamily{heiti}{\raisebox{0.05em}{习题}\ }}}
+
+% 设置段间距
+\setlength{\parskip}{1ex}
 
 % 设置目录中 subsection 的缩进
-\settowidth\cftsubsecindent{2}
+%\settowidth\cftsubsecindent{2em}
 % 设置目录中 chapter 章节编号的宽度 (ctex 章节编号为中文, 需要特别注意).
 % 参考 <<LaTeX 入门>>, 刘海洋 编著, 电子工业出版社, 2013.6
 \settowidth\cftchapnumwidth{第十章} % 最宽的可能编号
-\renewcommand\cftchapaftersnumb{\hspace{0.5em}} % 额外间距
+\renewcommand\cftchapaftersnumb{\hspace{1em}} % 额外间距
+
+% 重新设置目录的字体
+\renewcommand\cftchapfont{\CJKfamily{heiti}}
 
 \title{AWK 程序设计语言}
 \author{Alfred V.Aho \and Brian W.Kernighan \and Peter J.Weinberger \and

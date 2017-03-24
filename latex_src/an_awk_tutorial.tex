@@ -255,7 +255,7 @@ awk 从它的输入中每次读取一行, 将行分解为一个个的字段 (默
 \print 打印的每一行都由一个换行符终止. 这些默认行为都可以修改, 我们将在第
 \ref{chap:the_awk_language} 章讨论如何修改.
 
-\subsection{\texttt{NF}, 字段的数量}
+\subsection{{\bfseries\texttt{NF}}, 字段的数量}
 \label{subsec:nf_the_number_fields}
 
 有时候, 必须总是通过 \verb'$1', \verb'$2' 这样的形式引用字段, 但是任何表
@@ -521,7 +521,7 @@ Awk 的模式非常擅长从输入中选择感兴趣的行, 以便进行进一�
 \end{awkcode}
 如果数据没有错误, 就不会有输出.
 
-\subsection{\BEGIN 与 \END}
+\subsection{\textbf{\BEGIN} 与 \textbf{\END}}
 \label{subsec:an_awk_tutorial_begin_and_end}
 
 特殊的模式 \BEGIN 在第一个输入文件的第一行之前被匹配, \END 在最后一个输入
@@ -703,7 +703,7 @@ Awk 的长处之一是它可以非常方便地对字符串进行操作, 就像�
 Awk 提供有用于决策的 \verb'if-else'语句, 以及循环语句, 所有的这些都来源于
 C 语言. 它们只能用在动作 (Action) 里.
 
-\subsection{\texttt{If-Else} 语句}
+\subsection{\textbf{\texttt{If-Else}} 语句}
 \label{subsec:if_else_statement}
 
 下面这个程序计算每小时工资多于 \$6.00 的雇员的总报酬与平均报酬. 在计算平均
@@ -726,7 +726,7 @@ C 语言. 它们只能用在动作 (Action) 里.
 \print 语句执行, 否则是第二个 \print 语句被执行. 注意到, 在逗号后面断
 行, 我们可以将一个长语句延续到下一行.
 
-\subsection{\texttt{While} 语句}
+\subsection{\textbf{\texttt{While}} 语句}
 \label{subsec:while_statement}
 
 一个 \texttt{while} 含有一个条件判断与一个循环体. 当条件为真时, 循环体
@@ -770,7 +770,7 @@ C 语言. 它们只能用在动作 (Action) 里.
             1762.34
 \end{awkcode}
 
-\subsection{\texttt{For} 语句}
+\subsection{\textbf{\texttt{For}} 语句}
 \label{subsec:for_statement}
 \marginpar{16}
 大多数循环都包括初始化, 测试, 增值, 而 \texttt{for} 语句将这三者压缩成一行.
