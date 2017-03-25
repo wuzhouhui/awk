@@ -32,9 +32,7 @@
     默认操作都是为了向这个方向努力, 具体来说, 使用空格
 作为默认的字段分隔符, 隐式地初始化, 变量的无类型声明, 等等, 这些设计
 选择都使得 单行程序变成可能. 作为作者, 我们非常清楚地 ``知道'' awk
-将会被如何地使用, 所以我们通常只需要写单行程序就够了.\footnote{原文是 We,
-    being the authors, ``knew'' how the language was supposed to be used,
-    and so we only wrote one-liners.}
+将会被如何地使用, 所以我们通常只写单行程序.
 
 \marginpar{182}
 Awk 的快速传播强有力地推动了语言的发展. 把 awk 作为一门通用编程语言来使用,
@@ -116,7 +114,8 @@ Awk 并没有内建的计时工具, 因此在本地环境中, 哪些操作属于
 \begin{tabular}{l|c|c|c|c|c}
     \hline
     \hline
-    程序 & \makecell{AT\&T \\ 6300+} & \makecell{DEC VAX \\ 11-750} &
+    \multicolumn{1}{c|}{程序} & \makecell{AT\&T \\ 6300+} &
+    \makecell{DEC VAX \\ 11-750} &
     \makecell{AT\&T \\ 3B2/600} & \makecell{SUN-3} &
     \makecell{DEC VAX \\ 8550} \\
     \hline
@@ -167,8 +166,7 @@ Awk 并没有内建的计时工具, 因此在本地环境中, 哪些操作属于
 
 最后一个办法是用其他编程语言重写程序. 基本原则是把 awk 中比较有用的内建
 特性用子例程替换掉, 除此之外, 尽量让新程序和原程序在结构上保持一致.
-不要试图完全模仿 awk 的工作方式, 相反, 尽量充分利用手中已有的程序.
-\footnote{原文是 Instead provide just enough for the problem at hand.}
+不要试图完全模仿 awk 的工作方式, 只要能解决问题就足够了.
 比较有用的练习是写一个小型函数库, 函数库提供了字段分割, 关联数组,
 和正则表达式匹配, 在某些不支持动态字符串的语言中 (比如 C 语言), 你可能
 还需要一些能够方便地分配和释放字符串的子例程. 有了这些库函数, 把 awk 
@@ -200,15 +198,10 @@ awk 难逢敌手. 隐式输入循环和 \patact 范式简化了 (而且经常是
 存储功能和灵活的下标. 正则表达式提供了描述文本的统一表示法. 默认的初
 始化操作和声明的缺少缩减了程序的规模.
 
-我们没有预料到的是,  在许多不太常见的应用中也用到了 awk. 比如, ``非编程
-工作'' 到 ``编程工作'' 的转换是一个渐变的过程: 由于缺少传统语言 (比如 
+我们没有料到的是, 在许多非常规应用中也用到了 awk. 比如 ``非编程'' 到
+``编程'' 的转换是一个渐变的过程, 由于缺少传统语言 (比如
 C 和 Pascal) 所具有的语法包袱, 所以 awk 学习起来非常简单, 它甚至是相
-当一部分人的第一门编程语言.\footnote{原文是 What we did not anticipate were
-    the less conventional applications. For example, the transition from
-    ``not programming'' to ``programming'' is quite gradual: the absence of
-    the syntatic baggage of conventional languages like C or Pascal makes
-    awk easy enough to learn that it has been the first language for a
-surprising number of people.}
+当一部分人的第一门编程语言.
 
 在 1985 年加入的特性, 尤其是自定义函数的支持, 催生出了许多未曾预料到的
 应用, 比如小型数据库系统和小语言编译器. 在许多种情况下, awk 只是用

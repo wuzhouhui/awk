@@ -992,9 +992,8 @@ awk 程序, 就可以把原来的程序应用到多行记录上. 第 1 个程序
 
 
 \marginpar{86}
-在某些应用中, 数据可能包含更复杂的结构\footnote{原文为 In some applications
-    data may have more structure than can be captured by a sequence of
-unformatted lines.}, 例如, 地址可能含有国家名称, 也可能不包括街道地址.
+某些应用的数据更加结构化, 这些数据没办法表示成一系列非结构化的文本, 例如,
+地址可能含有国家名称, 也可能不包括街道地址.
 
 处理结构化数据的一种方法是为记录的每一个字段加上一个名字或关键词, 例如,
 我们有可能如此组织一本支票薄:
@@ -1036,10 +1035,8 @@ unformatted lines.}, 例如, 地址可能含有国家名称, 也可能不包括�
 不一样.
 
 处理这种数据的方法之一是把它们都当作单行数据, 但是要注意空白行被当作
-分隔符. 每一行都指出了字段的名称及其所对应的值,
-但是它们之间并没有以其他方式相联系 \footnote{原文为 Each line identifies
-the value it corresponds to, but they are not otherwise connected.}.
-比如说, 如果我们想要计算存款与支票的总额, 只需要扫描存款项与支票项即可:
+分隔符. 每一行都指出了字段的名称及其所对应的值, 行与行之间没有其他过多的联
+系, 比如说, 如果我们想要计算存款与支票的总额, 只需要扫描存款项与支票项即可:
 \marginpar{87}
 \begin{awkcode}
     # check1 - print total deposits and checks

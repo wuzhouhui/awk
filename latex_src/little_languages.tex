@@ -85,7 +85,7 @@
     \begin{tabular}{c|l|l}
         \hline
         \hline
-        操作码          & 指令    &
+        \multicolumn{1}{c|}{操作码}          & \multicolumn{1}{c|}{指令}    &
         \multicolumn{1}{c}{意义}  \\
         \hline
         \texttt{01}     & \texttt{get}  & 从输入读取一个数, 并存放到累
@@ -305,7 +305,7 @@
     \url{https://en.wikipedia.org/wiki/List_of_motor_vehicle_deaths_in_U.S._by_year}
  --- 译者注}:
 {\footnotesize
-\begin{awkcode}
+\begin{lstlisting}[basicstyle = \ttfamily, lineskip = -2pt]
       |------------------------------------------------------------------------|
       |                                                                        |
       |                                                  *  **                 |
@@ -330,7 +330,7 @@
       |---------|----------|---------|----------|---------|----------|---------|
                1930       1940      1950       1960      1970       1980        
                         Annual Traffic Deaths, USA, 1925-1984                   
-\end{awkcode}
+\end{lstlisting}
 }
 
 \texttt{graph} 的处理程序分为两个阶段. 主循环读取并解析图的规范说明, 
@@ -472,11 +472,9 @@ Awk 很适合处理面向模式的 \texttt{graph} 语言, 之所以这样说是�
     \includegraphics{./images/traffic_deaths.eps}
 \end{center}
 
-Awk 擅长于设计与测验小语言, 如果设计被证明是合理的, 那么就可以用更
+Awk 很适合用来设计与测验小语言, 如果设计被证明是合理的, 那么就可以用更
 高效的语言 (比如 C) 来实现一个产品化的版本. 在某些情况下, 即使是一个
-原型化的版本也可以用在实际生产中. 典型的例子包括糖衣或者对已有工具的
-定制.\footnote{原文为 These situations typically involve sugar-coating or
-specializing an existing tool.}
+原型产品也可以用在实际生产中, 典型的例子包括对已有工具的定制或包装.
 
 一个特定的实例是定制图表的准备, 在这个实例中, 我们把一门简单的语言, 用
 awk 程序转换成 \texttt{grap} 命令. 其他例子还包括散点矩阵 (scatter-plot
@@ -503,7 +501,7 @@ matrices), 点阵图 (dotchart, 直方图的一种), 箱线图 (boxplot, 显示�
 
 \begin{exercise}
     如果你的系统提供了图形库, 修改 \texttt{graph}, 为图形库生成命令.
-    (这是一个糖衣的例子\footnote{This is an example of sugar-coating})
+    (这是一个对已有工具进行再包装的例子)
 \end{exercise}
 
 \marginpar{140}
@@ -788,9 +786,7 @@ Forth 和 Postscript) 和口袋计算器都把它作为基本表示法来使用.
 语言拥有大量不同优先级的运算符, 嵌套结构 (比如括号与 if-then-else 语句),
 以及其他复杂的构造, 所有的这些都要求更强大的解析技术, 而不仅仅是字段
 分割与正则表达式匹配. 使用 awk 处理高级语言是可能的, 只要有一个完全
-成熟的解析程序即可, 而解析程序可以用任何一种语言来写\footnote{原文为
-    It is possible to process such languages in awk by
-writing a full-fledged parser, as one would in any language}.
+成熟的解析程序即可, 而解析程序可以用任何一种语言来写.
 本节将开发一个对数学表达式进行求值的程序, 表达式使用人们通常所熟悉的中
 缀表示法表示. 以该程序为先导, 我们会在下一节开发一个更加复杂的
 解析程序.

@@ -424,14 +424,10 @@ Programming} (第 2 卷) 中找到.
 知道每个非终结符可以产生的最短输出, 当推导过程变得过长时, 就强制按照最
 短输出规则来推导. 这需要对语法进行大量的修改, 以及一些特殊的知识.
 
-\myexer\ref{exer:weight} 我们为产生式的每一个终止添加概率. 这些概率首
-先被读取到数组 \texttt{rhsprob} 中. 语法规则读取完毕后, 修改
-\texttt{rhsprob}, 使得它不仅可以表示当前这条产生式的概率, 还可以表示
-前面任意一条产生式的概率.\footnote{After the grammar has been read,
-\texttt{rhsprob} is changed so that it represents the probability of this
-or any previous production, rather than this production.}
-这样做可以 让 \texttt{gen} 中的测试更简单一点, 否则的话, 概率就会
-被重复累加.
+\myexer\ref{exer:weight} 我们在每一条产生式的末尾都加上概率, 这些概率首
+先被读取到数组 \texttt{rhsprob} 中, 读取完毕后, 修改 \texttt{rhsprob},
+使得每个元素都表示当前或前面任意一条产生式的概率, 这样做可以让函数
+\texttt{gen} 中的条件判断更简单一点, 否则的话, 每次都要重新计算概率.
 \begin{awkcode}
     # sentgen1 - random sentence generator with probabilities
     #   input:  grammar file; sequence of nonterminals

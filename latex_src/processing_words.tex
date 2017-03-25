@@ -5,7 +5,7 @@
 \marginpar{111}
 本章的程序都指向一个共同主题: 文本处理. 示例程序涵盖的范围包括随机单词
 与句子的生成 (生成的句子可以和用户进行有限的对话), 以及文本处理. 大多数示例
-程序都很简单, 它们只是起说明作用, 但是, 其中一些文件准备程序的确拥有实际
+程序都很简单, 它们只是起说明作用, 但是, 其中一些文档准备程序的确拥有实际
 用途.
 
 \section{生成随机文本}
@@ -330,9 +330,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 
 \begin{exercise}
     写一套语法规则, 该规则能够生成关于某学科的, 听起来貌似合理的文本 ---
-    学科可以是商业, 政治, 或计算机.\footnote{原文为 Write a grammar for
-        generating plausible-sounding text from a field that appeals to you
-    -- business, politics, and computing are all good possibilities.}
+    学科可以是商业, 政治, 计算机或其他你感兴趣的领域.
 \end{exercise}
 
 \begin{exercise}
@@ -505,7 +503,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 \section{文本处理}
 \label{sec:text_processing}
 
-由于强大的字符串处理能力, 对于涉及到文本处理与文件准备的工作来说, awk 是
+由于强大的字符串处理能力, 对于涉及到文本处理与文档准备的工作来说, awk 是
 一个非常有用的工具. 作为示例, 这一节包含的程序可以用于单词计数, 文本格式
 化, 交叉索引维护, 制作 KWIC 索引, 以及索引准备工作.
 
@@ -602,10 +600,8 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 \subsection{维护手稿的交叉引用}
 \label{subsec:maintaining_cross_reference_in_manuscripts}
 
-文件准备的一个常见问题是为条目创建一个一致的名字或编号集合, 条目可以是
-文献引用, 图表, 示例等.\footnote{原文为 A common problem in document
-    preparation is creating a consistent set of names or numbers for items
-like bibliographic citations, figures, tables, examples, and so on.}
+文档准备的一个常见问题是为条目创建一个一致的名字或编号集合, 条目可以是
+文献引用, 图片, 表格等.
 某些文本格式化程序可以帮助我们完成这件工作, 但是大多数情况下还是需要自己来
 完成. 我们的下一个例子是对交叉引用进行编号, 该技术对于技术文档编写来说
 特别有用.
@@ -613,10 +609,7 @@ like bibliographic citations, figures, tables, examples, and so on.}
 编写文档时, 作者为不同的条目创建并使用不同的符号名, 这些条目之后会被
 交叉引用. 因为名字是符号化的, 所以条目可以被添加, 删除, 重新编排, 而不用
 修改已存在的名字. 本节所提出的交叉引用技术是使用两个程序共同创建一个文本,
-文本中的符号名被适当的编号
-所替代\footnote{原文为 Two programs create the version in which the
-symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不经
-过渡就直接提到 ``Two programs ...''}.
+文本中的符号名被适当的编号所替代.
 这里有一个示例文档, 文档中包含了两个文献引用和一张图的符号名:
 \marginpar{121}
 \begin{awkcode}
@@ -733,10 +726,9 @@ symbolic names are replaced by suitable numbers. 原文显得有点突兀: 不�
 \subsection{制作 KWIC 索引}
 \label{subsec:making_a_kwic_index}
 
-一个 KWIC (Keyword-In-Context) 索引指的是一种显示了其所在行的上下文内的每
-一个单词的索引\footnote{原文为 A Keyword-In-Context or KWIC index is an
-index that shows each word in the context of the line it is found in.}.
-在本质上, 它所提供的信息等价于重要语汇索引 (concordance), 虽然形式上有点
+KWIC (Keyword-In-Context) 索引把一行内的每个单词都显示在单词所在行的上下文
+语境中, 在本质上, 它所提供的信息等价于 \cterm{重要语汇索引} (concordance),
+虽然形式上有点
 \marginpar{123}
 不同. 考虑下面三个句子:
 \begin{awkcode}
@@ -815,9 +807,8 @@ Unix 管道提供了一个三步骤的解决方案: 第一个程序生成每一�
 \end{exercise}
 
 \begin{exercise}
-    修改 \texttt{kwic}, 使得它可以显示尽可能多的行内数据, 方法是在末尾换行,
-    而非截断.\footnote{原文为 Fix \texttt{kwic} to show as much as possible
-    of lines, by wrapping around at the ends rather than truncating.}
+    修改 \texttt{kwic}, 使得它可以显示尽可能多的行内数据, 方法是当遇到一行
+    的末尾时回绕, 而非截断.
 \end{exercise}
 
 \begin{exercise}
@@ -1044,9 +1035,7 @@ comparison}'' 生成 ``\texttt{comparison, string}''. 旋转操作与 KWIC
     controlflow statements      control-flow statements 48
     ...
 \end{awkcode}
-前面几行应该能够阐明排序键与实际数据之间的区别.\footnote{原文为 The first
-    few lines should clarify the distinction between the sort key and the
-actual data.}
+读者应该可以从前面几行分辨出排序键和实际的数据.
 
 第二个排序命令对输入按照字母顺序排序, 同之前的一样, 选项 \texttt{-f}
 表示合并大小写字母, \texttt{-d} 表示按照字典序排序.
@@ -1143,23 +1132,18 @@ actual data.}
 \end{exercise}
 
 \begin{exercise}
-    构造一个准备单词与短语列表的工具程序, 利用该程序来自动创建索引.
-    在促成索引字与主题方面, \texttt{wordfreq} 所生成的单词频率列表
-    表现如何?\footnote{Attack the problem of creating an index
-        automatically by building tools that prepare lists of words,
-        phrases, etc. How well does the list of word frequencies produced
-        by \texttt{wordfreq} suggest index terms or topics?}
+    构造一个准备单词和短语列表的工具程序, 利用该程序来自动创建索引.
+    是否可以根据 \texttt{wordfreq} 生成的单词频率列表, 来决定哪些单词可
+    以成为索引项?
 \end{exercise}
 
 \section{小结}
 \label{sec:processing_words_summary}
 
 Awk 处理文本就像 C 或 Pascal 处理数字那样轻松 --- 自动管理存储, 内建运算
-符与内建函数提供了许多必需的功能. 结果是 awk 擅长于原型构造, 有时候即使
-是对产品化的使用来说, 原型也已足够\footnote{原文为 As a result, awk is
-    usually good for prototyping, and sometimes it is quite adequate for
-production use.}. 索引程序就是一个很好的例子 --- 我们使用该程序的另一个
-版本为本书制作索引.
+符与内建函数提供了许多必需的功能. 因此 awk 很适合构造原型, 有时候即使
+用在产品化上, 原型也已足够, 索引程序就是一个很好的例子 --- 我们使用该程
+序的另一个版本为本书制作索引.
 
 \subsection*{参考资料}
 我们的测试程序以 Unix 的测试程序为原型构造而来, 后者最初由 Doug McIlroy
