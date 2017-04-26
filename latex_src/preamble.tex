@@ -42,6 +42,7 @@
 \usepackage{listings}
 
 \usepackage{pdfpages}
+\usepackage{bookmark}
 
 % 脚注编号带圈
 \renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
@@ -117,6 +118,15 @@
 
 % subsection unnumbered
 \CTEXsetup[number={}]{subsection}
+
+% Looks like subsection's format, reference CTex manual ctex.pdf
+\newcommand\pseudosubsec[1]{
+    \vspace{3.25ex plus 1ex minus .2ex}
+    \noindent\large\textbf{\phantom{占}#1}
+    \vspace{1.5ex plus .2ex}
+    \phantomsection
+    \addcontentsline{toc}{subsection}{\protect\numberline{}#1}
+}
 
 % word that shows frequently
 \newcommand\awk{\texttt{awk}}
