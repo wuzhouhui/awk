@@ -38,6 +38,7 @@
 \usepackage{listings}
 
 \usepackage{pdfpages}
+\usepackage{bookmark}
 
 % 脚注编号带圈
 \renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
@@ -125,7 +126,7 @@
     \noindent\large\textbf{\phantom{占}#1}
     \vspace{1.5ex plus .2ex}
     \phantomsection
-    \addcontentsline{toc}{section}{\protect\numberline{}#1}
+    \addcontentsline{toc}{subsection}{\protect\numberline{}#1}
 }
 
 % word that shows frequently
