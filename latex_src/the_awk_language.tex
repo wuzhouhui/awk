@@ -1213,7 +1213,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 
 \verb'sub' 返回替换发生的次数.
 \verb'sub('\textit{r}\verb','\textit{s}\verb')' 等价于
-\verb'gsub('\textit{r}\verb','\textit{s}\verb','\verb'$0'\verb')'.
+\verb'sub('\textit{r}\verb','\textit{s}\verb','\verb'$0'\verb')'.
 
 \verb'gsub' 是类似的, 但是它会连续地替换最左最长且不重叠的子串, 而不是只
 替换子串的第一次出现; 函数返回值仍然是替换发生的次数
@@ -1246,7 +1246,8 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
 
 \verb'substr('\textit{s}\verb','\textit{p}\verb')'
 返回 \textit{s} 从位置 \textit{p} 开始的后缀. 如果使用了
-\verb'substr('\textit{s}\verb','\textit{p}\verb')', 那么只会返回后缀的
+\verb'substr('\textit{s}\verb','\textit{p}\verb','\textit{n}\verb')',
+那么只会返回后缀的
 前 \textit{n} 个字符; 如果后缀的长度小于 \textit{n}, 那么就会返回整个后缀.
 例如, 我们可以将国家名缩写为名字的前三个字母, 程序
 \begin{awkcode}
