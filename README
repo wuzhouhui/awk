@@ -8,7 +8,7 @@ The AWK Programming Language (Aho, Kernighan, Weinberger 著, 中文名: AWK
 
 文件清单:
         The_AWK_Programming_Language.djvu:      英文原版
-        AWK程序设计语言.pdf:                    中文版
+        The_AWK_Programming_Language_zh_CN.pdf  中文版
         awkcode.txt                             书中出现的 awk 程序源代码
         latex_src                               LaTeX 源代码
 
