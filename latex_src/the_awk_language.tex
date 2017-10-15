@@ -538,7 +538,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     \verb'\f'   & 换页  \\
     \verb'\n'   & 换行 \\
     \verb'\r'   & 回车 \\
-    \verb't'    & 制表符    \\
+    \verb'\t'    & 制表符    \\
     \verb'\'\textit{ddd} & 八进制数 \textit{ddd}, \textit{ddd}
         含有 1 到 3 个数字, 每个数字的值在 0 到 7 之间 \\
     \verb'\'\textit{c} & 其他的字面意义上的 \textit{c}
@@ -824,7 +824,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
                             { print }
 \end{awkcode}
 在这个程序里, \BEGIN 动作重新设置 \verb'FS' (\verb'FS' 控制输入行的字段分
-割符) 与 \verb'OS' (\verb'OS' 控制输出的字段分割符) 为 制表符. 第 4 行的
+割符) 与 \verb'OFS' (\verb'OFS' 控制输出的字段分割符) 为 制表符. 第 4 行的
 \print 语句打印可能被修改过的 \verb'$0'. 值得注意的是: 如果 \verb'$0' 发生了
 \marginpar{36}
 改变 (通过赋值或替换), 那么 \verb'$1', \verb'$2' 等等, 以及 \nf
