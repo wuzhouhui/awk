@@ -25,9 +25,9 @@ awk 程序.
     Mary    5.50    22
     Susie   4.25    18
 \end{awkcode}
-现在你想要打印每位雇员的名字以及他们的报酬 (每小时工资乘以工作时长), 而雇员
+现在你想打印每位雇员的名字以及他们的报酬 (每小时工资乘以工作时长), 而雇员
 的工作时长必须大于零. 这种类型的工作是 awk 的设计目标之一, 所以会很简单.
-只要键入下面这一行即可:
+只要键入下面一行即可:
 \begin{awkcode}
     awk '$3 > 0 { print $1, $2 * $3 }' emp.data
 \end{awkcode}
@@ -67,7 +67,7 @@ awk 程序.
     Dan
     $
 \end{awkcode}
-行首的字符 \verb'$' 是 Shell 的命令提示符, 在其他机器上或许会不一样.
+行首的字符 \verb'$' 是 Shell 的命令提示符, 在你的机器上或许会不一样.
 
 \subsection{AWK 程序的结构}
 \label{subsec:the_structure_of_an_awk_program}
@@ -128,7 +128,7 @@ awk 的基本操作是在由输入行组成的序列中, 陆续地扫描每一�
 \begin{awkcode}
     awk '$3 == 0 { print $1 }' file1 file2
 \end{awkcode}
-来打印文件 \filename{file1} 与 \filename{file2} 的每一行的第一个字段
+打印文件 \filename{file1} 与 \filename{file2} 的每一行的第一个字段
 (条件是该行的第3个字段为0).
 
 也可以在命令行上省略输入文件, 只要键入
@@ -136,7 +136,7 @@ awk 的基本操作是在由输入行组成的序列中, 陆续地扫描每一�
     \texttt{awk} \texttt{'}\textit{program}\texttt{'}
 \end{pattern}
 在这种情况下, awk 会将 \textit{program} 应用到你接下来在终端输入的内容上面,
-直到键入一个文件结束标志 (Unix 系统是组合键 control-d). 下面是一个在 Unix
+直到键入一个文件结束标志 (Unix 系统是组合键 Control-d). 下面是一个在 Unix
 上运行的例子
 \marginpar{4}
 \begin{pattern}
@@ -550,7 +550,7 @@ Awk 的模式非常擅长从输入中选择感兴趣的行, 以便进行进一�
 一个动作就是一个语句序列, 语句之间用分号或换行符分开. 读者已经见过只有一条
 单独的 \print 语句的动作. 这一小节提供的例子所包含的语句可以用来进行简单
 的数学或字符串计算. 在这些语句里, 不仅可以使用内建变量, 比如 \nf, 还
-可以自己定义变量, 这些变量可以用来计算, 存储数据, 等等. 在 awk 中, 用户创建
+可以自己定义变量, 这些变量可以用来计算, 存储数据等. 在 awk 中, 用户创建
 的变量不需要事先声明就可以使用.
 
 \subsection{计数}
@@ -604,8 +604,7 @@ Awk 的模式非常擅长从输入中选择感兴趣的行, 以便进行进一�
 \subsection{操作文本}
 \label{subsec:handling_text}
 
-Awk 的长处之一是它可以非常方便地对字符串进行操作, 就像大多数其他语言操
-作数值那
+Awk 的长处之一是它可以非常方便地对字符串进行操作, 就像其他大多数语言处理数值那
 样方便. Awk 的变量除了可以存储数值, 还可以存储字符串. 这个程序搜索每小时
 工资最高的雇员:
 \begin{awkcode}
@@ -700,7 +699,7 @@ Awk 的长处之一是它可以非常方便地对字符串进行操作, 就像�
 \section{流程控制语句}
 \label{sec:control_flow_statements}
 
-Awk 提供有用于决策的 \verb'if-else'语句, 以及循环语句, 所有的这些都来源于
+Awk 提供了用于决策的 \verb'if-else' 语句, 以及循环语句, 所有的这些都来源于
 C 语言. 它们只能用在动作 (Action) 里.
 
 \subsection{\textbf{\texttt{If-Else}} 语句}
