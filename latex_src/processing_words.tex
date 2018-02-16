@@ -143,7 +143,7 @@
 我们将在第 \ref{chap:little_languages} 章展示 awk 的部分语法规则, 并利用
 该规则开发一个语法分析器, 用来分析 awk 程序. 然而在这一章, 我们感兴趣的是
 规则的生成, 而不是分析. 举例来说, 类似 ``the boy walks slowly'' 和 ``the
-girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
+girl runs very very quickly'' 这样的句子可以用下面的语法描述:
 \begin{awkcode}
     Sentence -> Nounphrase Verbphrase
     Nounphrase -> the boy
@@ -497,7 +497,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 
 \begin{exercise}
     \label{exer:quiz}
-    修改 \texttt{quiz}: 对于同一道问题最多输出一次.
+    修改 \texttt{quiz}, 使得同一道问题最多出现一次.
 \end{exercise}
 
 \section{文本处理}
@@ -728,8 +728,8 @@ girl runs very very quickly'' 这样的句子可以用下面的语法来描述:
 
 KWIC (Keyword-In-Context) 索引把一行内的每个单词都显示在单词所在行的上下文
 语境中, 在本质上, 它所提供的信息等价于 \cterm{重要语汇索引} (concordance),
-虽然形式上有点
-\marginpar{123}
+虽然形式上有点%
+\marginpar{123}%
 不同. 考虑下面三个句子:
 \begin{awkcode}
     All's well that ends well.
@@ -802,7 +802,7 @@ Unix 管道提供了一个三步骤的解决方案: 第一个程序生成每一�
 
 \begin{exercise}
     \label{exer:stop_list}
-    为 \texttt{kwic} 添加一个 ``停止列表 (stop list)'', ``停止列表'' 指的是
+    为 \texttt{kwic} 添加一个 ``停止列表'' (stop list), ``停止列表'' 指的是
     不能被当作关键词的单词集合, 比如 ``a'', ``the''.
 \end{exercise}
 
@@ -994,7 +994,7 @@ comparison}'' 生成 ``\texttt{comparison, string}''. 旋转操作与 KWIC
 \end{awkcode}
 
 下一个步骤是对旋转后的索引字排序. 如果直接对它们进行排序, 由于文本内
-仍然嵌入有格式化命令 (比如 \texttt{[...]}), 这些命令会对排序结果造成
+仍然嵌有格式化命令 (比如 \texttt{[...]}), 这些命令会对排序结果造成
 干扰. 我们的解决办法是为每一行加上一个前缀 (排序键), 这个前缀确保排序结果
 是正确的, 在后面的步骤中会把这些前缀移除. 程序 \texttt{ix.genkey} 通过移除 
 \texttt{troff} 的字号与字体设置命令来构造前缀, \texttt{troff} 的字号与 
