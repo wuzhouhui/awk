@@ -236,7 +236,7 @@ awk 从它的输入中每次读取一行, 将行分解为一个个的字段 (默
 \subsection{打印某些字段}
 \label{subsec:printing_certain_fields}
 
-在一个 \print 语句中可以将多个条目打印到同一个输出行中. 打印每一个输入行
+在单个 \print 语句中可以将多个条目打印到同一个输出行中. 打印每一个输入行
 的第1与第3个字段的程序是
 \begin{awkcode}
     { print $1, $3 }
