@@ -698,7 +698,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     \expr       & \verb'$3 < 100' & 第3个字段小于100的行 \\
     \textit{string-matching} & \verb'/Asia/' & 含有 \verb'Asia' 的行 \\
     \textit{compound}   & \verb'$3 < 100 && $4 == "Asia"' & 第3个字段小于
-        100 并且第 4 个字段含有  \verb'Asia' 的行 \\
+        100 并且第 4 个字段是  \verb'Asia' 的行 \\
     \textit{range} & \verb'NR==10, NR==20' & 输入的第10行到第20行. \\
     \hline
 \end{tabular}
@@ -1854,9 +1854,9 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 用于产生格式化的输出. 来自 \print 与 \printf 的输出可以被重定向到文件, 管
 道与终端. 这两个语句可以混合使用, 输出按照它们产生的顺序出现.
 
+\marginpar{55}
 \begin{summary}{输出语句}
     \begin{enumerate}
-            \marginpar{55}
         \item \print \par
             将 \verb'$0' 打印到标准输出
         \item \print\ \expr\verb',' \expr\verb',' \ldots \par

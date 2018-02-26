@@ -9,6 +9,8 @@
 \usepackage{amssymb}
 % for tikz
 \usepackage{tikz}
+% for varwidth
+\usepackage{varwidth}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage{verbatim}
@@ -25,6 +27,8 @@
 \usepackage{pifont}
 % 一页结束时, 脚注编号清零
 \usepackage[perpage]{footmisc}
+% summary 的边框
+\usepackage{mdframed}
 % 插图所需的宏包
 \usepackage{graphicx}
 % 
@@ -53,7 +57,7 @@
     margin=1cm,
     marginparsep = 0.5cm,
     marginparwidth=1cm,
-    top = 2cm,
+    top = 2.5cm,
     bottom = 2cm,
     outer = 2.5cm,
     inner = 2.5cm
@@ -97,19 +101,14 @@
 {\end{quotation}}
 
 % environment for summary
+\newmdenv{summaryframe}
 \newenvironment{summary}[1]
 {
-    \begin{center}
-        \rule{\textwidth}{2.0pt}
-    \end{center}
-    \vspace{-2.0em}
+    \begin{summaryframe}
     \begin{center} \Large{#1} \end{center}%
 }
 {
-    \vspace{-1.2em}
-    \begin{center}
-        \rule{\textwidth}{2.0pt}
-    \end{center}
+    \end{summaryframe}
 }
 
 % term in English
@@ -160,7 +159,7 @@
 \newcommand\myexer{\textbf{习题\ }}
 
 % 设置目录中 subsection 的缩进
-\settowidth\cftsubsecindent{2}
+\settowidth\cftsubsecindent{2em}
 % 设置目录中 chapter 章节编号的宽度 (ctex 章节编号为中文, 需要特别注意).
 % 参考 <<LaTeX 入门>>, 刘海洋 编著, 电子工业出版社, 2013.6
 \settowidth\cftchapnumwidth{第十章} % 最宽的可能编号
