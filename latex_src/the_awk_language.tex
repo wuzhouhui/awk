@@ -919,7 +919,7 @@ Awk 不存在显式的拼接运算符. 如果 \textit{r}$_1$ 与 \textit{r}$_2$ 
     \textit{var} \verb'=' \textit{expr}
 \end{pattern}
 在这个表达式中, \textit{var} 是一个变量或字段的名字, 然后 \textit{expr} 是
-一个任意的表达式. 例如, 为了计算总人口与亚洲的国家数量, 我们可以写
+一个任意的表达式. 例如, 为了计算亚洲国家的总人口与数量, 我们可以写
 \begin{awkcode}
     $4 == "Asia"    { pop = pop + $3; n = n + 1 }
     END             { print "Total population of the", n,
