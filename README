@@ -4,7 +4,8 @@ The AWK Programming Language (Aho, Kernighan, Weinberger 著, 中文名: AWK
 
 翻译进度:
         全部翻译完毕, 当然错误是难免的, 如果你在阅读的过程中发现了它们,
-        一定要记得告诉我 (Issue, Email, 或 Pull Request).
+        一定要记得告诉我 (Issue, Email, 或 Pull Request, 在发送 Pull
+        Request 时, 请基于分支 review).
 
 文件清单:
         The_AWK_Programming_Language.djvu:      英文原版
