@@ -28,7 +28,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 \subsection{一个简单的报表}
 \label{subsec:a_simple_report}
 
-假设我们想要一张报表, 这张表包含了每个国家的人口, 面积, 及人口密度. 
+假设我们想要一张报表, 这张表包含了每个国家的人口, 面积, 及人口密度.
 我们还希望国家按照所在的大洲进行分组, 大洲按照字母顺序排列, 大洲相同的
 国家按照人口密度的降序排列, 就像这样:
 \marginpar{90}
@@ -184,7 +184,7 @@ Awk 可以从文件中挑选数据, 并将挑选到的数据格式化成报表. 
 \end{verbatim}
 
 格式化程序 \verb'form2' 是一个 ``control-break'' 程序, 变量 \verb'prev' 
-跟踪大洲的名字, 只有当大洲名字变化时才会打印出来. 在下一节, 我们将会看到 
+跟踪大洲的名字, 只有当大洲名字变化时才会打印出来. 在下一节, 我们将会看到
 更复杂的 ``control-break'' 程序.
 
 \subsection{更复杂的报表}
@@ -274,8 +274,8 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
     该国所在的大洲的总人口
     该国所在的大洲的面积
 \end{awkcode}
-注意 \verb'sort' 的命令行参数, 该命令行参数使得排序后的记录先按照第 1 个字 
-段的字母顺序排列, 再按第 7 个字段的数值形式的逆序排列. 
+注意 \verb'sort' 的命令行参数, 该命令行参数使得排序后的记录先按照第 1 个
+字段的字母顺序排列, 再按第 7 个字段的数值形式的逆序排列. 
 
 键入下面的命令行, 就可以生成前面那张精美的报表 \texttt{Report No. 3}:
 \begin{awkcode}
@@ -335,7 +335,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 累加总人口, 总人口比重, 总面积, 总面积比重, 这些信息在 \END 中被打印出来.
 
 \verb'form3' 在打印完每个大洲的汇总信息之后, 再打印合计信息, 但是一般情况
-下, 除非读取到一个新的大洲, 否则它不会知道是否已经处理完所有的条目, 
+下, 除非读取到一个新的大洲, 否则它不会知道是否已经处理完所有的条目,
 解决这种 ``我们已经走得太远了 (We've gone too far)'' 问题是 control-break
 编程的经典例子. 解决办法是在打印之前检查每一个输入行, 判断是否需要为
 前一个数据组生成合计信息, 同样的检查也出现在了 \END 中, 所以计算工作最好
@@ -417,9 +417,9 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
     \includegraphics{./images/report3.eps}
 \end{center}
 
-如果可能的话, 我们建议构造一个程序来格式化表格, 实现一个像 \verb'tbl' 这样 
+如果可能的话, 我们建议构造一个程序来格式化表格, 实现一个像 \verb'tbl' 这样
 复杂的程序的确很有野心, 但不妨让我们从一个小程序开始: 这个程序以左对齐的
-方式在列中打印文本条目, 其列宽度为所在列的最大值; 如果是数值则右对齐, 但是 
+方式在列中打印文本条目, 其列宽度为所在列的最大值; 如果是数值则右对齐, 但是
 数值所占的域相对于本列最宽的项居中. 如果给定头部与输入文件
 \filename{countries}, 程序的输出是\footnote{头部需要额外提供 --- 译者注}:
 \begin{awkcode}
@@ -503,7 +503,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 \end{tikzpicture}
 \end{center}
 \verb'v' 左边的空格数是 \verb'(wid[i]-nwid[i])/2', 所以 \verb'numjust' 会
-在 \verb'v' 的末尾拼接这么多的空格, 然后再按照 \verb'%10s' 的格式输出 (假设 
+在 \verb'v' 的末尾拼接这么多的空格, 然后再按照 \verb'%10s' 的格式输出 (假设
 该列的最大宽度是 10).
 
 \marginpar{99}
@@ -534,7 +534,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 \label{sec:packaged_queries_and_reports}
 
 如果某个查询经常被访问, 比较方便的做法是把它打包到一个命令中, 这样在下次
-执行的时候, 就可以少打点字. 假设我们想要查询某个国家的人口, 面积, 以及人口 
+执行的时候, 就可以少打点字. 假设我们想要查询某个国家的人口, 面积, 以及人口
 密度, 比如说 Canada, 则可以键入 (假定用的是类Unix的 shell):
 \begin{awkcode}
     awk '
@@ -587,7 +587,7 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 \end{awkcode}
 第一个 \verb'$1' 指的是当前输入行的第一个字段, 而第二个 \verb'$1' (被单引号
 包围着的)指的是国家名称参数, 也就是执行 shell 命令 \verb'info' 时的第一个参
-数. 第二个 \verb'$1' 只对shell可见, 当命令被执行时, 它被 \verb'info' 后面 
+数. 第二个 \verb'$1' 只对shell可见, 当命令被执行时, 它被 \verb'info' 后面
 的字符串所替代. 具体过程是: shell 通过拼接三个字符串来组合成 awk程序, 这三 
 个字符串其中两个是被一对单引号包围起来的多行文本, 另外一个是 \verb'$1',
 即 \texttt{info} 的参数. 需要注意的是, 可以把任意一个正则表达式传递给
@@ -706,7 +706,7 @@ Awk 也可以用于生成格式信函, 生成时
 一个只含有少量字段的文件, 要比编辑一个包含全部字段的文件容易得多. 另外,
 利用本节开发的数据库系统, 我们就有可能在不改变数据库访问程序的情况下,
 重构数据库. 最后, 对于简单的查询来说, 访问一个小文件要比访问一个大文件高效
-得多. 另一方面, 当我们往数据库添加数据时, 必须小心修改所有的相关文件, 
+得多. 另一方面, 当我们往数据库添加数据时, 必须小心修改所有的相关文件,
 否则会带来一致性问题.
 
 假设我们的数据库由一个单独
@@ -760,7 +760,7 @@ Awk 也可以用于生成格式信函, 生成时
 (\term{attribute}), 所以我们可以认为表格 \verb'capitals' 具有属性
 \verb'country' 与 \verb'capital'.
 
-一个 \cterm{自然连接} (\term{natural join}) (或简称为 \cterm{连接}) 指的是 
+一个 \cterm{自然连接} (\term{natural join}) (或简称为 \cterm{连接}) 指的是
 一个运算, 它将两张表以公共属性为基础组合成一张表, 这张表包含了两张表所有
 的属性, 但是重复的属性会被移除. 如果我们把 \verb'countries' 与
 \verb'capitals' 这两张表作自然连接, 我们就会得到一张新表 (姑且称为
@@ -973,7 +973,7 @@ table}), 只有在必要的时候才会构造导出表.
         !join temp.countries temp.capitals >cc
 \end{awkcode}
 这个文件说明数据库中有两张基表 --- \filename{countries} 与
-\filename{capitals}, 一张导出表 \filename{cc}, 导出表 \filename{cc} 通过 
+\filename{capitals}, 一张导出表 \filename{cc}, 导出表 \filename{cc} 通过
 把基表排序并存放在临时文件中, 再对临时文件执行连接操作来生成, 也就是说, 
 \filename{cc} 通过执行
 \marginpar{107}
@@ -1026,7 +1026,7 @@ relation}), 它是一张包含了所有属性的表, 是 \texttt{relfile} 的最
 \begin{awkcode}
     { print $country, $population, $capital }
 \end{awkcode}
-包含属性 \texttt{country}, \texttt{population} 与 \texttt{capital}, 它们 
+包含属性 \texttt{country}, \texttt{population} 与 \texttt{capital}, 它们
 都是导出表 \texttt{cc} 的属性子集. 于是查询处理程序利用 \filename{relfile}
 列出的构造命令构造出表格 \texttt{cc}, 并将该查询转换成程序
 \begin{awkcode}
@@ -1056,7 +1056,7 @@ awk 程序.
 名为 \textit{a} 的属性的索引.
 
 然后, \texttt{qawk} 读取一个查询, 判断它会用到哪些属性, 查询中的属性都
-是形式为 \verb'$'\textit{name} 的字符串. 利用函数 \texttt{subset}, 就可以 
+是形式为 \verb'$'\textit{name} 的字符串. 利用函数 \texttt{subset}, 就可以
 找到第一张包含了查询中全部属性的表 $T_i$. 程序通过把属性的索引替换成
 原始形式来生成 awk 程序, 并执行必要的命令来生成表格 $T_i$, 再执行 新生成
 的awk程序, 把表格 $T_i$ 作为输入数据.
@@ -1185,7 +1185,7 @@ awk 程序.
 \ref{chap:data_processing} 章使用 awk 的方式都是专门针对某一具体的问题,
 这种情况更加典型.
 
-为了生成表格, ``分而治之'' 通常是最好的方法: 在一个程序中准备数据, 如果 
+为了生成表格, ``分而治之'' 通常是最好的方法: 在一个程序中准备数据, 如果
 必要的话就对数据排序, 然后用第二个程序对数据进行格式化. Control break 可
 以通过向前看, 或者推回输入 (通常是比较优雅的方式) 来处理. (有时候也可以
 通过管道来完成这些工作, 虽然我们在这章没有用到.) 为了处理格式的细节, 相对
