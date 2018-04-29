@@ -163,7 +163,7 @@
 \end{awkcode}
 变量 \texttt{date} 在命令行中赋值, 而且它的值可以一直保留到 \texttt{form3}
 的 \texttt{BEGIN} 动作之外. 如果参数中包含空格, 那么就必须用引号把它们
-包围起来. 另一个办法是把 \texttt{date} 命令的输出以管道的方式输送给 
+包围起来. 另一个办法是把 \texttt{date} 命令的输出以管道的方式输送给
 变量, \ref{sec:data_transformation_and_reduction} 节演示过这种方法.
 
 \myexer\ref{exer:table_format} 在参考我们给出的答案之前, 考虑一下你会如何
@@ -516,7 +516,7 @@ Programming} (第 2 卷) 中找到.
 到 \texttt{nq} 的排列, 然后按照这个顺序来提问.
 
 \myexer\ref{exer:wordcount} 在 awk 中, 对大小写进行转换的最简洁的方式是
-创建一个数组, 数组包含了每个字母的大小写映射关系, 这种做法非常笨拙, 所以 
+创建一个数组, 数组包含了每个字母的大小写映射关系, 这种做法非常笨拙, 所以
 如果可能的话, 可以利用某些 Unix 命令来完成, 比如 \texttt{tr}.
 
 \myexer\ref{exer:fmt_justify} 我们把单词存放在数组中, 如果要在一行内打印
@@ -705,7 +705,7 @@ awk 使用哈稀表来存放数组. 在小数组中查找元素时, 哈稀表只
 但是当数组变大时, 查找时间也会增加.
 
 \myexer\ref{exer:end_exit} 由 \texttt{makeprof} 插入的 \texttt{END} 动
-作, 是在所有其他的 \texttt{END} 执行完之后才会轮到它们执行. 所以, 如果 
+作, 是在所有其他的 \texttt{END} 执行完之后才会轮到它们执行. 所以, 如果
 前面先执行的 \texttt{END} 中含有 \texttt{exit} 语句, 就会提前终止程序.
 部分的解决方案是把 \texttt{END} 插入到所有其他 \texttt{END} 的前面.
 
