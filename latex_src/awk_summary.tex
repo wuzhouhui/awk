@@ -355,14 +355,10 @@
         \textit{$r_1$}\texttt{|}\textit{$r_2$} & 选择: 匹配一个能被 \textit{$r_1$} 或 \textit{$r_2$} 匹配的字符串 \\
         \texttt{(}\textit{$r_1$}\texttt{)}\texttt{(}\textit{$r_2$}\texttt{)} & 拼接: 匹配字符串
         \textit{xy}, 其中 \textit{x} 被 \textit{$r_1$} 匹配, \textit{y} 被 \textit{$r_2$} 匹配 \\
-        \texttt{(}\textit{r}\texttt{)*} & 匹配 0 个或多个连续出现的被 \textit{r} 匹配 
-        的字符串 \\
-        \texttt{(}\textit{r}\texttt{)+} & 匹配 1 个或多个连续出现的被 \textit{r} 匹配 
-        的字符串 \\
+        \texttt{(}\textit{r}\texttt{)*} & 匹配 0 个或多个连续出现的被 \textit{r} 匹配的字符串 \\
+        \texttt{(}\textit{r}\texttt{)+} & 匹配 1 个或多个连续出现的被 \textit{r} 匹配的字符串 \\
         \texttt{(}\textit{r}\texttt{)?} & 匹配 0 个或 1 个被 \textit{r} 匹配的字符串 \\
-        \texttt{(}\textit{r}\texttt{)}   & 组合: 匹配的字符串与 \textit{r} 所匹配 
-        的字符串相同 \\
-
+        \texttt{(}\textit{r}\texttt{)} & 组合: 匹配的字符串与 \textit{r} 所匹配的字符串相同 \\
     \end{tabular}
 \end{quote}
 运算符按优先级升序排列. 只要没有违反优先级规则, 就可以省略多余的括号.
@@ -397,7 +393,7 @@
     1 个管道 \par
     双精度浮点数
 \end{quote}
-数值的限制与本地系统所能表示的数值范围有关, 比如某个机器所能表示的数值 
+数值的限制与本地系统所能表示的数值范围有关, 比如某个机器所能表示的数值
 范围是 $10^{-38}$ 到  $10^{38}$, 超过这个范围的数值只拥有字符串形式.
 \marginpar{192}
 \subsubsection{初始化, 比较和强制类型转换}
