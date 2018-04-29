@@ -32,7 +32,7 @@
 \end{awkcode}
 \texttt{randint(n)} 按比例调整 \texttt{rand} 的返回值, 调整后的值大于
 等于 \texttt{0} 并且小于 \texttt{n}, 将小数部分截去可以得到 \texttt{0} 
-至 \texttt{n-1} 的整数, 然后再加 1, 就是 \texttt{1} 到 \texttt{n} 之间的 
+至 \texttt{n-1} 的整数, 然后再加 1, 就是 \texttt{1} 到 \texttt{n} 之间的
 整数.
 
 我们可以用 \texttt{randint} 随机选择一个字母:
@@ -193,7 +193,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法描述:
 终结符, 就会为该非终结符生成一个随机语句.
 
 程序使用三个数组来存放语法规则:
-\texttt{lhs[A]} 给出了非终结符 \texttt{A} 的产 
+\texttt{lhs[A]} 给出了非终结符 \texttt{A} 的产
 生式个数, \texttt{rhscnt[A, i]} 存放的是 \texttt{A} 的第 \texttt{i} 条产生
 式右部的符号个数, \texttt{rhslist[A, i, j]} 存放的是 \texttt{A} 的第 
 \texttt{i} 条产生式右部的第 \texttt{j} 个符号. 对于前面提到的语法规则, 
@@ -637,7 +637,7 @@ girl runs very very quickly'' 这样的句子可以用下面的语法描述:
     .#Category _SymbolicName_
 \end{awkcode}
 这样的定义可以出现在文档中的任何地方, 只要作者愿意, 他可以定义多种不同的
-\texttt{Category}. 在整篇文档中, 某一条目总是通过它的符号名来引用. 我们 
+\texttt{Category}. 在整篇文档中, 某一条目总是通过它的符号名来引用. 我们
 规定符号名以下划线开始并结尾, 不过也可以使用其他任意的名字, 前提是
 你可以从文本中把它们分离出来 (条目的名字不可以相同, 即使它们在不同的
 类别中). 名字 \texttt{.\#Fig} 与 \texttt{.\#Bib} 以句点开始, 这样的话即使
@@ -835,7 +835,7 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
 排版的), 如果用的是其他排版程序 (比如 TEX 或 Scribe), 那么这些细节
 都会发生变化, 不过程序的基本结构是一样的.
 
-我们通过在文本中插入格式化命令来为书籍制作索引. 当 \texttt{troff} 扫描 
+我们通过在文本中插入格式化命令来为书籍制作索引. 当 \texttt{troff} 扫描
 文本时, 根据命令把索引字与页码搜集到一个文件中. 文件的内容类似于下面
 的文本, 这些文本是索引准备程序进一步加工处理的原材料
 (索引字与页码之间用一个制表符分开):
@@ -907,7 +907,7 @@ KWIC 索引程序: 分而治之. 任务被细分成一系列小任务, 每个小
 \indent\indent\texttt{sort -t '}\textit{tab}\texttt{' +0 -1 +1n -2 -u} \par 
 解释一下 \texttt{sort} 的命令行参数: \texttt{-t'}\textit{tab}\texttt{'}
 表示使用制表符作为字段分隔符; \texttt{+0 -1} 表示第一个排序键是第一个字段,
-结果是按照字母排序; \texttt{+1n -2} 表示第二个排序键是第二个字段, 结果 
+结果是按照字母排序; \texttt{+1n -2} 表示第二个排序键是第二个字段, 结果
 是按照数值排序; \texttt{-u} 表示丢弃重复条目. (在第
 \ref{chap:little_languages} 章我们将展示一个排序生成程序, 它可以根据用户
 的需要构建排序命令的参数) 如果以上面的数据作为输入, 则 \texttt{ix.sort1}
@@ -1063,7 +1063,7 @@ comparison}'' 生成 ``\texttt{comparison, string}''. 旋转操作与 KWIC
 \marginpar{129}
 最后一步是用程序 \texttt{ix.format} 移除排序键, 把 \texttt{[...]} 扩展
 成\texttt{troff} 的字体设置命令, 并在每个术语之前加上一个格式化命令
-\texttt{.XX}, 格式化程序可以利用这个命令控制文本的大小, 位置等. (实际 
+\texttt{.XX}, 格式化程序可以利用这个命令控制文本的大小, 位置等. (实际
 产生的命令只对 \texttt{troff} 有意义, 读者大可忽略这些细节)
 \begin{awkcode}
     # ix.format - remove key, restore size and font commands

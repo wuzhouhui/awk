@@ -1790,7 +1790,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
             \indent\indent\stmt \par
         \verb'}'
 \end{pattern}
-一个函数定义可以出现在任何 \patact 语句可以出现的地方. 于是, awk 程序的 
+一个函数定义可以出现在任何 \patact 语句可以出现的地方. 于是, awk 程序的
 通常形式就变成了一系列的, 由换行符或分号分开的 \patact 语句与函数定义.
 
 在一个函数定义中, 函数体左花括号后的换行符, 与右花括号前的换行符都是可选
@@ -1802,7 +1802,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \begin{pattern}
     \verb'return '\expr
 \end{pattern}
-\expr 与 \verb'return' 语句都是可选的, 如果没有为 \verb'return' 语句提供 
+\expr 与 \verb'return' 语句都是可选的, 如果没有为 \verb'return' 语句提供
 表达式, 或者最后一句执行的语句不是 \verb'return', 那么返回值就是未定义的.
 
 举例来说, 这个函数计算参数的最大值:
@@ -1830,14 +1830,14 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \end{awkcode}
 调用函数时, 函数名与左括号之间不能留有空白.
 
-一个带有参数 \verb'$1' 的函数被调用时 (\verb'$1' 只是一个普通的变量), 函数 
+一个带有参数 \verb'$1' 的函数被调用时 (\verb'$1' 只是一个普通的变量), 函数
 接收到的参数是变量的值的一份拷贝, 所以函数操作的是变量的拷贝, 而不是变量本
 身. 这意味着函数不会对函数体外部的变量的值产生影响. (用行话来说, 这样的变
-量叫做 ``标量'', ``按值传递'' 给函数) 然而, 当数组作为函数的参数时, 函数 
+量叫做 ``标量'', ``按值传递'' 给函数) 然而, 当数组作为函数的参数时, 函数
 接收到的参数就不是数组的拷贝, 所以函数可以改变数组的元素, 或往数组增添新
 的值 (这叫作 ``按引用传递''). 函数名不能当作参数使用.
 
-重申一遍, 在函数体内部, 参数是局部变量 --- 它们只在函数执行时才存在, 而且 
+重申一遍, 在函数体内部, 参数是局部变量 --- 它们只在函数执行时才存在, 而且
 它们与程序中其他同名的变量没有任何关联. 但是, \textbf{其他所有的变量都是全
 局的} (\emph{all other variables are global}); 如果函数体内的某个变量没有
 出现在参数列表中, 那么整个程序范围内都可以访问该变量.
@@ -2028,7 +2028,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
         \end{tabular}
 \end{center}
     \end{figure}
-表 \ref{tbl:examples_of_printf_specifications} 包含有几个例子, 这些例子 
+表 \ref{tbl:examples_of_printf_specifications} 包含有几个例子, 这些例子
 说明了格式说明符, 数据及其对应的输出. 由 \printf 产生的输出不会在行末自动
 插入一个换行符, 除非显式放置了一个换行符.
 
@@ -2139,7 +2139,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \section{输入}
 \label{sec:input}
 
-为 awk 提供输入数据有若干种方式. 最常见的是把输入数据放在一个文件中, 例如 
+为 awk 提供输入数据有若干种方式. 最常见的是把输入数据放在一个文件中, 例如
 文件 \verb'data', 然后再键入
 \begin{pattern}
     \indent\verb"awk '"\textit{program}\verb"' data"
@@ -2388,7 +2388,7 @@ Awk 的数组与大多数其他语言最大的不同点是, 数组元素的下�
 \end{awkcode}
 都是生成 1 到 10 这十个整数.
 
-\verb'ARGV' 里面的参数可以修改或添加, \verb'ARGC' 可能会随之改变. 每当有一 
+\verb'ARGV' 里面的参数可以修改或添加, \verb'ARGC' 可能会随之改变. 每当有一
 个输入文件结束, awk 把 \verb'ARGV' 的下一个非空元素 (直到 \verb'ARGC - 1'
 的当前值) 看作是下一个输入文件名. 于是, 把 \verb'ARGV' 的一个元素设置为
 空, 意味着 awk 不会把它看作是输入文件. 名字 ``\verb"-"'' 可以当作标准输入
@@ -2494,7 +2494,7 @@ awk 的话, 最简单的方式是扫描内建数组 \verb'ARGV', 获取 \textit{
 \label{subsec:bibliographic_notes}
 
 \textit{The C Programming Language} (Brian Kernighan 与 Dennis Ritchie 著,
-Prentice-Hall 1978 年出版) 对 C 程序设计语言进行了完整地描述. 关于如何 
+Prentice-Hall 1978 年出版) 对 C 程序设计语言进行了完整地描述. 关于如何
 使用 Unix 系统有大量的资料可供参考; \textit{The Unix Programming 
 Environment} (Brian Kernighan 与 Rob Pike 著, Prentice-Hall 1984 年出版)
 包含一个扩展讨论, 讨论的是如何创建包含 awk 的 shell 程序.
