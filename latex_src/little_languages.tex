@@ -854,7 +854,7 @@ Forth 和 Postscript) 和便捷计算器都把它作为基本表示法来使用.
 为了开发中缀计算器, 我们需要一个表达式解析程序. 只需要多花点精力, 
 就可以利用语法规则来构造解析器, 除此之外, 它还可以用来组织程序.
 为每一个非终结符写一个函数: 程序使用函数 \texttt{expr}
-处理由加号或负号分隔的 \textit{term}, 使用函数 \texttt{term} 处理 
+处理由加号或减号分隔的 \textit{term}, 使用函数 \texttt{term} 处理
 由乘号或除号分隔的 \textit{factor}, 最后, 使用函数 \texttt{factor} 来
 识别数字和被括号包围起来的 \textit{expr}.
 
