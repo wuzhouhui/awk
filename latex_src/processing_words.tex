@@ -254,19 +254,19 @@ girl runs very very quickly'' 这样的句子可以用下面的语法描述:
     \pgfmathsetmacro\maxheight{4.5};
 
     \foreach \i in {0,...,9}
-        \draw (0, \maxheight - \i * \height) -- (2.5, \maxheight - \i *
+        \draw (-0.1, \maxheight - \i * \height) -- (2.6, \maxheight - \i *
         \height);
-    \draw (0, \maxheight - 0) -- (0, \maxheight - 9 * \height);
-    \draw (2.5, \maxheight - 0) -- (2.5, \maxheight - 9 * \height);
-    \node[left] at (0, \maxheight - \height * 0.5) {\texttt{Sentence,1,1}};
-    \node[left] at (0, \maxheight - \height * 1.5) {\texttt{Sentence,1,2}};
-    \node[left] at (0, \maxheight - \height * 2.5) {\texttt{Nounphrase,1,1}};
-    \node[left] at (0, \maxheight - \height * 3.5) {\texttt{Nounphrase,1,2}};
-    \node[left] at (0, \maxheight - \height * 4.5) {\texttt{Nounphrase,2,1}};
-    \node[left] at (0, \maxheight - \height * 5.5) {\texttt{Nounphrase,2,2}};
-    \node[left] at (0, \maxheight - \height * 6.5) {\texttt{Verbphrase,1,1}};
-    \node[left] at (0, \maxheight - \height * 7.5) {\texttt{Verbphrase,1,2}};
-    \node[left] at (0, \maxheight - \height * 8.5) {\texttt{Verbphrase,1,3}};
+    \draw (-0.1, \maxheight - 0) -- (-0.1, \maxheight - 9 * \height);
+    \draw (2.6, \maxheight - 0) -- (2.6, \maxheight - 9 * \height);
+    \node[left] at (-0.1, \maxheight - \height * 0.5) {\texttt{Sentence,1,1}};
+    \node[left] at (-0.1, \maxheight - \height * 1.5) {\texttt{Sentence,1,2}};
+    \node[left] at (-0.1, \maxheight - \height * 2.5) {\texttt{Nounphrase,1,1}};
+    \node[left] at (-0.1, \maxheight - \height * 3.5) {\texttt{Nounphrase,1,2}};
+    \node[left] at (-0.1, \maxheight - \height * 4.5) {\texttt{Nounphrase,2,1}};
+    \node[left] at (-0.1, \maxheight - \height * 5.5) {\texttt{Nounphrase,2,2}};
+    \node[left] at (-0.1, \maxheight - \height * 6.5) {\texttt{Verbphrase,1,1}};
+    \node[left] at (-0.1, \maxheight - \height * 7.5) {\texttt{Verbphrase,1,2}};
+    \node[left] at (-0.1, \maxheight - \height * 8.5) {\texttt{Verbphrase,1,3}};
     \node at (1.25, \maxheight - \height * 0.5) {\texttt{Nounphrase}};
     \node at (1.25, \maxheight - \height * 1.5) {\texttt{Verbphrase}};
     \node at (1.25, \maxheight - \height * 2.5) {\texttt{the}};
