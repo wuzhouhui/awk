@@ -296,14 +296,14 @@ shell. 受限形式的正则表达式也出现在其他系统中, 在 MS-DOS 中
 \begin{summary}{字符串匹配模式}
     \begin{enumerate}
         \item \verb'/'\textit{regexpr}\verb'/' \par
-            当当前输入行包含一段能够被 \textit{regexpr} 匹配的子字符串时,
-            该模式被匹配.
+            如果当前输入行包含一段能够被 \textit{regexpr} 匹配的子字符串,
+            则该模式被匹配.
         \item \expr {} \verb'~' \verb'/'\textit{regexpr}\verb'/' \par
             如果 \expr 的字符串值包含一段能够被 \textit{regexpr} 匹配的子
-            字符时, 该模式被匹配.
+            字符串, 则该模式被匹配.
         \item \expr {} \verb'!~' \verb'/'\textit{regexpr}\verb'/' \par
             如果 \expr 的字符串值不包含能够被 \textit{regexpr} 匹配的子字
-            符串, 该模式被匹配.
+            符串, 则该模式被匹配.
     \end{enumerate}
     在 \verb'~' 与 \verb'!~' 的语境中, 任意一个表达式都可以用来替换
     \verb'/'\textit{regexpr}\verb'/'.
