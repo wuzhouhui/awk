@@ -902,8 +902,8 @@ Awk 也可以用于生成格式信函, 生成时
 
 函数 \texttt{getgroup} 把下一组前缀相同的行放入数组 \texttt{gp} 中, 它调用
 \texttt{getone} 来获取每一行, 如果发现获取到的行不属于本组, 就调用
-\texttt{unget} 将它放回. 我们把提取第一个属性值的代码局限在函数
-\texttt{prefix} 中, 这样以后改起来也比较方便.
+\texttt{unget} 将它放回. 我们把提取第一个属性值的代码封装在函数
+\texttt{prefix} 里, 这样以后改起来也比较方便.
 
 读者应该注意一下函数 \texttt{getone} 与 \texttt{unget} 如何推回一个输入行.
 在读取新行之前, \texttt{getone} 检查是否已经有一行被读取并由
