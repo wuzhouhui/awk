@@ -263,17 +263,17 @@ Report No. 3       POPULATION, AREA, POPULATION DENSITY         January 1, 1988
 \end{awkcode}
 \verb'prep3' 产生的输出, 其每一行都由 9 个字段组成, 字段之间用冒号分隔,
 这些 字段包括:
-\begin{awkcode}
-    大洲 
-    国家
-    国家人口 
-    人口所占的比重
-    国土面积 
-    面积所占的比重
-    人口密度
-    该国所在的大洲的总人口
-    该国所在的大洲的面积
-\end{awkcode}
+\begin{pattern}
+\indent 大洲 \par
+\indent 国家 \par
+\indent 国家人口 \par
+\indent 人口所占的比重 \par
+\indent 国土面积 \par
+\indent 面积所占的比重 \par
+\indent 人口密度 \par
+\indent 该国所在的大洲的总人口 \par
+\indent 该国所在的大洲的面积 \par
+\end{pattern}
 注意 \verb'sort' 的命令行参数, 该命令行参数使得排序后的记录先按照第 1 个字 
 段的字母顺序排列, 再按第 7 个字段的数值形式的逆序排列. 
 
